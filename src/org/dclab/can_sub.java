@@ -1,4 +1,4 @@
-package try_web;
+package org.dclab;
 
 public class can_sub {
 	private int id;
@@ -16,7 +16,6 @@ public class can_sub {
 		this.subjectId = subjectId;
 	}
 	public int getSubjectId() {
-		// TODO Auto-generated method stub
 		return subjectId;
 	}
 	

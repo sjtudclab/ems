@@ -1,9 +1,9 @@
-package try_web;
+package org.dclab;
 
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+/*import java.util.concurrent.atomic.AtomicLong;*/
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
-	private static final String template = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
+/*	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();*/
 
 	@RequestMapping("/greeting")
 	public Map<String,Object> greeting(@RequestParam(value = "name") String name) {

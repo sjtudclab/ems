@@ -1,4 +1,4 @@
-package try_web;
+package org.dclab;
 
 import java.util.Date;
 
@@ -12,7 +12,6 @@ public class Subject {
 		return name;
 	}
 	public Date getDate() {
-		// TODO Auto-generated method stub
 		return startTime;
 	}
 	

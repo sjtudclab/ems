@@ -1,4 +1,4 @@
-package try_web;
+package org.dclab;
 
 public class User {
 	private int Uid;
