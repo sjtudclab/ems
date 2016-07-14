@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sqlMapping.can_sub_Mapper">
 	<select id="getCanSub" parameterType="int"
-	resultType="try_web.can_sub">
+	resultType="org.dclab.can_sub">
 		select * from candidate_subject where candidateId=#{candidateId}
 	</select>
 </mapper>

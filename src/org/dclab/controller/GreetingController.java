@@ -1,4 +1,4 @@
-package org.dclab;
+package org.dclab.controller;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -8,6 +8,9 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.dclab.Subject;
+import org.dclab.User;
+import org.dclab.can_sub;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +29,7 @@ public class GreetingController {
 		InputStream is=GreetingController.class.getClassLoader().getResourceAsStream(resource);
 		SqlSessionFactory sessionFactory=new SqlSessionFactoryBuilder().build(is);
 		SqlSession session=sessionFactory.openSession();
+		System.out.println("session开启成功");
 		String statement="sqlMapping.userMapper.getUser";
 		User user=session.selectOne(statement, name);
 		int uid=user.getUid();

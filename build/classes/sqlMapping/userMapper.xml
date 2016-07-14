@@ -13,7 +13,7 @@
         根据id查询得到一个user对象
      -->
     <select id="getUser" parameterType="int" 
-        resultType="try_web.User">
+        resultType="org.dclab.User">
         select * from user where Uid=#{id}
     </select>
 </mapper>

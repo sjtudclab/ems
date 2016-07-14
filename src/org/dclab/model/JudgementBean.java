@@ -11,6 +11,10 @@ import java.io.Serializable;
  *
  */
 public class JudgementBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1233847995962873452L;
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查

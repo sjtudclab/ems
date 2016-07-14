@@ -16,6 +16,6 @@
 	<mvc:annotation-driven />
     <mvc:default-servlet-handler />
 
-	<context:component-scan base-package="try_web" />
+	<context:component-scan base-package="org.dclab.controller" />
 
 </beans>
