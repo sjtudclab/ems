@@ -14,6 +14,10 @@ import java.util.List;
  */
 public class ExamBean implements Serializable{
 	private static final long	serialVersionUID	= 15493198966L;
+	//剩余时长, 装填试卷时将其初始化，每次写log时，获取前台剩余时间，重新setDuration，延时或者减少时间时直接修改这个值
+	private int duration;
+	private boolean isFinished = false; //是否交卷
+	private boolean isVIP;	//用户可在任何时间开始考试，数据库中字段
 	private long lastModifiedTime;
 	private List<SingleChoiceBean> singleChoiceList;
 	private List<MultiChoicesBean> multiChoicesList;
@@ -68,6 +72,30 @@ public class ExamBean implements Serializable{
 	}
 	public void setJudgementList(List<JudgementBean> judgementList) {
 		this.judgementList = judgementList;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public boolean isFinished() {
+		return isFinished;
+	}
+
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
+	}
+
+	public boolean isVIP() {
+		return isVIP;
+	}
+
+	public void setVIP(boolean isVIP) {
+		this.isVIP = isVIP;
 	}
 	
 }
