@@ -1,0 +1,26 @@
+<div class="checkdiv">
+    温馨提示：蓝色为已答题，红色为标记题，白色为未答题
+</div>
+<div ng-controller="Ctab1" ng-init="listrecev()">
+    <div class="row">
+        <div class="col-md-1 checkdiv" ng-repeat="list in lists">
+            <button class="button button-primary button-box button-large" ng-click="skip(list)">
+                {{list}}
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1 checkdiv" ng-repeat="list1 in lists1">
+            <button class="button button-caution button-box button-large">
+                {{list1}}
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1 checkdiv" ng-repeat="list2 in lists2">
+            <button class="button button-border button-box button-large">
+                {{list2}}
+            </button>
+        </div>
+    </div>
+</div>
