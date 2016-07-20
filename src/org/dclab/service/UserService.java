@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,10 +12,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.dclab.Subject;
 import org.dclab.User;
 import org.dclab.mapping.CanSubMapperI;
+import org.dclab.mapping.RoomCanMapperI;
 import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
+import org.dclab.model.SuperBean;
+import org.dclab.model.SupervisorOperator;
 import org.dclab.utils.MyBatisUtil;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +81,7 @@ public class UserService {
 		return map;
 	}
 	
-	public Map<String,Object> getUserInfo(UUID token){
+/*	public Map<String,Object> getUserInfo(UUID token){
 		
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		
@@ -103,11 +107,6 @@ public class UserService {
 		sqlSession.close();
 		return map;
 		
-	}
-
-/*	public String getPhoto(UUID token){
-		ExamBean examBean=ExamOperator.tokenExamMap.get(token);
-		
 	}*/
-	
+
 }
