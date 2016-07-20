@@ -2,6 +2,7 @@ package org.dclab.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 所有考试过程中的操作都是对内存中此对象的读写
@@ -13,12 +14,12 @@ public class ExamOperator {
 	/**
 	 * 用户 id 到token 的MAP  
 	 */
-	public static Map<String, String> idTokenMap = new HashMap<>(64);
+	public static Map<Integer, UUID> idTokenMap = new HashMap<>(64);
 	
 	/**
 	 * 考生token 到 examBean的映射
 	 */
-	public static Map<String, ExamBean> tokenExamMap = new HashMap<>(256);
+	public static Map<UUID, ExamBean> tokenExamMap = new HashMap<>(256);
 	
 	/**
 	 * 从数据库加载数据装填考生id与token及试卷

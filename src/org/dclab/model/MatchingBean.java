@@ -12,6 +12,10 @@ import java.util.List;
  *
  */
 public class MatchingBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1445501220162322852L;
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查

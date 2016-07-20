@@ -17,5 +17,5 @@
     <mvc:default-servlet-handler />
 
 	<context:component-scan base-package="org.dclab.controller" />
-
+	<context:component-scan base-package="org.dclab.service"/>
 </beans>

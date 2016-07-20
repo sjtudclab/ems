@@ -13,11 +13,22 @@ import java.util.*;
  */
 public class MultiChoicesBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6078271522167915749L;
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private List<?> choiceIdList;//考生答案id的list
-	
+	private String choiceA;
+	private int choiceAId;
+	private String choiceB;
+	private int choiceBId;
+	private String choiceC;
+	private int choiceCId;
+	private String choiceD;
+	private int choiceDId;
 	public int getId() {
 		return id;
 	}

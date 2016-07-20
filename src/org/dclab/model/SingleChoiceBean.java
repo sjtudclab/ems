@@ -13,11 +13,22 @@ import java.io.Serializable;
 
 public class SingleChoiceBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7633906860972374279L;
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
-	
+	private String choiceA;
+	private int choiceAId;
+	private String choiceB;
+	private int choiceBId;
+	private String choiceC;
+	private int choiceCId;
+	private String choiceD;
+	private int choiceDId;
 	public int getId() {
 		return id;
 	}

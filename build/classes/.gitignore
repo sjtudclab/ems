@@ -1,3 +1,3 @@
-/conf.xml
 /org/
-/sqlMapping/
+/ems.properties
+/applicationContext.xml
