@@ -22,7 +22,13 @@
    });
 
    formlogin.controller('showCtrl', function($scope, $state, $stateParams,$rootScope) {
-      
+       //对象记录状态
+	  // alert(typeof($rootScope.problemStatus));
+	  // if(typeof($rootScope.problemStatus)==undefined){
+		   $rootScope.problemStatus={"single":{},"multiple":{},"judgment":{},"match":{}};
+		  // alert("haha");
+	 //  }
+	   
 	   $rootScope.name = $stateParams.name;
 	   $rootScope.id = $stateParams.id;
 	   $rootScope.cid = $stateParams.cid;
@@ -30,7 +36,7 @@
 	   $rootScope.time = $stateParams.time;
       // alert($scope.name);
        $scope.click=function(){
-     	  $state.go('main');
+     	  $state.go('main',{active:"",num:'',brand:''});
        }
        
 
@@ -112,38 +118,59 @@
    
    demo0.controller('skiptb1', function($scope, $http, $window, $rootScope, $state, $stateParams) {
 	    //单选题
-	    if (($stateParams.active+1) == 1) {
-	        alert('cp面板1'+$scope.active);
-	        $rootScope.num = $stateParams.num*1; 
-	        //检查某题
-	        $http.get('new2.json', {
-                params: { typeId:0,token:$rootScope.token,id:$stateParams.num}
-            }).success(function(data, status, headers, config) {
-                // 试题
-                $rootScope.Id1 = data.choiceIdA;
-                $rootScope.Id2 = data.choiceIdB;
-                $rootScope.Id3 = data.choiceIdC;
-                $rootScope.Id4 = data.choiceIdD;
-                $rootScope.title = data.content;
-                $rootScope.option1 = data.choiceA;
-                $rootScope.option2 = data.choiceB;
-                $rootScope.option3 = data.choiceC;
-                $rootScope.option4 = data.choiceD;
-                //试题状态
-                $scope.option.optionsRadios = data.choiceIdA;
-                if (data.ifCheck) {
-                    $scope.red = "#FF6347";
-                    $scope.count = true;
-                }
-                if ($rootScope.num == 1) { $scope.before = true; }
+	          $scope.option = {};
+	    	  if($stateParams.brand==1){
+	    		  if ($stateParams.active == 0) {
+	    		        alert('cp面板1'+$scope.active);
+	    		        $scope.num1 = $stateParams.num*1; 
+	    		        //检查某题
+	    		        $http.get('new2.json', {
+	    	                params: { typeId:0,token:$rootScope.token,id:$stateParams.num}
+	    	            }).success(function(data, status, headers, config) {
+	    	                // 试题
+	    	                $scope.Id1 = data.choiceIdA;
+	    	                $scope.Id2 = data.choiceIdB;
+	    	                $scope.Id3 = data.choiceIdC;
+	    	                $scope.Id4 = data.choiceIdD;
+	    	                $scope.title1 = data.content;
+	    	                $scope.option1 = data.choiceA;
+	    	                $scope.option2 = data.choiceB;
+	    	                $scope.option3 = data.choiceC;
+	    	                $scope.option4 = data.choiceD;
+	    	                //试题状态
+	    	                $scope.option.optionsRadios = data.choiceIdA;
+	    	                if (data.ifCheck) {
+	    	                    $scope.red = "#FF6347";
+	    	                    $scope.count = true;
+	    	                }
+	    	                if ( $scope.num1 == 1) { $scope.before = true; }
 
-            }).error(function(data, status, headers, config) {
-                //处理错误  
-                alert('tab1出错！');
-            });
+	    	            }).error(function(data, status, headers, config) {
+	    	                //处理错误  
+	    	                alert('tab1出错！');
+	    	            });
 
-	    } else {
-	    	  if($stateParams.active == 2||$stateParams.active == 3||$stateParams.active == 4){}else{
+	    		    } else{
+	    		    	
+	    		    	$scope.Id1=$rootScope.problemStatus.single.choiceAId;
+	    		    	$scope.Id2=$rootScope.problemStatus.single.choiceBId;
+	    		    	$scope.Id3=$rootScope.problemStatus.single.choiceCId;
+	    		    	$scope.Id4=$rootScope.problemStatus.single.choiceDId;
+	    		    	$scope.option1=$rootScope.problemStatus.single.choiceA;
+	    		    	$scope.option2=$rootScope.problemStatus.single.choiceB;
+	    		    	$scope.option3=$rootScope.problemStatus.single.choiceC;
+	    		    	$scope.option4=$rootScope.problemStatus.single.choiceD;
+	    		    	$scope.title1=$rootScope.problemStatus.single.title1;
+	    		    	$scope.num1=$rootScope.problemStatus.single.num1;
+	    		    	$scope.count=$rootScope.problemStatus.single.count;
+	    		    	$scope.red=$rootScope.problemStatus.single.red;
+	    		    	$scope.before=$rootScope.problemStatus.single.before;
+	    		    	$scope.option.optionsRadios=$rootScope.problemStatus.single.option.optionsRadios;
+	    		    	
+	    		    	alert("保留tab0!")
+	    		    	}
+	    		  
+	    	  }else{
 	    		  alert("hh-1");
 	    		  $rootScope.active=0;
 	    		  //初始化试题
@@ -151,16 +178,16 @@
 	    			  params: { typeId:0,token:$rootScope.token}
 		            }).success(function(data, status, headers, config) {
 		                //试题
-		                $rootScope.Id1 = data.choiceIdA;
-		                $rootScope.Id2 = data.choiceIdB;
-		                $rootScope.Id3 = data.choiceIdC;
-		                $rootScope.Id4 = data.choiceIdD;
-		                $rootScope.num = 1;
-		                $rootScope.title = data.content;
-		                $rootScope.option1 = data.choiceA;
-		                $rootScope.option2 = data.choiceB;
-		                $rootScope.option3 = data.choiceC;
-		                $rootScope.option4 = data.choiceD;
+		            	 $scope.Id1 = data.choiceIdA;
+		            	 $scope.Id2 = data.choiceIdB;
+		            	 $scope.Id3 = data.choiceIdC;
+		            	 $scope.Id4 = data.choiceIdD;
+		            	 $scope.num1 = 1;
+		            	 $scope.title1 = data.content;
+		            	 $scope.option1 = data.choiceA;
+		            	 $scope.option2 = data.choiceB;
+		            	 $scope.option3 = data.choiceC;
+		            	 $scope.option4 = data.choiceD;
 		                //试题状态
 		                $scope.before = true;
 		                $scope.red = "#000000";
@@ -174,31 +201,50 @@
 	    		  
 	    	  }
 	    		     
-	    }
+
    
-       $scope.option = {};
+      
        //下一题
-       $scope.receive = function(option) {
+       $scope.receive1 = function(option) {
     	  // var sec=$rootScope.hour*3600+$rootScope.minute*60+$rootScope.time;
          //  alert(sec);
            alert(option.optionsRadios);
            var isChecked=$scope.count;
            alert(isChecked);
+           
+           alert($rootScope.problemStatus);
+           
+           $rootScope.problemStatus.single.choiceAId=$scope.Id1;
+           $rootScope.problemStatus.single.choiceBId=$scope.Id2;
+           $rootScope.problemStatus.single.choiceCId=$scope.Id3;
+           $rootScope.problemStatus.single.choiceDId=$scope.Id4;
+           $rootScope.problemStatus.single.choiceA=$scope.option1;
+           $rootScope.problemStatus.single.choiceB=$scope.option2;
+           $rootScope.problemStatus.single.choiceC=$scope.option3;
+           $rootScope.problemStatus.single.choiceD=$scope.option4;
+           $rootScope.problemStatus.single.title1=$scope.title1;
+           $rootScope.problemStatus.single.num1=$scope.num1;
+           $rootScope.problemStatus.single.count=$scope.count;
+           $rootScope.problemStatus.single.red=$scope.red;
+           $rootScope.problemStatus.single.option=$scope.option;
+           $rootScope.problemStatus.single.before=$scope.before;
+           
+           
  
            $http.get('new1.json', {
-           params: {token:$rootScope.token,typeId:0,id:$rootScope.num,choiceId:option,ifCheck:isChecked}
+           params: {token:$rootScope.token,typeId:0,id: $scope.num1,choiceId:option,ifCheck:isChecked}
        }).success(function(data, status, headers, config) {
                //试题
-               $rootScope.Id1=data.choiceAId;
-               $rootScope.Id2=data.choiceBId;
-               $rootScope.Id3=data.choiceCId;
-               $rootScope.Id4=data.choiceDId;
-               $rootScope.num = $rootScope.num+1;
-               $rootScope.title = data.content;
-               $rootScope.option1 = data.choiceA;
-               $rootScope.option2 = data.choiceB;
-               $rootScope.option3 = data.choiceC;
-               $rootScope.option4 = data.choiceD;
+    	   $scope.Id1=data.choiceAId;
+    	   $scope.Id2=data.choiceBId;
+    	   $scope.Id3=data.choiceCId;
+    	   $scope.Id4=data.choiceDId;
+    	   $scope.num1 =  $scope.num1+1;
+    	   $scope.title1 = data.content;
+    	   $scope.option1 = data.choiceA;
+    	   $scope.option2 = data.choiceB;
+    	   $scope.option3 = data.choiceC;
+    	   $scope.option4 = data.choiceD;
                //试题状态
                $scope.red = "#000000";
                $scope.count = false;
@@ -213,33 +259,33 @@
 
        };
      //上一题
-       $scope.sreceive = function(option) {
+       $scope.sreceive1 = function(option) {
           // alert(option.optionsRadios);
            var isChecked = $scope.count;
          //  alert(isChecked);
          //  alert(ID);
            $http.get('new2.json', {
-               params: { token:$rootScope.token,typeId:0,id:$rootScope.num,choiceId:option,ifCheck:isChecked}
+               params: { token:$rootScope.token,typeId:0,id: $scope.num1,choiceId:option,ifCheck:isChecked}
            }).success(function(data, status, headers, config) {
                //试题
-               $rootScope.Id1 = data.choiceIdA;
-               $rootScope.Id2 = data.choiceIdB;
-               $rootScope.Id3 = data.choiceIdC;
-               $rootScope.Id4 = data.choiceIdD;
-               $rootScope.num = $rootScope.num - 1;
-               $scope.title = data.content;
+        	   $scope.Id1 = data.choiceIdA;
+        	   $scope.Id2 = data.choiceIdB;
+        	   $scope.Id3 = data.choiceIdC;
+        	   $scope.Id4 = data.choiceIdD;
+        	   $scope.num1 =  $scope.num1 - 1;
+               $scope.title1 = data.content;
                $scope.option1 = data.choiceA;
                $scope.option2 = data.choiceB;
                $scope.option3 = data.choiceC;
                $scope.option4 = data.choiceD;
                //试题状态
-               if (data.count) {
+               if (data.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
                }
 
                $scope.option.optionsRadios = data.choiceIdA;
-               if ($rootScope.num == 1) { $scope.before = true; }
+               if ( $scope.num1 == 1) { $scope.before = true; }
 
 
            }).error(function(data, status, headers, config) {
@@ -346,42 +392,61 @@
 
    //判断题
   demo0.controller('skiptb3', function($scope, $http, $window,$rootScope,$stateParams) {
-	  if (($stateParams.active+1) == 3) {
-	        alert('cp面板3'+$scope.active3);
-	        $rootScope.num3 = $stateParams.num; 
-	        //检查某题
-	        $http.get('info1.json', {
-              params: { typeId:2,token:$rootScope.token3,id:$stateParams.num}
-          }).success(function(data, status, headers, config) {
-              // $rootScope.ID = data.id;
-    
-          	  $rootScope.title3 = data.title;
-              $scope.before= true;
-              $scope.count = false;
-              $scope.option.optionsRadios = true;
-              if (data.count) {
-                  $scope.red = "#FF6347";
-                  $scope.count = true;
-              }
-              if ($rootScope.num == 1) { $scope.before = true; }
+	         
+	          $scope.op3 = {};
+	    	  if($stateParams.brand == 1){
+	    		  if ($stateParams.active == 2) {
+	    		        alert('cp面板3'+$scope.active3);
+	    		        $scope.num3 = $stateParams.num; 
+	    		        //检查某题
+	    		        $http.get('info1.json', {
+	    	              params: { typeId:2,token:$rootScope.token,id:$stateParams.num}
+	    	          }).success(function(data, status, headers, config) {
+	    	              // $rootScope.ID = data.id;
+	    	    
+	    	          	  $scope.title3 = data.title;
+	    	              $scope.before= true;
+	    	              $scope.count = false;
+	    	              $scope.op3.options = true;
+	    	              if (data.count) {
+	    	                  $scope.red = "#FF6347";
+	    	                  $scope.count = true;
+	    	              }
+	    	              if ($stateParams.num == 1) { $scope.before = true; }
 
-          }).error(function(data, status, headers, config) {
-              //处理错误  
-              alert('tab3出错！');
-          });
+	    	          }).error(function(data, status, headers, config) {
+	    	              //处理错误  
+	    	              alert('tab3出错！');
+	    	          });
 
-	    } else {
-	    	  if($stateParams.active == 1||$stateParams.active == 2||$stateParams.active == 4){}else{
+	    		    }else{
+	    		    	
+	    		    	alert($rootScope.problemStatus.judgment.op3.options);
+	    		    	alert("hahah");
+	    		    	//$scope.Id1=$rootScope.problemStatus.judgment.choiceAId;
+	    		    	//$scope.Id2=$rootScope.problemStatus.judgment.choiceBId;
+	    		    //	$scope.option1=$rootScope.problemStatus.judgment.choiceA;
+	    		    //	$scope.option2=$rootScope.problemStatus.judgment.choiceB;
+	    		    	$scope.title3=$rootScope.problemStatus.judgment.title3;
+	    		    	$scope.num3=$rootScope.problemStatus.judgment.num3;
+	    		    	$scope.count=$rootScope.problemStatus.judgment.count;
+	    		    	$scope.red=$rootScope.problemStatus.judgment.red;
+	    		    	$scope.before=$rootScope.problemStatus.judgment.before;
+	    		    	$scope.op3.options=$rootScope.problemStatus.judgment.op3.options;
+	    		    	
+	    		    	alert("保留tab3!")
+	    		    	} 
+	    	  }else{
 	    		  alert("ss-1");
-	    		  $scope.active=0;
+	    		
 	    		  //初始化试题
 	    		  $http.get('info.json', {
-		                params: { typeId:2,token:$rootScope.token3 }
+		                params: { typeId:2,token:$rootScope.token }
 		            }).success(function(data, status, headers, config) {
 		                //加载成功之后做一些事 
 		                // $rootScope.ID = data.id;
-		            	$rootScope.num3 = 1;
-		            	$rootScope.title3 = data.title;
+		            	$scope.num3 = 1;
+		            	$scope.title3 = data.title;
 		                $scope.before= true;
 		                $scope.count = false;
 
@@ -392,24 +457,35 @@
 	    		  
 	    	  }
 	    		     
-
-	    }
-       $scope.op1 = {};
+       
        $scope.receive3 = function(option) {
            alert(option.options);
-           var sec=$rootScope.hour*3600+$rootScope.minute*60+$rootScope.time;
+          // var sec=$rootScope.hour*3600+$rootScope.minute*60+$rootScope.time;
            var isChecked = $scope.count;
         //   alert(sec);
            //下一题
-           $http.get('info1.json', {
-               params: { token:$rootScope.token,typeId:0,id:$rootScope.num,choiceId:option,ifCheck:isChecked}
-           }).success(function(data, status, headers, config) {
-        	   $rootScope.title3 = data.title;
+           $rootScope.problemStatus.judgment.choiceAId=$scope.Id1;
+           $rootScope.problemStatus.judgment.choiceBId=$scope.Id2;
+           $rootScope.problemStatus.judgment.choiceA=$scope.option1;
+           $rootScope.problemStatus.judgment.choiceB=$scope.option2;
+           $rootScope.problemStatus.judgment.title3=$scope.title3;
+           $rootScope.problemStatus.judgment.num3=$scope.num3;
+           $rootScope.problemStatus.judgment.count=$scope.count;
+           $rootScope.problemStatus.judgment.red=$scope.red;
+           $rootScope.problemStatus.judgment.before=$scope.before;
+           $rootScope.problemStatus.judgment.op3=option;
+          
            
-        	   $rootScope.num3 = $rootScope.num3+1;
+           
+           $http.get('info1.json', {
+               params: { token:$rootScope.token,typeId:0,id:$scope.num3,choiceId:option,ifCheck:isChecked}
+           }).success(function(data, status, headers, config) {
+        	   $scope.title3 = data.title;
+           
+        	   $scope.num3 = $scope.num3+1;
                $scope.red = "#000000";
                $scope.count = false;
-               $scope.op1 = {};
+               $scope.op3 = {};
                $scope.before= false;
 
 
@@ -425,20 +501,20 @@
          //  alert(isChecked);
          //  alert(ID);
            $http.get('info.json', {
-               params: { token:$rootScope.token,typeId:0,id:$rootScope.num,choiceId:option,ifCheck:isChecked}
+               params: { token:$rootScope.token,typeId:2,id:$scope.num3,choiceId:option,ifCheck:isChecked}
            }).success(function(data, status, headers, config) {
                //加载成功之后做一些事  
-        	   $rootScope.title3 = data.title;
+        	   $scope.title3 = data.title;
                
-        	   $rootScope.num3 = $rootScope.num3-1;
+        	   $scope.num3 = $scope.num3-1;
               
                if (data.count) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
                }
 
-               $scope.op1.options= "true";
-               if ($rootScope.num3 == 1) { $scope.before = true; }
+               $scope.op3.options= "true";
+               if ($scope.num3 == 1) { $scope.before = true; }
 
 
            }).error(function(data, status, headers, config) {
@@ -583,7 +659,7 @@ checkup.controller("Ctab1",function($scope,$http,$state){
        };
        $scope.skip=function(listnum){
            alert(listnum);
-           $state.go('main',{active:1,num:2});
+           $state.go('main',{active:0,num:2,brand:1});
  
       }
  

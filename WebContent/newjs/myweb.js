@@ -37,7 +37,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('main', {
-            url: '/main/:active/:num',
+            url: '/main/:active/:num/:brand',
             views: {
                 '': {
                     templateUrl: 'tpls/main.html',
