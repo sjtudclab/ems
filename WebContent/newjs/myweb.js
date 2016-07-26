@@ -37,25 +37,27 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('main', {
-            url: '/main/:active/:num/:brand',
+            url: '/main/:active/:num/:type',
             views: {
                 '': {
                     templateUrl: 'tpls/main.html',
                     controller: 'showMain'
                 },
                'tab1@main': {
-                   templateUrl: 'tpls/tabmain/tab1.html',
+                   templateUrl: 'tpls/tabmain/tab11.html',
                    controller: 'skiptb1'
                 },
                'tab2@main': {
-                   templateUrl: 'tpls/tabmain/tab2.html'
+                   templateUrl: 'tpls/tabmain/tab21.html',
+                   controller: 'skiptb2'
                 },
                'tab3@main': {
-                   templateUrl: 'tpls/tabmain/tab3.html',
+                   templateUrl: 'tpls/tabmain/tab31.html',
                    controller: 'skiptb3'
                 },
                'tab4@main': {
-                   templateUrl: 'tpls/tabmain/tab4.html'
+                   templateUrl: 'tpls/tabmain/tab41.html',
+                   controller: 'skiptb4'
                 },
                 'info@main': {
                     templateUrl: 'tpls/info.html'
