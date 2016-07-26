@@ -1,0 +1,7 @@
+{
+	"id":1,
+	"content":"今天天气好晴朗嘿嘿",
+	"ifCheck":false,
+	"choiceList":[{"choiceId":11,"content":"呵呵哒"},{"choiceId":12,"content":"中二啊"},{"choiceId":13,"content":"溜溜球"},{"choiceId":14,"content":"人生啊"}],
+	"choiceIdList":[]
+}
