@@ -13,6 +13,7 @@ public interface UserMapperI {
 	@Select("select * from user where Uid=#{uid}")
 	public User getByUid(int uid);
 	
+	
 /*     //使用@Insert注解指明add方法要执行的SQL
 	 @Insert("insert into users(name, age) values(#{name}, #{age})")
 	 public int add(User user);

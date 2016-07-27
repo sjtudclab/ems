@@ -274,37 +274,6 @@ public class ExamService {
 			return null;
 		}
 	}
-	//监考操作之延时操作
-	public void delay(ExamBean exambean){
-		exambean.setDuration(exambean.getDuration()+100);
-	}
-	//监考操作之返回试卷
-	public void returnToExam(ExamBean exambean){
-		exambean.setFinished(false);
-	}
-	//监考操作之手动交卷
-	public void manualAssign(ExamBean exambean){
-		/*ExamBean exambean=ExamOperator.tokenExamMap.get(token);*/
-		exambean.setFinished(true);
-	}
-	// 监考操作之强制终止
-	public void forceTerminate(ExamBean exambean) {
-		exambean.setAllowStart(true);
-	}
 
-	// 监考操作之允许开始
-	public void allowStart(ExamBean exambean) {
-		exambean.setAllowTerminate(true);
-	}
-
-	// 监考操作之允许终止
-	public void allowTerminate(ExamBean exambean) {
-		exambean.setAllowTerminate(true);
-	}
-
-	// 监考操作之删除试卷
-	public void deleteExamInfo(ExamBean exambean) {
-		exambean = null;
-	}
 
 }

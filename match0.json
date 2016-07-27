@@ -1,0 +1,7 @@
+{
+	"id":2,
+	"contentList":[{"contentId":1,"content":"今天天气好晴朗嘿嘿"},{"contentId":2,"content":"处处好风光"},{"contentId":3,"content":"鸟儿忙啊我也忙"},{"contentId":4,"content":"大家都忙啊啊啊啊"}],
+	"ifCheck":"true",
+	"choiceList":[{"choiceId":11,"content":"呵呵哒"},{"choiceId":12,"content":"中二啊"},{"choiceId":13,"content":"溜溜球"},{"choiceId":14,"content":"人生啊"}],
+	"choiceIdMap":{"1":12,"2":11}
+}

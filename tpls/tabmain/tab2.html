@@ -1,0 +1,33 @@
+<div class="container tabfront" ng-controller="checkboxCtrl">
+    <div ng-init="checkboxreceive()">
+        <div>
+            <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)"></span> {{num}}、{{title}}
+        </div>
+        <div style="padding-left:5%">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="phone.tab1" name="optionscheckboxs" id="optionscheckboxs1" ng-true-value="1" ng-false-value="false"> <span>A、{{option1}}</span>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="phone.tab2" name="optionscheckboxs" ng-true-value="2" ng-false-value="false" id="optionscheckboxs2"> <span>B、{{option2}}</span>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="phone.tab3" name="optionscheckboxs" id="optionscheckboxs3" ng-true-value="3" ng-false-value="false"> <span>C、{{option3}}</span>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="phone.tab4" name="optionscheckboxs" id="optionscheckboxs4" ng-true-value="4" ng-false-value="false"><span>D、{{option4}}</span>
+                </label>
+            </div>
+        </div>
+        <div style="padding-left:5%">
+            <a class="btn" ng-click="before ||checkbox(option)" ng-disabled="before">上一题</a>
+            <a class="btn" ng-click="receive2(phone)">下一题</a>
+        </div>
+    </div>
+</div>
