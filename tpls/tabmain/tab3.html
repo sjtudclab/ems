@@ -1,0 +1,23 @@
+<div class="container tabfront">
+    <div>
+        <div>
+            <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)"></span> {{num3}}、{{title3}}
+        </div>
+        <div style="padding-left:5%">
+            <div class="radio">
+                <label>
+                    <input type="radio" ng-model="op3.options" name="options" id="optionsRadios1" value="true"> <span>A、对</span>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" ng-model="op3.options" name="options" id="optionsRadios2" value="option2"> <span>B、错</span>
+                </label>
+            </div>
+        </div>
+        <div style="padding-left:5%">
+            <a class="btn" ng-click="before ||sreceive3(op3)" ng-disabled="before">上一题</a>
+            <a class="btn" ng-click="receive3(op3)">下一题</a>
+        </div>
+    </div>
+</div>

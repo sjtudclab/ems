@@ -1,0 +1,44 @@
+<div ui-view="info"></div>
+<!-- Main component for a primary marketing message or call to action -->
+<div style="height:84%" class="tabcolor">
+    <uib-tabset active="active" type="tabs">
+        <uib-tab index="0" heading="单选题">
+            <div>
+                <div ui-view="tab1"></div>
+            </div>
+        </uib-tab>
+        <uib-tab index="1" heading="多选题">
+            <div>
+                <div ui-view="tab2"></div>
+            </div>
+        </uib-tab>
+        <uib-tab index="2" heading="判断题">
+            <div>
+                <div ui-view="tab3"></div>
+            </div>
+        </uib-tab>
+        <uib-tab index="3" heading="匹配题">
+            <div>
+                <div ui-view="tab4"></div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>
+<div class="container-fluid info-custom" style="height:8%">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="row" style="height:100%">
+            <div class="col-md-3 bottominfo" style="height:100%" ui-view="time"> 
+            </div>
+            <div class="col-md-3 bottominfo reinfoco" style="height:100%" >
+                <p>待检查题数目：{{counter}}</p>
+            </div>
+            <div class="col-md-3 btn bottominfo " style="height:100%">
+                 <p ui-sref="checkup">检查</p>
+            </div>
+            <div class="col-md-3 btn bottominfo reinfoco" style="height:100%">
+                <p>交卷</p>
+            </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+    </div>
+    <!-- /.navbar-collapse -->
+</div>
