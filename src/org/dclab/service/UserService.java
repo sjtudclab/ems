@@ -5,16 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.Subject;
 import org.dclab.User;
 import org.dclab.mapping.CanSubMapperI;
 import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.UserMapperI;
-import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
+import org.dclab.model.SupervisorOperator;
 import org.dclab.utils.MyBatisUtil;
 import org.springframework.stereotype.Service;
 
@@ -40,44 +38,52 @@ public class UserService {
 		
 		User user=mapper.getByUid(Uid);
 
-		CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
-		int sid=csmapper.getSubjectIdByUid(Uid);
-
-		SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
-		Subject subject=smapper.getById(sid);
-
 		Map<String,Object> map=new HashMap<String,Object>();
-		map.put("name", user.getUname());
-		map.put("id", user.getUid());
-		map.put("cid", user.getCid());
-		map.put("subject",subject.getName());
-		map.put("time", subject.getDate());
-		UUID token=ExamOperator.idTokenMap.get(Uid);
-		map.put("token", token);
+		switch(user.getRid()){
+		case 0:
+			CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
+			int sid=csmapper.getSubjectIdByUid(Uid);
+
+			SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
+			Subject subject=smapper.getById(sid);
+			map.put("name", user.getUname());
+			map.put("id", user.getUid());
+			map.put("cid", user.getCid());
+			map.put("subject",subject.getName());
+			map.put("time", subject.getDate());
+			map.put("Rid",user.getRid());
+			map.put("gender", user.getGender());
+			map.put("token", ExamOperator.idTokenMap.get(Uid));
+			
+			
+			String dir=user.getPhoto();
+			InputStream in=null;
+			byte[] data=null;
+			try{
+				in=new FileInputStream(dir);
+				data=new byte[in.available()];
+				in.read(data);
+				in.close();
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			BASE64Encoder encoder=new BASE64Encoder();
+			String photo=encoder.encode(data);
+			map.put("photo", photo);
+			break;
+		case 1:
+			map.put("Uid",user.getUid());
+			map.put("Rid", user.getRid());
+			map.put("token",SupervisorOperator.idTokenMap.get(Uid));
+		}
 		sqlSession.close();
-		
-		String dir=user.getPhoto();
-		InputStream in=null;
-		byte[] data=null;
-		try{
-			in=new FileInputStream(dir);
-			data=new byte[in.available()];
-			in.read(data);
-			in.close();
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		BASE64Encoder encoder=new BASE64Encoder();
-		String photo=encoder.encode(data);
-		
-		map.put("photo", photo);
+
 		return map;
 	}
 	
-	public Map<String,Object> getUserInfo(UUID token){
+/*	public Map<String,Object> getUserInfo(UUID token){
 		
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		
@@ -103,11 +109,6 @@ public class UserService {
 		sqlSession.close();
 		return map;
 		
-	}
-
-/*	public String getPhoto(UUID token){
-		ExamBean examBean=ExamOperator.tokenExamMap.get(token);
-		
 	}*/
-	
+
 }

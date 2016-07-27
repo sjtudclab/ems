@@ -29,6 +29,9 @@
         <mapper class="org.dclab.mapping.UserMapperI"/>
         <mapper class="org.dclab.mapping.CanSubMapperI"/>
         <mapper class="org.dclab.mapping.SubjectMapperI"/>
+        <mapper class="org.dclab.mapping.RoomCanMapperI"/>
+        <mapper class="org.dclab.mapping.TopicMapperI"/>
+        <mapper class="org.dclab.mapping.ChoiceMapperI"/>
     </mappers>
     
 </configuration>

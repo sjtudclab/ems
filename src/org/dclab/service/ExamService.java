@@ -1,12 +1,24 @@
 package org.dclab.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.dclab.model.CheckBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
+import org.dclab.model.MatchingBean;
+import org.dclab.model.MultiChoicesBean;
+import org.dclab.model.SingleChoiceBean;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 试卷操作
@@ -28,6 +40,28 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ExamService {
+	
+	
+	/*
+	 * 
+	 * 测试用的方法,构造一个单选题
+	 */
+/*	public SingleChoiceBean getTestTopic(){
+		SingleChoiceBean topic=new SingleChoiceBean();
+		topic.setId(1);
+		topic.setContent("2009年颁布的《关于实行党政领导干部问责的暂行规定》，要求对党政干部的失职行为实施问责。这一举措表明");
+		topic.setChoiceA("政府执政必须符合法律程序");
+		topic.setChoiceAId(212);
+		topic.setChoiceB("我国已建立完整的行政监督体系");
+		topic.setChoiceBId(213);
+		topic.setChoiceC("每个公民都有监督权和质询权");
+		topic.setChoiceCId(214);
+		topic.setChoiceD("党政领导干部的权力和责任是统一的");
+		topic.setChoiceDId(215);
+		topic.setIfCheck(true);
+		topic.setChoiceId(215);
+		return topic;
+	}*/
 
 	//获取第一题
 	public Object getFirstTopic(ExamBean exambean,int typeId)
@@ -58,253 +92,236 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
-			if(id==exambean.getSingleChoiceList().size()+1||id==0)//判断是不是超出了该题型的范围
+			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else
 				return exambean.getSingleChoiceById(id);
 		case 1:
-			if(id==exambean.getMultiChoicesList().size()+1||id==0)
+			if(id==exambean.getMultiChoicesList().size()||id<0)
 				return null;
 			else
 				return exambean.getMultiChoiceById(id);
 		case 2:
-			if(id==exambean.getMatchingList().size()+1||id==0)
+			if(id==exambean.getMatchingList().size()||id<0)
 				return null;
 			else
 				return exambean.getMatchingById(id);
 		case 3:
-			if(id==exambean.getJudgementList().size()+1||id==0)
+			if(id==exambean.getJudgementList().size()||id<0)
 				return null;
 			else
 				return exambean.getJudgementById(id);
 		default:
-			System.out.println("错误的typeid");
+			System.out.println("get topic error");
 			return null;
 		}
 	}
-	//返回下一题并将该题内容写入
-	public Object getNextTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceId,boolean ifCheck)
+	
+	//把前端传来的json的string转换成需要的答案id的list
+	public List<Integer> stringToList(String str)
 	{
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Integer> map=new HashMap<>();
+		try {
+			map=mapper.readValue(str, new TypeReference<Map<String, Integer>>(){});
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Integer> list=new ArrayList<>();
+		for(String key : map.keySet()){
+			list.add(map.get(key));
+		}
+		return list;
+	}
+	
+	//把前端传来的json的string转换成需要的答案id的map
+	public Map<Integer, Integer> stringTomap(String str)
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		Map<Integer, Integer> map=new HashMap<>();
+		try {
+			map=mapper.readValue(str, new TypeReference<Map<String, Integer>>(){});
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		return map;
+	}
+	//返回下一题并将该题内容写入
+	public Object getNextTopic(ExamBean exambean,Integer typeId,Integer id,List<Integer> choiceId,boolean ifCheck)
+	{
+		id=id-1;//前端传来的id是这道题的标号，从1开始。存储在list中的题目下标从0开始，所以减一
 		switch(typeId)
 		{
 		case 0:
-			exambean.getSingleChoiceById(id).setChoiceId(choiceId.get(0));//单选题写入考生答案，以及检查标志
+			if(choiceId.size()!=0)
+				exambean.getSingleChoiceById(id).setChoiceId(choiceId.get(0));//单选题写入考生答案，以及检查标志
+			else
+				exambean.getSingleChoiceById(id).setChoiceId(0);//如果传过来的考生答案为空，则将bean中的答案置为0
 			if(ifCheck==true)
 				exambean.getSingleChoiceById(id).setIfCheck(true);
-/*			if(id==exambean.getSingleChoiceList().size())
-				flag=true;*/
+			else
+				exambean.getSingleChoiceById(id).setIfCheck(false);
 			break;
 		case 1:
-			exambean.getMultiChoiceById(id).setChoiceId(choiceId);
+			exambean.getMultiChoiceById(id).setChoiceIdList(choiceId);
 			if(ifCheck==true)
 				exambean.getMultiChoiceById(id).setIfCheck(true);
-			break;
-		case 2:
-			exambean.getMatchingById(id).setChoiceIdList(choiceId);
-			if(ifCheck==true)
-				exambean.getMatchingById(id).setIfCheck(true);
+			else
+				exambean.getMultiChoiceById(id).setIfCheck(false);
 			break;
 		case 3:
-			exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
+			if(choiceId.size()!=0)
+				exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
+			else
+				exambean.getJudgementById(id).setChoiceId(0);
 			if(ifCheck==true)
 				exambean.getJudgementById(id).setIfCheck(true);
+			else
+				exambean.getJudgementById(id).setIfCheck(false);
 			break;
 		default:
-				System.out.println("错误的typeId");
+			System.out.println("getNextTopic error");
 		}
 		return getTopic(exambean,typeId, ++id);
+	}
+	//匹配题返回下一题
+	public Object getNextTopic(ExamBean exambean, Integer typeId, Integer id, Map<Integer, Integer> choiceIdMap,
+			boolean ifCheck) {
+		id=id-1;
+		if(ifCheck==true)
+			exambean.getMatchingById(id).setIfCheck(true);
+		else
+			exambean.getMatchingById(id).setIfCheck(false);
+		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
+		return getTopic(exambean, typeId, ++id);
 	}
 	
 	//返回上一题并将该题内容写入
 	public Object getLastTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceId,boolean ifCheck)
 	{
+		id=id-1;
 		switch(typeId)
 		{
 		case 0:
-			exambean.getSingleChoiceById(id).setChoiceId(choiceId.get(0));
+			if(choiceId.size()!=0)
+				exambean.getSingleChoiceById(id).setChoiceId(choiceId.get(0));
+			else
+				exambean.getSingleChoiceById(id).setChoiceId(0);
 			if(ifCheck==true)
 				exambean.getSingleChoiceById(id).setIfCheck(true);
+			else
+				exambean.getSingleChoiceById(id).setIfCheck(false);
 			break;
 		case 1:
-			exambean.getMultiChoiceById(id).setChoiceId(choiceId);
+			exambean.getMultiChoiceById(id).setChoiceIdList(choiceId);
 			if(ifCheck==true)
 				exambean.getMultiChoiceById(id).setIfCheck(true);
-			break;
-		case 2:
-			exambean.getMatchingById(id).setChoiceIdList(choiceId);
-			if(ifCheck==true)
-				exambean.getMatchingById(id).setIfCheck(true);
+			else
+				exambean.getMultiChoiceById(id).setIfCheck(false);
 			break;
 		case 3:
-			exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
+			if(choiceId.size()!=0)
+				exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
+			else
+				exambean.getJudgementById(id).setChoiceId(0);
 			if(ifCheck==true)
 				exambean.getJudgementById(id).setIfCheck(true);
+			else
+				exambean.getJudgementById(id).setIfCheck(false);
 			break;
+		default:
+			System.out.println("getlasttopic error");	
 		}
 		return getTopic(exambean,typeId, --id);
 	}
+	//匹配题返回上一题
+	public Object getLastTopic(ExamBean exambean, Integer typeId, Integer id, Map<Integer, Integer> choiceIdMap,
+			boolean ifCheck) {
+		id=id-1;
+		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
+		if(ifCheck==true)
+			exambean.getMatchingById(id).setIfCheck(true);
+		else
+			exambean.getMatchingById(id).setIfCheck(false);
+		return getTopic(exambean, typeId, id);
+	}
+	//返回检查页面需要的list，下标加一为题号，0为待检查，1为已完成，2为未完成
+	public List<CheckBean> getCheckList(ExamBean exambean,int typeId){
+		List<CheckBean> list=new ArrayList<>();
+		switch(typeId){
+		case 0:
+			for(int i=0;i<exambean.getSingleChoiceList().size();i++){
+				if(exambean.getSingleChoiceById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1,0));
+				else if(exambean.getSingleChoiceById(i).getChoiceId()!=0)//是不是0还要想一想
+					list.add(new CheckBean(i+1, 1));
+				else
+					list.add(new CheckBean(i+1, 2));
+			}
+			break;
+		case 1:
+			for(int i=0;i<exambean.getMultiChoicesList().size();i++){
+				if(exambean.getMultiChoiceById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1, 0));
+				else if(exambean.getMultiChoiceById(i).getChoiceIdList().size()!=0)
+					list.add(new CheckBean(i+1,1));
+				else
+					list.add(new CheckBean(i+1, 2));
+			}
+			break;
+		case 2:
+			for(int i=0;i<exambean.getMatchingList().size();i++){
+				if(exambean.getMatchingById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1, 0));
+				else if(exambean.getMatchingById(i).getChoiceIdMap().size()!=0)
+					list.add(new CheckBean(i+1, 1));
+				else
+					list.add(new CheckBean(i+1, 2));
+			}
+			break;
+		case 3:
+			for(int i=0;i<exambean.getJudgementList().size();i++)
+			{
+				if(exambean.getJudgementById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1, 0));
+				else if(exambean.getJudgementById(i).getChoiceId()!=0)
+					list.add(new CheckBean(i+1, 1));
+				else
+					list.add(new CheckBean(i+1, 2));
+			}
+			break;
+		default:
+			System.out.println("getchecklist error");
+		}
+		return list;
+	}
 	
-	//获取需要检查的单选题的id的list
-	public List<Integer> getSingleCheckList(ExamBean exambean){
-		List<Integer> checkList=new ArrayList<Integer>();
-		for(int i=0;i<exambean.getSingleChoiceList().size();i++)//获取单选题需要检查的题目的id的list
+	public int getTime(ExamBean exambean){
+		if(exambean.getStartTime()!=0)
 		{
-			if(exambean.getSingleChoiceList().get(i).isIfCheck())
-			{
-				checkList.add(exambean.getSingleChoiceList().get(i).getId());
-			}
+			int time=(int) (exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000);
+			return time;
 		}
-		return checkList;
-	}
-	//获取已作答且不需要检查的单选题的list
-	public List<Integer> getSingleAnsweredList(ExamBean exambean){
-		List<Integer> answeredList=new ArrayList<>();
-		for(int i=0;i<exambean.getSingleChoiceList().size();i++)
-		{
-			if(exambean.getSingleChoiceList().get(i).getChoiceId()!=0&&exambean.getSingleChoiceList().get(i).isIfCheck()==false)
-			{
-				answeredList.add(exambean.getSingleChoiceList().get(i).getId());
-			}
-		}
-		return answeredList;
-	}
-	//获取需要检查的多选题的id的list
-	public List<Integer> getMultiCheckList(ExamBean exambean){
-		List<Integer> checkList=new ArrayList<Integer>();
-		for(int i=0;i<exambean.getMultiChoicesList().size();i++)//获取多选题需要检查的题目的id的list
-		{
-			if(exambean.getMultiChoicesList().get(i).isIfCheck())
-			{
-				checkList.add( exambean.getMultiChoicesList().get(i).getId());
-			}
-		}
-		return checkList;
-	}
-	//获取已作答且不需要检查的多选题的list
-		public List<Integer> getMultiAnsweredList(ExamBean exambean){
-			List<Integer> answeredList=new ArrayList<>();
-			for(int i=0;i<exambean.getMultiChoicesList().size();i++)
-			{
-				if(exambean.getMultiChoicesList().get(i).getChoiceId()!=null&&exambean.getMultiChoicesList().get(i).isIfCheck()==false)
-				{
-					answeredList.add(exambean.getMultiChoicesList().get(i).getId());
-				}
-			}
-			return answeredList;
-		}
-	//获取需要检查的匹配题的id的list
-	public List<Integer> getMatchCheckList(ExamBean exambean){
-		List<Integer> checkList=new ArrayList<Integer>();
-		for(int i=0;i<exambean.getMatchingList().size();i++)
-		{
-			if(exambean.getMatchingList().get(i).isIfCheck())
-			{
-				checkList.add(exambean.getMatchingList().get(i).getId());
-			}
-		}
-		return checkList;
-	}
-	//获取已作答的且不需要检查的匹配题的list
-	public List<Integer> getMatchAnsweredList(ExamBean exambean){
-		List<Integer> answeredList=new ArrayList<>();
-		for(int i=0;i<exambean.getMatchingList().size();i++)
-		{
-			if(exambean.getMatchingList().get(i).getChoiceIdList()!=null&&exambean.getMatchingList().get(i).isIfCheck()==false)
-			{
-				answeredList.add(exambean.getMatchingList().get(i).getId());
-			}
-		}
-		return answeredList;
-	}
-	//获取需要检查的判断题的id的list
-	public List<Integer> getJudgeCheckList(ExamBean exambean){
-		List<Integer> checkList=new ArrayList<Integer>();
-		for(int i=0;i<exambean.getJudgementList().size();i++)
-		{
-			if(exambean.getJudgementList().get(i).isIfCheck())
-			{
-				checkList.add( exambean.getJudgementList().get(i).getId());
-			}
-		}
-		return checkList;
-	}
-	//获取已作答且不需要检查的判断题的list
-	public List<Integer> getJudgeAnsweredList(ExamBean exambean){
-		List<Integer> answeredList=new ArrayList<>();
-		for(int i=0;i<exambean.getJudgementList().size();i++)
-		{
-			if(exambean.getJudgementList().get(i).getChoiceId()!=0&&exambean.getJudgementList().get(i).isIfCheck()==false)
-			{
-				answeredList.add(exambean.getJudgementList().get(i).getId());
-			}
-		}
-		return answeredList;
-	}
-	//根据typeid获取检查list
-	public List<Integer> getCheckList(ExamBean exambean,int typeId){
-		switch(typeId)
-		{
-		case 0:
-			return getSingleCheckList(exambean);
-		case 1:
-			return getMultiCheckList(exambean);
-		case 2:
-			return getMatchCheckList(exambean);
-		case 3:
-			return getJudgeCheckList(exambean);
-		default:
-			System.out.println("typeid错误："+typeId);
-			return null;
-		}
-	}
-	//根据typeid获取已答list
-	public List<Integer> getAnsweredList(ExamBean exambean,int typeId){
-		switch(typeId)
-		{
-		case 0:
-			return getSingleAnsweredList(exambean);
-		case 1:
-			return getMultiAnsweredList(exambean);
-		case 2:
-			return getMatchAnsweredList(exambean);
-		case 3:
-			return getJudgeAnsweredList(exambean);
-		default:
-			System.out.println("typeid错误: "+typeId);
-			return null;
-		}
-	}
-	//监考操作之延时操作
-	public void delay(ExamBean exambean){
-		exambean.setDuration(exambean.getDuration()+100);
-	}
-	//监考操作之返回试卷
-	public void returnToExam(ExamBean exambean){
-		exambean.setFinished(false);
-	}
-	//监考操作之手动交卷
-	public void manualAssign(ExamBean exambean){
-		/*ExamBean exambean=ExamOperator.tokenExamMap.get(token);*/
-		exambean.setFinished(true);
-	}
-	// 监考操作之强制终止
-	public void forceTerminate(ExamBean exambean) {
-		exambean.setAllowStart(true);
+		else
+			return exambean.getEXAM_TIME();
 	}
 
-	// 监考操作之允许开始
-	public void allowStart(ExamBean exambean) {
-		exambean.setAllowTerminate(true);
-	}
 
-	// 监考操作之允许终止
-	public void allowTerminate(ExamBean exambean) {
-		exambean.setAllowTerminate(true);
-	}
 
-	// 监考操作之删除试卷
-	public void deleteExamInfo(ExamBean exambean) {
-		exambean = null;
-	}
+
 
 }

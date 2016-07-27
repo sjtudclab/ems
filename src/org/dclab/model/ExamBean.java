@@ -14,11 +14,14 @@ import java.util.List;
  */
 public class ExamBean implements Serializable{
 	private static final long	serialVersionUID	= 15493198966L;
+	private static int EXAM_TIME;	//整场考试的时长，记得加载时初始化 
 	//剩余时长, 装填试卷时将其初始化，每次写log时，获取前台剩余时间，重新setDuration，延时或者减少时间时直接修改这个值
-	private int duration;
+	private int duration;	//该考生剩余的时长，用于灾备
 	private long startTime;//该考生开始考试的时间
 	private int uid; //用户准考证号
 	private int sid;//考试科目id
+	
+	private boolean ifLogin;//考生是否登录了，主要是用在监考教师的界面显示上
 
 	private boolean allowStart;//任何时间开始
 	private boolean allowTerminate;//任何时间终止
@@ -31,9 +34,22 @@ public class ExamBean implements Serializable{
 	private List<MatchingBean> matchingList;
 	private List<JudgementBean> judgementList;
 	
-	public ExamBean(){}
+	public ExamBean(int id, int sid2){
+		uid=id;
+		sid=sid2;
+	}
 	
 	
+	public static int getEXAM_TIME() {
+		return EXAM_TIME;
+	}
+
+
+	public static void setEXAM_TIME(int eXAM_TIME) {
+		EXAM_TIME = eXAM_TIME;
+	}
+
+
 	public long getStartTime() {
 		return startTime;
 	}
@@ -41,6 +57,16 @@ public class ExamBean implements Serializable{
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+
+	public boolean isIfLogin() {
+		return ifLogin;
+	}
+
+
+	public void setIfLogin(boolean ifLogin) {
+		this.ifLogin = ifLogin;
 	}
 
 

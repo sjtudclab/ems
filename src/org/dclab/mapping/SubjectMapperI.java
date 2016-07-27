@@ -10,4 +10,7 @@ public interface SubjectMapperI {
 	//由id取得subject的name
 	@Select("select name from subject where id=#{id}")
 	public String getNameById(int id);
+	
+	@Select("select duration from subject where id=#{id}")
+	public int getDurationById(int id);
 }

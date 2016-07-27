@@ -21,14 +21,20 @@ public class MultiChoicesBean implements Serializable {
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private List<?> choiceIdList;//考生答案id的list
-	private String choiceA;
-	private int choiceAId;
-	private String choiceB;
-	private int choiceBId;
-	private String choiceC;
-	private int choiceCId;
-	private String choiceD;
-	private int choiceDId;
+	private List<ChoicesBean> choiceList;//题目选项的内容和id的list
+	
+	public List<?> getChoiceIdList() {
+		return choiceIdList;
+	}
+	public void setChoiceIdList(List<?> choiceIdList) {
+		this.choiceIdList = choiceIdList;
+	}
+	public List<ChoicesBean> getChoiceList() {
+		return choiceList;
+	}
+	public void setChoiceList(List<ChoicesBean> choiceList) {
+		this.choiceList = choiceList;
+	}
 	public int getId() {
 		return id;
 	}
@@ -47,12 +53,6 @@ public class MultiChoicesBean implements Serializable {
 	public void setIfCheck(boolean ifCheck) {
 		this.ifCheck = ifCheck;
 	}
-	public List<?> getChoiceId() {
-		return choiceIdList;
-	}
-	public void setChoiceId(List<?> choiceId) {
-		this.choiceIdList = choiceId;
-	}
-	
+
 	
 }

@@ -1,6 +1,8 @@
 package org.dclab.model;
 
+import java.awt.Choice;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 判断题对象：
@@ -19,10 +21,7 @@ public class JudgementBean implements Serializable{
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
-	private String choiceT;
-	private int choiceTId;
-	private String choiceF;
-	private int choiceFId;
+	private List<ChoicesBean> choiceList;//题目的内容和id的list
 	
 	public int getId() {
 		return id;
@@ -47,6 +46,12 @@ public class JudgementBean implements Serializable{
 	}
 	public void setChoiceId(int choiceId) {
 		this.choiceId = choiceId;
+	}
+	public List<ChoicesBean> getChoiceList() {
+		return choiceList;
+	}
+	public void setChoiceList(List<ChoicesBean> choiceList) {
+		this.choiceList = choiceList;
 	}
 	
 	

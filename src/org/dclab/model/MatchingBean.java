@@ -2,6 +2,7 @@ package org.dclab.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 匹配题对象：
@@ -16,22 +17,26 @@ public class MatchingBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1445501220162322852L;
-	private int id;//题目id
-	private String content;//题目内容
+	private Integer id;//整个题目的id
+	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
-	private List<?> choiceIdList;//考生答案id的list
+	private Map<Integer, Integer> choiceIdMap;//考生答案id的map
+	private List<ChoicesBean> choiceList;//选项的内容和id的list
 	
-	public int getId() {
-		return id;
+	public List<ChoicesBean> getChoiceList() {
+		return choiceList;
 	}
-	public void setId(int id) {
+	public void setChoiceList(List<ChoicesBean> choiceList) {
+		this.choiceList = choiceList;
+	}
+	public List<ContentBean> getContentList() {
+		return contentList;
+	}
+	public void setContentList(List<ContentBean> contentList) {
+		this.contentList = contentList;
+	}
+	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
 	}
 	public boolean isIfCheck() {
 		return ifCheck;
@@ -39,11 +44,11 @@ public class MatchingBean implements Serializable {
 	public void setIfCheck(boolean ifCheck) {
 		this.ifCheck = ifCheck;
 	}
-	public List<?> getChoiceIdList() {
-		return choiceIdList;
+	public Map<Integer, Integer> getChoiceIdMap() {
+		return choiceIdMap;
 	}
-	public void setChoiceIdList(List<?> choiceIdList) {
-		this.choiceIdList = choiceIdList;
+	public void setChoiceIdMap(Map<Integer, Integer> choiceIdmap) {
+		this.choiceIdMap = choiceIdmap;
 	}
 	
 }

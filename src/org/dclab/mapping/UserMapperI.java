@@ -1,6 +1,8 @@
 package org.dclab.mapping;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 import org.dclab.User;
 
@@ -12,6 +14,10 @@ public interface UserMapperI {
 	
 	@Select("select * from user where Uid=#{uid}")
 	public User getByUid(int uid);
+	
+	@Select("select Uid from user inner join candidate_subject on user.Uid=candidate_subject.candidateId")
+	public List<Integer> getUid();
+	
 	
 /*     //使用@Insert注解指明add方法要执行的SQL
 	 @Insert("insert into users(name, age) values(#{name}, #{age})")
