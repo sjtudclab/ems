@@ -36,6 +36,5 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_66/lib/rt.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

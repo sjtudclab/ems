@@ -11,25 +11,35 @@
                     <h3 class="panel-title">考生信息</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="input-group">
+                     <div style="border: 1px solid #ccc">
+                       <!--  <img src="image/inch.jpg" height="80px" width="55px" class="center-block" > -->  
+                          <img ng-src="data:image/png;base64,{{photo}}" height="80px" width="55px" class="center-block">
+                     </div>
+                     <br>
+                     <div class="input-group">
                         <span class="input-group-addon">姓名</span>
                         <p ng-bind="name" id="ename" class="form-control"></p>
                     </div>
                     <br>
                     <div class="input-group">
-                        <span class="input-group-addon">准考证号</span>
-                        <p ng-bind="id" class="form-control">7364878</p>
+                        <span class="input-group-addon">性别</span>
+                        <p ng-bind="gender" class="form-control"></p>
                     </div>
                     <br>
                     <div class="input-group">
-                        <span class="input-group-addon">身份证号</span>
-                        <p ng-bind="cid" id="e-idnum" class="form-control">sdfh</p>
+                        <span class="input-group-addon">准考证号</span>
+                        <p ng-bind="id" class="form-control"></p>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">证件号</span>
+                        <p ng-bind="cid" id="e-idnum" class="form-control"></p>
 
                     </div>
                     <br>
                     <div class="input-group">
                         <span class="input-group-addon">考试科目</span>
-                        <p ng-bind="subject" class="form-control">fh90</p>
+                        <p ng-bind="subject" class="form-control"></p>
             
                     </div>
                     <br>
@@ -38,7 +48,7 @@
                         <p class="form-control">{{time| date:'yyyy-MM-dd HH:mm:ss'}}</p>
                     </div>
                     <br>
-                    <a ui-sref="main" class="btn btn-info btn-pp center-block">确认</a>
+                    <p ng-click="click()" class="btn btn-info btn-pp center-block">确认</p>
                 </div>
             </div>
         </div>

@@ -54,6 +54,7 @@ public class UserService {
 		map.put("time", subject.getDate());
 		UUID token=ExamOperator.idTokenMap.get(Uid);
 		map.put("token", token);
+		map.put("gender", user.getGender());
 		sqlSession.close();
 		
 		String dir=user.getPhoto();

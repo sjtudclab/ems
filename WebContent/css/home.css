@@ -188,8 +188,7 @@ body {
     text-transform: uppercase;
 }
 
-.page-custom h1,
-h3 {
+.page-custom{
     color: #fff;
 }
 
@@ -325,4 +324,6 @@ h3 {
     background-color:rgba(148, 211, 224,.3);
 }
 
-
+.checkdiv {
+    margin:2%;
+}
