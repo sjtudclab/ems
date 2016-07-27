@@ -1,3 +1,4 @@
+
 package org.dclab.mapping;
 
 import org.apache.ibatis.annotations.Select;

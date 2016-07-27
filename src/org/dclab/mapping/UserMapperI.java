@@ -31,3 +31,4 @@ public interface UserMapperI {
 	 @Update("update users set name=#{name},age=#{age} where id=#{id}")
 	 public int update(User user);*/
 }
+

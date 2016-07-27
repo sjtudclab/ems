@@ -1,3 +1,4 @@
+
 package org.dclab.mapping;
 
 import java.util.List;
@@ -19,3 +20,4 @@ public interface RoomCanMapperI {
 	@Select("select candidateId from room_candidate where roomId=#{roomId} and seatNum!=null order by seatNum")
 	public List<Integer> getUidByRoomId(int roomId);
 }
+
