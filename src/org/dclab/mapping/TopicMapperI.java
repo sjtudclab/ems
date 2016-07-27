@@ -17,13 +17,13 @@ public interface TopicMapperI {
 	public List<MultiChoicesBean> getMultiBean();
 	
 	
-	@Select("select number from topic where typeId=2 order by rand() limit 2")
+	@Select("select distinct number from topic where typeId=3 order by rand() limit 2")
 	public List<Integer> getMatchNum();
 	
-	@Select("select id,content from topic where typeId=3 order by rand() limit 5")
+	@Select("select id,content from topic where typeId=2 order by rand() limit 5")
 	public List<JudgementBean> getJudgeBean();
 	
-	@Select("select id as contentId,content from topic where typeId=2 && number=#{num}")
+	@Select("select id as contentId,content from topic where typeId=3 && number=#{num}")
 	public List<ContentBean> getMatchContent(int num);
 	
 }

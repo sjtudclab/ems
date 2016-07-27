@@ -8,10 +8,18 @@ public class RequestBean {
 	private UUID token;
 	private Integer typeId;
 	private Integer id;
-	private List<Integer> choiceId;
+	private int choiceId;
+	private List<Integer> choiceIdList;
 	private Map<Integer, Integer> choiceIdMap;
 	private boolean ifCheck;
 	
+	
+	public int getChoiceId() {
+		return choiceId;
+	}
+	public void setChoiceId(int choiceId) {
+		this.choiceId = choiceId;
+	}
 	public boolean isIfCheck() {
 		return ifCheck;
 	}
@@ -37,10 +45,10 @@ public class RequestBean {
 		this.id = id;
 	}
 	public List<Integer> getChoiceIdList() {
-		return choiceId;
+		return choiceIdList;
 	}
 	public void setChoiceIdList(List<Integer> choiceIdList) {
-		this.choiceId = choiceIdList;
+		this.choiceIdList = choiceIdList;
 	}
 	public Map<Integer, Integer> getChoiceIdMap() {
 		return choiceIdMap;

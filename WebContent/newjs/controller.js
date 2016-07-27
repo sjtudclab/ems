@@ -12,10 +12,12 @@
                //加载成功之后做一些事  
              //  alert(data.name);
               // alert(data.checklist[0]);
+        	   $window.sessionStorage.token=data.token;
         	   var infoStatus={};
         	   $window.sessionStorage.infoStatus=JSON.stringify(infoStatus);
         	   var infoStatus=JSON.parse($window.sessionStorage.infoStatus);
-        	   infoStatus.token=data.token;
+        	  
+        
         	   infoStatus.name = data.name;
         	   infoStatus.gender = data.gender;
         	   infoStatus.id = data.id;
@@ -90,7 +92,7 @@
    
    
    demo0.controller("timeinfo", function($scope, $interval,$window,$http) {
-	   $http.get('time.json', {
+	   $http.get('/EMS/exam/getTime', {
 	        params: {token:$window.sessionStorage.token}
 	    }).success(function(data, status, headers, config) {
 	    	var second = data,timePromise = undefined;
@@ -130,9 +132,9 @@
 	          
 	    		  if ($stateParams.type == 1) {
 	    		     //   alert('cp面板1'+$scope.active);
-	    		        $scope.id = $stateParams.num*1; 
+	    		        $scope.nid = $stateParams.num*1; 
 	    		        //检查某题
-	    		        $http.get('single0.json', {
+	    		        $http.get('/EMS/exam/toTopic', {
 	    	                params: { typeId:0,token:$window.sessionStorage.token,id:$stateParams.num}
 	    	            }).success(function(data, status, headers, config) {
 	    	                // 试题
@@ -153,7 +155,7 @@
 	    			             $scope.count = false;
 	    	                	
 	    	                }
-	    	                if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
+	    	                if ( $scope.nid == 1) { $scope.before = true; }else{$scope.before = false; }
 
 	    	            }).error(function(data, status, headers, config) {
 	    	                //处理错误  
@@ -164,7 +166,7 @@
 	    		    	 var singleStatus=JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
 	    		    	 if(singleStatus.single.id){
 	    		    	
-	    		    	$scope.id=singleStatus.single.id;
+	    		    	$scope.nid=singleStatus.single.nid;
 	    		    	$scope.content=singleStatus.single.content;
 	    		    	$scope.lists=singleStatus.single.choiceList;
 	    		    	
@@ -186,13 +188,14 @@
 	    		    //	alert("保留tab0!")
 	    		   	 
 	    		    	 }else{
+	    		    		 alert("chushihus"+$window.sessionStorage.token);
 	    		    		 $window.sessionStorage.active=0;
 	    		    		  //初始化试题
-	    		    		  $http.get('single.json', {
+	    		    		  $http.get('/EMS/exam/start', {
 	    		    			  params: { typeId:0,token:$window.sessionStorage.token}
 	    			            }).success(function(data, status, headers, config) {
 	    			                //试题
-	    			            	$scope.id = data.id; 
+	    			            	$scope.nid = 1; 
 	    	    	                $scope.content = data.content;
 	    	    	                $scope.lists = data.choiceList;
 	    	    	                var length = $scope.lists.length;
@@ -226,7 +229,7 @@
        //下一题
        $scope.receive1 = function(option) {
 
-         //  alert(option.optionsRadios);
+           alert(option.optionsRadios);
            var isChecked=$scope.count;
       
            singleStatus.single.id=$scope.id;
@@ -239,12 +242,12 @@
            
            $window.sessionStorage.problemStatus=JSON.stringify(singleStatus);
            
-          
-           $http.get('single0.json', {
-           params: {token:$window.sessionStorage.token,typeId:0,id: $scope.id,choiceId:option,ifCheck:isChecked}
+           alert(isChecked+" "+$window.sessionStorage.token+" "+option.optionsRadios);
+           $http.get('/EMS/exam/nextTopic', {
+           params: {token:$window.sessionStorage.token,typeId:0,id: 1,choiceId:option.optionsRadios,ifCheck:isChecked}
        }).success(function(data, status, headers, config) {
     	// 试题
-    	   $scope.id=data.id;
+    	   $scope.nid=$scope.nid+1;
            $scope.content = data.content;
            $scope.lists = data.choiceList;
            var length = $scope.lists.length;
@@ -276,11 +279,11 @@
            var isChecked = $scope.count;
          //  alert(isChecked);
          //  alert(ID);
-           $http.get('single.json', {
-               params: { token:$window.sessionStorage.token,typeId:0,id: $scope.id,choiceId:option,ifCheck:isChecked}
+           $http.get('/EMS/exam/lastTopic', {
+               params: { token:$window.sessionStorage.token,typeId:0,id: $scope.nid,choiceId:option,ifCheck:isChecked}
            }).success(function(data, status, headers, config) {
         	// 试题
-        	   $scope.id=data.id;
+        	   $scope.nid=$scope.nid-1;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
                var length = $scope.lists.length;
@@ -331,7 +334,7 @@
 	    //多选题
 	          $scope.option = [];
 	          $scope.isSelected = function(id) {
-	              return $scope.option.indexOf(id) >= 0;
+	            //  return $scope.option.indexOf(id) >= 0;
 	           }
 	          $scope.updateSelection = function($event, id) {
 	              var checkbox = $event.target;
@@ -350,7 +353,7 @@
 	    		      //  alert('cp面板2'+$scope.active);
 	    		        $scope.id = $stateParams.num*1; 
 	    		        //检查某题
-	    		        $http.get('multiple.json', {
+	    		        $http.get('/EMS/exam/toTopic', {
 	    	                params: { typeId:1,token:$window.sessionStorage.token,id:$stateParams.num}
 	    	            }).success(function(data, status, headers, config) {
 	    	                // 试题
@@ -405,7 +408,7 @@
 	    		   	 
 	    		    	 }else{
 	    		    		//初始化试题
-	    		    		  $http.get('multiple.json', {
+	    		    		  $http.get('/EMS/exam/start', {
 	    		    			  params: { typeId:1,token:$window.sessionStorage.token}
 	    			            }).success(function(data, status, headers, config) {
 	    			                //试题
@@ -460,7 +463,7 @@
           $window.sessionStorage.problemStatus=JSON.stringify(multiStatus);
           
          
-          $http.get('multiple0.json', {
+          $http.get('/EMS/exam/nextTopic', {
           params: {token:$window.sessionStorage.token,typeId:1,id: $scope.id,choiceId:option,ifCheck:isChecked}
       }).success(function(data, status, headers, config) {
    	// 试题
@@ -496,7 +499,7 @@
           var isChecked = $scope.count;
         //  alert(isChecked);
         //  alert(ID);
-          $http.get('multiple.json', {
+          $http.get('/EMS/exam/lastTopic', {
               params: { token:$window.sessionStorage.token,typeId:1,id: $scope.id,choiceId:option,ifCheck:isChecked}
           }).success(function(data, status, headers, config) {
        	// 试题
@@ -557,7 +560,7 @@
 	    		       // alert('cp面板3'+$scope.active);
 	    		        $scope.id = $stateParams.num*1; 
 	    		        //检查某题
-	    		        $http.get('judg.json', {
+	    		        $http.get('/EMS/exam/toTopic', {
 	    	                params: { typeId:2,token:$window.sessionStorage.token,id:$stateParams.num}
 	    	            }).success(function(data, status, headers, config) {
 	    	                // 试题
@@ -610,7 +613,7 @@
 	    		    	
 	    		    	}else{
 	    		    		//初始化试题
-	    		    		  $http.get('judg.json', {
+	    		    		  $http.get('/EMS/exam/start', {
 	    		    			  params: { typeId:2,token:$window.sessionStorage.token}
 	    			            }).success(function(data, status, headers, config) {
 	    			                //试题
@@ -666,7 +669,7 @@
           $window.sessionStorage.problemStatus=JSON.stringify(judgStatus);
           
          
-          $http.get('judg0.json', {
+          $http.get('/EMS/exam/nextTopic', {
           params: {token:$window.sessionStorage.token,typeId:2,id: $scope.id,choiceId:option,ifCheck:isChecked}
       }).success(function(data, status, headers, config) {
    	// 试题
@@ -702,7 +705,7 @@
           var isChecked = $scope.count;
         //  alert(isChecked);
         //  alert(ID);
-          $http.get('judg.json', {
+          $http.get('/EMS/exam/lastTopic', {
               params: { token:$window.sessionStorage.token,typeId:2,id: $scope.id,choiceId:option,ifCheck:isChecked}
           }).success(function(data, status, headers, config) {
        	// 试题
@@ -763,16 +766,17 @@
 	    		       // alert('cp面板4'+$scope.active);
 	    		        $scope.id = $stateParams.num*1; 
 	    		        //检查某题
-	    		        $http.get('match.json', {
+	    		        $http.get('/EMS/exam/toTopic', {
 	    	                params: { typeId:3,token:$window.sessionStorage.token,id:$stateParams.num}
 	    	            }).success(function(data, status, headers, config) {
 	    	                // 试题
 	    	                $scope.contentlists = data.contentList;
 	    	                $scope.lists = data.choiceList;
-	    	                var length = $scope.lists.length;
-		    		    	for (var i = 0; i < length; i++) {
-		    		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		    		        }
+	    	                alert(data.choiceList);
+	    	            //    var length = $scope.lists.length;
+		    		    //	for (var i = 0; i < length; i++) {
+		    		      //      $scope.lists[i].alp=String.fromCharCode(i+65);
+		    		     //   }
 	    	                //试题状态
 	    	              
 	    	                $scope.option = data.choiceIdMap;
@@ -815,17 +819,18 @@
 	    		    	 //alert("保留tab4!")
 	    		    	}else{
 	    		    		 //初始化试题
-	    		    		  $http.get('match.json', {
+	    		    		  $http.get('/EMS/exam/start', {
 	    		    			  params: { typeId:3,token:$window.sessionStorage.token}
 	    			            }).success(function(data, status, headers, config) {
 	    			                //试题
 	    			            	$scope.id = data.id; 
 	    	  	                    $scope.contentlists = data.contentList;
-	    	  	                    $scope.lists = data.choiceList;
-	    	  	                var length = $scope.lists.length;
-	    		    		    	for (var i = 0; i < length; i++) {
-	    		    		            $scope.lists[i].alp=String.fromCharCode(i+65);
-	    		    		        }
+	    	  	              //    alert(data.choiceList);
+	    	  	               //     $scope.lists = data.choiceList;
+	    	  	             //   var length = $scope.lists.length;
+	    		    		 //   	for (var i = 0; i < length; i++) {
+	    		    		  //          $scope.lists[i].alp=String.fromCharCode(i+65);
+	    		    		 //       }
 	    	  	                //试题状态
 	    	  	                $scope.option = data.choiceIdMap;
 	    	  	                if (data.ifCheck) {
@@ -872,17 +877,17 @@
          $window.sessionStorage.problemStatus=JSON.stringify(matchStatus);
          
         
-         $http.get('match0.json', {
+         $http.get('/EMS/exam/nextTopic', {
          params: {token:$window.sessionStorage.token,typeId:3,id: $scope.id,choiceId:option,ifCheck:isChecked}
      }).success(function(data, status, headers, config) {
   	// 试题
   	     $scope.id=data.id;
          $scope.contentlists = data.contentList;
          $scope.lists = data.choiceList;
-         var length = $scope.lists.length;
+        /* var length = $scope.lists.length;
 	       for (var i = 0; i < length; i++) {
 	            $scope.lists[i].alp=String.fromCharCode(i+65);
-	        }
+	        }*/
          //试题状态
          $scope.option= data.choiceIdMap;
          if (data.ifCheck) {
@@ -908,17 +913,17 @@
          var isChecked = $scope.count;
        //  alert(isChecked);
        //  alert(ID);
-         $http.get('match.json', {
+         $http.get('/EMS/exam/lastTopic', {
              params: { token:$window.sessionStorage.token,typeId:3,id: $scope.id,choiceId:option,ifCheck:isChecked}
          }).success(function(data, status, headers, config) {
       	// 试题
       	   $scope.id=data.id;
              $scope.contentlists = data.contentList;
              $scope.lists = data.choiceList;
-             var length = $scope.lists.length;
+             /*var length = $scope.lists.length;
 		    	for (var i = 0; i < length; i++) {
 		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		        }
+		        }*/
              //试题状态
              $scope.option = data.choiceIdMap;
              if (data.ifCheck) {
@@ -981,7 +986,7 @@ checkup.controller('btnCtrl', function($scope) {
 //单选题
 checkup.controller("Ctab1",function($scope,$http,$state,$window){
        
-	        $http.get('checklist.json', {
+	        $http.get('/EMS/exam/check', {
 	            params: { token:$window.sessionStorage.token,typeId:0 }
 	        }).success(function(data, status, headers, config) {
 	            $scope.lists = data;
@@ -1004,7 +1009,7 @@ checkup.controller("Ctab1",function($scope,$http,$state,$window){
 //多选题
 checkup.controller("Ctab2",function($scope,$http,$state,$window){
     
-    $http.get('checklist.json', {
+    $http.get('/EMS/exam/check', {
         params: { token:$window.sessionStorage.token,typeId:1  }
     }).success(function(data, status, headers, config) {
         $scope.lists = data;
@@ -1026,7 +1031,7 @@ $scope.skip=function(listnum){
 //判断题
 checkup.controller("Ctab3",function($scope,$http,$state,$window){
     
-    $http.get('checklist.json', {
+    $http.get('/EMS/exam/check', {
         params: { token:$window.sessionStorage.token,typeId:2 }
     }).success(function(data, status, headers, config) {
         $scope.lists = data;
@@ -1048,7 +1053,7 @@ $scope.skip=function(listnum){
 //匹配题
 checkup.controller("Ctab4",function($scope,$http,$state,$window){
     
-    $http.get('checklist.json', {
+    $http.get('/EMS/exam/check', {
         params: { token:$window.sessionStorage.token,typeId:3 }
     }).success(function(data, status, headers, config) {
         $scope.lists = data;

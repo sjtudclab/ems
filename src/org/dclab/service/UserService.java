@@ -55,7 +55,6 @@ public class UserService {
 			map.put("gender", user.getGender());
 			map.put("token", ExamOperator.idTokenMap.get(Uid));
 			
-			
 			String dir=user.getPhoto();
 			InputStream in=null;
 			byte[] data=null;
@@ -72,6 +71,7 @@ public class UserService {
 			BASE64Encoder encoder=new BASE64Encoder();
 			String photo=encoder.encode(data);
 			map.put("photo", photo);
+			System.out.println("login执行完毕，返回数据");
 			break;
 		case 1:
 			map.put("Uid",user.getUid());

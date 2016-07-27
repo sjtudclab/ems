@@ -69,13 +69,31 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
+			System.out.println("单选第一题");
 			return exambean.getSingleChoiceById(0);
 		case 1:
+			System.out.println("多选第一题");
 			return exambean.getMultiChoiceById(0);
-		case 2:
-			return exambean.getMatchingById(0);
 		case 3:
-			return exambean.getJudgementById(0);
+			System.out.println("匹配第一题");
+			if(exambean.getMatchingList().size()>0)
+				{System.out.println("匹配list有东西");
+				return exambean.getMatchingById(0);
+				}
+			else
+			{
+				System.out.println("没有东西");
+				return null;
+			}
+		case 2:
+			System.out.println("判断第一题");
+			if(exambean.getJudgementList().size()>0)
+			{
+				System.out.println("判断没有题");
+				return exambean.getJudgementById(0);
+			}
+			else
+				return null;
 		default:
 			System.out.println("typeid取值不正确："+typeId);
 			return null;
@@ -84,6 +102,7 @@ public class ExamService {
 	//由token获取exambean
 	public ExamBean getExambeanByToken(UUID token)
 	{
+		System.out.println("用token获取ExamBean");
 		return ExamOperator.tokenExamMap.get(token);
 	}
 	//根据typeid和id获取题目。
@@ -95,18 +114,19 @@ public class ExamService {
 			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else
+				System.out.println(exambean.getSingleChoiceById(id));
 				return exambean.getSingleChoiceById(id);
 		case 1:
 			if(id==exambean.getMultiChoicesList().size()||id<0)
 				return null;
 			else
 				return exambean.getMultiChoiceById(id);
-		case 2:
+		case 3:
 			if(id==exambean.getMatchingList().size()||id<0)
 				return null;
 			else
 				return exambean.getMatchingById(id);
-		case 3:
+		case 2:
 			if(id==exambean.getJudgementList().size()||id<0)
 				return null;
 			else
@@ -161,51 +181,37 @@ public class ExamService {
 		return map;
 	}
 	//返回下一题并将该题内容写入
-	public Object getNextTopic(ExamBean exambean,Integer typeId,Integer id,List<Integer> choiceId,boolean ifCheck)
+	public Object getNextTopic(ExamBean exambean,int typeId,int id,int choiceId,boolean ifCheck)
 	{
 		id=id-1;//前端传来的id是这道题的标号，从1开始。存储在list中的题目下标从0开始，所以减一
 		switch(typeId)
 		{
 		case 0:
-			if(choiceId.size()!=0)
-				exambean.getSingleChoiceById(id).setChoiceId(choiceId.get(0));//单选题写入考生答案，以及检查标志
-			else
-				exambean.getSingleChoiceById(id).setChoiceId(0);//如果传过来的考生答案为空，则将bean中的答案置为0
-			if(ifCheck==true)
-				exambean.getSingleChoiceById(id).setIfCheck(true);
-			else
-				exambean.getSingleChoiceById(id).setIfCheck(false);
+				exambean.getSingleChoiceById(id).setChoiceId(choiceId);//单选题写入考生答案，以及检查标志
+				exambean.getSingleChoiceById(id).setIfCheck(ifCheck);
 			break;
-		case 1:
-			exambean.getMultiChoiceById(id).setChoiceIdList(choiceId);
-			if(ifCheck==true)
-				exambean.getMultiChoiceById(id).setIfCheck(true);
-			else
-				exambean.getMultiChoiceById(id).setIfCheck(false);
-			break;
-		case 3:
-			if(choiceId.size()!=0)
-				exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
-			else
-				exambean.getJudgementById(id).setChoiceId(0);
-			if(ifCheck==true)
-				exambean.getJudgementById(id).setIfCheck(true);
-			else
-				exambean.getJudgementById(id).setIfCheck(false);
+		case 2:
+				exambean.getJudgementById(id).setChoiceId(choiceId);
+				exambean.getJudgementById(id).setIfCheck(ifCheck);
 			break;
 		default:
 			System.out.println("getNextTopic error");
 		}
 		return getTopic(exambean,typeId, ++id);
 	}
+	//多选题返回下一题
+	
+	public Object getNextTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck){
+		id=id-1;
+		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
+		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		return getTopic(exambean, typeId, ++id);
+	}
 	//匹配题返回下一题
 	public Object getNextTopic(ExamBean exambean, Integer typeId, Integer id, Map<Integer, Integer> choiceIdMap,
 			boolean ifCheck) {
 		id=id-1;
-		if(ifCheck==true)
-			exambean.getMatchingById(id).setIfCheck(true);
-		else
-			exambean.getMatchingById(id).setIfCheck(false);
+			exambean.getMatchingById(id).setIfCheck(ifCheck);
 		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
 		return getTopic(exambean, typeId, ++id);
 	}
@@ -233,7 +239,7 @@ public class ExamService {
 			else
 				exambean.getMultiChoiceById(id).setIfCheck(false);
 			break;
-		case 3:
+		case 2:
 			if(choiceId.size()!=0)
 				exambean.getJudgementById(id).setChoiceId(choiceId.get(0));
 			else
@@ -283,7 +289,7 @@ public class ExamService {
 					list.add(new CheckBean(i+1, 2));
 			}
 			break;
-		case 2:
+		case 3:
 			for(int i=0;i<exambean.getMatchingList().size();i++){
 				if(exambean.getMatchingById(i).isIfCheck()==true)
 					list.add(new CheckBean(i+1, 0));
@@ -293,7 +299,7 @@ public class ExamService {
 					list.add(new CheckBean(i+1, 2));
 			}
 			break;
-		case 3:
+		case 2:
 			for(int i=0;i<exambean.getJudgementList().size();i++)
 			{
 				if(exambean.getJudgementById(i).isIfCheck()==true)
