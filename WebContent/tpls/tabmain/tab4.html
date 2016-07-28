@@ -1,0 +1,49 @@
+<!--text-align:center-->
+<div class="container" ng-controller="ppCtrl" ng-init="ppreceive()">
+    <div class="col-md-6">
+        <div>
+            {{num}}、<span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> 
+        </div>
+        <div ng-controller="navbar">
+            (1).{{content1}}
+            <select role="button" ng-model="opt.selected1" ng-options="x for x in activities">
+            </select>
+        </div>
+        <br>
+        <div ng-controller="navbar">
+            (2).{{content2}}
+            <select role="button" ng-model="opt.selected2" ng-options="x for x in activities">
+            </select>
+        </div>
+        <br>
+        <div ng-controller="navbar">
+            (3).{{content3}}
+            <select role="button" ng-model="opt.selected3" ng-options="x for x in activities">
+            </select>
+        </div>
+        <br>
+        <div style="padding-left:5%">
+            <a class="btn" ng-click="before ||radio(option)" ng-disabled="before" >上一题</a>
+            <a class="btn" ng-click="receive4(opt)">下一题</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <br>
+        <br>
+        <div id="Id1">
+            A. {{option1}}
+        </div>
+        <br>
+        <div id="Id2">
+            B. {{option2}}
+        </div>
+        <br>
+        <div id="Id3">
+            C. {{option3}}
+        </div>
+        <br>
+        <div id="Id4">
+            D. {{option4}}
+        </div>
+    </div>
+</div>
