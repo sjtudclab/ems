@@ -1,6 +1,7 @@
+
 <div ui-view="info"></div>
 <!-- Main component for a primary marketing message or call to action -->
-<div style="height:84%" class="tabcolor">
+<!-- <div style="height:84%" class="tabcolor">
     <uib-tabset active="active" type="tabs">
         <uib-tab index="0" heading="单选题">
             <div>
@@ -23,7 +24,20 @@
             </div>
         </uib-tab>
     </uib-tabset>
-</div>
+</div> -->
+ <div ng-controller="TabsDemoCtrl" style="height:84%">
+        <ul class="nav nav-tabs" style="height:6.5%">
+            <li ng-repeat="x in problemMetaInfo" class="{{active[$index]}}">
+                <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-style: solid;border-color:black;border-bottom-color:transparent">{{x}}</a>
+            </li>
+        </ul>
+        <div class="tab-content" style="height:93.5%">
+            <div ng-repeat="x in problemMetaInfo" class="tab-pane {{active[$index]}}" style="background-color:{{color[$index]}};height:100%">
+<!--                  <div  style="height:100%">ff</div>-->
+                  <div ui-view="tab{{$index+1}}" style="height:100%"></div>
+            </div>
+        </div>
+   </div>
 <div class="container-fluid info-custom" style="height:8%">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="row" style="height:100%">

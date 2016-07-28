@@ -82,6 +82,48 @@
 
 
    var demo0 = angular.module('demo0', ['ui.bootstrap'])
+   
+   demo0.controller('TabsDemoCtrl', function($scope) {
+    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题'];
+    $scope.active = [];
+    $scope.color = [];
+    $scope.index = 0;
+    $scope.$watch('index', function(newValue, oldValue) {
+        for (i in $scope.active) {
+
+            $scope.active[i] = "";
+            $scope.color[i] = "white";
+        };
+
+
+        $scope.active[$scope.index] = "active";
+
+        switch ($scope.index) {
+            case 0:
+                $scope.color[$scope.index] = "rgba(165,222,228,1)";
+                break;
+            case 1:
+                $scope.color[$scope.index] = "#CCCCFF";
+                break;
+            case 2:
+                $scope.color[$scope.index] = "#A8D8B9";
+                break;
+            case 3:
+                $scope.color[$scope.index] = "#FFCCCC";
+                break;
+            default:
+                alert('error');
+
+        };
+    });
+
+    $scope.sel = function(index) {
+        $scope.index = index;
+    };
+
+});
+   
+   
 
    demo0.controller('showMain', function($scope, $state, $stateParams, $window) {
 
