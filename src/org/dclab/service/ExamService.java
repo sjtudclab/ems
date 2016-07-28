@@ -93,10 +93,14 @@ public class ExamService {
 		switch (typeId) {
 		case 0:
 			exambean.getSingleChoiceById(id).setChoiceId(choiceId);
+			if(exambean.getSingleChoiceById(id).getChoiceId()!=0)
+				exambean.getFinishTopic().add(exambean.getSingleChoiceById(id).getId());
 			exambean.getSingleChoiceById(id).setIfCheck(ifCheck);
 			break;
 		case 2:
 			exambean.getJudgementById(id).setChoiceId(choiceId);
+			if(exambean.getJudgementById(id).getChoiceId()!=0)
+				exambean.getFinishTopic().add(exambean.getJudgementById(id).getId());
 			exambean.getJudgementById(id).setIfCheck(ifCheck);
 			break;
 		default:
@@ -108,11 +112,16 @@ public class ExamService {
 	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
 	{
 		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		if(exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
+			exambean.getFinishTopic().add(exambean.getMultiChoiceById(id).getId());
 		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
 	}
+	//匹配题
 	public void storeTopic(ExamBean exambean,int typeId,int id,Map<Integer, Integer> choiceIdMap,boolean ifCheck)
 	{
 		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
+		if(exambean.getMatchingById(id).getChoiceIdMap().size()!=0)
+			exambean.getFinishTopic().add(exambean.getMatchingById(id).getId());
 		exambean.getMatchingById(id).setIfCheck(ifCheck);
 	}
 	//根据typeid和id获取题目。
