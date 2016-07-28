@@ -17,12 +17,15 @@ public class MatchingBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1445501220162322852L;
-	private Integer id;//整个题目的id
+	private int id;//整个题目的id
 	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
 	private Map<Integer, Integer> choiceIdMap;//考生答案id的map
 	private List<ChoicesBean> choiceList;//选项的内容和id的list
 	
+	public int getId() {
+		return id;
+	}
 	public List<ChoicesBean> getChoiceList() {
 		return choiceList;
 	}
@@ -35,7 +38,7 @@ public class MatchingBean implements Serializable {
 	public void setContentList(List<ContentBean> contentList) {
 		this.contentList = contentList;
 	}
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public boolean isIfCheck() {

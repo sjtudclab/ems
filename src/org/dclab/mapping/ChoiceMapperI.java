@@ -9,6 +9,6 @@ public interface ChoiceMapperI {
 	@Select("select id as choiceId,content from choice where topicId=#{topicId}")
 	public List<ChoicesBean> getChoice(int topicId);
 	
-	@Select("select id as choiceId,content from choice where topicId=#{topicId}")
-	public ChoicesBean getMatchChoice(int topicId);
+	@Select("select id as choiceId,content from choice where id>60&&id<63")
+	public List<ChoicesBean> getJudgeChoice();
 }

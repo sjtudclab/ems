@@ -6,14 +6,21 @@ import java.util.UUID;
 
 public class RequestBean {
 	private UUID token;
-	private Integer typeId;
-	private Integer id;
+	private int typeId;
+	private int id;
+	private int requestId;
 	private int choiceId;
 	private List<Integer> choiceIdList;
 	private Map<Integer, Integer> choiceIdMap;
 	private boolean ifCheck;
 	
 	
+	public int getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(int requestId) {
+		this.requestId = requestId;
+	}
 	public int getChoiceId() {
 		return choiceId;
 	}
@@ -32,16 +39,16 @@ public class RequestBean {
 	public void setToken(UUID token) {
 		this.token = token;
 	}
-	public Integer getTypeId() {
+	public int getTypeId() {
 		return typeId;
 	}
-	public void setTypeId(Integer typeId) {
+	public void setTypeId(int typeId) {
 		this.typeId = typeId;
 	}
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public List<Integer> getChoiceIdList() {

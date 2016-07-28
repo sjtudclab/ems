@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.ChoiceMapperI;
+import org.dclab.mapping.MatchItemMapperI;
 import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.mapping.UserMapperI;
@@ -42,6 +43,7 @@ public class ExamOperator {
 		
 	    TopicMapperI topicMapper=sqlSession.getMapper(TopicMapperI.class);
 	    ChoiceMapperI choiceMapper=sqlSession.getMapper(ChoiceMapperI.class);
+	    MatchItemMapperI matchMapper=sqlSession.getMapper(MatchItemMapperI.class);
 	    
 	    List<SingleChoiceBean> slist=topicMapper.getSingleBean();//将topicid和content填入singlechoiceBean
 	    for(SingleChoiceBean bean: slist){//对于每一个bean，根据topicid填充选项的id和content
@@ -59,20 +61,15 @@ public class ExamOperator {
 	    
 	    System.out.println("多选题的个数"+mlist.size());//********
 	    
-	    List<Integer> numlist=topicMapper.getMatchNum();//由于一道匹配题有多个topicid,所以根据number识别
+	    List<Integer> tlist=topicMapper.getMatchTopicId();//由于一道匹配题有多个topicid,所以根据number识别
 	    List<MatchingBean>  mlist1=new ArrayList<MatchingBean>();
-	    for(int num : numlist)
+	    for(int topicId : tlist)
 	    {
 	    	MatchingBean bean=new MatchingBean();
-	    	bean.setId(num);//
-	    	bean.setContentList(topicMapper.getMatchContent(num));//对于每一道匹配题，都有一个内容和id的list
-	    	List<ChoicesBean> clist=new ArrayList<ChoicesBean>();
-	    	for(ContentBean cbean : bean.getContentList()){//对于匹配题的每一个待选项，都有一个对应的答案
-	    		int topicid=cbean.getContentId();
-	    		ChoicesBean choicesBean=choiceMapper.getMatchChoice(topicid);
-	    		clist.add(choicesBean);
-	    	}
-	    	bean.setChoiceList(clist);
+	    	bean.setId(topicId);//
+	    	bean.setContentList(matchMapper.getItem(topicId));//对于每一道匹配题，都有一个内容和id的list
+	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
+	    	mlist1.add(bean);
 	    }
 	    
 	    System.out.println("匹配题的个数"+mlist1.size());//********
@@ -80,9 +77,8 @@ public class ExamOperator {
 	    List<JudgementBean> jlist=topicMapper.getJudgeBean();//和单选题一样
 	    for(JudgementBean bean: jlist){
 	    	int topicId=bean.getId();
-	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
+	    	bean.setChoiceList(choiceMapper.getJudgeChoice());
 	    }
-	    
 	    System.out.println("判断题的个数"+jlist.size());//********
 	    
 	    System.out.println("成功取出题目");

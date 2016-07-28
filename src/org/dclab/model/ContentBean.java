@@ -1,5 +1,10 @@
 package org.dclab.model;
 
+/**
+ * @author alvis
+ *对于匹配题独特需求的bean。
+ *每个匹配题有多个item，每个item有多个content及对应的id
+ */
 public class ContentBean {
 	private int contentId;
 	private String content;

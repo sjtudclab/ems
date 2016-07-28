@@ -45,12 +45,10 @@ public class ExamController {
 		{
 			long startTime=System.currentTimeMillis();
 			exambean.setStartTime(startTime);//将考生开始考试的时间写入ExamBean
-			System.out.println("here");
 			return examService.getFirstTopic(exambean, request.getTypeId());
 		}
 		else /*if(System.currentTimeMillis()-exambean.getStartTime()<exambean.getDuration()*1000)*/
 		{
-			System.out.println("this");
 			return examService.getFirstTopic(exambean, request.getTypeId());
 		}
 /*		else
@@ -62,8 +60,6 @@ public class ExamController {
 	
 	@RequestMapping("/nextTopic")
 	public Object getNextTopic(RequestBean request){
-		System.out.println("进入了下一题函数");
-		System.out.println("下一题得到的题目id"+request.getId());
 		ExamBean exambean=examService.getExambeanByToken(request.getToken());
 		if(request.getChoiceIdMap()!=null)
 		{

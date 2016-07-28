@@ -32,6 +32,7 @@
         <mapper class="org.dclab.mapping.RoomCanMapperI"/>
         <mapper class="org.dclab.mapping.TopicMapperI"/>
         <mapper class="org.dclab.mapping.ChoiceMapperI"/>
+        <mapper class="org.dclab.mapping.MatchItemMapperI"/>
     </mappers>
     
 </configuration>

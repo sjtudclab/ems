@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
  * 试卷操作
@@ -69,41 +70,45 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
-			System.out.println("单选第一题");
 			return exambean.getSingleChoiceById(0);
 		case 1:
-			System.out.println("多选第一题");
 			return exambean.getMultiChoiceById(0);
 		case 3:
-			System.out.println("匹配第一题");
-			if(exambean.getMatchingList().size()>0)
-				{System.out.println("匹配list有东西");
-				return exambean.getMatchingById(0);
-				}
-			else
-			{
-				System.out.println("没有东西");
-				return null;
-			}
+			return exambean.getMatchingById(0);
 		case 2:
-			System.out.println("判断第一题");
-			if(exambean.getJudgementList().size()>0)
-			{
-				System.out.println("判断没有题");
-				return exambean.getJudgementById(0);
-			}
-			else
-				return null;
+			return exambean.getJudgementById(0);
 		default:
-			System.out.println("typeid取值不正确："+typeId);
-			return null;
+			System.out.println("获取第一题出错");
+		return null;
 		}
 	}
 	//由token获取exambean
 	public ExamBean getExambeanByToken(UUID token)
 	{
-		System.out.println("用token获取ExamBean");
 		return ExamOperator.tokenExamMap.get(token);
+	}
+	//存储当前题目的状态
+	public void storeTopic(ExamBean exambean,int typeId,int id,int choiceId,boolean ifCheck)
+	{
+		switch (typeId) {
+		case 0:
+			exambean.getSingleChoiceById(id).setChoiceId(choiceId);
+			exambean.getSingleChoiceById(id).setIfCheck(ifCheck);
+			break;
+		case 2:
+			exambean.getJudgementById(id).setChoiceId(choiceId);
+			exambean.getJudgementById(id).setIfCheck(ifCheck);
+			break;
+		default:
+			System.out.println("storeTopic运行出错");
+			break;
+		}
+	}
+	//多选题存储，重载
+	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
+	{
+		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
 	}
 	//根据typeid和id获取题目。
 	public Object getTopic(ExamBean exambean,int typeId,int id)

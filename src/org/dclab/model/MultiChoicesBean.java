@@ -20,13 +20,13 @@ public class MultiChoicesBean implements Serializable {
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
-	private List<?> choiceIdList;//考生答案id的list
+	private List<Integer> choiceIdList;//考生答案id的list
 	private List<ChoicesBean> choiceList;//题目选项的内容和id的list
 	
 	public List<?> getChoiceIdList() {
 		return choiceIdList;
 	}
-	public void setChoiceIdList(List<?> choiceIdList) {
+	public void setChoiceIdList(List<Integer> choiceIdList) {
 		this.choiceIdList = choiceIdList;
 	}
 	public List<ChoicesBean> getChoiceList() {
