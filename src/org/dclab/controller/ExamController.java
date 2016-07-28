@@ -1,5 +1,6 @@
 package org.dclab.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -90,27 +91,37 @@ public class ExamController {
 		ExamBean exambean=examService.getExambeanByToken(request.getToken());
 		int id=request.getId()-1;
 		int requestId=request.getRequestId()-1;
+		
 		switch (request.getTypeId()) {
+		case 0:
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceId(), request.isIfCheck());
+			break;
 		case 1:
-			System.out.println(request.getChoiceIdList());
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceIdList(), request.isIfCheck());
 			break;
 		case 3:
-			System.out.println(request.getChoiceIdMap());
 			Map<Integer, Integer> map=examService.stringTomap(request.getChoiceIdMap());
 			examService.storeTopic(exambean, request.getTypeId(), id, map, request.isIfCheck());
 			break;
-		default:
+		case 2:
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceId(), request.isIfCheck());
+			break;
+		default:
+			System.out.println("controller getTopic 出错");
 			break;
 		}
 		return examService.getTopic(exambean, request.getTypeId(), requestId);
 	}
 	@RequestMapping("/check")
-	public List<CheckBean> showCheckPage(@RequestParam(value="token")UUID token,
+	public Map<String, Object> showCheckPage(@RequestParam(value="token")UUID token,
 			@RequestParam(value="typeId")Integer typeId){
 		ExamBean exambean=examService.getExambeanByToken(token);
-		return examService.getCheckList(exambean, typeId);
+		Map<String, Object> map=new HashMap<String, Object>();
+		List<CheckBean> checkList=examService.getCheckList(exambean, typeId);
+		map.put("checkList", checkList);
+		map.put("topicNum", exambean.getTopicNum());
+		map.put("finishNum", exambean.getFinishTopic().size());
+		return map;
 	}
 	
 	@RequestMapping("/toTopic")

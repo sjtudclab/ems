@@ -1,6 +1,7 @@
 package org.dclab.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,6 +22,9 @@ public class ExamBean implements Serializable{
 	private int uid; //用户准考证号
 	private int sid;//考试科目id
 	
+	private int topicNum;
+	private HashSet<Integer> finishTopic;
+	
 	private boolean ifLogin;//考生是否登录了，主要是用在监考教师的界面显示上
 
 	private boolean allowStart;//任何时间开始
@@ -37,9 +41,29 @@ public class ExamBean implements Serializable{
 	public ExamBean(int id, int sid2){
 		uid=id;
 		sid=sid2;
+		finishTopic=new HashSet<>();
 	}
 	
 	
+	public HashSet<Integer> getFinishTopic() {
+		return finishTopic;
+	}
+
+
+	public void setFinishTopic(HashSet<Integer> finishTopic) {
+		this.finishTopic = finishTopic;
+	}
+
+
+	public int getTopicNum() {
+		return topicNum;
+	}
+
+
+	public void setTopicNum(int topicNum) {
+		this.topicNum = topicNum;
+	}
+
 	public static int getEXAM_TIME() {
 		return EXAM_TIME;
 	}
