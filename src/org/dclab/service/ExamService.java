@@ -110,6 +110,11 @@ public class ExamService {
 		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
 		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
 	}
+	public void storeTopic(ExamBean exambean,int typeId,int id,Map<Integer, Integer> choiceIdMap,boolean ifCheck)
+	{
+		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
+		exambean.getMatchingById(id).setIfCheck(ifCheck);
+	}
 	//根据typeid和id获取题目。
 	public Object getTopic(ExamBean exambean,int typeId,int id)
 	{
@@ -119,7 +124,6 @@ public class ExamService {
 			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else
-				System.out.println(exambean.getSingleChoiceById(id));
 				return exambean.getSingleChoiceById(id);
 		case 1:
 			if(id==exambean.getMultiChoicesList().size()||id<0)
@@ -137,7 +141,7 @@ public class ExamService {
 			else
 				return exambean.getJudgementById(id);
 		default:
-			System.out.println("get topic error");
+			System.out.println("getTopic error");
 			return null;
 		}
 	}
@@ -186,7 +190,7 @@ public class ExamService {
 		return map;
 	}
 	//返回下一题并将该题内容写入
-	public Object getNextTopic(ExamBean exambean,int typeId,int id,int choiceId,boolean ifCheck)
+/*	public Object getNextTopic(ExamBean exambean,int typeId,int id,int choiceId,boolean ifCheck)
 	{
 		id=id-1;//前端传来的id是这道题的标号，从1开始。存储在list中的题目下标从0开始，所以减一
 		switch(typeId)
@@ -203,10 +207,10 @@ public class ExamService {
 			System.out.println("getNextTopic error");
 		}
 		return getTopic(exambean,typeId, ++id);
-	}
+	}*/
 	//多选题返回下一题
 	
-	public Object getNextTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck){
+	/*public Object getNextTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck){
 		id=id-1;
 		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
 		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
@@ -220,9 +224,9 @@ public class ExamService {
 		exambean.getMatchingById(id).setChoiceIdMap(choiceIdMap);
 		return getTopic(exambean, typeId, ++id);
 	}
-	
+	*/
 	//返回上一题并将该题内容写入
-	public Object getLastTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceId,boolean ifCheck)
+	/*public Object getLastTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceId,boolean ifCheck)
 	{
 		id=id-1;
 		switch(typeId)
@@ -269,7 +273,7 @@ public class ExamService {
 		else
 			exambean.getMatchingById(id).setIfCheck(false);
 		return getTopic(exambean, typeId, id);
-	}
+	}*/
 	//返回检查页面需要的list，下标加一为题号，0为待检查，1为已完成，2为未完成
 	public List<CheckBean> getCheckList(ExamBean exambean,int typeId){
 		List<CheckBean> list=new ArrayList<>();

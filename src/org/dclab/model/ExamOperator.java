@@ -57,6 +57,8 @@ public class ExamOperator {
 	    for(MultiChoicesBean bean: mlist){
 	    	int topicId=bean.getId();
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
+	    	List<Integer> choiceIdList=new ArrayList<>();
+	    	bean.setChoiceIdList(choiceIdList);
 	    }
 	    
 	    System.out.println("多选题的个数"+mlist.size());//********
@@ -70,6 +72,8 @@ public class ExamOperator {
 	    	bean.setContentList(matchMapper.getItem(topicId));//对于每一道匹配题，都有一个内容和id的list
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
 	    	mlist1.add(bean);
+	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
+	    	bean.setChoiceIdMap(choiceIdMap);
 	    }
 	    
 	    System.out.println("匹配题的个数"+mlist1.size());//********

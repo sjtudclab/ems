@@ -1,6 +1,7 @@
 package org.dclab.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.dclab.model.CheckBean;
@@ -58,7 +59,7 @@ public class ExamController {
 		}*/
 	}
 	
-	@RequestMapping("/nextTopic")
+	/*@RequestMapping("/nextTopic")
 	public Object getNextTopic(RequestBean request){
 		ExamBean exambean=examService.getExambeanByToken(request.getToken());
 		if(request.getChoiceIdMap()!=null)
@@ -82,8 +83,29 @@ public class ExamController {
 		}
 		else
 			return examService.getLastTopic(exambean, requset.getTypeId(), requset.getId(), requset.getChoiceIdList(), requset.isIfCheck());
+	}*/
+	@RequestMapping("/getTopic")
+	public Object getTopic(RequestBean request)//写入本题状态，返回请求的题目
+	{
+		ExamBean exambean=examService.getExambeanByToken(request.getToken());
+		int id=request.getId()-1;
+		int requestId=request.getRequestId()-1;
+		switch (request.getTypeId()) {
+		case 1:
+			System.out.println(request.getChoiceIdList());
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceIdList(), request.isIfCheck());
+			break;
+		case 3:
+			System.out.println(request.getChoiceIdMap());
+			Map<Integer, Integer> map=examService.stringTomap(request.getChoiceIdMap());
+			examService.storeTopic(exambean, request.getTypeId(), id, map, request.isIfCheck());
+			break;
+		default:
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceId(), request.isIfCheck());
+			break;
+		}
+		return examService.getTopic(exambean, request.getTypeId(), requestId);
 	}
-	
 	@RequestMapping("/check")
 	public List<CheckBean> showCheckPage(@RequestParam(value="token")UUID token,
 			@RequestParam(value="typeId")Integer typeId){
@@ -93,8 +115,8 @@ public class ExamController {
 	
 	@RequestMapping("/toTopic")
 	public Object toTopic(@RequestParam(value="token")UUID token,
-			@RequestParam(value="typeId")Integer typeId,
-			@RequestParam(value="id")Integer id){
+			@RequestParam(value="typeId")int typeId,
+			@RequestParam(value="id")int id){
 		ExamBean exambean=examService.getExambeanByToken(token);
 		id=id-1;
 		return examService.getTopic(exambean, typeId, id);

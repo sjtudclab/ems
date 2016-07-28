@@ -11,7 +11,7 @@ public class RequestBean {
 	private int requestId;
 	private int choiceId;
 	private List<Integer> choiceIdList;
-	private Map<Integer, Integer> choiceIdMap;
+	private String choiceIdMap;
 	private boolean ifCheck;
 	
 	
@@ -57,10 +57,10 @@ public class RequestBean {
 	public void setChoiceIdList(List<Integer> choiceIdList) {
 		this.choiceIdList = choiceIdList;
 	}
-	public Map<Integer, Integer> getChoiceIdMap() {
+	public String getChoiceIdMap() {
 		return choiceIdMap;
 	}
-	public void setChoiceIdMap(Map<Integer, Integer> choiceIdMap) {
+	public void setChoiceIdMap(String choiceIdMap) {
 		this.choiceIdMap = choiceIdMap;
 	}
 	
