@@ -49,6 +49,7 @@
        problemStatus.multiple = {};
        problemStatus.judgment = {};
        problemStatus.match = {};
+       problemStatus.simple = {};
        $window.sessionStorage.problemStatus = JSON.stringify(problemStatus);
 
        var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
@@ -84,35 +85,60 @@
    var demo0 = angular.module('demo0', ['ui.bootstrap'])
    
    demo0.controller('TabsDemoCtrl', function($scope) {
-    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题'];
+    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题','简答题'];
     $scope.active = [];
+//    for(x in $scope.problemMetaInfo){
+//    	$scope.active[x]='';
+//    };
     $scope.color = [];
     $scope.index = 0;
     $scope.$watch('index', function(newValue, oldValue) {
+    	
         for (i in $scope.active) {
 
             $scope.active[i] = "";
-            $scope.color[i] = "white";
+            $scope.color[i] = "transparant";
+           
+            
         };
 
 
         $scope.active[$scope.index] = "active";
 
         switch ($scope.index) {
+    
             case 0:
-                $scope.color[$scope.index] = "rgba(165,222,228,1)";
+                $scope.color[$scope.index] = "rgba(88,178,220,.5)";
                 break;
             case 1:
-                $scope.color[$scope.index] = "#CCCCFF";
+                $scope.color[$scope.index] = "rgba(204,204,255,.6)";
                 break;
             case 2:
-                $scope.color[$scope.index] = "#A8D8B9";
+                $scope.color[$scope.index] = "rgba(168,216,185,.6)";
                 break;
             case 3:
-                $scope.color[$scope.index] = "#FFCCCC";
+                $scope.color[$scope.index] = "rgba(255,204,204,.6)";
+                break;
+            case 4:
+                $scope.color[$scope.index] = "rgba(165,222,228,.8)";
                 break;
             default:
                 alert('error');
+            /*   case 0:
+            $scope.color[$scope.index] = "#d9edf7";
+            break;
+        case 1:
+            $scope.color[$scope.index] = "#A8D8B9";
+            break;
+        case 2:
+            $scope.color[$scope.index] = "#dff0d8";
+            break;
+        case 3:
+            $scope.color[$scope.index] = "#f2dede";
+            break;
+        case 4:
+            $scope.color[$scope.index] = "#66BAB7";
+            break;*/
 
         };
     });
@@ -240,6 +266,7 @@
                    params: { typeId: 0, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	   $scope.totalItems = data.singleNum;
                    $scope.nid = 1;
                    $scope.content = data.content;
                    $scope.lists = data.choiceList;
@@ -541,6 +568,7 @@
                    params: { typeId: 1, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	   $scope.totalItems = data.multiNum;
                    $scope.nid = 1;
                    $scope.content = data.content;
                    $scope.lists = data.choiceList;
@@ -817,6 +845,7 @@
                    params: { typeId: 2, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	   $scope.totalItems = data.judgeNum;
                    $scope.nid = 1;
                    $scope.content = data.content;
                    $scope.lists = data.choiceList;
@@ -1088,6 +1117,7 @@
                    params: { typeId: 3, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	   $scope.totalItems = data.matchNum;
                    $scope.nid = 1;
                    $scope.contentlists = data.contentList;
                    //    alert(data.choiceList);
@@ -1283,6 +1313,166 @@
 
    });
 
+   demo0.controller('skiptb5', function($scope, $http, $window, $state, $stateParams, $rootScope) {
+       //简答题
+      
+       $scope.option = {};
+       var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+
+       if ($stateParams.type == 4) {
+           // alert('cp面板4'+$scope.active);
+           $scope.nid = $stateParams.num * 1;
+           //检查某题
+           $http.get('/EMS/exam/toTopic', {
+               /*  $http.get('match.json', {*/
+               params: { typeId: 4, token: $window.sessionStorage.token, id: $stateParams.num }
+           }).success(function(data, status, headers, config) {
+               // 试题
+               $scope.content = data.content;
+             
+               //试题状态
+
+               $scope.option = data.choiceIdMap;
+               if (data.ifCheck) {
+                   $scope.red = "#FF6347";
+                   $scope.count = true;
+               } else {
+                   $scope.red = "#000000";
+                   $scope.count = false;
+
+               }
+               /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+
+           }).error(function(data, status, headers, config) {
+               //处理错误  
+               alert('tab1出错！');
+           });
+
+       } else {
+
+           var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+           if (simpleStatus.simple.nid) {
+               $scope.nid = simpleStatus.simple.nid;
+               $scope.content = simpleStatus.simple.content;
+          
+               //status
+               $scope.option = simpleStatus.simple.choiceIdMap;
+               $rootScope.counter = simpleStatus.simple.counter;
+               if (simpleStatus.simple.ifCheck) {
+                   $scope.red = "#FF6347";
+                   $scope.count = true;
+               } else {
+                   $scope.red = "#000000";
+                   $scope.count = false;
+
+               }
+               /*	if ( matchStatus.match.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+
+               //alert("保留tab4!")
+           } else {
+               //初始化试题
+               /* $http.get('/EMS/exam/start', {*/
+               $http.get('match.json', {
+                   params: { typeId: 4, token: $window.sessionStorage.token }
+               }).success(function(data, status, headers, config) {
+                   //试题
+            	   $scope.totalItems = data.matchNum;
+                   $scope.nid = 1;
+                   $scope.content = data.content;
+                   //    alert(data.choiceList);
+                
+                   //试题状态
+               //    alert("match"+data.choiceIdMap);
+                   $scope.option = data.choiceIdMap;
+                   if (data.ifCheck) {
+                       $scope.red = "#FF6347";
+                       $scope.count = true;
+                   } else {
+                       $scope.red = "#000000";
+                       $scope.count = false;
+
+                   }
+
+                   /*  $scope.before = true;*/
+
+
+
+               }).error(function(data, status, headers, config) {
+                   //处理错误  
+                   alert('用户不存在或密码错误！');
+               });
+           }
+
+
+       }
+
+       $scope.previousText = "上一题";
+       $scope.nextText = "下一题";
+       $scope.totalItems = 20;
+       $scope.itemsPerPage = 1;
+       $scope.currentPage = 1;
+       $scope.maxSize = 5;
+       $scope.pageChanged = function(option) {
+         //  alert($scope.currentPage);
+           alert($scope.option);
+           var isChecked = $scope.count;
+
+           simpleStatus.simple.nid = $scope.nid;
+           simpleStatus.simple.content = $scope.content;
+
+           simpleStatus.match.choiceIdMap = option;
+           simpleStatus.simple.ifCheck = $scope.count;
+           simpleStatus.simple.counter = $rootScope.counter;
+
+           $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
+
+
+           $http.get('/EMS/exam/getTopic', {
+                /* $http.get('match0.json', {*/
+               params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
+           }).success(function(data, status, headers, config) {
+               // 试题
+               $scope.nid = $scope.currentPage;
+               $scope.content = data.content;
+            
+               //试题状态
+               $scope.option = data.choiceIdMap;
+               if (data.ifCheck) {
+                   $scope.red = "#FF6347";
+                   $scope.count = true;
+               } else {
+                   $scope.red = "#000000";
+                   $scope.count = false;
+
+               }
+   
+           }).error(function(data, status, headers, config) {
+               //处理错误  
+               alert('用户不存在或密码错误！');
+           });
+
+       };
+
+       //标志旗帜颜色
+       $scope.chgColor = function(count) {
+
+
+           if (count) {
+               $scope.red = "#000000";
+               $scope.count = false;
+               $rootScope.counter = $rootScope.counter - 1;
+
+           } else {
+               $scope.red = "#FF6347";
+               $scope.count = true;
+               $rootScope.counter = $rootScope.counter + 1;
+
+           }
+
+       }
+
+   });
+   
 
    var checkup = angular.module('checkup', [])
    checkup.controller('btnCtrl', function($scope) {
@@ -1303,13 +1493,20 @@
 
    });
    //单选题
-   checkup.controller("Ctab1", function($scope, $http, $state, $window) {
+   checkup.controller("Ctab1", function($scope, $http, $state, $window,$rootScope) {
 
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 0 }
        }).success(function(data, status, headers, config) {
-           $scope.lists = data;
-
+           $scope.lists = data.checkList;
+           $rootScope.topicNum=data.topicNum;
+           $rootScope.finishNum=data.finishNum;
+           $rootScope.otherNum=data.topicNum-data.finishNum;                                                                                      
+          
+          /* $rootScope.topicNum=3;
+           $rootScope.finishNum=2;
+           $rootScope.otherNum=1;*/
+           
        }).error(function(data, status, headers, config) {
            //处理错误  
            alert('用户不存在或密码错误！');
@@ -1331,7 +1528,10 @@
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 1 }
        }).success(function(data, status, headers, config) {
-           $scope.lists = data;
+    	   $scope.lists = data.checkList;
+         /*  $rootScope.topicNum=data.topicNum;
+           $rootScope.finishNum=data.finishNum;
+           $rootScope.otherNum=data.topicNum-data.finishNum;*/
 
        }).error(function(data, status, headers, config) {
            //处理错误  
@@ -1353,7 +1553,10 @@
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 2 }
        }).success(function(data, status, headers, config) {
-           $scope.lists = data;
+    	   $scope.lists = data.checkList;
+          /* $rootScope.topicNum=data.topicNum;
+           $rootScope.finishNum=data.finishNum;
+           $rootScope.otherNum=data.topicNum-data.finishNum;*/
 
        }).error(function(data, status, headers, config) {
            //处理错误  
@@ -1375,7 +1578,10 @@
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 3 }
        }).success(function(data, status, headers, config) {
-           $scope.lists = data;
+    	   $scope.lists = data.checkList;
+          /* $rootScope.topicNum=data.topicNum;
+           $rootScope.finishNum=data.finishNum;
+           $rootScope.otherNum=data.topicNum-data.finishNum;*/
 
        }).error(function(data, status, headers, config) {
            //处理错误  

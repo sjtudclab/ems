@@ -192,9 +192,9 @@ body {
     color: #fff;
 }
 
-.home {
+/* .home {
     padding-bottom: 150px;
-}
+} */
 
 .home-register {
     padding-top: 150px;
@@ -260,6 +260,10 @@ body {
     border-top: 0;
     text-transform: uppercase;
     border: 1px solid transparent;
+    border-bottom-color:rgb(125, 185, 232)/* #d9edf7 *//* rgba(51,122,183,.8) */;
+    background-color:/* rgba(51,122,183,.8) *//* #7DB9DE */rgb(125, 185, 232);
+    color:#fff;
+  /*   background-color:rgba(125, 185, 232, 1); */
 }
 .info-custom li{
     display: inline-block;
@@ -273,7 +277,7 @@ body {
     cursor: pointer;
     -moz-user-select: none;
     background-image: none;
-    border: 1px solid transparent;
+    border: 1px solid transparant;
     border-radius: 4px;
 }
 
@@ -327,3 +331,13 @@ body {
 .checkdiv {
     margin:2%;
 }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #555;
+/*     border: 2px solid #ddd;
+    border-bottom-color:transparent; */
+
+
+}
+
+

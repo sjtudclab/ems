@@ -1,19 +1,19 @@
-
-   <div ui-view="navbar"></div>
+    <div class="bg">
+   <div ui-view="navbar" style="height:3%"></div>
    
-    <div class="home">
-        <div class="container">
-        <div class="page-header page-custom">
+    <div height="94%">
+        <div class="container" height="100%">
+        <div class="page-header page-custom"  height="18%">
             <h1>考试管理系统</h1>
         </div>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <div class="form-top">
+            <div class="row"  height="80%">
+                <div class="col-sm-6 col-sm-offset-3"  height="100%">
+                    <div class="form-top" height="10%">
                         <div class="form-top-left">
                             <h2>登录</h2>
                         </div>
                     </div>
-                    <div class="form-bottom" ng-controller="httpCtrl">
+                    <div class="form-bottom" ng-controller="httpCtrl" height="90%">
                         <div class="form-group">
                             <label class="sr-only" for="username">用户名</label>
                             <input type="text" placeholder="用户名" class="form-username form-control" ng-model="username">
@@ -22,28 +22,11 @@
                             <label class="sr-only" for="password">密码</label>
                             <input type="password"  placeholder="密码" class="form-password form-control" ng-model="password">
                         </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">记住密码
-                            </label>
-                        </div>
                         <!-- <a href="showinfo.html" class="btn btn-info">登录</a> -->
                         <button  ype="submit" class="btn btn-info btn-block" ng-click="receive(username,password)">登录</button>
-                        <br>
-                        <button type="submit" class="btn btn-warning btn-block">注册</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
     </div>

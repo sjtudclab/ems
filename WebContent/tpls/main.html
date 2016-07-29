@@ -26,12 +26,12 @@
     </uib-tabset>
 </div> -->
  <div ng-controller="TabsDemoCtrl" style="height:84%">
-        <ul class="nav nav-tabs" style="height:6.5%">
+        <ul class="nav nav-tabs">
             <li ng-repeat="x in problemMetaInfo" class="{{active[$index]}}">
-                <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-style: solid;border-color:black;border-bottom-color:transparent">{{x}}</a>
+                <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-bottom-color:transparent">{{x}}</a>
             </li>
         </ul>
-        <div class="tab-content" style="height:93.5%">
+        <div class="tab-content" style="height:94%">
             <div ng-repeat="x in problemMetaInfo" class="tab-pane {{active[$index]}}" style="background-color:{{color[$index]}};height:100%">
 <!--                  <div  style="height:100%">ff</div>-->
                   <div ui-view="tab{{$index+1}}" style="height:100%"></div>
@@ -43,13 +43,13 @@
     <div class="row" style="height:100%">
             <div class="col-md-3 bottominfo" style="height:100%" ui-view="time"> 
             </div>
-            <div class="col-md-3 bottominfo reinfoco" style="height:100%" >
+            <div class="col-md-3 bottominfo " style="height:100%" >
                 <p>待检查题数目：{{counter}}</p>
             </div>
             <div class="col-md-3 btn bottominfo " style="height:100%">
                  <p ui-sref="checkup">检查</p>
             </div>
-            <div class="col-md-3 btn bottominfo reinfoco" style="height:100%">
+            <div class="col-md-3 btn bottominfo" style="height:100%">
                 <p>交卷</p>
             </div>
         <!-- Collect the nav links, forms, and other content for toggling -->

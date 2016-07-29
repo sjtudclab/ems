@@ -59,6 +59,10 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
                    templateUrl: 'tpls/tabmain/tab41.html',
                    controller: 'skiptb4'
                 },
+                'tab5@main': {
+                    templateUrl: 'tpls/tabmain/tab51.html'/*,
+                    controller: 'skiptb5'*/
+                 },
                 'info@main': {
                     templateUrl: 'tpls/info.html',
                     controller: 'showinfo'
