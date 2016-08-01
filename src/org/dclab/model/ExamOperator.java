@@ -53,9 +53,9 @@ public class ExamOperator {
 	    	int topicId=bean.getId();
 	    	bean.setSingleNum(slist.size());
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
-	    	if(bean.getImg()!=null)
+	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null)
+	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	    System.out.println("单选题的个数"+slist.size());//********
@@ -67,9 +67,9 @@ public class ExamOperator {
 	    	List<Integer> choiceIdList=new ArrayList<>();
 	    	bean.setChoiceIdList(choiceIdList);
 	    	bean.setMultiNum(mlist.size());
-	    	if(bean.getImg()!=null)
+	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null)
+	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	   
@@ -87,9 +87,9 @@ public class ExamOperator {
 	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 	    	bean.setChoiceIdMap(choiceIdMap);
 	    	bean.setMatchNum(mlist1.size());
-	    	if(bean.getImg()!=null)
+	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null)
+	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	   
@@ -100,9 +100,9 @@ public class ExamOperator {
 	    	int topicId=bean.getId();
 	    	bean.setChoiceList(choiceMapper.getJudgeChoice());
 	    	bean.setJudgeNum(jlist.size());
-	    	if(bean.getImg()!=null)
+	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null)
+	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	    
@@ -111,6 +111,7 @@ public class ExamOperator {
 	    List<shortAnswerBean> salist=topicMapper.getShortBean();
 	    for(shortAnswerBean bean: salist){
 	    	bean.setShortNum(salist.size());
+	    	
 	    }
 	    
 	    System.out.println("成功取出题目");
