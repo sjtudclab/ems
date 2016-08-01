@@ -2,6 +2,10 @@
     <div>
         <div>
             <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)"></span>{{nid}}.{{content}}
+           <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
+             </audio>
+ 
+             <img ng-src="{{img}}" style="display:{{imghide}}">
         </div>
         <div style="padding-left:5%">
                 <div ng-repeat="list in lists">

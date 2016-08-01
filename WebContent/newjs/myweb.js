@@ -60,8 +60,8 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
                    controller: 'skiptb4'
                 },
                 'tab5@main': {
-                    templateUrl: 'tpls/tabmain/tab51.html'/*,
-                    controller: 'skiptb5'*/
+                    templateUrl: 'tpls/tabmain/tab51.html',
+                    controller: 'skiptb5'
                  },
                 'info@main': {
                     templateUrl: 'tpls/info.html',
@@ -96,6 +96,10 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
                    templateUrl: 'tpls/checktab/Ctab4.html',
                    controller: 'Ctab4'
                 },
+                'Ctab5@checkup': {
+                    templateUrl: 'tpls/checktab/Ctab5.html',
+                    controller: 'Ctab5'
+                 },
                 'time@checkup': {
                     templateUrl: 'tpls/time.html',
                     controller: 'timeinfo'

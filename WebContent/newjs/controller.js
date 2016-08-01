@@ -1,4 +1,10 @@
-﻿   var formlogin = angular.module('formlogin', [])
+﻿/*routingDemoApp.filter("trustUrl", ['$sce', function ($sce) {
+        return function (recordingUrl) {
+            return $sce.trustAsResourceUrl(recordingUrl);
+        };
+    }]);   */
+
+var formlogin = angular.module('formlogin', [])
 
 
    formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
@@ -214,7 +220,9 @@
                /* $http.get('single.json', {*/
                params: { typeId: 0, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
+        	   
                // 试题
+        	   $scope.totalItems = data.singleNum;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
                $scope.lists = shuffle(data.choiceList);
@@ -222,6 +230,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
 
                $scope.option.optionsRadios = data.choiceId;
@@ -247,6 +268,24 @@
                $scope.nid = singleStatus.single.nid;
                $scope.content = singleStatus.single.content;
                $scope.lists = singleStatus.single.choiceList;
+               $scope.totalItems=singleStatus.single.totalItems;
+               if(singleStatus.single.audiohide=="block"){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=singleStatus.single.audio;
+        	   }else{
+        		   $scope.audiohide="none";
+        		  // alert("隐藏");
+        		 
+        	   }
+        	   if(singleStatus.single.imghide=="block"){
+        		   $scope.imghide="block";
+        		   $scope.img=singleStatus.single.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none";
+        		   //alert("隐藏");
+        		  
+        	   }
 
                //status
                $scope.option.optionsRadios = singleStatus.single.option;
@@ -270,24 +309,20 @@
                    params: { typeId: 0, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
-            	   alert("dfjs"+data.img);
-            	   alert("dfjs"+data.audio);
-            	   if(data.audio.length){  
-            		   $scope.audioshow=false;
+            	 //  alert("dfjs"+data.img);
+            	 //  alert("dfjs"+data.audio);
+            	   if(data.audio){  
+            		   $scope.audiohide="block";
             		   $scope.audio=data.audio;
             	   }else{
-            		   $scope.audioshow=true;
-            		   alert("隐藏");
-            		 
+            		   $scope.audiohide="none";	 
             	   }
-            	   if(data.img.length){
-            		   $scope.imgshow=false;
+            	   if(data.img){
+            		   $scope.imghide="block";
             		   $scope.img=data.img;
             		  
             	   }else{
-            		   $scope.imgshow=true;
-            		   alert("隐藏");
-            		  
+            		   $scope.imghide="none"; 
             	   }
             	 
             	   $scope.totalItems = data.singleNum;
@@ -336,10 +371,24 @@
            singleStatus.single.nid = $scope.nid;
            singleStatus.single.content = $scope.content;
            singleStatus.single.choiceList = $scope.lists;
+           if( $scope.audiohide=="block"){
+        	   singleStatus.single.audio=$scope.sudio;
+        	   singleStatus.single.audiohide=$scope.sudiohide;
+           }else{
+        	   singleStatus.single.audiohide=$scope.sudiohide;
+           }
+           if( $scope.imghide=="block"){
+        	   singleStatus.single.img=$scope.img;
+        	   singleStatus.single.imghide=$scope.imghide;
+           }else{
+        	   singleStatus.single.imghide=$scope.imghide;
+           }
+          
 
            singleStatus.single.option = option.optionsRadios;
            singleStatus.single.ifCheck = $scope.count;
            singleStatus.single.counter = $rootScope.counter;
+           singleStatus.single.totalItems = $scope.totalItems;
 
            $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
 
@@ -348,6 +397,7 @@
                params: { token: $window.sessionStorage.token, typeId: 0, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.singleNum;
                $scope.nid = $scope.currentPage;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
@@ -356,6 +406,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
                alert( data.choiceId);
                $scope.option.optionsRadios = data.choiceId;
@@ -377,90 +440,7 @@
        };
 
 
-       /*    
-     //下一题
-       $scope.receive1 = function(option) {
-
-           alert(option.optionsRadios);
-           var isChecked=$scope.count;
-      
-           singleStatus.single.id=$scope.id;
-           singleStatus.single.content=$scope.content;
-           singleStatus.single.choiceList=$scope.lists;
-           
-           singleStatus.single.option=option.optionsRadios;
-           singleStatus.single.ifCheck=$scope.count;
-           singleStatus.single.counter=$rootScope.counter;
-           
-           $window.sessionStorage.problemStatus=JSON.stringify(singleStatus);
-           
-           alert(isChecked+" "+$window.sessionStorage.token+" "+option.optionsRadios);
-           $http.get('/EMS/exam/nextTopic', {
-           params: {token:$window.sessionStorage.token,typeId:0,id: 1,choiceId:option.optionsRadios,ifCheck:isChecked}
-       }).success(function(data, status, headers, config) {
-    	// 试题
-    	   $scope.nid=$scope.nid+1;
-           $scope.content = data.content;
-           $scope.lists = data.choiceList;
-           var length = $scope.lists.length;
-	       for (var i = 0; i < length; i++) {
-	            $scope.lists[i].alp=String.fromCharCode(i+65);
-	        }
-           //试题状态
-           $scope.option.optionsRadios = data.choiceId;
-           if (data.ifCheck) {
-               $scope.red = "#FF6347";
-               $scope.count = true;
-           }else{
-          	 $scope.red = "#000000";
-             $scope.count = false;
-        	
-          } 
-           if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-           }).error(function(data, status, headers, config) {
-               //处理错误  
-               alert('用户不存在或密码错误！');
-           });
-
-       };
-     //上一题
-       $scope.sreceive1 = function(option) {
-          // alert(option.optionsRadios);
-           var isChecked = $scope.count;
-         //  alert(isChecked);
-         //  alert(ID);
-           $http.get('/EMS/exam/lastTopic', {
-               params: { token:$window.sessionStorage.token,typeId:0,id: $scope.nid,choiceId:option,ifCheck:isChecked}
-           }).success(function(data, status, headers, config) {
-        	// 试题
-        	   $scope.nid=$scope.nid-1;
-               $scope.content = data.content;
-               $scope.lists = data.choiceList;
-               var length = $scope.lists.length;
-		    	for (var i = 0; i < length; i++) {
-		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		        }
-               //试题状态
-               $scope.option.optionsRadios = data.choiceId;
-               if (data.ifCheck) {
-                   $scope.red = "#FF6347";
-                   $scope.count = true;
-               }else{
-              	 $scope.red = "#000000";
-                 $scope.count = false;
-            	
-              } 
-               if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-           }).error(function(data, status, headers, config) {
-               //处理错误  
-               alert('用户不存在或密码错误！');
-           });
-
-       };*/
+   
        $rootScope.counter = 0;
        //标志旗帜颜色
        $scope.chgColor = function(count) {
@@ -535,6 +515,7 @@
                params: { typeId: 1, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.multiNum;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
                $scope.lists = shuffle(data.choiceList);
@@ -542,6 +523,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
          
                $scope.option = data.choiceIdList;
@@ -567,6 +561,24 @@
                $scope.nid = multiStatus.multiple.nid;
                $scope.content = multiStatus.multiple.content;
                $scope.lists = multiStatus.multiple.choiceList;
+               $scope.totalItems=multiStatus.multiple.totalItems;
+               if(multiStatus.multiple.audiohide=="block"){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=multiStatus.multiple.audio;
+        	   }else{
+        		   $scope.audiohide="none";
+        		  // alert("隐藏");
+        		 
+        	   }
+        	   if(multiStatus.multiple.imghide=="block"){
+        		   $scope.imghide="block";
+        		   $scope.img=multiStatus.multiple.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none";
+        		   //alert("隐藏");
+        		  
+        	   }
 
                //status
                $scope.option = multiStatus.multiple.choiceIdList;
@@ -601,6 +613,19 @@
                    for (var i = 0; i < length; i++) {
                        $scope.lists[i].alp = String.fromCharCode(i + 65);
                    }
+                   if(data.audio){  
+            		   $scope.audiohide="block";
+            		   $scope.audio=data.audio;
+            	   }else{
+            		   $scope.audiohide="none";	 
+            	   }
+            	   if(data.img){
+            		   $scope.imghide="block";
+            		   $scope.img=data.img;
+            		  
+            	   }else{
+            		   $scope.imghide="none"; 
+            	   }
                    //试题状态
                    //alert($scope.lists[0].choiceId);
 /*                   data.choiceIdList[0]=$scope.lists[0].choiceId;
@@ -644,10 +669,24 @@
            multiStatus.multiple.nid = $scope.nid;
            multiStatus.multiple.content = $scope.content;
            multiStatus.multiple.choiceList = $scope.lists;
+           if( $scope.audiohide=="block"){
+        	   multiStatus.multiple.audio=$scope.sudio;
+        	   multiStatus.multiple.audiohide=$scope.sudiohide;
+           }else{
+        	   multiStatus.multiple.audiohide=$scope.sudiohide;
+           }
+           if( $scope.imghide=="block"){
+        	   multiStatus.multiple.img=$scope.img;
+        	   multiStatus.multiple.imghide=$scope.imghide;
+           }else{
+        	   multiStatus.multiple.imghide=$scope.imghide;
+           }
+          
 
            multiStatus.multiple.choiceIdList = option;
            multiStatus.multiple.ifCheck = $scope.count;
            multiStatus.multiple.counter = $rootScope.counter;
+           multiStatus.multiple.totalItems = $scope.totalItems;
 
            $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
 
@@ -656,6 +695,7 @@
                params: { token: $window.sessionStorage.token, typeId: 1, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.multiNum;
                $scope.nid = $scope.currentPage;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
@@ -664,6 +704,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
             //   alert( data.choiceIdList);
                alert("aa"+data.choiceIdList);
@@ -686,90 +739,6 @@
        };
 
 
-       /*   //下一题
-      $scope.receive2 = function(option) {
-
-        //  alert(option.optionsRadios);
-          var isChecked=$scope.count;
-     
-          multiStatus.multiple.id=$scope.id;
-          multiStatus.multiple.content=$scope.content;
-          multiStatus.multiple.choiceList=$scope.lists;
-          
-          multiStatus.multiple.option=option;
-          multiStatus.multiple.ifCheck=$scope.count;
-          multiStatus.multiple.counter=$rootScope.counter;
-          
-          $window.sessionStorage.problemStatus=JSON.stringify(multiStatus);
-          
-         
-          $http.get('/EMS/exam/nextTopic', {
-          params: {token:$window.sessionStorage.token,typeId:1,id: $scope.id,choiceId:option,ifCheck:isChecked}
-      }).success(function(data, status, headers, config) {
-   	// 试题
-   	      $scope.id=data.id;
-          $scope.content = data.content;
-          $scope.lists = data.choiceList;
-          var length = $scope.lists.length;
-	       for (var i = 0; i < length; i++) {
-	            $scope.lists[i].alp=String.fromCharCode(i+65);
-	        }
-          //试题状态
-          $scope.option = data.choiceIdList;
-          if (data.ifCheck) {
-              $scope.red = "#FF6347";
-              $scope.count = true;
-          }else{
-         	 $scope.red = "#000000";
-            $scope.count = false;
-       	
-         } 
-          if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-          }).error(function(data, status, headers, config) {
-              //处理错误  
-              alert('用户不存在或密码错误！');
-          });
-
-      };
-    //上一题
-      $scope.sreceive2 = function(option) {
-         // alert(option.optionsRadios);
-          var isChecked = $scope.count;
-        //  alert(isChecked);
-        //  alert(ID);
-          $http.get('/EMS/exam/lastTopic', {
-              params: { token:$window.sessionStorage.token,typeId:1,id: $scope.id,choiceId:option,ifCheck:isChecked}
-          }).success(function(data, status, headers, config) {
-       	// 试题
-       	   $scope.id=data.id;
-              $scope.content = data.content;
-              $scope.lists = data.choiceList;
-              var length = $scope.lists.length;
-		    	for (var i = 0; i < length; i++) {
-		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		        }
-              //试题状态
-              $scope.option= data.choiceIdList;
-              if (data.ifCheck) {
-                  $scope.red = "#FF6347";
-                  $scope.count = true;
-              }else{
-             	 $scope.red = "#000000";
-                $scope.count = false;
-           	
-             } 
-              if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-          }).error(function(data, status, headers, config) {
-              //处理错误  
-              alert('用户不存在或密码错误！');
-          });
-
-      };*/
-       //     $rootScope.counter = 0;
        //标志旗帜颜色
        $scope.chgColor = function(count) {
 
@@ -814,6 +783,7 @@
                params: { typeId: 2, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.judgeNum;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
                $scope.lists = shuffle(data.choiceList);
@@ -821,6 +791,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
 
                $scope.option.optionsRadios = data.choiceId;
@@ -846,10 +829,28 @@
                $scope.nid = judgStatus.judgment.nid;
                $scope.content = judgStatus.judgment.content;
                $scope.lists = judgStatus.judgment.choiceList;
+               $rootScope.totalItems=judgStatus.judgment.totalItems;
+               if(judgStatus.judgment.audiohide=="block"){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=judgStatus.judgment.audio;
+        	   }else{
+        		   $scope.audiohide="none";
+        		  // alert("隐藏");
+        		 
+        	   }
+        	   if(judgStatus.judgment.imghide=="block"){
+        		   $scope.imghide="block";
+        		   $scope.img=judgStatus.judgment.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none";
+        		   //alert("隐藏");
+        		  
+        	   }
 
                //status
                $scope.option.optionsRadios = judgStatus.judgment.option;
-               $rootScope.counter = judgStatus.judgment.counter;
+               $scope.counter = judgStatus.judgment.counter;
                if (judgStatus.judgment.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
@@ -878,6 +879,19 @@
                    for (var i = 0; i < length; i++) {
                        $scope.lists[i].alp = String.fromCharCode(i + 65);
                    }
+                   if(data.audio){  
+            		   $scope.audiohide="block";
+            		   $scope.audio=data.audio;
+            	   }else{
+            		   $scope.audiohide="none";	 
+            	   }
+            	   if(data.img){
+            		   $scope.imghide="block";
+            		   $scope.img=data.img;
+            		  
+            	   }else{
+            		   $scope.imghide="none"; 
+            	   }
                    //试题状态
                    $scope.option.optionsRadios = data.choiceId;
                    if (data.ifCheck) {
@@ -917,10 +931,24 @@
            judgStatus.judgment.nid = $scope.nid;
            judgStatus.judgment.content = $scope.content;
            judgStatus.judgment.choiceList = $scope.lists;
+           if( $scope.audiohide=="block"){
+        	   judgStatus.judgment.audio=$scope.sudio;
+        	   judgStatus.judgment.audiohide=$scope.sudiohide;
+           }else{
+        	   judgStatus.judgment.audiohide=$scope.sudiohide;
+           }
+           if( $scope.imghide=="block"){
+        	   judgStatus.judgment.img=$scope.img;
+        	   judgStatus.judgment.imghide=$scope.imghide;
+           }else{
+        	   judgStatus.judgment.imghide=$scope.imghide;
+           }
 
            judgStatus.judgment.option = option.optionsRadios;
            judgStatus.judgment.ifCheck = $scope.count;
            judgStatus.judgment.counter = $rootScope.counter;
+           judgStatus.judgment.totalItems = $scope.totalItems;
+          
 
            $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
 
@@ -930,6 +958,7 @@
                params: { token: $window.sessionStorage.token, typeId: 2, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.judgeNum;
                $scope.nid = $scope.currentPage;
                $scope.content = data.content;
                $scope.lists = data.choiceList;
@@ -938,6 +967,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
                $scope.option.optionsRadios = data.choiceId;
                if (data.ifCheck) {
@@ -958,90 +1000,6 @@
 
        };
 
-
-       /* //下一题
-      $scope.receive3 = function(option) {
-
-        //  alert(option.optionsRadios);
-          var isChecked=$scope.count;
-     
-          judgStatus.judgment.id=$scope.id;
-          judgStatus.judgment.content=$scope.content;
-          judgStatus.judgment.choiceList=$scope.lists;
-          
-          judgStatus.judgment.option=option.optionsRadios;
-          judgStatus.judgment.ifCheck=$scope.count;
-          judgStatus.judgment.counter=$rootScope.counter;
-          
-          $window.sessionStorage.problemStatus=JSON.stringify(judgStatus);
-          
-         
-          $http.get('/EMS/exam/nextTopic', {
-          params: {token:$window.sessionStorage.token,typeId:2,id: $scope.id,choiceId:option,ifCheck:isChecked}
-      }).success(function(data, status, headers, config) {
-   	// 试题
-   	     $scope.id=data.id;
-          $scope.content = data.content;
-          $scope.lists = data.choiceList;
-          var length = $scope.lists.length;
-	       for (var i = 0; i < length; i++) {
-	            $scope.lists[i].alp=String.fromCharCode(i+65);
-	        }
-          //试题状态
-          $scope.option.optionsRadios = data.choiceId;
-          if (data.ifCheck) {
-              $scope.red = "#FF6347";
-              $scope.count = true;
-          }else{
-         	 $scope.red = "#000000";
-            $scope.count = false;
-       	
-         } 
-          if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-          }).error(function(data, status, headers, config) {
-              //处理错误  
-              alert('用户不存在或密码错误！');
-          });
-
-      };
-    //上一题
-      $scope.sreceive3 = function(option) {
-         // alert(option.optionsRadios);
-          var isChecked = $scope.count;
-        //  alert(isChecked);
-        //  alert(ID);
-          $http.get('/EMS/exam/lastTopic', {
-              params: { token:$window.sessionStorage.token,typeId:2,id: $scope.id,choiceId:option,ifCheck:isChecked}
-          }).success(function(data, status, headers, config) {
-       	// 试题
-       	      $scope.id=data.id;
-              $scope.content = data.content;
-              $scope.lists = data.choiceList;
-              var length = $scope.lists.length;
-		    	for (var i = 0; i < length; i++) {
-		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		        }
-              //试题状态
-              $scope.option.optionsRadios = data.choiceId;
-              if (data.ifCheck) {
-                  $scope.red = "#FF6347";
-                  $scope.count = true;
-              }else{
-             	 $scope.red = "#000000";
-                $scope.count = false;
-           	
-             } 
-              if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-          }).error(function(data, status, headers, config) {
-              //处理错误  
-              alert('用户不存在或密码错误！');
-          });
-
-      };*/
        //  $rootScope.counter = 0;
        //标志旗帜颜色
        $scope.chgColor = function(count) {
@@ -1087,6 +1045,7 @@
                params: { typeId: 3, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.matchNum;
                $scope.contentlists = data.contentList;
                $scope.lists = data.choiceList;
                $scope.lists = shuffle(data.choiceList);
@@ -1094,6 +1053,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
 
                $scope.option = data.choiceIdMap;
@@ -1119,6 +1091,24 @@
                $scope.nid = matchStatus.match.nid;
                $scope.contentlists = matchStatus.match.contentList;
                $scope.lists = matchStatus.match.choiceList;
+               $scope.totalItems = matchStatus.match.totalItems;
+               if(matchStatus.match.audiohide=="block"){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=matchStatus.match.audio;
+        	   }else{
+        		   $scope.audiohide="none";
+        		  // alert("隐藏");
+        		 
+        	   }
+        	   if(matchStatus.match.imghide=="block"){
+        		   $scope.imghide="block";
+        		   $scope.img=matchStatus.match.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none";
+        		   //alert("隐藏");
+        		  
+        	   }
 
                //status
                $scope.option = matchStatus.match.choiceIdMap;
@@ -1151,6 +1141,19 @@
                    for (var i = 0; i < length; i++) {
                        $scope.lists[i].alp = String.fromCharCode(i + 65);
                    }
+                   if(data.audio){  
+            		   $scope.audiohide="block";
+            		   $scope.audio=data.audio;
+            	   }else{
+            		   $scope.audiohide="none";	 
+            	   }
+            	   if(data.img){
+            		   $scope.imghide="block";
+            		   $scope.img=data.img;
+            		  
+            	   }else{
+            		   $scope.imghide="none"; 
+            	   }
                    //试题状态
                //    alert("match"+data.choiceIdMap);
                    $scope.option = data.choiceIdMap;
@@ -1190,10 +1193,25 @@
            matchStatus.match.nid = $scope.nid;
            matchStatus.match.contentList = $scope.contentlists;
            matchStatus.match.choiceList = $scope.lists;
+           if( $scope.audiohide=="block"){
+        	   matchStatus.match.audio=$scope.sudio;
+        	   matchStatus.match.audiohide=$scope.sudiohide;
+           }else{
+        	   matchStatus.match.audiohide=$scope.sudiohide;
+           }
+           if( $scope.imghide=="block"){
+        	   matchStatus.match.img=$scope.img;
+        	   matchStatus.match.imghide=$scope.imghide;
+           }else{
+        	   matchStatus.match.imghide=$scope.imghide;
+           }
+
+           
 
            matchStatus.match.choiceIdMap = option;
            matchStatus.match.ifCheck = $scope.count;
            matchStatus.match.counter = $rootScope.counter;
+           matchStatus.match.totalItems = $scope.totalItems;
 
            $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
 
@@ -1203,6 +1221,7 @@
                params: { token: $window.sessionStorage.token, typeId: 3, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.matchNum;
                $scope.nid = $scope.currentPage;
                $scope.contentlists = data.contentList;
                $scope.lists = data.choiceList;
@@ -1211,6 +1230,19 @@
                for (var i = 0; i < length; i++) {
                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                }
+               if(data.audio){  
+        		   $scope.audiohide="block";
+        		   $scope.audio=data.audio;
+        	   }else{
+        		   $scope.audiohide="none";	 
+        	   }
+        	   if(data.img){
+        		   $scope.imghide="block";
+        		   $scope.img=data.img;
+        		  
+        	   }else{
+        		   $scope.imghide="none"; 
+        	   }
                //试题状态
                $scope.option = data.choiceIdMap;
                if (data.ifCheck) {
@@ -1232,90 +1264,6 @@
        };
 
 
-       /*//下一题
-     $scope.receive4 = function(option) {
-
-       //  alert(option.optionsRadios);
-         var isChecked=$scope.count;
-    
-         matchStatus.match.id=$scope.id;
-         alert(matchStatus.match.id);
-         matchStatus.match.contentList=$scope.contentlists;
-         matchStatus.match.choiceList=$scope.lists;
-         
-         matchStatus.match.option=option;
-         matchStatus.match.ifCheck=$scope.count;
-         matchStatus.match.counter=$rootScope.counter;
-         
-         $window.sessionStorage.problemStatus=JSON.stringify(matchStatus);
-         
-        
-         $http.get('/EMS/exam/nextTopic', {
-         params: {token:$window.sessionStorage.token,typeId:3,id: $scope.id,choiceId:option,ifCheck:isChecked}
-     }).success(function(data, status, headers, config) {
-  	// 试题
-  	     $scope.id=data.id;
-         $scope.contentlists = data.contentList;
-         $scope.lists = data.choiceList;
-         var length = $scope.lists.length;
-	       for (var i = 0; i < length; i++) {
-	            $scope.lists[i].alp=String.fromCharCode(i+65);
-	        }
-         //试题状态
-         $scope.option= data.choiceIdMap;
-         if (data.ifCheck) {
-             $scope.red = "#FF6347";
-             $scope.count = true;
-         }else{
-        	 $scope.red = "#000000";
-           $scope.count = false;
-      	
-        } 
-         if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-         }).error(function(data, status, headers, config) {
-             //处理错误  
-             alert('用户不存在或密码错误！');
-         });
-
-     };
-   //上一题
-     $scope.sreceive4 = function(option) {
-        // alert(option.optionsRadios);
-         var isChecked = $scope.count;
-       //  alert(isChecked);
-       //  alert(ID);
-         $http.get('/EMS/exam/lastTopic', {
-             params: { token:$window.sessionStorage.token,typeId:3,id: $scope.id,choiceId:option,ifCheck:isChecked}
-         }).success(function(data, status, headers, config) {
-      	// 试题
-      	   $scope.id=data.id;
-             $scope.contentlists = data.contentList;
-             $scope.lists = data.choiceList;
-             var length = $scope.lists.length;
-		    	for (var i = 0; i < length; i++) {
-		            $scope.lists[i].alp=String.fromCharCode(i+65);
-		        }
-             //试题状态
-             $scope.option = data.choiceIdMap;
-             if (data.ifCheck) {
-                 $scope.red = "#FF6347";
-                 $scope.count = true;
-             }else{
-            	 $scope.red = "#000000";
-                 $scope.count = false;
-          	
-            } 
-             if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }
-
-
-         }).error(function(data, status, headers, config) {
-             //处理错误  
-             alert('用户不存在或密码错误！');
-         });
-
-     };*/
        //  $rootScope.counter = 0;
        //标志旗帜颜色
        $scope.chgColor = function(count) {
@@ -1340,15 +1288,15 @@
    demo0.controller('skiptb5', function($scope, $http, $window, $state, $stateParams, $rootScope) {
        //简答题
       
-       $scope.option = {};
+       /*$scope.option = "撰写答案";*/
        var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
 
-       if ($stateParams.type == 4) {
+       if ($stateParams.type == 5) {
            // alert('cp面板4'+$scope.active);
            $scope.nid = $stateParams.num * 1;
            //检查某题
-           $http.get('/EMS/exam/toTopic', {
-               /*  $http.get('match.json', {*/
+         /*  $http.get('/EMS/exam/toTopic', {*/
+                 $http.get('match.json', {
                params: { typeId: 4, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
                // 试题
@@ -1356,7 +1304,7 @@
              
                //试题状态
 
-               $scope.option = data.choiceIdMap;
+               $scope.answer = data.answer;
                if (data.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
@@ -1378,9 +1326,10 @@
            if (simpleStatus.simple.nid) {
                $scope.nid = simpleStatus.simple.nid;
                $scope.content = simpleStatus.simple.content;
+               $scope.totalItems = simpleStatus.simple.totalItems;
           
                //status
-               $scope.option = simpleStatus.simple.choiceIdMap;
+               $scope.answer = simpleStatus.simple.answer;
                $rootScope.counter = simpleStatus.simple.counter;
                if (simpleStatus.simple.ifCheck) {
                    $scope.red = "#FF6347";
@@ -1395,19 +1344,18 @@
                //alert("保留tab4!")
            } else {
                //初始化试题
-               /* $http.get('/EMS/exam/start', {*/
-               $http.get('match.json', {
+                $http.get('/EMS/exam/start', {
+              /* $http.get('judg.json', {*/
                    params: { typeId: 4, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
-            	   $scope.totalItems = data.matchNum;
+            	   $scope.totalItems = 2/*data.shortNum*/;
                    $scope.nid = 1;
                    $scope.content = data.content;
                    //    alert(data.choiceList);
                 
                    //试题状态
-               //    alert("match"+data.choiceIdMap);
-                   $scope.option = data.choiceIdMap;
+                   $scope.answer = data.answer;
                    if (data.ifCheck) {
                        $scope.red = "#FF6347";
                        $scope.count = true;
@@ -1417,10 +1365,7 @@
 
                    }
 
-                   /*  $scope.before = true;*/
-
-
-
+             
                }).error(function(data, status, headers, config) {
                    //处理错误  
                    alert('用户不存在或密码错误！');
@@ -1436,31 +1381,33 @@
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
        $scope.maxSize = 5;
-       $scope.pageChanged = function(option) {
-         //  alert($scope.currentPage);
-           alert($scope.option);
+       
+       $scope.pageChanged = function(answer) {
            var isChecked = $scope.count;
-
+           alert(answer);
            simpleStatus.simple.nid = $scope.nid;
            simpleStatus.simple.content = $scope.content;
 
-           simpleStatus.match.choiceIdMap = option;
+           simpleStatus.simple.answer = answer;
            simpleStatus.simple.ifCheck = $scope.count;
            simpleStatus.simple.counter = $rootScope.counter;
-
+           simpleStatus.simple.totalItems = $scope.totalItems;
+           
            $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
 
 
            $http.get('/EMS/exam/getTopic', {
-                /* $http.get('match0.json', {*/
-               params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
+              /*   $http.get('judg0.json', {*/
+               params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, answer: answer, ifCheck: isChecked }
            }).success(function(data, status, headers, config) {
                // 试题
+        	   $scope.totalItems = data.shortNum;
                $scope.nid = $scope.currentPage;
                $scope.content = data.content;
+               $scope.answer ="";
             
                //试题状态
-               $scope.option = data.choiceIdMap;
+               $scope.answer = data.answer;
                if (data.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
@@ -1501,7 +1448,7 @@
    var checkup = angular.module('checkup', [])
    checkup.controller('btnCtrl', function($scope) {
 
-       switch ($scope.list) {
+       switch ($scope.list.status) {
            case 0: //检查
                $scope.btnClass = 'button button-caution button-box button-large';
                break;
@@ -1522,6 +1469,7 @@
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 0 }
        }).success(function(data, status, headers, config) {
+    	  // alert(data.checkList[0].status);
            $scope.lists = data.checkList;
            $rootScope.topicNum=data.topicNum;
            $rootScope.finishNum=data.finishNum;
@@ -1540,7 +1488,7 @@
        $scope.skip = function(listnum) {
 
            //  alert(listnum);
-           $state.go('main', { active: 0, num: 2, type: 1 });
+           $state.go('main', { active: 0, num: listnum, type: 1 });
 
        }
 
@@ -1565,7 +1513,7 @@
 
        $scope.skip = function(listnum) {
            //    alert(listnum);
-           $state.go('main', { active: 1, num: 2, type: 2 });
+           $state.go('main', { active: 1, num: listnum, type: 2 });
 
        }
 
@@ -1590,7 +1538,7 @@
 
        $scope.skip = function(listnum) {
            // alert(listnum);
-           $state.go('main', { active: 2, num: 2, type: 3 });
+           $state.go('main', { active: 2, num: listnum, type: 3 });
 
        }
 
@@ -1615,7 +1563,33 @@
 
        $scope.skip = function(listnum) {
            // alert(listnum);
-           $state.go('main', { active: 3, num: 2, type: 4 });
+           $state.go('main', { active: 3, num: listnum, type: 4 });
+
+       }
+
+
+   });
+   //简答题
+   checkup.controller("Ctab5", function($scope, $http, $state, $window) {
+
+       $http.get('/EMS/exam/check', {
+           params: { token: $window.sessionStorage.token, typeId: 4 }
+       }).success(function(data, status, headers, config) {
+    	   alert(data.checkList);
+    	   $scope.lists = data.checkList;
+          /* $rootScope.topicNum=data.topicNum;
+           $rootScope.finishNum=data.finishNum;
+           $rootScope.otherNum=data.topicNum-data.finishNum;*/
+
+       }).error(function(data, status, headers, config) {
+           //处理错误  
+           alert('用户不存在或密码错误！');
+       });
+
+
+       $scope.skip = function(listnum) {
+           // alert(listnum);
+           $state.go('main', { active: 4, num: listnum, type: 5 });
 
        }
 

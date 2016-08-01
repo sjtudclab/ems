@@ -2,7 +2,13 @@
 <div class="container">
     <div class="col-md-8">
         <!--匹配题 -->
-            <div>{{nid}}.<span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> </div>
+            <div>{{nid}}.<span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> 
+            <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
+             </audio>
+ 
+             <img ng-src="{{img}}" style="display:{{imghide}}">
+            
+            </div>
             <div ng-repeat="contentlist in contentlists">
                 ({{$index+1}}).{{contentlist.content}}
                 <select role="button" ng-model="option[contentlist.contentId]" ng-options="x.choiceId as x.alp for x in lists">
