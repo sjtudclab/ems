@@ -270,7 +270,26 @@
                    params: { typeId: 0, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
-            	   alert("dfjs"+data.singleNum);
+            	   alert("dfjs"+data.img);
+            	   alert("dfjs"+data.audio);
+            	   if(data.audio.length){  
+            		   $scope.audioshow=false;
+            		   $scope.audio=data.audio;
+            	   }else{
+            		   $scope.audioshow=true;
+            		   alert("隐藏");
+            		 
+            	   }
+            	   if(data.img.length){
+            		   $scope.imgshow=false;
+            		   $scope.img=data.img;
+            		  
+            	   }else{
+            		   $scope.imgshow=true;
+            		   alert("隐藏");
+            		  
+            	   }
+            	 
             	   $scope.totalItems = data.singleNum;
                    $scope.nid = 1;
                    $scope.content = data.content;
@@ -586,7 +605,7 @@
                    //alert($scope.lists[0].choiceId);
 /*                   data.choiceIdList[0]=$scope.lists[0].choiceId;
                    data.choiceIdList[1]=$scope.lists[1].choiceId;*/
-                   alert("mulit"+data.choiceIdList);
+                
                    $scope.option = data.choiceIdList;
                    // alert(data.choiceIdList);
                    if (data.ifCheck) {

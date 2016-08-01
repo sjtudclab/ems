@@ -260,8 +260,8 @@ body {
     border-top: 0;
     text-transform: uppercase;
     border: 1px solid transparent;
-    border-bottom-color:rgb(125, 185, 232)/* #d9edf7 *//* rgba(51,122,183,.8) */;
-    background-color:/* rgba(51,122,183,.8) *//* #7DB9DE */rgb(125, 185, 232);
+    border-bottom-color:/* #3498db *//* rgba(0,0,0,.3) */rgb(125, 185, 232)/* #d9edf7 *//* rgba(51,122,183,.8) */;
+    background-color:#337ab7/* #3A8FB7 *//* #7DB9DE *//* rgb(125, 185, 232) */;
     color:#fff;
   /*   background-color:rgba(125, 185, 232, 1); */
 }

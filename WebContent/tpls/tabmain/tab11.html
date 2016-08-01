@@ -2,6 +2,12 @@
     <div>
         <div>
             <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> {{nid}}.{{content}}
+            <div ng-hide="{{audioshow}}">
+            <audio controls ng-src="{{audio}}" type="audio/mp3" >
+             </audio>
+             </div>
+             <img ng-src="{{img}}" ng-hide="{{imgshow}}">
+        
         </div>
         <div style="padding-left:5%">
             <!--单选题 -->
