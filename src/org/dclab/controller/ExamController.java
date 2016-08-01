@@ -39,6 +39,7 @@ public class ExamController {
 			return respond;
 		}*/
 		ExamBean exambean=examService.getExambeanByToken(request.getToken());
+		System.out.println(exambean.getSingleChoiceById(request.getId()).getSingleNum());
 		/*if(exambean.isFinished()==true){
 			String respond="已经交卷了";
 			return respond;
@@ -91,6 +92,7 @@ public class ExamController {
 		ExamBean exambean=examService.getExambeanByToken(request.getToken());
 		int id=request.getId()-1;
 		int requestId=request.getRequestId()-1;
+		
 		
 		switch (request.getTypeId()) {
 		case 0:

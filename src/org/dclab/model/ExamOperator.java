@@ -48,9 +48,9 @@ public class ExamOperator {
 	    List<SingleChoiceBean> slist=topicMapper.getSingleBean();//将topicid和content填入singlechoiceBean
 	    for(SingleChoiceBean bean: slist){//对于每一个bean，根据topicid填充选项的id和content
 	    	int topicId=bean.getId();
+	    	bean.setSingleNum(slist.size());
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
 	    }
-	    SingleChoiceBean.setSingleNum(slist.size());
 	    System.out.println("单选题的个数"+slist.size());//********
 	    
 	    List<MultiChoicesBean> mlist=topicMapper.getMultiBean();//和单选题一样
@@ -59,8 +59,9 @@ public class ExamOperator {
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
 	    	List<Integer> choiceIdList=new ArrayList<>();
 	    	bean.setChoiceIdList(choiceIdList);
+	    	bean.setMultiNum(mlist.size());
 	    }
-	    MultiChoicesBean.setMultiNum(mlist.size());
+	   
 	    System.out.println("多选题的个数"+mlist.size());//********
 	    
 	    List<Integer> tlist=topicMapper.getMatchTopicId();//由于一道匹配题有多个topicid,所以根据number识别
@@ -74,17 +75,18 @@ public class ExamOperator {
 	    	mlist1.add(bean);
 	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 	    	bean.setChoiceIdMap(choiceIdMap);
+	    	bean.setMatchNum(mlist1.size());
 	    }
-	    MatchingBean.setMatchNum(mlist1.size());
+	   
 	    System.out.println("匹配题的个数"+mlist1.size());//********
 	    
 	    List<JudgementBean> jlist=topicMapper.getJudgeBean();//和单选题一样
 	    for(JudgementBean bean: jlist){
 	    	int topicId=bean.getId();
 	    	bean.setChoiceList(choiceMapper.getJudgeChoice());
+	    	bean.setJudgeNum(jlist.size());
 	    }
 	    
-	    JudgementBean.setJudgeNum(jlist.size());
 	    System.out.println("判断题的个数"+jlist.size());//********
 	    
 	    System.out.println("成功取出题目");

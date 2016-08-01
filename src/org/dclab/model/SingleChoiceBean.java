@@ -18,19 +18,19 @@ public class SingleChoiceBean implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 7633906860972374279L;
-	private static int singleNum;//存储单选题数目
+	private int singleNum;//存储单选题数目
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
 	private List<ChoicesBean> choiceList;//选项的内容和id
 	
-	
-	public static int getSingleNum() {
+
+	public int getSingleNum() {
 		return singleNum;
 	}
-	public static void setSingleNum(int singleNum) {
-		SingleChoiceBean.singleNum = singleNum;
+	public void setSingleNum(int singleNum) {
+		this.singleNum = singleNum;
 	}
 	public int getId() {
 		return id;

@@ -112,7 +112,8 @@ public class ExamService {
 	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
 	{
 		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
-		if(exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
+		if(exambean.getMultiChoiceById(id).getChoiceIdList()!=null&&
+				exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
 			exambean.getFinishTopic().add(exambean.getMultiChoiceById(id).getId());
 		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
 	}

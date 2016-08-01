@@ -17,7 +17,7 @@ public class JudgementBean implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1233847995962873452L;
-	private static int judgeNum;//存储判断题数目
+	private int judgeNum;//存储判断题数目
 	private int id;//题目id(数据库中id)
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
@@ -25,11 +25,11 @@ public class JudgementBean implements Serializable{
 	private List<ChoicesBean> choiceList;//题目的内容和id的list
 	
 	
-	public static int getJudgeNum() {
+	public int getJudgeNum() {
 		return judgeNum;
 	}
-	public static void setJudgeNum(int judgeNum) {
-		JudgementBean.judgeNum = judgeNum;
+	public void setJudgeNum(int judgeNum) {
+		this.judgeNum = judgeNum;
 	}
 	public int getId() {
 		return id;

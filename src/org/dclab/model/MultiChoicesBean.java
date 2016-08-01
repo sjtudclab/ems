@@ -17,7 +17,7 @@ public class MultiChoicesBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6078271522167915749L;
-	private static int multiNum;//存储多选题数目
+	private int multiNum;//存储多选题数目
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
@@ -25,11 +25,11 @@ public class MultiChoicesBean implements Serializable {
 	private List<ChoicesBean> choiceList;//题目选项的内容和id的list
 	
 	
-	public static int getMultiNum() {
+	public int getMultiNum() {
 		return multiNum;
 	}
-	public static void setMultiNum(int multiNum) {
-		MultiChoicesBean.multiNum = multiNum;
+	public void setMultiNum(int multiNum) {
+		this.multiNum = multiNum;
 	}
 	public List<?> getChoiceIdList() {
 		return choiceIdList;

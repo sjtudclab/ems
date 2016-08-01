@@ -17,19 +17,18 @@ public class MatchingBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1445501220162322852L;
-	private static int matchNum;//匹配题数目
+	private int matchNum;//匹配题数目
 	private int id;//整个题目的id
 	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
 	private Map<Integer, Integer> choiceIdMap;//考生答案id的map
 	private List<ChoicesBean> choiceList;//选项的内容和id的list
 	
-	
-	public static int getMatchNum() {
+	public int getMatchNum() {
 		return matchNum;
 	}
-	public static void setMatchNum(int matchNum) {
-		MatchingBean.matchNum = matchNum;
+	public void setMatchNum(int matchNum) {
+		this.matchNum = matchNum;
 	}
 	public int getId() {
 		return id;
