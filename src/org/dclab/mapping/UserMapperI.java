@@ -18,6 +18,9 @@ public interface UserMapperI {
 	@Select("select Uid from user inner join candidate_subject on user.Uid=candidate_subject.candidateId")
 	public List<Integer> getUid();
 	
+	@Select("select Uid from user where Rid=1")
+	public List<Integer> getUidByRid();
+	
 	
 /*     //使用@Insert注解指明add方法要执行的SQL
 	 @Insert("insert into users(name, age) values(#{name}, #{age})")

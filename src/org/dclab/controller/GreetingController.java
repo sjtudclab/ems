@@ -3,6 +3,7 @@ package org.dclab.controller;
 import java.util.Map;
 
 import org.dclab.model.ExamOperator;
+import org.dclab.model.SupervisorOperator;
 import org.dclab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class GreetingController {
 	public Map<String,Object> greeting(@RequestParam(value = "name") int name) {
 		
 		ExamOperator.load(1);
+		SupervisorOperator.load();
 		
 		return userService.login(name);
 	}
