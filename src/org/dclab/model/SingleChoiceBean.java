@@ -26,10 +26,17 @@ public class SingleChoiceBean implements Serializable{
 	private List<ChoicesBean> choiceList;//选项的内容和id
 	private String img;
 	private String audio;
+	private String vedio;
 	
 	
 	
-
+	
+	public String getVedio() {
+		return vedio;
+	}
+	public void setVedio(String vedio) {
+		this.vedio = vedio;
+	}
 	public String getImg() {
 		return img;
 	}

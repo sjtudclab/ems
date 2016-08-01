@@ -28,6 +28,7 @@ public class ExamOperator {
 	 */
 	private static final String imgPath="EMSdata\\img\\";
 	private static final String audioPath="EMSdata\\audio\\";
+	private static final String vedioPath="EMSdata\\vedio\\";
 	public static Map<Integer, UUID> idTokenMap = new HashMap<>();
 	
 	/**
@@ -57,6 +58,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
+	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
+	    		bean.setVedio(vedioPath+bean.getVedio());
 	    }
 	    System.out.println("单选题的个数"+slist.size());//********
 	    
@@ -71,6 +74,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
+	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
+	    		bean.setVedio(vedioPath+bean.getVedio());
 	    }
 	   
 	    System.out.println("多选题的个数"+mlist.size());//********
@@ -91,6 +96,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
+	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
+	    		bean.setVedio(vedioPath+bean.getVedio());
 	    	mlist1.add(bean);
 	    }
 	   
@@ -105,6 +112,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
+	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
+	    		bean.setVedio(vedioPath+bean.getVedio());
 	    }
 	    
 	    System.out.println("判断题的个数"+jlist.size());//********
