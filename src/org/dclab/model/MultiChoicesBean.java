@@ -30,10 +30,10 @@ public class MultiChoicesBean implements Serializable {
 	
 	
 	
-	public String getVedio() {
+	public String getVideo() {
 		return video;
 	}
-	public void setVedio(String vedio) {
+	public void setVideo(String vedio) {
 		this.video = vedio;
 	}
 	public String getImg() {

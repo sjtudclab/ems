@@ -58,8 +58,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
-	    		bean.setVedio(vedioPath+bean.getVedio());
+	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+	    		bean.setVideo(vedioPath+bean.getVideo());
 	    }
 	    System.out.println("单选题的个数"+slist.size());//********
 	    
@@ -74,8 +74,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
-	    		bean.setVedio(vedioPath+bean.getVedio());
+	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+	    		bean.setVideo(vedioPath+bean.getVideo());
 	    }
 	   
 	    System.out.println("多选题的个数"+mlist.size());//********
@@ -96,8 +96,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
-	    		bean.setVedio(vedioPath+bean.getVedio());
+	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+	    		bean.setVideo(vedioPath+bean.getVideo());
 	    	mlist1.add(bean);
 	    }
 	   
@@ -112,8 +112,8 @@ public class ExamOperator {
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVedio()!=null&&bean.getVedio().length()!=0)
-	    		bean.setVedio(vedioPath+bean.getVedio());
+	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+	    		bean.setVideo(vedioPath+bean.getVideo());
 	    }
 	    
 	    System.out.println("判断题的个数"+jlist.size());//********

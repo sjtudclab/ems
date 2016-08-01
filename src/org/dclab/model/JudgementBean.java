@@ -28,10 +28,10 @@ public class JudgementBean implements Serializable{
 	private String video;//存储题目中可能存在的视频的地址
 	
 	
-	public String getVedio() {
+	public String getVideo() {
 		return video;
 	}
-	public void setVedio(String vedio) {
+	public void setVideo(String vedio) {
 		this.video = vedio;
 	}
 	public String getImg() {
