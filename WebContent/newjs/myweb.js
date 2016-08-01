@@ -1,6 +1,6 @@
-var routingDemoApp=angular.module('routingDemoApp', ['ui.router','ui.bootstrap','formlogin','demo0','checkup'])
+var routingDemoApp=angular.module('routingDemoApp', ['ui.router','ui.bootstrap','formlogin','demo0','checkup','supervisor'])
 routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/index');
+    
     $stateProvider
         .state('index', {
             url: '/index',
@@ -33,6 +33,18 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
                 },
                'navbar@showinfo': {
                    templateUrl: 'tpls/navbar.html'
+                }
+            }
+        })
+         .state('supervisor', {
+            url: '/supervisor',
+            views: {
+                '': {
+                    templateUrl: 'tpls/supervisor.html'/*,
+                     controller: 'showCtrl'*/
+                },
+                'navbar@supervisor': {
+                    templateUrl: 'tpls/navbar.html'
                 }
             }
         })
@@ -110,5 +122,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
                      
                   }
             }
-        })
+        });
+        
+        $urlRouterProvider.otherwise('/index');
 });

@@ -34,7 +34,12 @@ var formlogin = angular.module('formlogin', [])
                infoStatus.photo = data.photo;
                infoStatus.Rid = data.Rid;
                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-               $state.go('showinfo');
+               if(data.Rid==0){
+            	   $state.go('showinfo');
+               }else{
+            	   $state.go('supervisor');
+               }
+             
 
            }).error(function(data, status, headers, config) {
                //处理错误  
@@ -310,7 +315,7 @@ var formlogin = angular.module('formlogin', [])
                }).success(function(data, status, headers, config) {
                    //试题
             	 //  alert("dfjs"+data.img);
-            	 //  alert("dfjs"+data.audio);
+            	   alert("dfjs"+data.video);
             	   if(data.audio){  
             		   $scope.audiohide="block";
             		   $scope.audio=data.audio;
@@ -323,6 +328,13 @@ var formlogin = angular.module('formlogin', [])
             		  
             	   }else{
             		   $scope.imghide="none"; 
+            	   }
+            	   if(data.video){  
+            		   /*alert(data.video);*/
+            		   $scope.videohide="block";
+            		   $scope.video=data.video;
+            	   }else{
+            		   $scope.videohide="none";	 
             	   }
             	 
             	   $scope.totalItems = data.singleNum;
@@ -418,6 +430,13 @@ var formlogin = angular.module('formlogin', [])
         		  
         	   }else{
         		   $scope.imghide="none"; 
+        	   }
+        	   if(data.video){  
+        		   /*alert(data.video);*/
+        		   $scope.videohide="block";
+        		   $scope.video=data.video;
+        	   }else{
+        		   $scope.videohide="none";	 
         	   }
                //试题状态
                alert( data.choiceId);
@@ -1131,6 +1150,7 @@ var formlogin = angular.module('formlogin', [])
                    params: { typeId: 3, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	  /* alert("match"+data.matchNum);*/
             	   $scope.totalItems = data.matchNum;
                    $scope.nid = 1;
                    $scope.contentlists = data.contentList;
@@ -1380,6 +1400,9 @@ var formlogin = angular.module('formlogin', [])
        $scope.totalItems = 20;
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
+       
+       
+       
        $scope.maxSize = 5;
        
        $scope.pageChanged = function(answer) {
@@ -1575,7 +1598,6 @@ var formlogin = angular.module('formlogin', [])
        $http.get('/EMS/exam/check', {
            params: { token: $window.sessionStorage.token, typeId: 4 }
        }).success(function(data, status, headers, config) {
-    	   alert(data.checkList);
     	   $scope.lists = data.checkList;
           /* $rootScope.topicNum=data.topicNum;
            $rootScope.finishNum=data.finishNum;

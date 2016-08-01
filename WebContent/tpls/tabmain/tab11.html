@@ -2,12 +2,14 @@
     <div>
         <div>
             <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> {{nid}}.{{content}}
-
+            <div style="padding-left:5%">
             <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
              </audio>
- 
+             <video controls   ng-src="{{video}}" type="video/mp4" style="display:{{videohide}}">
+                  <!--  <source ng-src="{{video}}" type="video/mp4"> -->
+             </video>
              <img ng-src="{{img}}" style="display:{{imghide}}">
-            
+             </div>
         </div>
         <div style="padding-left:5%">
             <!--单选题 -->

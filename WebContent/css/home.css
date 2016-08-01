@@ -340,5 +340,56 @@ body {
 
 
 }
+/* .navbarcustom {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, .7);
+}
+ */
+.supervi{
+	height:100%
+}
+.supervi ul {
+            float: left;
+            background-color: #CCCCCC;
+            width: 10%;
+            height: 100%
+        }
+        
+.supervi  li {
+            text-align: center;
+        }
+        
+ .supervi  a {
+            margin: 5%
+        }
+ 
+ .supervi td,th {
+            text-align: center;
+        }
+        
 
 
+        .content {
+            float: left;
+            width: 90%;
+            height: 100%
+        }
+
+       #main {
+            height: 94%
+        }
+
+       
+        #workingSpace {
+            height: 20%
+        }
+
+        #selectArea {
+            height: 70%
+        }
+
+        .table-responsive {
+            height: 90%;
+        }
+
+       
