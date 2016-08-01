@@ -18,7 +18,7 @@ public interface TopicMapperI {
 	public List<MultiChoicesBean> getMultiBean();
 	
 	
-	@Select("select id from topic where typeId=3 order by rand()")
+	@Select("select id from topic where typeId=3")
 	public List<Integer> getMatchTopicId();
 	
 	@Select("select id,content,img,audio from topic where typeId=2 order by rand() limit 5")
@@ -27,7 +27,7 @@ public interface TopicMapperI {
 	@Select("select id as contentId,content,img,audio from topic where typeId=3 && number=#{num}")
 	public List<ContentBean> getMatchContent(int num);
 	
-	@Select("select id,content from topic where typeId=4 order by rand() limit 3")
+	@Select("select id,content from topic where typeId=4")
 	public List<shortAnswerBean> getShortBean();
 	
 }

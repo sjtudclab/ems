@@ -110,9 +110,10 @@ public class ExamOperator {
 	    
 	    List<shortAnswerBean> salist=topicMapper.getShortBean();
 	    for(shortAnswerBean bean: salist){
-	    	bean.setShortNum(salist.size());
-	    	
+	    	bean.setShortNum(salist.size());	
 	    }
+	    
+	    System.out.println("简答题的个数"+salist.size());
 	    
 	    System.out.println("成功取出题目");
 	    int count=slist.size()+mlist.size()+mlist1.size()+jlist.size()+salist.size();
