@@ -8,6 +8,7 @@ import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
+import org.dclab.model.shortAnswerBean;
 
 public interface TopicMapperI {
 	@Select("select id,content,img,audio from topic where typeId=0 order by rand() limit 5")
@@ -25,5 +26,8 @@ public interface TopicMapperI {
 	
 	@Select("select id as contentId,content,img,audio from topic where typeId=3 && number=#{num}")
 	public List<ContentBean> getMatchContent(int num);
+	
+	@Select("select id,content from topic where typeId=4 order by rand() limit 3")
+	public List<shortAnswerBean> getShortBean();
 	
 }

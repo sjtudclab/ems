@@ -16,6 +16,16 @@ public class shortAnswerBean implements Serializable{
 	private String content;//题干
 	private boolean ifCheck;//检查标记
 	private String answer;//考生答案
+	private int shortNum;//存储简答题数目
+	
+	
+	
+	public int getShortNum() {
+		return shortNum;
+	}
+	public void setShortNum(int shortNum) {
+		this.shortNum = shortNum;
+	}
 	public int getId() {
 		return id;
 	}

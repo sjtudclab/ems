@@ -77,6 +77,8 @@ public class ExamService {
 			return exambean.getMatchingById(0);
 		case 2:
 			return exambean.getJudgementById(0);
+		case 4:
+			return exambean.getShortAnswerById(0);
 		default:
 			System.out.println("获取第一题出错");
 		return null;
@@ -125,6 +127,13 @@ public class ExamService {
 			exambean.getFinishTopic().add(exambean.getMatchingById(id).getId());
 		exambean.getMatchingById(id).setIfCheck(ifCheck);
 	}
+	//简答题存储
+	public void storeTopic(ExamBean exambean,int typeId,int id,String answer,boolean ifCheck){
+		exambean.getShortAnswerById(id).setAnswer(answer);
+		if(exambean.getShortAnswerById(id).getAnswer()!=null)
+			exambean.getFinishTopic().add(exambean.getShortAnswerById(id).getId());
+		exambean.getShortAnswerById(id).setIfCheck(ifCheck);
+	}
 	//根据typeid和id获取题目。
 	public Object getTopic(ExamBean exambean,int typeId,int id)
 	{
@@ -151,6 +160,11 @@ public class ExamService {
 				return null;
 			else
 				return exambean.getJudgementById(id);
+		case 4:
+			if(id==exambean.getShortAnswerList().size()||id<0)
+				return null;
+			else
+				return exambean.getShortAnswerById(id);
 		default:
 			System.out.println("getTopic error");
 			return null;
@@ -303,7 +317,8 @@ public class ExamService {
 			for(int i=0;i<exambean.getMultiChoicesList().size();i++){
 				if(exambean.getMultiChoiceById(i).isIfCheck()==true)
 					list.add(new CheckBean(i+1, 0));
-				else if(exambean.getMultiChoiceById(i).getChoiceIdList().size()!=0)
+				else if(exambean.getMultiChoiceById(i).getChoiceIdList()!=null&&
+						exambean.getMultiChoiceById(i).getChoiceIdList().size()!=0)
 					list.add(new CheckBean(i+1,1));
 				else
 					list.add(new CheckBean(i+1, 2));
@@ -313,7 +328,8 @@ public class ExamService {
 			for(int i=0;i<exambean.getMatchingList().size();i++){
 				if(exambean.getMatchingById(i).isIfCheck()==true)
 					list.add(new CheckBean(i+1, 0));
-				else if(exambean.getMatchingById(i).getChoiceIdMap().size()!=0)
+				else if(exambean.getMatchingById(i).getChoiceIdMap()!=null&&
+						exambean.getMatchingById(i).getChoiceIdMap().size()!=0)
 					list.add(new CheckBean(i+1, 1));
 				else
 					list.add(new CheckBean(i+1, 2));
@@ -325,6 +341,17 @@ public class ExamService {
 				if(exambean.getJudgementById(i).isIfCheck()==true)
 					list.add(new CheckBean(i+1, 0));
 				else if(exambean.getJudgementById(i).getChoiceId()!=0)
+					list.add(new CheckBean(i+1, 1));
+				else
+					list.add(new CheckBean(i+1, 2));
+			}
+			break;
+		case 4:
+			for(int i=0;i<exambean.getShortAnswerList().size();i++)
+			{
+				if(exambean.getShortAnswerById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1, 0));
+				else if(exambean.getShortAnswerById(i).getAnswer()!=null)
 					list.add(new CheckBean(i+1, 1));
 				else
 					list.add(new CheckBean(i+1, 2));

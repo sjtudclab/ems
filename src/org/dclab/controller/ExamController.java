@@ -108,6 +108,9 @@ public class ExamController {
 		case 2:
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceId(), request.isIfCheck());
 			break;
+		case 4:
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getAnswer(), request.isIfCheck());
+			break;
 		default:
 			System.out.println("controller getTopic 出错");
 			break;

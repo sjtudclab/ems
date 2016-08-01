@@ -12,9 +12,16 @@ public class RequestBean {
 	private int choiceId;
 	private List<Integer> choiceIdList;
 	private String choiceIdMap;
+	private String answer;//简答题的答案
 	private boolean ifCheck;
 	
 	
+	public String getAnswer() {
+		return answer;
+	}
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 	public int getRequestId() {
 		return requestId;
 	}

@@ -26,8 +26,8 @@ public class ExamOperator {
 	 * 用户 id 到token 的MAP  
 	 * 
 	 */
-	private static final String imgPath="D:\\版本\\1.0\\ems\\WebContent\\EMSdata\\img\\";
-	private static final String audioPath="D:\\版本\\1.0\\ems\\WebContent\\EMSdata\\audio\\";
+	private static final String imgPath="EMSdata\\img\\";
+	private static final String audioPath="EMSdata\\audio\\";
 	public static Map<Integer, UUID> idTokenMap = new HashMap<>();
 	
 	/**
@@ -108,8 +108,13 @@ public class ExamOperator {
 	    
 	    System.out.println("判断题的个数"+jlist.size());//********
 	    
+	    List<shortAnswerBean> salist=topicMapper.getShortBean();
+	    for(shortAnswerBean bean: salist){
+	    	bean.setShortNum(salist.size());
+	    }
+	    
 	    System.out.println("成功取出题目");
-	    int count=slist.size()+mlist.size()+mlist1.size()+jlist.size();
+	    int count=slist.size()+mlist.size()+mlist1.size()+jlist.size()+salist.size();
 	    
 		List<Integer> uidList=userMapper.getUid();
 		for(int id:uidList){
@@ -119,6 +124,7 @@ public class ExamOperator {
 			exambean.setMultiChoicesList(mlist);
 			exambean.setMatchingList(mlist1);
 			exambean.setJudgementList(jlist);
+			exambean.setShortAnswerList(salist);
 			exambean.setTopicNum(count);
 			tokenExamMap.put(idTokenMap.get(id), exambean);
 		}
