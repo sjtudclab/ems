@@ -28,7 +28,7 @@ public class ExamOperator {
 	 */
 	private static final String imgPath="EMSdata\\img\\";
 	private static final String audioPath="EMSdata\\audio\\";
-	private static final String vedioPath="EMSdata\\vedio\\";
+	private static final String vedioPath="EMSdata\\video\\";
 	public static Map<Integer, UUID> idTokenMap = new HashMap<>();
 	
 	/**

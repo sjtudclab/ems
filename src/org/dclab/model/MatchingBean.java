@@ -25,14 +25,14 @@ public class MatchingBean implements Serializable {
 	private List<ChoicesBean> choiceList;//选项的内容和id的list
 	private String img;//存储题目中可能存在的图片的地址
 	private String audio;//存储题目中可能存在的音频的地址
-	private String vedio;//存储题目中可能存在的视频的地址
+	private String video;//存储题目中可能存在的视频的地址
 	
 	
 	public String getVedio() {
-		return vedio;
+		return video;
 	}
 	public void setVedio(String vedio) {
-		this.vedio = vedio;
+		this.video = vedio;
 	}
 	public String getImg() {
 		return img;
