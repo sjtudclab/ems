@@ -86,11 +86,12 @@ public class ExamOperator {
 	    	mlist1.add(bean);
 	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 	    	bean.setChoiceIdMap(choiceIdMap);
-	    	bean.setMatchNum(mlist1.size());
+	    	bean.setMatchNum(tlist.size());
 	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
 	    		bean.setAudio(audioPath+bean.getAudio());
+	    	mlist1.add(bean);
 	    }
 	   
 	    System.out.println("匹配题的个数"+mlist1.size());//********
