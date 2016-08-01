@@ -24,8 +24,24 @@ public class SingleChoiceBean implements Serializable{
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
 	private List<ChoicesBean> choiceList;//选项的内容和id
+	private String img;
+	private String audio;
+	
+	
 	
 
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getAudio() {
+		return audio;
+	}
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
 	public int getSingleNum() {
 		return singleNum;
 	}

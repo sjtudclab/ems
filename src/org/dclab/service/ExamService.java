@@ -131,6 +131,7 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
+			System.out.println(exambean.getSingleChoiceById(id).getImg());
 			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else

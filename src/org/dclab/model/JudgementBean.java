@@ -23,8 +23,23 @@ public class JudgementBean implements Serializable{
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
 	private List<ChoicesBean> choiceList;//题目的内容和id的list
+	private String img;//存储题目中可能存在的图片的地址
+	private String audio;//存储题目中可能存在的音频的地址
 	
 	
+	
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getAudio() {
+		return audio;
+	}
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
 	public int getJudgeNum() {
 		return judgeNum;
 	}

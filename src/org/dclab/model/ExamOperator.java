@@ -24,7 +24,10 @@ import org.dclab.utils.TokenGenerator;
 public class ExamOperator {
 	/**
 	 * 用户 id 到token 的MAP  
+	 * 
 	 */
+	private static final String imgPath="D:\\版本\\1.0\\ems\\WebContent\\EMSdata\\img\\";
+	private static final String audioPath="D:\\版本\\1.0\\ems\\WebContent\\EMSdata\\audio\\";
 	public static Map<Integer, UUID> idTokenMap = new HashMap<>();
 	
 	/**
@@ -50,6 +53,10 @@ public class ExamOperator {
 	    	int topicId=bean.getId();
 	    	bean.setSingleNum(slist.size());
 	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
+	    	if(bean.getImg()!=null)
+	    		bean.setImg(imgPath+bean.getImg());
+	    	if(bean.getAudio()!=null)
+	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	    System.out.println("单选题的个数"+slist.size());//********
 	    
@@ -60,6 +67,10 @@ public class ExamOperator {
 	    	List<Integer> choiceIdList=new ArrayList<>();
 	    	bean.setChoiceIdList(choiceIdList);
 	    	bean.setMultiNum(mlist.size());
+	    	if(bean.getImg()!=null)
+	    		bean.setImg(imgPath+bean.getImg());
+	    	if(bean.getAudio()!=null)
+	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	   
 	    System.out.println("多选题的个数"+mlist.size());//********
@@ -76,6 +87,10 @@ public class ExamOperator {
 	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 	    	bean.setChoiceIdMap(choiceIdMap);
 	    	bean.setMatchNum(mlist1.size());
+	    	if(bean.getImg()!=null)
+	    		bean.setImg(imgPath+bean.getImg());
+	    	if(bean.getAudio()!=null)
+	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	   
 	    System.out.println("匹配题的个数"+mlist1.size());//********
@@ -85,6 +100,10 @@ public class ExamOperator {
 	    	int topicId=bean.getId();
 	    	bean.setChoiceList(choiceMapper.getJudgeChoice());
 	    	bean.setJudgeNum(jlist.size());
+	    	if(bean.getImg()!=null)
+	    		bean.setImg(imgPath+bean.getImg());
+	    	if(bean.getAudio()!=null)
+	    		bean.setAudio(audioPath+bean.getAudio());
 	    }
 	    
 	    System.out.println("判断题的个数"+jlist.size());//********

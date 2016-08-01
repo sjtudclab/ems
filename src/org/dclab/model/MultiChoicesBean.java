@@ -23,8 +23,24 @@ public class MultiChoicesBean implements Serializable {
 	private boolean ifCheck;//是否需要检查
 	private List<Integer> choiceIdList;//考生答案id的list
 	private List<ChoicesBean> choiceList;//题目选项的内容和id的list
+	private String img;//存储题目中可能存在的图片的地址
+	private String audio;//存储题目中可能存在的音频的地址
 	
 	
+	
+	
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getAudio() {
+		return audio;
+	}
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
 	public int getMultiNum() {
 		return multiNum;
 	}
