@@ -87,23 +87,27 @@
    demo0.controller('TabsDemoCtrl', function($scope) {
     $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题','简答题'];
     $scope.active = [];
-//    for(x in $scope.problemMetaInfo){
-//    	$scope.active[x]='';
-//    };
+    $scope.display=[];
     $scope.color = [];
     $scope.index = 0;
+    for(x in $scope.problemMetaInfo){
+	  $scope.active[x]="";
+	  $scope.display[x]='none';
+	  $scope.color[x] = "white";
+    };
     $scope.$watch('index', function(newValue, oldValue) {
     	
         for (i in $scope.active) {
-
             $scope.active[i] = "";
-            $scope.color[i] = "transparant";
-           
+            $scope.color[i] = "white";
+            $scope.display[i]="none";
             
         };
+        
 
 
         $scope.active[$scope.index] = "active";
+        $scope.display[$scope.index] = "block";
 
         switch ($scope.index) {
     
@@ -266,6 +270,7 @@
                    params: { typeId: 0, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
+            	   alert("dfjs"+data.singleNum);
             	   $scope.totalItems = data.singleNum;
                    $scope.nid = 1;
                    $scope.content = data.content;
@@ -299,10 +304,10 @@
 
        $scope.previousText = "上一题";
        $scope.nextText = "下一题";
-       $scope.totalItems = 20;
+      /* $scope.totalItems = 20;*/
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
-       $scope.maxSize = 5;
+       $scope.maxSize = 2;
 
        $scope.pageChanged = function(option) {
           // alert($scope.currentPage);
@@ -607,7 +612,7 @@
 
        $scope.previousText = "上一题";
        $scope.nextText = "下一题";
-       $scope.totalItems = 20;
+      /* $scope.totalItems = 20;*/
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
        $scope.maxSize = 5;
@@ -880,7 +885,7 @@
 
        $scope.previousText = "上一题";
        $scope.nextText = "下一题";
-       $scope.totalItems = 20;
+   /*    $scope.totalItems = 20;*/
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
        $scope.maxSize = 5;
@@ -1154,7 +1159,7 @@
 
        $scope.previousText = "上一题";
        $scope.nextText = "下一题";
-       $scope.totalItems = 20;
+      /* $scope.totalItems = 20;*/
        $scope.itemsPerPage = 1;
        $scope.currentPage = 1;
        $scope.maxSize = 5;

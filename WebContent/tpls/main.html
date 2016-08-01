@@ -27,14 +27,14 @@
 </div> -->
  <div ng-controller="TabsDemoCtrl" style="height:84%">
         <ul class="nav nav-tabs">
-            <li ng-repeat="x in problemMetaInfo" class="{{active[$index]}}">
+            <li ng-repeat="x in problemMetaInfo" class="active:{{active[$index]}}">
                 <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-bottom-color:transparent">{{x}}</a>
             </li>
         </ul>
-        <div class="tab-content" style="height:94%">
-            <div ng-repeat="x in problemMetaInfo" class="tab-pane {{active[$index]}}" style="background-color:{{color[$index]}};height:100%">
+        <div style="height:100%">
+            <div ng-repeat="x in problemMetaInfo" style="background-color:{{color[$index]}};height:100%;display:{{display[$index]}}">
 <!--                  <div  style="height:100%">ff</div>-->
-                  <div ui-view="tab{{$index+1}}" style="height:100%"></div>
+                   <div ui-view="tab{{$index+1}}" style="height:100%"></div> 
             </div>
         </div>
    </div>
