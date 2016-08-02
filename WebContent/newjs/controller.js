@@ -248,6 +248,13 @@ var formlogin = angular.module('formlogin', [])
         	   }else{
         		   $scope.imghide="none"; 
         	   }
+        	   if(data.video){  
+        		   /*alert(data.video);*/
+        		   $scope.videohide="block";
+        		   $scope.video=data.video;
+        	   }else{
+        		   $scope.videohide="none";	 
+        	   }
                //试题状态
 
                $scope.option.optionsRadios = data.choiceId;
