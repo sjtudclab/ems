@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.Subject;
 import org.dclab.User;
@@ -30,7 +32,7 @@ import sun.misc.BASE64Encoder;
 @Service
 public class UserService {
 
-	public Map<String,Object> login(int Uid)
+	public Object login(int Uid)
 	{
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		//得到UserMapperI接口的实现类对象，UserMapperI接口的实现类对象由sqlSession.getMapper(UserMapperI.class)动态构建出来
@@ -72,15 +74,17 @@ public class UserService {
 			String photo=encoder.encode(data);
 			map.put("photo", photo);
 			System.out.println("login执行完毕，返回数据");
-			break;
+			sqlSession.close();
+			return map;
 		case 1:
-			map.put("Uid",user.getUid());
-			map.put("Rid", user.getRid());
-			map.put("token",SupervisorOperator.idTokenMap.get(Uid));
+			UUID token=SupervisorOperator.idTokenMap.get(user.getUid());
+			sqlSession.close();
+			return SupervisorOperator.tokenSuperMap.get(token);
+		default:
+				return null;
 		}
-		sqlSession.close();
 
-		return map;
+		
 	}
 	
 /*	public Map<String,Object> getUserInfo(UUID token){

@@ -24,43 +24,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/supervise")
 public class SuperviseController {
+	
 	@Autowired
 	private SupervisorService supervisorService;
 	public void setSupervisorService(SupervisorService service){
 		supervisorService=service;
 	}
 	
-	@RequestMapping("/start")
-	public Map<String, Object> showDefaultPage(@RequestParam(value="Uid")int Uid){
-		UUID token=SupervisorOperator.idTokenMap.get(Uid);
-		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
-		List<User> userList=supervisorService.getUserList(superbean);
-
-		List<Integer> loginedList=supervisorService.getLoginedList(superbean);
-		
-		Map<String, Object> map=new HashMap<String, Object>();
-		map.put("userList", userList);
-		map.put("loginedList", loginedList);
-		map.put("roomId", superbean.getRoomId());
-		map.put("token", token);
-		
-		return map;
-	}
-	
-	@RequestMapping("/refresh")
+/*	@RequestMapping("/refresh")
 	public List<Integer> refreshLogin(@RequestParam(value="token")UUID token){
 		
 		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
 		return supervisorService.getLoginedList(superbean);
-	}
+	}*/
 	
 
-	@RequestMapping("/operation")
+/*	@RequestMapping("/operation")
 	public Object individualOperation(@RequestParam(value="token")UUID token,
 			@RequestParam(value="seatNum")int seatNum){
 		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
 		return supervisorService.getUserList(superbean).get(seatNum-1);
-	}
+	}*/
 	
 	@RequestMapping("/delay")
 	public void delay(@RequestParam(value="token")UUID token,

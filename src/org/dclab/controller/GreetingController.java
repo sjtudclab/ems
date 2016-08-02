@@ -25,7 +25,7 @@ public class GreetingController {
 	}
 	
 	@RequestMapping("/greeting")
-	public Map<String,Object> greeting(@RequestParam(value = "name") int name) {
+	public Object greeting(@RequestParam(value = "name") int name) {
 		
 		ExamOperator.load(1);
 		SupervisorOperator.load();

@@ -7,25 +7,23 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.User;
 import org.dclab.mapping.RoomCanMapperI;
+import org.dclab.model.CandidateBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.utils.MyBatisUtil;
+import org.springframework.stereotype.Service;
 
 /**
  * @author alvis
  *监考老师相关操作
  */
+
+@Service
 public class SupervisorService {
 	
-	//获得监考老师对应考场的考生的信息
-	public List<User> getUserList(SuperBean superbean){
-
-		List<User> userList=superbean.getUserList();//这里的User对象可能后期修改！！！！
-		return userList;
-	}
-	
+/*	
 	//获得对应考场的已登录的考生的座位号的list
 	public List<Integer> getLoginedList(SuperBean superbean){
 		List<Integer> uidSeatList=superbean.getUidSeatList();
@@ -37,7 +35,7 @@ public class SupervisorService {
 				loginedList.add(i+1);
 		}
 		return loginedList;
-	}
+	}*/
 	
 	//监考操作之延时操作
 	public void delay(ExamBean exambean){
@@ -54,7 +52,7 @@ public class SupervisorService {
 	}
 	// 监考操作之强制终止
 	public void forceTerminate(ExamBean exambean) {
-		exambean.setAllowStart(true);
+		exambean.setFinished(true);
 	}
 
 	// 监考操作之允许开始

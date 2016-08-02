@@ -4,6 +4,7 @@ package org.dclab.mapping;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
+import org.dclab.model.CandidateBean;
 
 /**
  * @author alvis
@@ -19,5 +20,8 @@ public interface RoomCanMapperI {
 	
 	@Select("select candidateId from room_candidate where roomId=#{roomId} and seatNum!=null order by seatNum")
 	public List<Integer> getUidByRoomId(int roomId);
+	
+	@Select("select seatNum,Uname,gender,user.Uid,Cid from room_candidate inner join user on room_candidate.candidateId=user.Uid where roomId=#{roomId}")
+	public List<CandidateBean> getUserListByRoomId(int roomId);
 }
 
