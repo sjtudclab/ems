@@ -43,42 +43,47 @@ public class UserService {
 		case 0:
 			CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
 			int sid=csmapper.getSubjectIdByUid(Uid);
-
+			UUID token=ExamOperator.idTokenMap.get(Uid);
 			SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
-			System.out.println("考试开始时间毫秒数： "+smapper.getStartTimeById(sid).getTime());
 			Subject subject=smapper.getById(sid);
-			map.put("name", user.getUname());
-			map.put("id", user.getUid());
-			map.put("cid", user.getCid());
-			map.put("subject",subject.getName());
-			map.put("time", subject.getDate());
-			map.put("Rid",user.getRid());
-			map.put("gender", user.getGender());
-			map.put("token", ExamOperator.idTokenMap.get(Uid));
+			/*if(ExamOperator.tokenExamMap.get(token).isAllowStart()==false&&
+					System.currentTimeMillis()-subject.getStartTime().getTime()<1800*1000)
+			{*/
+				map.put("name", user.getUname());
+				map.put("id", user.getUid());
+				map.put("cid", user.getCid());
+				map.put("subject",subject.getName());
+				map.put("time", subject.getStartTime());
+				map.put("Rid",user.getRid());
+				map.put("gender", user.getGender());
+				map.put("token", token);
 			
-			String dir=user.getPhoto();
-			InputStream in=null;
-			byte[] data=null;
-			try{
-				in=new FileInputStream(dir);
-				data=new byte[in.available()];
-				in.read(data);
-				in.close();
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-			BASE64Encoder encoder=new BASE64Encoder();
-			String photo=encoder.encode(data);
-			map.put("photo", photo);
-			System.out.println("login执行完毕，返回数据");
-			sqlSession.close();
-			return map;
+				String dir=user.getPhoto();
+				InputStream in=null;
+				byte[] data=null;
+				try{
+					in=new FileInputStream(dir);
+					data=new byte[in.available()];
+					in.read(data);
+					in.close();
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+				BASE64Encoder encoder=new BASE64Encoder();
+				String photo=encoder.encode(data);
+			
+				map.put("photo", photo);
+				sqlSession.close();
+				return map;
+/*			}
+			else
+				return null;*/
 		case 1:
-			UUID token=SupervisorOperator.idTokenMap.get(user.getUid());
+			UUID token1=SupervisorOperator.idTokenMap.get(user.getUid());
 			sqlSession.close();
-			return SupervisorOperator.tokenSuperMap.get(token);
+			return SupervisorOperator.tokenSuperMap.get(token1);
 		default:
 			return null;
 		}

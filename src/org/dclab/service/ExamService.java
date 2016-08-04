@@ -91,7 +91,8 @@ public class ExamService {
 	//多选题存储，重载
 	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
 	{
-		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		if(choiceIdList!=null)
+			exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
 		if(exambean.getMultiChoiceById(id).getChoiceIdList()!=null&&
 				exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
 			exambean.getFinishTopic().add(exambean.getMultiChoiceById(id).getId());
@@ -118,7 +119,6 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
-			System.out.println(exambean.getSingleChoiceById(id).getImg());
 			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else

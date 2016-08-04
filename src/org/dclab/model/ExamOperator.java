@@ -123,7 +123,6 @@ public class ExamOperator {
 		    	List<ChoicesBean> list1=choiceMapper.getChoice(topicId);
 		    	Collections.shuffle(list1);
 		    	bean.setChoiceList(list1);
-		    	mlist.add(bean);
 		    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 		    	bean.setChoiceIdMap(choiceIdMap);
 		    	bean.setMatchNum(tlist.size());
