@@ -10,7 +10,7 @@ public class CandidateBean {
 	private String gender;//性别
 	private int Uid;//准考证号
 	private String Cid;//身份证号
-	private String status;//考生状态
+	private int status;//考生状态
 	public int getSeatNum() {
 		return seatNum;
 	}
@@ -41,10 +41,10 @@ public class CandidateBean {
 	public void setCid(String cid) {
 		Cid = cid;
 	}
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	

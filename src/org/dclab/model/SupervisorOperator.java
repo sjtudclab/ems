@@ -40,16 +40,6 @@ public class SupervisorOperator {
 			SuperBean superBean=new SuperBean();
 			superBean.setRoomId(roomId);
 			superBean.setCanList(rcmapper.getUserListByRoomId(roomId));
-			for(CandidateBean cbean : superBean.getCanList()){
-				if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
-						ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).getStartTime()==0)
-					cbean.setStatus("未登录");
-				else if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
-						ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).isFinished()==true)
-					cbean.setStatus("已交卷");
-				else
-					cbean.setStatus("已登录");
-			}
 			superBean.setToken(idTokenMap.get(i));
 			superBean.setAuthorityList(amapper.getListByRid());
 			superBean.setRid(1);

@@ -81,7 +81,7 @@ public class UserService {
 			sqlSession.close();
 			return SupervisorOperator.tokenSuperMap.get(token);
 		default:
-				return null;
+			return null;
 		}
 
 		

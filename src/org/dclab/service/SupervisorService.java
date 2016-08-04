@@ -36,12 +36,27 @@ public class SupervisorService {
 		}
 		return loginedList;
 	}*/
+	//获得对应考场的考生信息list
+	public List<CandidateBean> getInfo(SuperBean superBean){
+		for(CandidateBean cbean : superBean.getCanList()){
+			if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
+					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).getStartTime()==0)
+				cbean.setStatus(0);
+			else if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
+					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).isFinished()==true)
+				cbean.setStatus(2);
+			else
+				cbean.setStatus(1);
+		}
+		
+		return superBean.getCanList();
+	}
 	
 	//监考操作之延时操作
 	public void delay(ExamBean exambean){
 		exambean.setDuration(exambean.getDuration()+100);
 	}
-	//监考操作之返回试卷
+	//监考操作之撤销交卷
 	public void returnToExam(ExamBean exambean){
 		exambean.setFinished(false);
 	}

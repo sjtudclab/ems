@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.dclab.User;
+import org.dclab.model.CandidateBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.SuperBean;
@@ -31,12 +32,12 @@ public class SuperviseController {
 		supervisorService=service;
 	}
 	
-/*	@RequestMapping("/refresh")
-	public List<Integer> refreshLogin(@RequestParam(value="token")UUID token){
+	@RequestMapping("/refresh")
+	public List<CandidateBean> refreshLogin(@RequestParam(value="token")UUID token){
 		
 		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
-		return supervisorService.getLoginedList(superbean);
-	}*/
+		return supervisorService.getInfo(superbean);
+	}
 	
 
 /*	@RequestMapping("/operation")
