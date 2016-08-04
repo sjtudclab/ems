@@ -2,6 +2,7 @@ package org.dclab.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.dclab.User;
@@ -20,11 +21,18 @@ public class SuperBean implements Serializable{
 	private int roomId;//考场号
 	private List<CandidateBean> canList;//该考场的考生信息list
 	private List<AuthorityBean> authorityList;//权限列表
+	private List<Integer> freeSeatList;//考场空闲座位list
 	private UUID token;
 	private int Rid;//角色标识
 	
 	
 	
+	public List<Integer> getFreeSeatList() {
+		return freeSeatList;
+	}
+	public void setFreeSeatList(List<Integer> freeSeatList) {
+		this.freeSeatList = freeSeatList;
+	}
 	public int getRid() {
 		return Rid;
 	}

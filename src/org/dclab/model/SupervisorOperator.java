@@ -43,6 +43,7 @@ public class SupervisorOperator {
 			superBean.setToken(idTokenMap.get(i));
 			superBean.setAuthorityList(amapper.getListByRid());
 			superBean.setRid(1);
+			superBean.setFreeSeatList(rcmapper.getFreeSeatByRoomId(roomId));
 			tokenSuperMap.put(idTokenMap.get(i), superBean);
 		}
 		

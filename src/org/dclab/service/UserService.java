@@ -37,9 +37,7 @@ public class UserService {
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		//得到UserMapperI接口的实现类对象，UserMapperI接口的实现类对象由sqlSession.getMapper(UserMapperI.class)动态构建出来
 		UserMapperI mapper=sqlSession.getMapper(UserMapperI.class);
-		
 		User user=mapper.getByUid(Uid);
-
 		Map<String,Object> map=new HashMap<String,Object>();
 		switch(user.getRid()){
 		case 0:
@@ -47,6 +45,7 @@ public class UserService {
 			int sid=csmapper.getSubjectIdByUid(Uid);
 
 			SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
+			System.out.println("考试开始时间毫秒数： "+smapper.getStartTimeById(sid).getTime());
 			Subject subject=smapper.getById(sid);
 			map.put("name", user.getUname());
 			map.put("id", user.getUid());

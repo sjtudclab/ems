@@ -1,9 +1,11 @@
 package org.dclab.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
@@ -49,64 +51,103 @@ public class ExamOperator {
 	    ChoiceMapperI choiceMapper=sqlSession.getMapper(ChoiceMapperI.class);
 	    MatchItemMapperI matchMapper=sqlSession.getMapper(MatchItemMapperI.class);
 	    
-	    List<SingleChoiceBean> slist=topicMapper.getSingleBean();//将topicid和content填入singlechoiceBean
-	    for(SingleChoiceBean bean: slist){//对于每一个bean，根据topicid填充选项的id和content
-	    	int topicId=bean.getId();
-	    	bean.setSingleNum(slist.size());
-	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
-	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
-	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-	    		bean.setVideo(vedioPath+bean.getVideo());
-	    }
-	    System.out.println("单选题的个数"+slist.size());//********
+	    boolean flag=false;//因为多媒体资源的前缀path也循环叠加了5次，所以用这个flag控制
 	    
-	    List<MultiChoicesBean> mlist=topicMapper.getMultiBean();//和单选题一样
-	    for(MultiChoicesBean bean: mlist){
-	    	int topicId=bean.getId();
-	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
-	    	List<Integer> choiceIdList=new ArrayList<>();
-	    	bean.setChoiceIdList(choiceIdList);
-	    	bean.setMultiNum(mlist.size());
-	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
-	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-	    		bean.setVideo(vedioPath+bean.getVideo());
-	    }
-	   
-	    System.out.println("多选题的个数"+mlist.size());//********
-	    
-	    List<Integer> tlist=topicMapper.getMatchTopicId();//由于一道匹配题有多个topicid,所以根据number识别
-	    List<MatchingBean>  mlist1=new ArrayList<MatchingBean>();
-	    for(int topicId : tlist)
+	    List<List<SingleChoiceBean>> singleLists=new ArrayList<>();//这个list中放5个不同的单选题list
+	    for(int i=0;i<5;i++)//往singlelists中加载5套不同的单选题list
 	    {
-	    	MatchingBean bean=new MatchingBean();
-	    	bean.setId(topicId);//
-	    	bean.setContentList(matchMapper.getItem(topicId));//对于每一道匹配题，都有一个内容和id的list
-	    	bean.setChoiceList(choiceMapper.getChoice(topicId));
-	    	mlist1.add(bean);
-	    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
-	    	bean.setChoiceIdMap(choiceIdMap);
-	    	bean.setMatchNum(tlist.size());
-	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
-	    		bean.setImg(imgPath+bean.getImg());
-	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-	    		bean.setAudio(audioPath+bean.getAudio());
-	    	if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-	    		bean.setVideo(vedioPath+bean.getVideo());
-	    	mlist1.add(bean);
+		    List<SingleChoiceBean> slist=topicMapper.getSingleBean();//获得单选题题干,id和多媒体资源
+	    	for(SingleChoiceBean bean: slist)
+	    	{//对于每一个 bean，根据topicid填充选项的id和content
+		    	int topicId=bean.getId();
+		    	bean.setSingleNum(slist.size());
+		    	List<ChoicesBean> list=choiceMapper.getChoice(topicId);//随机化题目选项
+		    	Collections.shuffle(list);
+		    	bean.setChoiceList(list);
+		    	if(flag==false)
+		    	{ 
+		    		if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    	}
+		    	
+		    }
+	    	flag=true;
+	    	singleLists.add(slist);
 	    }
-	   
-	    System.out.println("匹配题的个数"+mlist1.size());//********
 	    
-	    List<JudgementBean> jlist=topicMapper.getJudgeBean();//和单选题一样
+	    flag=false;
+	    
+	    List<List<MultiChoicesBean>> multiLists=new ArrayList<>();//这个list中放5个不同的多选题list
+	    for(int i=0;i<5;i++)
+	    {
+	    	List<MultiChoicesBean> mlist=topicMapper.getMultiBean();//获得多选题题干和id
+	    	for(MultiChoicesBean bean: mlist){
+		    	int topicId=bean.getId();
+		    	List<ChoicesBean> list=choiceMapper.getChoice(topicId);
+		    	Collections.shuffle(list);
+		    	bean.setChoiceList(list);
+		    	List<Integer> choiceIdList=new ArrayList<>();
+		    	bean.setChoiceIdList(choiceIdList);
+		    	bean.setMultiNum(mlist.size());
+		    	if(flag==false)
+		    	{ 
+		    		if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    	}
+		    }
+	    	flag=true;
+	    	multiLists.add(mlist);
+	    }
+	    flag=false;
+	    
+	    List<List<MatchingBean>> matchLists=new ArrayList<>();//这个list中放5个不同的匹配题list
+	    for(int i=0;i<5;i++)
+	    {
+		    List<Integer> tlist=topicMapper.getMatchTopicId();//由于一道匹配题有多个topicid,所以根据number识别
+		    List<MatchingBean>  mlist=new ArrayList<MatchingBean>();
+		    for(int topicId : tlist)
+		    {
+		    	MatchingBean bean=new MatchingBean();
+		    	bean.setId(topicId);
+		    	List<ContentBean> list=matchMapper.getItem(topicId);
+		    	Collections.shuffle(list);
+		    	bean.setContentList(list);//对于每一道匹配题，都有一个内容和id的list
+		    	List<ChoicesBean> list1=choiceMapper.getChoice(topicId);
+		    	Collections.shuffle(list1);
+		    	bean.setChoiceList(list1);
+		    	mlist.add(bean);
+		    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
+		    	bean.setChoiceIdMap(choiceIdMap);
+		    	bean.setMatchNum(tlist.size());
+		    	if(flag==false)
+		    	{ 
+		    		if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    	}
+		    	mlist.add(bean);
+		    }
+		    flag=true;
+		    matchLists.add(mlist);
+	    }
+
+	    List<JudgementBean> jlist=topicMapper.getJudgeBean();//判断题list
 	    for(JudgementBean bean: jlist){
 	    	int topicId=bean.getId();
-	    	bean.setChoiceList(choiceMapper.getJudgeChoice());
+	    	List<ChoicesBean> list=choiceMapper.getJudgeChoice();
+	    	Collections.shuffle(list);
+	    	bean.setChoiceList(list);
 	    	bean.setJudgeNum(jlist.size());
 	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
@@ -116,30 +157,28 @@ public class ExamOperator {
 	    		bean.setVideo(vedioPath+bean.getVideo());
 	    }
 	    
-	    System.out.println("判断题的个数"+jlist.size());//********
-	    
-	    List<shortAnswerBean> salist=topicMapper.getShortBean();
+	    List<shortAnswerBean> salist=topicMapper.getShortBean();//简答题list
 	    for(shortAnswerBean bean: salist){
 	    	bean.setShortNum(salist.size());	
 	    }
-	    
-	    System.out.println("简答题的个数"+salist.size());
-	    
 	    System.out.println("成功取出题目");
-	    int count=slist.size()+mlist.size()+mlist1.size()+jlist.size()+salist.size();
+	    int count=singleLists.get(0).size()+multiLists.get(0).size()+matchLists.get(0).size()+jlist.size()+salist.size();
 	    
 		List<Integer> uidList=userMapper.getUid();
 		for(int id:uidList){
 			idTokenMap.put(id, TokenGenerator.generate());
+			Random rand=new Random();
+			int i=rand.nextInt(5);
 			ExamBean exambean=new ExamBean(id,sid);
-			exambean.setSingleChoiceList(slist);
-			exambean.setMultiChoicesList(mlist);
-			exambean.setMatchingList(mlist1);
+			exambean.setSingleChoiceList(singleLists.get(i));
+			exambean.setMultiChoicesList(multiLists.get(i));
+			exambean.setMatchingList(matchLists.get(i));
 			exambean.setJudgementList(jlist);
 			exambean.setShortAnswerList(salist);
 			exambean.setTopicNum(count);
 			tokenExamMap.put(idTokenMap.get(id), exambean);
 		}
+
 		System.out.println("成功装载到map");
 		sqlSession.close();
 		

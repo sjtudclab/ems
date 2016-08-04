@@ -20,5 +20,4 @@ public class CheckBean {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
 }

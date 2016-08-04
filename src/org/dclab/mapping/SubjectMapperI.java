@@ -1,8 +1,13 @@
 
 package org.dclab.mapping;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import org.apache.ibatis.annotations.Select;
 import org.dclab.Subject;
+
+import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
 public interface SubjectMapperI {
 	//获取subject对象
@@ -14,4 +19,7 @@ public interface SubjectMapperI {
 	
 	@Select("select duration from subject where id=#{id}")
 	public int getDurationById(int id);
+	
+	@Select("select startTime from subject where id=#{id}")
+	public Timestamp getStartTimeById(int id);
 }

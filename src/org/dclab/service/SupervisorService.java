@@ -22,20 +22,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SupervisorService {
-	
-/*	
-	//获得对应考场的已登录的考生的座位号的list
-	public List<Integer> getLoginedList(SuperBean superbean){
-		List<Integer> uidSeatList=superbean.getUidSeatList();
-		
-		List<Integer> loginedList=new ArrayList<Integer>();//用于返回的已登录list，里面装的应该是已登录考生的座位号
-		for(int i=0;i<uidSeatList.size();i++)
-		{
-			if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(uidSeatList.get(i))).isIfLogin()==true)
-				loginedList.add(i+1);
-		}
-		return loginedList;
-	}*/
 	//获得对应考场的考生信息list
 	public List<CandidateBean> getInfo(SuperBean superBean){
 		for(CandidateBean cbean : superBean.getCanList()){
@@ -48,10 +34,20 @@ public class SupervisorService {
 			else
 				cbean.setStatus(1);
 		}
-		
-		return superBean.getCanList();
+	return superBean.getCanList();
 	}
-	
+	//更换座位
+	public boolean seatChange(SuperBean superBean,int Uid,Integer seatNum){
+		if(superBean.getFreeSeatList().remove(seatNum)){//从空闲座位list中删去目标座位
+			for(CandidateBean cbean: superBean.getCanList()){//更新考生信息list
+				if(cbean.getUid()==Uid)
+					cbean.setSeatNum(seatNum);
+			}
+			return true;
+		}
+		else
+			return false;
+	}
 	//监考操作之延时操作
 	public void delay(ExamBean exambean){
 		exambean.setDuration(exambean.getDuration()+100);
@@ -62,7 +58,6 @@ public class SupervisorService {
 	}
 	//监考操作之手动交卷
 	public void manualAssign(ExamBean exambean){
-		/*ExamBean exambean=ExamOperator.tokenExamMap.get(token);*/
 		exambean.setFinished(true);
 	}
 	// 监考操作之强制终止

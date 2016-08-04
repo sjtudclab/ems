@@ -39,6 +39,18 @@ public class SuperviseController {
 		return supervisorService.getInfo(superbean);
 	}
 	
+	@RequestMapping("/seatChange")
+	public List<Integer> returnFreeList(@RequestParam(value="token")UUID token){
+		SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
+		return superBean.getFreeSeatList();
+	}
+	
+	@RequestMapping("/seatChange/confirm")
+	public boolean seatChange(@RequestParam(value="token")UUID token,
+			@RequestParam(value="Uid")int Uid,@RequestParam(value="seatNum")int seatNum){
+		SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
+		return supervisorService.seatChange(superBean, Uid, seatNum);
+	}
 
 /*	@RequestMapping("/operation")
 	public Object individualOperation(@RequestParam(value="token")UUID token,
