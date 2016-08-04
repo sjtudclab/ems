@@ -6,6 +6,7 @@ import org.dclab.model.ExamOperator;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +25,9 @@ public class GreetingController {
 		userService=service;
 	}
 	
+	@CrossOrigin(origins = "http://192.168.1.112:8080")
 	@RequestMapping("/greeting")
-	public Map<String,Object> greeting(@RequestParam(value = "name") int name) {
+	public Object greeting(@RequestParam(value = "name") int name) {
 		
 		ExamOperator.load(1);
 		SupervisorOperator.load();

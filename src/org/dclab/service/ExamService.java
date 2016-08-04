@@ -41,28 +41,6 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
  */
 @Service
 public class ExamService {
-	
-	
-	/*
-	 * 
-	 * 测试用的方法,构造一个单选题
-	 */
-/*	public SingleChoiceBean getTestTopic(){
-		SingleChoiceBean topic=new SingleChoiceBean();
-		topic.setId(1);
-		topic.setContent("2009年颁布的《关于实行党政领导干部问责的暂行规定》，要求对党政干部的失职行为实施问责。这一举措表明");
-		topic.setChoiceA("政府执政必须符合法律程序");
-		topic.setChoiceAId(212);
-		topic.setChoiceB("我国已建立完整的行政监督体系");
-		topic.setChoiceBId(213);
-		topic.setChoiceC("每个公民都有监督权和质询权");
-		topic.setChoiceCId(214);
-		topic.setChoiceD("党政领导干部的权力和责任是统一的");
-		topic.setChoiceDId(215);
-		topic.setIfCheck(true);
-		topic.setChoiceId(215);
-		return topic;
-	}*/
 
 	//获取第一题
 	public Object getFirstTopic(ExamBean exambean,int typeId)
@@ -113,7 +91,8 @@ public class ExamService {
 	//多选题存储，重载
 	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
 	{
-		exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		if(choiceIdList!=null)
+			exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
 		if(exambean.getMultiChoiceById(id).getChoiceIdList()!=null&&
 				exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
 			exambean.getFinishTopic().add(exambean.getMultiChoiceById(id).getId());
@@ -140,7 +119,6 @@ public class ExamService {
 		switch(typeId)
 		{
 		case 0:
-			System.out.println(exambean.getSingleChoiceById(id).getImg());
 			if(id==exambean.getSingleChoiceList().size()||id<0)//判断是不是超出了该题型的范围
 				return null;
 			else

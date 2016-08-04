@@ -33,6 +33,8 @@
         <mapper class="org.dclab.mapping.TopicMapperI"/>
         <mapper class="org.dclab.mapping.ChoiceMapperI"/>
         <mapper class="org.dclab.mapping.MatchItemMapperI"/>
+        <mapper class="org.dclab.mapping.RoomMapperI"/>
+        <mapper class="org.dclab.mapping.AuthorityMapperI"/> 
     </mappers>
     
 </configuration>

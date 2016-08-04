@@ -4,6 +4,7 @@ package org.dclab.mapping;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
+import org.dclab.model.CandidateBean;
 
 /**
  * @author alvis
@@ -13,11 +14,10 @@ public interface RoomCanMapperI {
 	@Select("select roomId from room_candidate where candidateId=#{Uid}")
 	public int getRoomIdByUid(int Uid);
 	
-	//这个语句注意一下
-	@Select("select seatNum from room_candidate where roomId=#(roomId) and seatNum!=null order by seatNum")
-	public List<Integer> getSeatNumByRoomId(int roomId);
+	@Select("select seatNum,Uname,gender,user.Uid,Cid from room_candidate inner join user on room_candidate.candidateId=user.Uid where roomId=#{roomId}")
+	public List<CandidateBean> getUserListByRoomId(int roomId);
 	
-	@Select("select candidateId from room_candidate where roomId=#{roomId} and seatNum!=null order by seatNum")
-	public List<Integer> getUidByRoomId(int roomId);
+	@Select("SELECT seatNum FROM room_candidate WHERE roomId=#{roomId} AND candidateId IS NULL ")
+	public List<Integer> getFreeSeatByRoomId(int roomId);
 }
 

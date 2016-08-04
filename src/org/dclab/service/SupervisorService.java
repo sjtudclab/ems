@@ -7,54 +7,62 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.User;
 import org.dclab.mapping.RoomCanMapperI;
+import org.dclab.model.CandidateBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.utils.MyBatisUtil;
+import org.springframework.stereotype.Service;
 
 /**
  * @author alvis
  *监考老师相关操作
  */
-public class SupervisorService {
-	
-	//获得监考老师对应考场的考生的信息
-	public List<User> getUserList(SuperBean superbean){
 
-		List<User> userList=superbean.getUserList();//这里的User对象可能后期修改！！！！
-		return userList;
-	}
-	
-	//获得对应考场的已登录的考生的座位号的list
-	public List<Integer> getLoginedList(SuperBean superbean){
-		List<Integer> uidSeatList=superbean.getUidSeatList();
-		
-		List<Integer> loginedList=new ArrayList<Integer>();//用于返回的已登录list，里面装的应该是已登录考生的座位号
-		for(int i=0;i<uidSeatList.size();i++)
-		{
-			if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(uidSeatList.get(i))).isIfLogin()==true)
-				loginedList.add(i+1);
+@Service
+public class SupervisorService {
+	//获得对应考场的考生信息list
+	public List<CandidateBean> getInfo(SuperBean superBean){
+		for(CandidateBean cbean : superBean.getCanList()){
+			if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
+					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).getStartTime()==0)
+				cbean.setStatus(0);
+			else if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
+					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).isFinished()==true)
+				cbean.setStatus(2);
+			else
+				cbean.setStatus(1);
 		}
-		return loginedList;
+	return superBean.getCanList();
 	}
-	
+	//更换座位
+	public boolean seatChange(SuperBean superBean,int Uid,Integer seatNum){
+		if(superBean.getFreeSeatList().remove(seatNum)){//从空闲座位list中删去目标座位
+			for(CandidateBean cbean: superBean.getCanList()){//更新考生信息list
+				if(cbean.getUid()==Uid)
+					cbean.setSeatNum(seatNum);
+			}
+			return true;
+		}
+		else
+			return false;
+	}
 	//监考操作之延时操作
 	public void delay(ExamBean exambean){
 		exambean.setDuration(exambean.getDuration()+100);
 	}
-	//监考操作之返回试卷
+	//监考操作之撤销交卷
 	public void returnToExam(ExamBean exambean){
 		exambean.setFinished(false);
 	}
 	//监考操作之手动交卷
 	public void manualAssign(ExamBean exambean){
-		/*ExamBean exambean=ExamOperator.tokenExamMap.get(token);*/
 		exambean.setFinished(true);
 	}
 	// 监考操作之强制终止
 	public void forceTerminate(ExamBean exambean) {
-		exambean.setAllowStart(true);
+		exambean.setFinished(true);
 	}
 
 	// 监考操作之允许开始
