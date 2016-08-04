@@ -46,11 +46,11 @@
             <div class="col-md-3 bottominfo " style="height:100%" >
                 <p>待检查题数目：{{counter}}</p>
             </div>
-            <div class="col-md-3 btn bottominfo " style="height:100%">
-                 <p ui-sref="checkup">检查</p>
+            <div class="col-md-3 btn bottominfo " style="height:100%" >
+                 <p ui-sref="checkup" ng-click="submit()">检查</p>
             </div>
-            <div class="col-md-3 btn bottominfo" style="height:100%">
-                <p>交卷</p>
+            <div class="col-md-3 btn bottominfo" style="height:100%" >
+                <p ng-click="submit()">交卷</p>
             </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
     </div>

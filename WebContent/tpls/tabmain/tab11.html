@@ -14,7 +14,7 @@
         <div style="padding-left:5%">
             <!--单选题 -->
                 <div ng-repeat="list in lists">
-                    <input type="radio" ng-model="option.optionsRadios" name="optionsRadios" id="optionsRadios2" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
+                    <input type="radio" ng-click="opChanged(option)" ng-model="option.optionsRadios" name="optionsRadios" id="optionsRadios2" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
                 </div>
 
         </div>

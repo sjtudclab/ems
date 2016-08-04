@@ -4,12 +4,13 @@
             <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)"></span>{{nid}}.{{content}}
            <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
              </audio>
- 
+             <video controls   ng-src="{{video}}" type="video/mp4" style="display:{{videohide}}">
+             </video>
              <img ng-src="{{img}}" style="display:{{imghide}}">
         </div>
         <div style="padding-left:5%">
                 <div ng-repeat="list in lists">
-                    <input type="radio" ng-model="option.optionsRadios" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
+                    <input type="radio" ng-click="opChanged(option)"  ng-model="option.optionsRadios" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
                 </div>
         </div>
       <!--   <div style="padding-left:5%">
