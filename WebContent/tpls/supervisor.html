@@ -1,50 +1,57 @@
 <div ui-view="navbar" style="height:6%;background-color:#337ab7/* #2aabd2 */">
 </div>
-<div ng-controller="TabsCtrl" id='main'>
-    <div class="supervi">
+<div ng-controller="supervisorCtrl" id='main' class="supervi">
+
         <ul class="nav nav-pills nav-stacked">
             <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
-                <a ng-click="sel($index)">{{x}}</a>
+                <a ng-click="$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
             </li>
         </ul>
         <div class="content" ng-repeat="x in operationMetaInfo" style="display:{{display[$index]}}">
-            <div id='workingSpace'>
+            <div class='workingSpace'>
                 <div style="margin:2% auto;width:20%">
-                    <input type="text" ng-model="$parent.inputMessage"> {{inputMessage}}
+                    <p ng-bind="x.url"></p>
                 </div>
                 <div style="margin:2% auto;width:20%">
                     <button type="button" class="btn btn-primary" ng-click="confirm()">确认操作</button>
                 </div>
             </div>
-            <div id="selectArea">
-                <div style="margin:2% 0% 2% 60%;width:40%;height:5%">
-                    <label>已选择:{{selectedNum}}/{{studentsInfo.length}}</label>
+            <div class="selectArea">
+                <div style="height:5%">
+                    <span>总人数：{{examineesInfo.length}}&nbsp&nbsp&nbsp&nbsp</span>
+                    <span>在考：{{examingNum}}&nbsp&nbsp&nbsp&nbsp</span>
+                    <span>已交卷：{{completeNum}}&nbsp&nbsp&nbsp&nbsp</span>
+                    <span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>
+                    <span class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span>
+                    <span style="float:right">
+                    <label ng-bind="'已选择:'+selectedNum+'/'+examineesInfo.length"></label>
                     <button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
                     <button type="button" class="btn btn-info" ng-click="cancelAll()">取消选择</button>
+                    </span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <tr>
-                            <th>#</th>
-                            <th ng-repeat="smi in studentMetaInfo">
-                                {{smi}}
+                            <th ng-repeat="(key,value) in examineeMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>
+                                {{value}}
+                                <span class="glyphicon glyphicon-sort"></span>
                             </th>
                             <th>选择</th>
                         </tr>
-                        <tr class="{{studentsStatus[student.id]}}" ng-repeat="student in studentsInfo">
+                        <tr class="{{examineesStatus[examinee.uid]}}" ng-repeat="examinee in examineesInfo | orderBy:orderCondition:isReverse">
+                            <td ng-bind="examinee.seatNum"></td>
+                            <td ng-bind="examinee.uname"></td>
+                            <td ng-bind="examinee.gender"></td>
+                            <td ng-bind="examinee.cid"></td>
+                            <td ng-bind="examinee.uid"></td>
+                            <td ng-bind="statusDisplay[examinee.status]"></td>
                             <td>
-                                {{$index+1}}
-                            </td>
-                            <td ng-repeat="info in student">
-                                {{info}}
-                            </td>
-                            <td>
-                                <input type="checkbox" ng-model="selectionStatus[student.id]" ng-click="checkSel(selectionStatus[student.id])">
+                                <input type="checkbox" ng-model="selectionStatus[examinee.uid]" ng-click="checkSel(selectionStatus[examinee.uid])">
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
