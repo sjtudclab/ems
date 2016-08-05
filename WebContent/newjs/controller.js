@@ -95,12 +95,12 @@ var formlogin = angular.module('formlogin', [])
 
    var demo0 = angular.module('demo0', ['ui.bootstrap'])
    
-   demo0.controller('TabsDemoCtrl', function($scope) {
+   demo0.controller('TabsDemoCtrl', function($scope,$rootScope) {
     $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题','简答题'];
     $scope.active = [];
     $scope.display=[];
     $scope.color = [];
-    $scope.index = 0;
+    $rootScope.index = 0;
     for(x in $scope.problemMetaInfo){
 	  $scope.active[x]="";
 	  $scope.display[x]='none';
@@ -117,25 +117,25 @@ var formlogin = angular.module('formlogin', [])
         
 
 
-        $scope.active[$scope.index] = "active";
-        $scope.display[$scope.index] = "block";
+        $scope.active[$rootScope.index] = "active";
+        $scope.display[$rootScope.index] = "block";
 
-        switch ($scope.index) {
+        switch ($rootScope.index) {
     
             case 0:
-                $scope.color[$scope.index] = "rgba(88,178,220,.5)";
+                $scope.color[$rootScope.index] = "rgba(88,178,220,.5)";
                 break;
             case 1:
-                $scope.color[$scope.index] = "rgba(204,204,255,.6)";
+                $scope.color[$rootScope.index] = "rgba(204,204,255,.6)";
                 break;
             case 2:
-                $scope.color[$scope.index] = "rgba(168,216,185,.6)";
+                $scope.color[$rootScope.index] = "rgba(168,216,185,.6)";
                 break;
             case 3:
-                $scope.color[$scope.index] = "rgba(255,204,204,.6)";
+                $scope.color[$rootScope.index] = "rgba(255,204,204,.6)";
                 break;
             case 4:
-                $scope.color[$scope.index] = "rgba(165,222,228,.8)";
+                $scope.color[$rootScope.index] = "rgba(165,222,228,.8)";
                 break;
             default:
                 alert('error');
@@ -159,20 +159,18 @@ var formlogin = angular.module('formlogin', [])
     });
 
     $scope.sel = function(index) {
-        $scope.index = index;
+    	$rootScope.index = index;
     };
 
 });
    
    
 
-   demo0.controller('showMain', function($scope, $state, $stateParams, $window,$http) {
+   demo0.controller('showMain', function($scope, $state, $stateParams, $window,$http,$rootScope) {
 
-     /*  $scope.active = $stateParams.active * 1; //面板切换
-*/       $scope.index = $stateParams.active * 1; //面板切换
+   
          $scope.submit=function(){
 	            var allStatus = JSON.parse($window.sessionStorage.problemStatus);
-	            alert(allStatus.single.option+allStatus.single.ifCheck);
 	            
 	            $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
@@ -196,7 +194,7 @@ var formlogin = angular.module('formlogin', [])
 	                   
             });
 	            $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.option, ifCheck: allStatus.match.ifCheck }
+                    params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
             }).success(function(data, status, headers, config) {
 	                   alert("匹配提succeed");
 	                   
@@ -264,6 +262,8 @@ var formlogin = angular.module('formlogin', [])
        if ($stateParams.type == 1) {
            //   alert('cp面板1'+$scope.active);
            $scope.nid = $stateParams.num * 1;
+           $rootScope.index = $stateParams.active * 1; //面板切换
+           $rootScope.counter =  $window.sessionStorage.counter*1;
            //检查某题
            $http.get('/EMS/exam/toTopic', {
                /* $http.get('single.json', {*/
@@ -271,7 +271,7 @@ var formlogin = angular.module('formlogin', [])
            }).success(function(data, status, headers, config) {
         	   
         	   var singleStatus = JSON.parse($window.sessionStorage.problemStatus);
-        	   $rootScope.counter =  $window.sessionStorage.counter;
+        	  
         	   $scope.totalItems = data.singleNum;
         	   $scope.currentPage = $scope.nid;
         	   
@@ -355,14 +355,19 @@ var formlogin = angular.module('formlogin', [])
 
        } else {
            var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+           
+         /**/
            if (singleStatus.single.nid) {
+        	   
+        	   $rootScope.counter =  $window.sessionStorage.counter*1;
+        	   /*alert("single"+$rootScope.counter);*/
                $scope.nid = singleStatus.single.nid;
                $scope.content = singleStatus.single.content;
                $scope.lists = singleStatus.single.choiceList;
                
                $scope.totalItems=singleStatus.single.totalItems;
                $scope.currentPage = singleStatus.single.nid;
-               $rootScope.counter = $window.sessionStorage.counter;
+             /*  $rootScope.counter = $window.sessionStorage.counter;*/
                if(singleStatus.single.audiohide=="block"){  
         		   $scope.audiohide="block";
         		   $scope.audio=singleStatus.single.audio;
@@ -404,15 +409,13 @@ var formlogin = angular.module('formlogin', [])
 
 
            } else {
-               $window.sessionStorage.active = 0;
                //初始化试题
                $http.get('/EMS/exam/start', {
                    /*  $http.get('single.json', {*/
                    params: { typeId: 0, token: $window.sessionStorage.token }
                }).success(function(data, status, headers, config) {
                    //试题
-            	   alert("单选题初始化");  
-            	   
+            	  
             	   if(data.audio){  
             		   $scope.audiohide="block";
             		   $scope.audio=data.audio;
@@ -456,8 +459,9 @@ var formlogin = angular.module('formlogin', [])
                        $scope.count = false;
 
                    }
-
+                   $window.sessionStorage.counter= $rootScope.counter;
                    var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+                   
             	   singleStatus.single.nid = $scope.nid;
                    singleStatus.single.content = $scope.content;
                    singleStatus.single.choiceList = $scope.lists;
@@ -651,6 +655,9 @@ var formlogin = angular.module('formlogin', [])
        if ($stateParams.type == 2) {
            //  alert('cp面板2'+$scope.active);
            $scope.nid = $stateParams.num * 1;
+           $rootScope.index= $stateParams.active*1;
+       /*    $rootScope.counter =  $window.sessionStorage.counter;*/
+          /* alert("mul"+$rootScope.counter);*/
            //检查某题
            $http.get('/EMS/exam/toTopic', {
                /* $http.get('multiple.json', {*/
@@ -738,7 +745,7 @@ var formlogin = angular.module('formlogin', [])
        } else {
            var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
            if (multiStatus.multiple.nid) {
-               
+        	  /* $rootScope.counter =  $window.sessionStorage.counter;*/
         	   $scope.totalItems=multiStatus.multiple.totalItems;
         	   $scope.currentPage = multiStatus.multiple.nid;
         	   
@@ -775,7 +782,7 @@ var formlogin = angular.module('formlogin', [])
 
                //status
                $scope.option = multiStatus.multiple.choiceIdList;
-               $rootScope.counter = $window.sessionStorage.counter;
+              /* $rootScope.counter = $window.sessionStorage.counter;*/
                if (multiStatus.multiple.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
@@ -1001,6 +1008,7 @@ var formlogin = angular.module('formlogin', [])
        if ($stateParams.type == 3) {
            // alert('cp面板3'+$scope.active);
            $scope.nid = $stateParams.num * 1;
+           $rootScope.index = $stateParams.active * 1; //面板切换
            //检查某题
            $http.get('/EMS/exam/toTopic', {
                /* $http.get('judg.json', {*/
@@ -1028,6 +1036,13 @@ var formlogin = angular.module('formlogin', [])
         		  
         	   }else{
         		   $scope.imghide="none"; 
+        	   }
+        	   if(data.video){
+        		   $scope.videohide="block";
+        		   $scope.video=data.video;
+        		  
+        	   }else{
+        		   $scope.videohide="none"; 
         	   }
                //试题状态
 
@@ -1349,6 +1364,7 @@ var formlogin = angular.module('formlogin', [])
        if ($stateParams.type == 4) {
            // alert('cp面板4'+$scope.active);
            $scope.nid = $stateParams.num * 1;
+           $rootScope.index = $stateParams.active * 1; //面板切换
            //检查某题
            $http.get('/EMS/exam/toTopic', {
                /*  $http.get('match.json', {*/
@@ -1518,7 +1534,6 @@ var formlogin = angular.module('formlogin', [])
             		   $scope.videohide="none"; 
             	   }
                    //试题状态
-               //    alert("match"+data.choiceIdMap);
                    $scope.option = data.choiceIdMap;
                    if (data.ifCheck) {
                        $scope.red = "#FF6347";
@@ -1713,9 +1728,10 @@ var formlogin = angular.module('formlogin', [])
        if ($stateParams.type == 5) {
            // alert('cp面板4'+$scope.active);
            $scope.nid = $stateParams.num * 1;
+           $rootScope.index = $stateParams.active * 1; //面板切换
            //检查某题
-         /*  $http.get('/EMS/exam/toTopic', {*/
-                 $http.get('match.json', {
+           $http.get('/EMS/exam/toTopic', {
+                /* $http.get('match.json', {*/
                params: { typeId: 4, token: $window.sessionStorage.token, id: $stateParams.num }
            }).success(function(data, status, headers, config) {
                
@@ -1825,7 +1841,7 @@ var formlogin = angular.module('formlogin', [])
           
                //status
                $scope.answer = simpleStatus.simple.answer;
-               $rootScope.counter = simpleStatus.simple.counter;
+               /*$rootScope.counter = simpleStatus.simple.counter;*/
                if (simpleStatus.simple.ifCheck) {
                    $scope.red = "#FF6347";
                    $scope.count = true;
@@ -2183,7 +2199,7 @@ var formlogin = angular.module('formlogin', [])
 
 
        $scope.skip = function(listnum) {
-           // alert(listnum);
+        /*    alert(listnum);*/
            $state.go('main', { active: 4, num: listnum, type: 5 });
 
        }
