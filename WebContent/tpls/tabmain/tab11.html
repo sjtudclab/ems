@@ -1,29 +1,29 @@
-<div class="container tabfront">
-    <div>
+<div class="container tabfront" style="font-size:125%;height:100%">
         <div>
             <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> {{nid}}.{{content}}
-            <div style="padding-left:5%">
-            <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
-             </audio>
-             <video controls   ng-src="{{video}}" type="video/mp4" style="display:{{videohide}}">
-                  <!--  <source ng-src="{{video}}" type="video/mp4"> -->
-             </video>
-             <img ng-src="{{img}}" style="display:{{imghide}}">
-             </div>
-        </div>
-        <div style="padding-left:5%">
+         </div>    
+            <!-- <div style="padding-left:5%"> -->
+                <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}};padding-left:5%">
+                </audio>
+                <video controls ng-src="{{video}}" type="video/mp4" style="display:{{videohide}};padding-left:5%" height="33%">
+                    <!--  <source ng-src="{{video}}" type="video/mp4"> -->
+                </video>
+                <img ng-src="{{img}}" style="display:{{imghide}};padding-left:5%" height="33%">
+          <!--   </div> -->
+       
+        <div style="padding-left:5%;height:50%">
             <!--单选题 -->
-                <div ng-repeat="list in lists">
-                    <input type="radio" ng-click="opChanged(option)" ng-model="option.optionsRadios" name="optionsRadios" id="optionsRadios2" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
-                </div>
-
+            <div ng-repeat="list in lists">
+                <input type="radio" ng-click="opChanged(option)" ng-model="option.optionsRadios" name="optionsRadios" id="optionsRadios2" value="{{list.choiceId}}" index="$index+1"> {{list.alp}}.{{list.content}}
+            </div>
+            <div>
+            <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(option)"></ul>
+            </div>
         </div>
-       <!--  <div style="padding-left:5%">
+        <!--  <div style="padding-left:5%">
             <a class="btn" ng-click="before ||sreceive1(option) " ng-disabled="before">上一题</a>
             <a class="btn" ng-click="receive1(option)">下一题</a>
         </div> -->
-        <div style="padding-left:5%">
-            <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(option)"></ul>
-        </div>
-    </div>
+        
+
 </div>

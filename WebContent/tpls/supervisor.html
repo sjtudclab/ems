@@ -1,10 +1,7 @@
-    
-    
-    <div ui-view="navbar" style="height:6%;background-color:#337ab7/* #2aabd2 */"></div>
-    
-    <div ng-controller="TabsCtrl" id='main'>
-        <div class="supervi">
-
+<div ui-view="navbar" style="height:6%;background-color:#337ab7/* #2aabd2 */">
+</div>
+<div ng-controller="TabsCtrl" id='main'>
+    <div class="supervi">
         <ul class="nav nav-pills nav-stacked">
             <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
                 <a ng-click="sel($index)">{{x}}</a>
@@ -49,7 +46,5 @@
                 </div>
             </div>
         </div>
-        </div>
-        
-
     </div>
+</div>
