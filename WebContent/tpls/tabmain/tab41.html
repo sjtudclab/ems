@@ -12,7 +12,9 @@
     
         <div ng-repeat="contentlist in contentlists">
             ({{$index+1}}).{{contentlist.content}}
-            <select role="button" ng-click="opChanged(option)" ng-model="option[contentlist.contentId]" ng-options="x.choiceId as x.alp for x in lists">
+           <!--  <select role="button" ng-click="opChanged(option)" ng-model="option[contentlist.contentId]" ng-options="x.choiceId as x.alp for x in lists">
+            </select> -->
+             <select role="button" ng-click="opChanged(option)" ng-model="option[$index]" ng-options="x.choiceId as x.alp for x in lists">
             </select>
         </div>
         <!--  <div style="padding-left:5%">

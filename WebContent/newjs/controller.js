@@ -19,7 +19,7 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
             //  alert(data.name);
             // alert(data.checklist[0]);
             $window.sessionStorage.token = data.token;
-            alert(data.Rid);
+         /*   alert(data.Rid);*/
             
             switch (data.Rid) {
             case 0: //考生登录
@@ -41,7 +41,7 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
             	//功能列表
-                infoStatus.operationMetaInfo = data.authorityList;
+                infoStatus.authorityList = data.authorityList;
                 // 考场号
                 infoStatus.roomId = data.roomId;
                 // 登陆用户id
@@ -1490,7 +1490,7 @@ demo0.controller('skiptb3', function($scope, $http, $window, $state, $stateParam
 
 demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParams, $rootScope) {
     //匹配题
-    $scope.option = {};
+    $scope.option = [];
 
 
     if ($stateParams.type == 4) {
@@ -1581,7 +1581,7 @@ demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParam
 
     } else {
 
-        var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
         if (matchStatus.match.nid) {
             $scope.totalItems = matchStatus.match.totalItems;
             $scope.currentPage = matchStatus.match.nid;

@@ -4,7 +4,7 @@
 
         <ul class="nav nav-pills nav-stacked">
             <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
-                <a ng-click="$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
+                <a ng-click="superRequest(x.url);$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
             </li>
         </ul>
         <div class="content" ng-repeat="x in operationMetaInfo" style="display:{{display[$index]}}">
@@ -46,7 +46,7 @@
                             <td ng-bind="examinee.uid"></td>
                             <td ng-bind="statusDisplay[examinee.status]"></td>
                             <td>
-                                <input type="checkbox" ng-model="selectionStatus[examinee.uid]" ng-click="checkSel(selectionStatus[examinee.uid])">
+                                <input type="checkbox" ng-disabled="ifcheck" ng-model="selectionStatus[examinee.uid]" ng-click="checkSel(selectionStatus[examinee.uid])">
                             </td>
                         </tr>
                     </table>

@@ -1,5 +1,6 @@
 ﻿angular.module('supervisor', ['ui.bootstrap']);
-angular.module('supervisor').controller('supervisorCtrl', function($scope, $http,$window) {
+
+angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$scope, $http,$window) {
 	   
 	    var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
         //功能列表
@@ -19,8 +20,12 @@ angular.module('supervisor').controller('supervisorCtrl', function($scope, $http
         // 初始化显示标签0
         $scope.index = 0;
   
-        
-        function success(response) {
+      
+        $http({
+            method: 'GET',
+            url: '/EMS/supervise/Refresh',
+            params: {token: $window.sessionStorage.token}
+        }).then(function success(response) {
             // 考生信息
             $scope.examineesInfo = response.data;
             $scope.examineeMetaInfo = {
@@ -62,16 +67,9 @@ angular.module('supervisor').controller('supervisorCtrl', function($scope, $http
             }
             $scope.orderCondition = 'seatNum';
             $scope.isReverse = false;
-        }
-        function error(response) {
+        }, function error(response) {
             alert('出现错误\n' + response.status + ' ' + response.statusText);
-        }
-        
-    $http({
-        method: 'GET',
-        url: '/EMS/supervise/Refresh'
-    }).then(success(response), error(response));
-
+        });
     // 监控index变量控制标签及标签页
     $scope.$watch('index', function() {
         if ($scope.index == undefined) {
@@ -84,66 +82,126 @@ angular.module('supervisor').controller('supervisorCtrl', function($scope, $http
         $scope.active[$scope.index] = "active";
         $scope.display[$scope.index] = "block";
     });
-
-
+    //更換座位請求
+    $scope.superRequest=function(url){
+    	console.log($scope);
+    	/*$parent.index=$index;*/
+    	switch (url){
+    	    case "seatChange": //更换座位
+    	    	$http.get('/EMS/supervise/seatChange', {
+                    params: { token: $window.sessionStorage.token}
+                }).then(function successCallback(response) {
+                    $scope.lists=response.data;
+                    $scope.selectionStatus = {};
+                    $scope.ifcheck=true;
+                	/*var lists=[];
+                	for(var i=0;i<100;i++){
+                		lists[i]=i+1;
+                	}
+                	$scope.lists=lists;*/
+                }, function errorCallback(response) {});
+                break;
+    	    case "forceStop":  //强制终止
+    	    	$scope.ifcheck=false;
+    	    	 $scope.selectionStatus = {};
+                break;
+            case "allowStart": //允许开始
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+            case "allowStop":  //允许终止
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+            case "delay":   //延时操作
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+            case "deleteExam": //撤销登录
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+            case "manualAssign": //强行交卷
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+            case "restart":  //撤销交卷
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+            case "roomChange":  //更换场次
+            	$scope.ifcheck=false;
+            	 $scope.selectionStatus = {};
+                break;
+    	   /* default:
+                alert('更换座位信息错误！');*/
+    	}
+    	
+    };
+   
     $scope.confirm = function(url) {
         /*alert($scope.inputMessage);*/
-    	
+    	console.log($scope);
+    	var uidList=[];
         for (x in $scope.selectionStatus) {
             alert(x + ' ' + $scope.selectionStatus[x]);
+            if($scope.selectionStatus[x]){uidList.push(x);}       
         }
+        alert(uidList);
         switch (url) {
         case "forceStop":  //强制终止
         	alert(url);
         	$http.get('/EMS/supervise/forceStop', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList}
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
 
             break;
         case "allowStart": //允许开始
-        	alert(url);
+        	/*alert(url);*/
         	$http.get('/EMS/supervise/allowStart', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList }
+            }).then(function successCallback(response) {alert(url); refresh()}, function errorCallback(response) {});
             break;
         case "allowStop":  //允许终止
         	alert(url);
         	$http.get('/EMS/supervise/allowStop', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "delay":   //延时操作
-        	alert(url);
+        	alert(url+$scope.delayTime);
         	$http.get('/EMS/supervise/delay', {
-                params: { token: $window.sessionStorage.token, uidList: password, delayTime:time }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList, delayTime:$rootScope.delayTime }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "deleteExam": //撤销登录
         	alert(url);
         	$http.get('/EMS/supervise/deleteExam', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "manualAssign": //强行交卷
         	alert(url);
         	$http.get('/EMS/supervise/manualAssign', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "restart":  //撤销交卷
         	alert(url);
         	$http.get('/EMS/supervise/restart', {
-                params: { token: $window.sessionStorage.token, uidList: password }
-            }).then(success(response), error(response));
+                params: { token: $window.sessionStorage.token, uidList: uidList }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "roomChange":  //更换场次
         	alert(url);
+        	$http.put('/EMS/supervise/roomChange', {
+                params: { token: $window.sessionStorage.token, uid: uidList ,roomNum:roomNum }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "seatChange": //更换座位
-        	alert(url);
-        	$http.get('/EMS/supervise/seatChange', {
-                params: { token: $window.sessionStorage.token, uid: passwordm ,seatNum:seatNum }
-            }).then(success(response), error(response));
+        	alert(url+$scope.seatNum+$scope.seat);
+        	$http.put('/EMS/supervise/seatChange', {
+                params: { token: $window.sessionStorage.token, uid: uidList ,seatNum:$rootScope.seatNum }
+            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         default:
             alert('考生状态错误！');
@@ -186,10 +244,13 @@ angular.module('supervisor').controller('supervisorCtrl', function($scope, $http
     }
 
     // 刷新
-    $scope.refresh = function() {
+  /*  $scope.refresh = function() {*/
+      function refresh(){
+    	 /* alert(refresh);*/
         $http({
             method: 'GET',
-            url: 'examineesInfo.json'
+            url: '/EMS/supervise/Refresh',
+            params: {token: $window.sessionStorage.token}
         }).then(function success(response) {
             $scope.examineesInfo = response.data;
             $scope.absentNum = 0;
