@@ -54,7 +54,7 @@ public class MultiChoicesBean implements Serializable {
 	public void setMultiNum(int multiNum) {
 		this.multiNum = multiNum;
 	}
-	public List<?> getChoiceIdList() {
+	public List<Integer> getChoiceIdList() {
 		return choiceIdList;
 	}
 	public void setChoiceIdList(List<Integer> choiceIdList) {
