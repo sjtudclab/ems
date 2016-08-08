@@ -19,21 +19,51 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
             //  alert(data.name);
             // alert(data.checklist[0]);
             $window.sessionStorage.token = data.token;
-            var infoStatus = {};
-            $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-            var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
-
-
-            infoStatus.name = data.name;
-            infoStatus.gender = data.gender;
-            infoStatus.id = data.id;
-            infoStatus.cid = data.cid;
-            infoStatus.subject = data.subject;
-            infoStatus.time = data.time;
-            //  $window.sessionStorage.photo=data.photo;
-            infoStatus.photo = data.photo;
-            infoStatus.Rid = data.Rid;
-            $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+            alert(data.Rid);
+            
+            switch (data.Rid) {
+            case 0: //考生登录
+            	 var infoStatus = {};
+                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+                 infoStatus.name = data.name;
+                 infoStatus.gender = data.gender;
+                 infoStatus.id = data.id;
+                 infoStatus.cid = data.cid;
+                 infoStatus.subject = data.subject;
+                 infoStatus.time = data.time;
+                 infoStatus.photo = data.photo;
+                 infoStatus.Rid = data.Rid;
+                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                break;
+            case 1:  //监考员登录
+            	var infoStatus = {};
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+            	//功能列表
+                infoStatus.operationMetaInfo = data.authorityList;
+                // 考场号
+                infoStatus.roomId = data.roomId;
+                // 登陆用户id
+                infoStatus.Rid = data.Rid;
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                break;
+            case 2:  //管理员登录
+            	var infoStatus = {};
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+            	//功能列表
+                infoStatus.operationMetaInfo = data.authorityList;
+                // 考场号
+                infoStatus.roomId = data.roomId;
+                // 登陆用户id
+                infoStatus.Rid = data.Rid;
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                break;
+            default:
+                alert('考生状态错误！');
+        }
+           
             if (data.Rid == 0) {
                 $state.go('showinfo');
             } else {

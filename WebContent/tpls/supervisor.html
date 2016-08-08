@@ -9,11 +9,11 @@
         </ul>
         <div class="content" ng-repeat="x in operationMetaInfo" style="display:{{display[$index]}}">
             <div class='workingSpace'>
-                <div style="margin:2% auto;width:20%">
-                    <p ng-bind="x.url"></p>
+                <div style="margin:2% auto;width:80%;text-align:center" ui-view="{{x.url}}">
+                    <!-- <p ng-bind="x.url"></p> -->
                 </div>
-                <div style="margin:2% auto;width:20%">
-                    <button type="button" class="btn btn-primary" ng-click="confirm()">确认操作</button>
+                <div style="margin:2% auto;width:20%;text-align:center">
+                    <button type="button" class="btn btn-primary" ng-click="confirm(x.url)">确认操作</button>
                 </div>
             </div>
             <div class="selectArea">

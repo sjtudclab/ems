@@ -41,11 +41,36 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 '': {
                     templateUrl: 'tpls/supervisor.html'
-                        /*,
-                                             controller: 'showCtrl'*/
                 },
                 'navbar@supervisor': {
                     templateUrl: 'tpls/navbar.html'
+                },
+                'forceStop@supervisor': {
+                    templateUrl: 'tpls/supervi/forceStop.html'
+                },
+                'allowStart@supervisor': {
+                    templateUrl: 'tpls/supervi/allowStart.html'
+                },
+                'allowStop@supervisor': {
+                    templateUrl: 'tpls/supervi/allowStop.html'
+                },
+                'delay@supervisor': {
+                    templateUrl: 'tpls/supervi/delay.html'
+                },
+                'deleteExam@supervisor': {
+                    templateUrl: 'tpls/supervi/deleteExam.html'
+                },
+                'manualAssign@supervisor': {
+                    templateUrl: 'tpls/supervi/manualAssign.html'
+                },
+                'restart@supervisor': {
+                    templateUrl: 'tpls/supervi/restart.html'
+                },
+                'roomChange@supervisor': {
+                    templateUrl: 'tpls/supervi/roomChange.html'
+                },
+                'seatChange@supervisor': {
+                    templateUrl: 'tpls/supervi/seatChange.html'
                 }
             }
         })
