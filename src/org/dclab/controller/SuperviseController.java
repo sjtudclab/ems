@@ -33,7 +33,7 @@ public class SuperviseController {
 		supervisorService=service;
 	}
 	
-	@RequestMapping("/refresh")
+	@RequestMapping("/Refresh")
 	public Collection<CandidateBean> refreshLogin(@RequestParam(value="token")UUID token){
 		
 		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
