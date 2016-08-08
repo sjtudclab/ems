@@ -19,7 +19,7 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
             //  alert(data.name);
             // alert(data.checklist[0]);
             $window.sessionStorage.token = data.token;
-         /*   alert(data.Rid);*/
+            alert(data.Rid);
             
             switch (data.Rid) {
             case 0: //考生登录
@@ -35,6 +35,7 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
                  infoStatus.photo = data.photo;
                  infoStatus.Rid = data.Rid;
                  $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                 $state.go('showinfo');
                 break;
             case 1:  //监考员登录
             	var infoStatus = {};
@@ -47,6 +48,7 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
                 // 登陆用户id
                 infoStatus.Rid = data.Rid;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                $state.go('supervisor');
                 break;
             case 2:  //管理员登录
             	var infoStatus = {};
@@ -64,11 +66,11 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
                 alert('考生状态错误！');
         }
            
-            if (data.Rid == 0) {
-                $state.go('showinfo');
+          /*  if (data.Rid == 0) {
+               
             } else {
-                $state.go('supervisor');
-            }
+               
+            }*/
 
 
         }).error(function(data, status, headers, config) {
@@ -1490,7 +1492,7 @@ demo0.controller('skiptb3', function($scope, $http, $window, $state, $stateParam
 
 demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParams, $rootScope) {
     //匹配题
-    $scope.option = [];
+    /*$scope.option = [];*/
 
 
     if ($stateParams.type == 4) {
@@ -1732,7 +1734,7 @@ demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParam
     $scope.maxSize = 5;
     $scope.pageChanged = function(option) {
         //  alert($scope.currentPage);
-       /* alert($scope.option);*/
+      /*  alert(option);*/
         var isChecked = $scope.count;
 
 

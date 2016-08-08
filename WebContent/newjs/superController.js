@@ -52,6 +52,7 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
                 switch ($scope.examineesInfo[x].status) {
                     case 0:
                         $scope.absentNum += 1;
+                        $scope.examineesStatus[$scope.examineesInfo[x].uid] = '';
                         break;
                     case 1:
                         $scope.examingNum += 1;
@@ -84,7 +85,7 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
     });
     //更換座位請求
     $scope.superRequest=function(url){
-    	console.log($scope);
+    	/*console.log($scope);*/
     	/*$parent.index=$index;*/
     	switch (url){
     	    case "seatChange": //更换座位
@@ -140,7 +141,7 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
    
     $scope.confirm = function(url) {
         /*alert($scope.inputMessage);*/
-    	console.log($scope);
+    /*	console.log($scope);*/
     	var uidList=[];
         for (x in $scope.selectionStatus) {
             alert(x + ' ' + $scope.selectionStatus[x]);
