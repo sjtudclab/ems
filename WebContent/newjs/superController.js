@@ -170,7 +170,7 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
         case "delay":   //延时操作
         	alert(url+$scope.delayTime);
         	$http.get('/EMS/supervise/delay', {
-                params: { token: $window.sessionStorage.token, uidList: uidList, delayTime:$rootScope.delayTime }
+                params: { token: $window.sessionStorage.token, uidList: uidList, delayTime:$scope.delayTime }
             }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         case "deleteExam": //撤销登录
@@ -200,7 +200,7 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
         case "seatChange": //更换座位
         	alert(url+$scope.seatNum+$scope.seat);
         	$http.put('/EMS/supervise/seatChange', {
-                params: { token: $window.sessionStorage.token, uid: uidList ,seatNum:$rootScope.seatNum }
+                params: { token: $window.sessionStorage.token, uid: $scope.seat ,seatNum:$scope.seatNum }
             }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
             break;
         default:
