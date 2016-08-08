@@ -48,7 +48,7 @@ public class SuperviseController {
 		return superBean.getFreeSeatList();
 	}
 	
-	@RequestMapping(value="/seatChange",method=POST)
+	@RequestMapping(value="/seatChange",method=PUT)
 	public SuperRespond seatChange(@RequestParam(value="token")UUID token,
 			@RequestParam(value="Uid")int Uid,@RequestParam(value="seatNum")int seatNum){
 		SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
