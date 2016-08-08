@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
-import org.dclab.Subject;
+import org.dclab.Session;
 import org.dclab.User;
 import org.dclab.mapping.CanSubMapperI;
-import org.dclab.mapping.SubjectMapperI;
+import org.dclab.mapping.SessionMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.SupervisorOperator;
@@ -38,86 +38,100 @@ public class UserService {
 		//得到UserMapperI接口的实现类对象，UserMapperI接口的实现类对象由sqlSession.getMapper(UserMapperI.class)动态构建出来
 		UserMapperI mapper=sqlSession.getMapper(UserMapperI.class);
 		User user=mapper.getByUid(Uid);
+		if(user==null)
+			return null;
 		Map<String,Object> map=new HashMap<String,Object>();
 		switch(user.getRid()){
 		case 0:
 			CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
-			int sid=csmapper.getSubjectIdByUid(Uid);
+			SessionMapperI smapper=sqlSession.getMapper(SessionMapperI.class);
+			int sessionId=csmapper.getSessionIdByUid(Uid);
 			UUID token=ExamOperator.idTokenMap.get(Uid);
-			SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
-			Subject subject=smapper.getById(sid);
-			/*if(ExamOperator.tokenExamMap.get(token).isAllowStart()==false&&
-					System.currentTimeMillis()-subject.getStartTime().getTime()<1800*1000)
-			{*/
-				map.put("name", user.getUname());
-				map.put("id", user.getUid());
-				map.put("cid", user.getCid());
-				map.put("subject",subject.getName());
-				map.put("time", subject.getStartTime());
-				map.put("Rid",user.getRid());
-				map.put("gender", user.getGender());
-				map.put("token", token);
-			
-				String dir=user.getPhoto();
-				InputStream in=null;
-				byte[] data=null;
-				try{
-					in=new FileInputStream(dir);
-					data=new byte[in.available()];
-					in.read(data);
-					in.close();
-				}
-				catch(IOException e)
+			Session session=smapper.getById(sessionId);
+			sqlSession.close();
+			if(!ExamOperator.tokenExamMap.get(token).isFinished()){//检测考生ExamBean中的考试结束标志是否为true
+				if(ExamOperator.tokenExamMap.get(token).isAllowStart()==true)//检测该考生是否可在任意时间登录
 				{
-					e.printStackTrace();
+					map.put("name", user.getUname());
+					map.put("id", user.getUid());
+					map.put("cid", user.getCid());
+					map.put("subject",session.getName());
+					map.put("time", session.getStartTime());
+					map.put("Rid",user.getRid());
+					map.put("gender", user.getGender());
+					map.put("token", token);
+				
+					String dir=user.getPhoto();
+					InputStream in=null;
+					byte[] data=null;
+					try{
+						in=new FileInputStream(dir);
+						data=new byte[in.available()];
+						in.read(data);
+						in.close();
+					}
+					catch(IOException e)
+					{
+						e.printStackTrace();
+					}
+					BASE64Encoder encoder=new BASE64Encoder();
+					String photo=encoder.encode(data);
+				
+					map.put("photo", photo);
+					return map;
 				}
-				BASE64Encoder encoder=new BASE64Encoder();
-				String photo=encoder.encode(data);
-			
-				map.put("photo", photo);
-				sqlSession.close();
-				return map;
-/*			}
+				else{
+					if(System.currentTimeMillis()-session.getStartTime().getTime()<1800*1000)//1800代表半小时，以后可能会改为由数据库中取值
+					{
+						map.put("name", user.getUname());
+						map.put("id", user.getUid());
+						map.put("cid", user.getCid());
+						map.put("subject",session.getName());
+						map.put("time", session.getStartTime());
+						map.put("Rid",user.getRid());
+						map.put("gender", user.getGender());
+						map.put("token", token);
+					
+						String dir=user.getPhoto();
+						InputStream in=null;
+						byte[] data=null;
+						try{
+							in=new FileInputStream(dir);
+							data=new byte[in.available()];
+							in.read(data);
+							in.close();
+						}
+						catch(IOException e)
+						{
+							e.printStackTrace();
+						}
+						BASE64Encoder encoder=new BASE64Encoder();
+						String photo=encoder.encode(data);
+					
+						map.put("photo", photo);
+						return map;
+					}
+					else
+						return null;
+				}
+			}
 			else
-				return null;*/
+				return null;
 		case 1:
 			UUID token1=SupervisorOperator.idTokenMap.get(user.getUid());
+			Map<String, Object> map1=new HashMap<>();
+			map1.put("token", token1);
+			map1.put("authorityList", SupervisorOperator.tokenSuperMap.get(token1).getAuthorityList());
+			map1.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomId());
+			map1.put("Rid", SupervisorOperator.tokenSuperMap.get(token1).getRid());
 			sqlSession.close();
-			return SupervisorOperator.tokenSuperMap.get(token1);
+			return map1;
 		default:
 			return null;
 		}
 
 		
 	}
-	
-/*	public Map<String,Object> getUserInfo(UUID token){
-		
-		SqlSession sqlSession=MyBatisUtil.getSqlSession();
-		
-		ExamBean exambean=ExamOperator.tokenExamMap.get(token);
-		int Uid=exambean.getUid();
-		
-		UserMapperI mapper=sqlSession.getMapper(UserMapperI.class);
-		User user=mapper.getByUid(Uid);
-		
-		CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
-		int sid=csmapper.getSubjectIdByUid(Uid);
-
-		SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
-		String subjectName=smapper.getNameById(sid);
-		
-		Map<String, Object> map=new HashMap<String,Object>();
-		map.put("name",user.getUname());
-		map.put("dir", user.getPhoto());
-		map.put("id", user.getUid());
-		map.put("cid", user.getCid());
-		map.put("gender", user.getGender());
-		map.put("subject", subjectName);
-		sqlSession.close();
-		return map;
-		
-	}*/
 
 }
 

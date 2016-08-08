@@ -1,5 +1,6 @@
 package org.dclab.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,14 @@ public class SupervisorOperator {
 			int roomId=rmapper.getRoomIdByUid(i);
 			SuperBean superBean=new SuperBean();
 			superBean.setRoomId(roomId);
-			superBean.setCanList(rcmapper.getUserListByRoomId(roomId));
+			List<Integer> uList=rcmapper.getUidLIstByRoomId(roomId);//获取该考场的考生准考证号list
+			System.out.println("考生list： "+uList);
+			Map<Integer, CandidateBean> map=new HashMap<>();
+			for(int uid :uList){
+				CheckBean checkBean=new CheckBean(roomId, uid);//暂时借用一下这个bean
+				map.put(uid, rcmapper.getUserByRoomId(checkBean));
+			}
+			superBean.setCanMap(map);
 			superBean.setToken(idTokenMap.get(i));
 			superBean.setAuthorityList(amapper.getListByRid());
 			superBean.setRid(1);
