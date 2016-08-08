@@ -15,7 +15,7 @@ public interface UserMapperI {
 	@Select("select * from user where Uid=#{uid}")
 	public User getByUid(int uid);
 	
-	@Select("select Uid from user inner join candidate_subject on user.Uid=candidate_subject.candidateId")
+	@Select("select Uid from user inner join candidate_session on user.Uid=candidate_session.candidateId")
 	public List<Integer> getUid();
 	
 	@Select("select Uid from user where Rid=1")

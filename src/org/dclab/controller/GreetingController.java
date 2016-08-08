@@ -25,7 +25,6 @@ public class GreetingController {
 		userService=service;
 	}
 	
-	@CrossOrigin(origins = "http://192.168.1.112:8080")
 	@RequestMapping("/greeting")
 	public Object greeting(@RequestParam(value = "name") int name) {
 		

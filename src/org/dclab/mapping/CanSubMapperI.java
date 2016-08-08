@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Select;
  *查询candidate_subject表的sql接口
  */
 public interface CanSubMapperI {
-	@Select("select subjectId from candidate_subject where candidateId=#{uid}")
-	public int getSubjectIdByUid(int uid);
+	@Select("select sessionId from candidate_session where candidateId=#{uid}")//用考生准考证号获得sessionId
+	public int getSessionIdByUid(int uid);
 }

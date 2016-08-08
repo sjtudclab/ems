@@ -290,7 +290,7 @@ body {
 
 }
 
-.bottominfo > p:hover{color:#0000FF;}
+.bottominfo > p:hover{color:#FFFF00;}
 
 
 
@@ -354,20 +354,6 @@ body {
             width: 10%;
             height: 100%
         }
-        
-.supervi  li {
-            text-align: center;
-        }
-        
- .supervi  a {
-            margin: 5%
-        }
- 
- .supervi td,th {
-            text-align: center;
-        }
-        
-
 
         .content {
             float: left;
@@ -375,21 +361,38 @@ body {
             height: 100%
         }
 
-       #main {
-            height: 94%
+   .supervi li {
+            text-align: center;
         }
 
-       
-        #workingSpace {
+ .supervi a {
+            margin: 5%
+        }
+
+        .workingSpace {
             height: 20%
         }
 
-        #selectArea {
+        .selectArea {
             height: 70%
         }
 
         .table-responsive {
             height: 90%;
+            width: 100%
         }
 
-       
+  .supervi td,th {
+            text-align: center;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+  /* finish page      */
+.finish {
+	padding: 10%;
+	text-align: center;
+	
+}

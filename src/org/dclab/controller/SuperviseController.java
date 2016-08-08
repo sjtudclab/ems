@@ -1,5 +1,6 @@
 package org.dclab.controller;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,8 @@ public class SuperviseController {
 		supervisorService=service;
 	}
 	
-	@RequestMapping("/refresh")
-	public List<CandidateBean> refreshLogin(@RequestParam(value="token")UUID token){
+	@RequestMapping("/Refresh")
+	public Collection<CandidateBean> refreshLogin(@RequestParam(value="token")UUID token){
 		
 		SuperBean superbean=SupervisorOperator.tokenSuperMap.get(token);
 		return supervisorService.getInfo(superbean);
@@ -61,10 +62,11 @@ public class SuperviseController {
 	
 	@RequestMapping("/delay")
 	public void delay(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList,
+			@RequestParam(value="delayTime")int delayTime){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null)
-		{ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-		supervisorService.delay(exambean);
+		{
+		    supervisorService.delay(uidList,delayTime);
 		}
 		else{
 			System.out.println("没有对应的token");
@@ -73,21 +75,20 @@ public class SuperviseController {
 	
 	@RequestMapping("/restart")
 	public void restart(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null){
-			ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-			supervisorService.returnToExam(exambean);
+			supervisorService.returnToExam(uidList);
 		}
 		else{System.out.println("没有对应的token");}
 	}
 	
 	@RequestMapping("/manualAssign")
 	public void manualAssign(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null)
 		{
-			ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-			supervisorService.manualAssign(exambean);
+			SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
+			supervisorService.forceTerminate(superBean, uidList);
 		}
 		else{
 			System.out.println("没有对应的token");
@@ -96,11 +97,10 @@ public class SuperviseController {
 	
 	@RequestMapping("/allowStart")
 	public void allowStart(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null)
 		{
-			ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-			supervisorService.allowStart(exambean);
+			supervisorService.allowStart(uidList);
 		}
 		else
 			System.out.println("没有对应的token");
@@ -108,11 +108,10 @@ public class SuperviseController {
 	
 	@RequestMapping("/allowStop")
 	public void allowStop(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null)
 		{
-			ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-			supervisorService.allowTerminate(exambean);
+			supervisorService.allowTerminate(uidList);
 		}
 		else
 			System.out.println("没有对应的token");
@@ -120,11 +119,11 @@ public class SuperviseController {
 	
 	@RequestMapping("/deleteExam")
 	public void deleteExam(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid){
+			@RequestParam(value="uidList")List<Integer> uidList){
 		if(SupervisorOperator.tokenSuperMap.get(token)!=null)
 		{
-			ExamBean exambean=ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(Uid));
-			supervisorService.deleteExamInfo(exambean);
+			SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
+			supervisorService.deleteExamInfo(superBean,uidList);
 		}
 		else
 			System.out.println("没有对应的token");

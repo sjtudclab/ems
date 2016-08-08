@@ -1,21 +1,21 @@
 <!--text-align:center-->
-<div class="container">
-    <div class="col-md-8">
+<div class="container" style="font-size:125%;height:100%">
+    <div class="col-md-8" style="height:100%">
         <!--匹配题 -->
-            <div>{{nid}}.<span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span> 
-            <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}}">
-             </audio>
-             <video controls   ng-src="{{video}}" type="video/mp4" style="display:{{videohide}}">
-             </video>
-             <img ng-src="{{img}}" style="display:{{imghide}}">
-            
-            </div>
-            <div ng-repeat="contentlist in contentlists">
-                ({{$index+1}}).{{contentlist.content}}
-                <select role="button" ng-click="opChanged(option)" ng-model="option[contentlist.contentId]" ng-options="x.choiceId as x.alp for x in lists">
-                </select>
-            </div>
-       <!--  <div style="padding-left:5%">
+        <div>{{nid}}.<span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span>
+             </div>   
+            <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}};padding-left:5%">
+            </audio>
+            <video controls ng-src="{{video}}" type="video/mp4" style="display:{{videohide}};padding-left:5%" height="33%">
+            </video>
+            <img ng-src="{{img}}" style="display:{{imghide}};padding-left:5%" height="33%">
+    
+        <div ng-repeat="contentlist in contentlists">
+            ({{$index+1}}).{{contentlist.content}}
+            <select role="button" ng-click="opChanged(option)" ng-model="option[contentlist.contentId]" ng-options="x.choiceId as x.alp for x in lists">
+            </select>
+        </div>
+        <!--  <div style="padding-left:5%">
             <a class="btn" ng-click="before ||sreceive4(option)" ng-disabled="before">上一题</a>
             <a class="btn" ng-click="receive4(option)">下一题</a>
         </div> -->
@@ -23,8 +23,8 @@
             <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(option)"></ul>
         </div>
     </div>
-    <div class="col-md-4">
-            <br>
+    <div class="col-md-4" style="height:100%">
+        <br>
         <br>
         <div ng-repeat="list in lists">
             {{list.alp}}.{{list.content}}

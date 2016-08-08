@@ -423,7 +423,8 @@
 * border to define their hit target.
 */
 .button-border, .button-border-thin, .button-border-thick {
-  background: none;
+ /*  background: none; */
+  background-color:#fff;
   border-width: 2px;
   border-style: solid;
   line-height: 36px; }

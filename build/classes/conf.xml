@@ -28,7 +28,7 @@
         <mapper resource="sqlMapping/can_sub_Mapper.xml"/> -->
         <mapper class="org.dclab.mapping.UserMapperI"/>
         <mapper class="org.dclab.mapping.CanSubMapperI"/>
-        <mapper class="org.dclab.mapping.SubjectMapperI"/>
+        <mapper class="org.dclab.mapping.SessionMapperI"/>
         <mapper class="org.dclab.mapping.RoomCanMapperI"/>
         <mapper class="org.dclab.mapping.TopicMapperI"/>
         <mapper class="org.dclab.mapping.ChoiceMapperI"/>

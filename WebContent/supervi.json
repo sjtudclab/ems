@@ -1,0 +1,34 @@
+﻿
+{
+    "roomId": 1,
+    "authorityList": [{
+        "name": "强制终止",
+        "url": "/EMS/supervise/forceStop"
+    }, {
+        "name": "允许开始",
+        "url": "/EMS/supervise/allowStart"
+    }, {
+        "name": "允许终止",
+        "url": "/EMS/supervise/allowStop"
+    }, {
+        "name": "更换座位",
+        "url": "/EMS/supervise/seatChange"
+    }, {
+        "name": "撤销登录",
+        "url": "/EMS/supervise/deleteExam"
+    }, {
+        "name": "延时操作",
+        "url": "/EMS/supervise/delay"
+    }, {
+        "name": "更换场次",
+        "url": "/EMS/supervise/roomChange"
+    }, {
+        "name": "撤销交卷",
+        "url": "/EMS/supervise/restart"
+    }, {
+        "name": "强行交卷",
+        "url": "/EMS/supervise/manualAssign"
+    }],
+    "token": "9b0df69a-f0c6-4a54-b786-5511151af556",
+    "rid": 1
+}

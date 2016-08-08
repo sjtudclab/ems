@@ -19,7 +19,7 @@ public class SuperBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -8957618769067770034L;
 	private int roomId;//考场号
-	private List<CandidateBean> canList;//该考场的考生信息list
+	private Map<Integer, CandidateBean> canMap;//该考场的考生信息list
 	private List<AuthorityBean> authorityList;//权限列表
 	private List<Integer> freeSeatList;//考场空闲座位list
 	private UUID token;
@@ -27,6 +27,12 @@ public class SuperBean implements Serializable{
 	
 	
 	
+	public Map<Integer, CandidateBean> getCanMap() {
+		return canMap;
+	}
+	public void setCanMap(Map<Integer, CandidateBean> canMap) {
+		this.canMap = canMap;
+	}
 	public List<Integer> getFreeSeatList() {
 		return freeSeatList;
 	}
@@ -50,12 +56,6 @@ public class SuperBean implements Serializable{
 	}
 	public void setToken(UUID token) {
 		this.token = token;
-	}
-	public List<CandidateBean> getCanList() {
-		return canList;
-	}
-	public void setCanList(List<CandidateBean> canList) {
-		this.canList = canList;
 	}
 	public int getRoomId() {
 		return roomId;
