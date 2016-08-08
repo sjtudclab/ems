@@ -35,6 +35,7 @@
         <mapper class="org.dclab.mapping.MatchItemMapperI"/>
         <mapper class="org.dclab.mapping.RoomMapperI"/>
         <mapper class="org.dclab.mapping.AuthorityMapperI"/> 
+        <mapper class="org.dclab.mapping.CorrectAnswerMapperI"/>
     </mappers>
     
 </configuration>

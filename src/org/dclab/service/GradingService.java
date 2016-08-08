@@ -8,12 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+import org.dclab.mapping.CorrectAnswerMapperI;
 import org.dclab.model.CorrectAnswerBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
+import org.dclab.utils.MyBatisUtil;
+import org.springframework.stereotype.Service;
 
 /**
  * 阅卷评分
@@ -25,6 +29,8 @@ import org.dclab.model.SingleChoiceBean;
  * @author zhaoz
  *
  */
+
+@Service
 public class GradingService {
 
 	public int gradeSingleChoice(Integer candidateChoice, CorrectAnswerBean correctAnswer){
@@ -133,7 +139,12 @@ public class GradingService {
 		int matchingScore		=	0;
 		
 		//load correct answer from database
-		List<CorrectAnswerBean> correctAnswerBeans = new ArrayList<>();	//TO DO: mapping from DB
+		SqlSession sqlSession=MyBatisUtil.getSqlSession();
+		CorrectAnswerMapperI camapper=sqlSession.getMapper(CorrectAnswerMapperI.class);
+		
+		List<CorrectAnswerBean> correctAnswerBeans = camapper.getCorrectAnswer();	//TO DO: mapping from DB
+		sqlSession.close();
+		
 		Map<Integer, CorrectAnswerBean> correctAnswerMap = new HashMap<Integer, CorrectAnswerBean>(128);
 		for (CorrectAnswerBean correctAnswerBean : correctAnswerBeans) {
 			correctAnswerMap.put(correctAnswerBean.getTopicId(), correctAnswerBean);	//for easily fetching
