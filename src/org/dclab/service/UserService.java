@@ -81,7 +81,7 @@ public class UserService {
 					return map;
 				}
 				else{
-					if(System.currentTimeMillis()-session.getStartTime().getTime()<1800*1000)//1800代表半小时，以后可能会改为由数据库中取值
+					if(System.currentTimeMillis()-session.getStartTime().getTime()<session.getLatestLogin()*1000)//1800代表半小时，以后可能会改为由数据库中取值
 					{
 						map.put("name", user.getUname());
 						map.put("id", user.getUid());
