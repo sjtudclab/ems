@@ -1,0 +1,12 @@
+
+{
+    "authorityList": [{
+        "name": "考场管理",
+        "url": "roomManager"
+    }, {
+        "name": "试题导入",
+        "url": "examImport"
+    }],
+    "token": "9b0df69a-f0c6-4a54-b786-5511151af556",
+    "rid": 2
+}

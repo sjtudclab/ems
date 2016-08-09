@@ -19,26 +19,58 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
             //  alert(data.name);
             // alert(data.checklist[0]);
             $window.sessionStorage.token = data.token;
-            var infoStatus = {};
-            $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-            var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
-
-
-            infoStatus.name = data.name;
-            infoStatus.gender = data.gender;
-            infoStatus.id = data.id;
-            infoStatus.cid = data.cid;
-            infoStatus.subject = data.subject;
-            infoStatus.time = data.time;
-            //  $window.sessionStorage.photo=data.photo;
-            infoStatus.photo = data.photo;
-            infoStatus.Rid = data.Rid;
-            $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-            if (data.Rid == 0) {
-                $state.go('showinfo');
-            } else {
+            alert(data.Rid);
+            // $state.go('examImport');
+            $state.go('manager');
+           /* switch (data.Rid) {
+            case 0: //考生登录
+            	 var infoStatus = {};
+                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+                 infoStatus.name = data.name;
+                 infoStatus.gender = data.gender;
+                 infoStatus.id = data.id;
+                 infoStatus.cid = data.cid;
+                 infoStatus.subject = data.subject;
+                 infoStatus.time = data.time;
+                 infoStatus.photo = data.photo;
+                 infoStatus.Rid = data.Rid;
+                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                 $state.go('showinfo');
+                break;
+            case 1:  //监考员登录
+            	var infoStatus = {};
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+            	//功能列表
+                infoStatus.authorityList = data.authorityList;
+                // 考场号
+                infoStatus.roomId = data.roomId;
+                // 登陆用户id
+                infoStatus.Rid = data.Rid;
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
                 $state.go('supervisor');
-            }
+                break;
+            case 2:  //管理员登录
+            	var infoStatus = {};
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+            	//功能列表
+                infoStatus.operationMetaInfo = data.authorityList;
+                // 登陆用户id
+                infoStatus.Rid = data.Rid;
+                $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                $state.go('manager');
+                break;
+            default:
+                alert('考生状态错误！');
+        }
+           */
+          /*  if (data.Rid == 0) {
+               
+            } else {
+               
+            }*/
 
 
         }).error(function(data, status, headers, config) {
@@ -1460,7 +1492,7 @@ demo0.controller('skiptb3', function($scope, $http, $window, $state, $stateParam
 
 demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParams, $rootScope) {
     //匹配题
-    $scope.option = {};
+    /*$scope.option = [];*/
 
 
     if ($stateParams.type == 4) {
@@ -1551,7 +1583,7 @@ demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParam
 
     } else {
 
-        var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
         if (matchStatus.match.nid) {
             $scope.totalItems = matchStatus.match.totalItems;
             $scope.currentPage = matchStatus.match.nid;
@@ -1702,7 +1734,7 @@ demo0.controller('skiptb4', function($scope, $http, $window, $state, $stateParam
     $scope.maxSize = 5;
     $scope.pageChanged = function(option) {
         //  alert($scope.currentPage);
-       /* alert($scope.option);*/
+      /*  alert(option);*/
         var isChecked = $scope.count;
 
 

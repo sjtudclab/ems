@@ -1,0 +1,34 @@
+
+{
+    "roomId": 1,
+    "authorityList": [{
+        "name": "强制终止",
+        "url": "forceStop"
+    }, {
+        "name": "允许开始",
+        "url": "allowStart"
+    }, {
+        "name": "允许终止",
+        "url": "allowStop"
+    }, {
+        "name": "更换座位",
+        "url": "seatChange"
+    }, {
+        "name": "撤销登录",
+        "url": "deleteExam"
+    }, {
+        "name": "延时操作",
+        "url": "delay"
+    }, {
+        "name": "更换场次",
+        "url": "roomChange"
+    }, {
+        "name": "撤销交卷",
+        "url": "restart"
+    }, {
+        "name": "强行交卷",
+        "url": "manualAssign"
+    }],
+    "token": "9b0df69a-f0c6-4a54-b786-5511151af556",
+    "rid": 1
+}

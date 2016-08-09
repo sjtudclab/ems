@@ -10,6 +10,7 @@ import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.RequestBean;
 import org.dclab.service.ExamService;
+import org.dclab.service.GradingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +22,16 @@ public class ExamController {
 
 	@Autowired
 	private ExamService examService;
+	private GradingService gradingService;
 	public void setExamService(ExamService service){
 		examService=service;
 	}
-	
+	@Autowired
+	public void setGradingService(GradingService gradingService) {
+		this.gradingService = gradingService;
+	}
+
+
 	@RequestMapping("/start")
 	public Object showDefaultExamPage(RequestBean request){
 		/*if(examService.getExambeanByToken(request.getToken())==null)
@@ -61,31 +68,6 @@ public class ExamController {
 		}*/
 	}
 	
-	/*@RequestMapping("/nextTopic")
-	public Object getNextTopic(RequestBean request){
-		ExamBean exambean=examService.getExambeanByToken(request.getToken());
-		if(request.getChoiceIdMap()!=null)
-		{
-			return examService.getNextTopic(exambean, request.getTypeId(), request.getId(), request.getChoiceIdMap(), request.isIfCheck());
-		}
-		else if(request.getChoiceIdList()!=null)
-		{
-			return examService.getNextTopic(exambean, request.getTypeId(), request.getId(), request.getChoiceIdList(), request.isIfCheck());
-		}
-		else
-			return  examService.getNextTopic(exambean, request.getTypeId(), request.getId(), request.getChoiceId(), request.isIfCheck());	
-	}
-	
-	@RequestMapping("/lastTopic")
-	public Object getLastTopic(RequestBean requset){
-		
-		ExamBean exambean=examService.getExambeanByToken(requset.getToken());
-		if(requset.getChoiceIdMap()!=null){
-			return examService.getLastTopic(exambean, requset.getTypeId(), requset.getId(), requset.getChoiceIdMap(), requset.isIfCheck());
-		}
-		else
-			return examService.getLastTopic(exambean, requset.getTypeId(), requset.getId(), requset.getChoiceIdList(), requset.isIfCheck());
-	}*/
 	@RequestMapping("/getTopic")
 	public Object getTopic(RequestBean request)//写入本题状态，返回请求的题目
 	{
@@ -134,24 +116,18 @@ public class ExamController {
 			@RequestParam(value="typeId")int typeId,
 			@RequestParam(value="id")int id){
 		ExamBean exambean=examService.getExambeanByToken(token);
-		id=id-1;
-		return examService.getTopic(exambean, typeId, id);
+		return examService.getTopic(exambean, typeId, --id);
 	}
 	
 	@RequestMapping("/handExam")
-	public boolean handin(@RequestParam(value="token")UUID token){
-		if(ExamOperator.tokenExamMap.get(token)!=null){
+	public int handin(@RequestParam(value="token")UUID token){
 			ExamBean exambean=examService.getExambeanByToken(token);
 			exambean.setFinished(true);
-			return true;
-		}
-		else
-			return false;
+			return gradingService.gradePaper(exambean);
 	}
 	
 	@RequestMapping("/getTime")
 	public int getTime(@RequestParam(value="token")UUID token){
-		System.out.println(token);
 		ExamBean exambean=examService.getExambeanByToken(token);
 		return examService.getTime(exambean);
 	}
