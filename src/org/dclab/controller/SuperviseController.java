@@ -16,9 +16,13 @@ import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.service.SupervisorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -48,11 +52,11 @@ public class SuperviseController {
 		return superBean.getFreeSeatList();
 	}
 	
-	@RequestMapping(value="/seatChange",method=PUT)
-	public SuperRespond seatChange(@RequestParam(value="token")UUID token,
-			@RequestParam(value="Uid")int Uid,@RequestParam(value="seatNum")int seatNum){
+	@RequestMapping(value="/seatChange",method=POST)
+	public SuperRespond seatChange(@RequestBody Map<String, Map> map){
+		UUID token=UUID.fromString((String) map.get("params").get("token"));
 		SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token);
-		return supervisorService.seatChange(superBean, Uid, seatNum);
+		return supervisorService.seatChange(superBean, (int)map.get("params").get("uid"),(int)map.get("params").get("seatNum"));
 	}
 	@RequestMapping("/delay")
 	public SuperRespond delay(SuperRequest superRequest){
