@@ -5,6 +5,7 @@ package org.dclab.model;
  *为了给每个监考老师装载所监考教室的考生的名单创建的bean
  */
 public class CandidateBean {
+	private int roomId;	//房间号
 	private int seatNum;//座位号
 	private String Uname;//姓名
 	private String gender;//性别
@@ -14,6 +15,15 @@ public class CandidateBean {
 	public int getSeatNum() {
 		return seatNum;
 	}
+	
+	public int getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
+	}
+
 	public void setSeatNum(int seatNum) {
 		this.seatNum = seatNum;
 	}

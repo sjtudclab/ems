@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Log Operations of Supervisor, SizeBasedTriggerPolicy, when file size is large than threshold,
+	compress the current file & create a new file to log, remove some obsolete files for space recycle -->
+
+<Configuration status="WARN">
+	<Appenders>
+		<!-- <File name="file" fileName="operations.log"> <PatternLayout pattern="%d{HH:mm:ss} 
+			[%t] %-5level %logger{36} - %msg%n"/> </File> -->
+		<RollingFile name="file" fileName="logs/operations.log"
+			filePattern="logs/ems-%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" /> <!-- overflow, new a file -->
+			</Policies>
+			<DefaultRolloverStrategy max="200"/> <!-- delete log when file number more than this -->
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="file" />
+		</Root>
+	</Loggers>
+</Configuration>
