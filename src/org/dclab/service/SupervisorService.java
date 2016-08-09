@@ -41,11 +41,9 @@ public class SupervisorService {
 	}
 	//更换座位
 	public SuperRespond seatChange(SuperBean superBean,int Uid,Integer seatNum){
-		if(superBean.getFreeSeatList().remove(seatNum)){//从空闲座位list中删去目标座位
-			for(CandidateBean cbean: superBean.getCanMap().values()){//更新考生信息list
-				if(cbean.getUid()==Uid)
-					cbean.setSeatNum(seatNum);
-			}
+		System.out.println(superBean);
+		if(superBean.getFreeSeatList()!=null&&superBean.getFreeSeatList().remove(seatNum)==true){//从空闲座位list中删去目标座位
+			superBean.getCanMap().get(Uid).setSeatNum(seatNum);
 			return new SuperRespond(true);
 		}
 		else
