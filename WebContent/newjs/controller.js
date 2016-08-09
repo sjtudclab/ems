@@ -20,8 +20,9 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
             // alert(data.checklist[0]);
             $window.sessionStorage.token = data.token;
             alert(data.Rid);
-            
-            switch (data.Rid) {
+            // $state.go('examImport');
+            $state.go('manager');
+           /* switch (data.Rid) {
             case 0: //考生登录
             	 var infoStatus = {};
                  $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
@@ -56,16 +57,15 @@ formlogin.controller('httpCtrl', function($scope, $state, $http, $window) {
                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
             	//功能列表
                 infoStatus.operationMetaInfo = data.authorityList;
-                // 考场号
-                infoStatus.roomId = data.roomId;
                 // 登陆用户id
                 infoStatus.Rid = data.Rid;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                $state.go('manager');
                 break;
             default:
                 alert('考生状态错误！');
         }
-           
+           */
           /*  if (data.Rid == 0) {
                
             } else {
