@@ -147,62 +147,108 @@ angular.module('supervisor').controller('supervisorCtrl', function($rootScope,$s
             alert(x + ' ' + $scope.selectionStatus[x]);
             if($scope.selectionStatus[x]){uidList.push(x);}       
         }
-        alert(uidList);
+      /*  alert(uidList);*/
         switch (url) {
         case "forceStop":  //强制终止
         	alert(url);
         	$http.get('/EMS/supervise/forceStop', {
                 params: { token: $window.sessionStorage.token, uidList: uidList}
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}
+            	}, function errorCallback(response) {});
 
             break;
         case "allowStart": //允许开始
         	/*alert(url);*/
         	$http.get('/EMS/supervise/allowStart', {
                 params: { token: $window.sessionStorage.token, uidList: uidList }
-            }).then(function successCallback(response) {alert(url); refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+        		refresh();
+        	}else{
+        		alert(response.data.detail)
+        	}}, function errorCallback(response) {});
             break;
         case "allowStop":  //允许终止
         	alert(url);
         	$http.get('/EMS/supervise/allowStop', {
                 params: { token: $window.sessionStorage.token, uidList: uidList }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "delay":   //延时操作
         	alert(url+$scope.delayTime);
         	$http.get('/EMS/supervise/delay', {
                 params: { token: $window.sessionStorage.token, uidList: uidList, delayTime:$scope.delayTime }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "deleteExam": //撤销登录
         	alert(url);
         	$http.get('/EMS/supervise/deleteExam', {
                 params: { token: $window.sessionStorage.token, uidList: uidList }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "manualAssign": //强行交卷
         	alert(url);
         	$http.get('/EMS/supervise/manualAssign', {
                 params: { token: $window.sessionStorage.token, uidList: uidList }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "restart":  //撤销交卷
         	alert(url);
         	$http.get('/EMS/supervise/restart', {
                 params: { token: $window.sessionStorage.token, uidList: uidList }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "roomChange":  //更换场次
         	alert(url);
         	$http.put('/EMS/supervise/roomChange', {
                 params: { token: $window.sessionStorage.token, uid: uidList ,roomNum:roomNum }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         case "seatChange": //更换座位
         	alert(url+$scope.seatNum+$scope.seat);
-        	$http.put('/EMS/supervise/seatChange', {
+        	$http.post('/EMS/supervise/seatChange', {
                 params: { token: $window.sessionStorage.token, uid: $scope.seat ,seatNum:$scope.seatNum }
-            }).then(function successCallback(response) {refresh()}, function errorCallback(response) {});
+            }).then(function successCallback(response) {
+            	if(response.data.flag){
+            		refresh();
+            	}else{
+            		alert(response.data.detail)
+            	}}, function errorCallback(response) {});
             break;
         default:
             alert('考生状态错误！');
