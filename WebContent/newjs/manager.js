@@ -24,7 +24,6 @@ angular
                 $scope.operationMetaInfo = response.data.authorityList;
                 // 登陆用户id
                 $scope.rId = response.data.Rid;
-                console.log($scope.operationMetaInfo);
                 // 控制标签显示
                 $scope.active = [];
                 // 控制标签页显示
@@ -65,7 +64,7 @@ angular
                 $scope.absentNum = 0;
                 // 已登录人数
                 $scope.examingNum = 0;
-               
+
                 for (x in $scope.roomsInfo) {
                     switch ($scope.roomsInfo[x].status) {
                         case 0:
@@ -165,9 +164,9 @@ angular
         }
 
         // 单独选择
-        $scope.checkSel = function (status,roomId) {
+        $scope.checkSel = function (status, roomId) {
             $scope.cancelAll();
-            $scope.selectionStatus[roomId]=true;
+            $scope.selectionStatus[roomId] = true;
             if (status == true) {
                 $scope.selectedNum += 1;
             }
@@ -220,4 +219,21 @@ angular
                         + ' ' + response.statusText);
                 });
         }
+
+        $scope.loadExam = function () {
+            
+            $scope.loadStyle = 'cursor:wait';
+            $scope.loadButtonDisabled = true;
+
+            $http.get('info.json', {
+                params: {
+                    token: $window.sessionStorage.token
+                }
+            }).then(function successCallback(response) {
+                console.log('success');
+                $scope.loadStyle = 'cursor:default';
+                $scope.loadButtonDisabled = false;
+            })
+        }
+        
 				});

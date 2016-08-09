@@ -1,8 +1,20 @@
 <div ui-view="navbar" style="height: 6%; background-color: #337ab7 /* #2aabd2 */"></div>
-<div ng-controller="managerCtrl" id='main' class="supervi">
+<div ng-controller="examManagerCtrl" id='main' class="supervi">
     <ul class="nav nav-pills nav-stacked">
-        <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
-            <a ng-click="superRequest(x.url);$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
-        </li>
+        <li class="cursor-pointer"><a ng-click="toggleImport()"><span class="{{importIcon}}" style="float:left"></span>试题导入</a></li>
+            <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}" style="display:{{displayImport}}">
+                <a ng-click="$parent.index=$index" ng-bind="x" class="cursor-pointer"></a>
+            </li>
+
     </ul>
+    <div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}}">
+        <div class='workingSpace'>
+            <div style="margin: 2% auto; width: 80%;text-align: center" ui-view="single">
+                <!--<p ng-bind="x"></p>-->
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
