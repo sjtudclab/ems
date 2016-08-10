@@ -21,7 +21,7 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
             $window.sessionStorage.token = data.token;
             alert(data.Rid);
             // $state.go('examImport');
-            // $state.go('manager');
+            //  $state.go('manager');
                  switch (data.Rid) {
                  case 0: //考生登录
                       var infoStatus = {};
@@ -63,7 +63,7 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
                      $state.go('manager');
                      break;
                  default:
-                     alert('考生状态错误！');
+                     alert('状态错误！');
              }
 
             /*  if (data.Rid == 0) {

@@ -1,7 +1,7 @@
 
 {
     "authorityList": [{
-        "name": "科目信息",
+        "name": "科目",
         "url": "subject"
     },{
         "name": "单选题",
@@ -18,7 +18,5 @@
     }, {
         "name": "简答题",
         "url": "simple"
-    }],
-    "token": "9b0df69a-f0c6-4a54-b786-5511151af556",
-    "Rid": 2
+    }]
 }

@@ -6,46 +6,46 @@ angular
 				'managerCtrl',
 				function ($rootScope, $scope, $http, $window, $state) {
 
-        var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
-        // 功能列表
-        $scope.operationMetaInfo = adminStatus.authorityList;
-        // 登陆用户id
-        $scope.Rid = response.data.Rid;
-        // 控制标签显示
-        $scope.active = [];
-        // 控制标签页显示
-        $scope.display = [];
-        for (i in $scope.operationMetaInfo) {
-            $scope.active[i] = "";
-            $scope.display[i] = "none";
-        }
-        // 初始化显示标签0
-        $scope.index = 0;
+        // var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
+        // // 功能列表
+        // $scope.operationMetaInfo = adminStatus.authorityList;
+        // // 登陆用户id
+        // $scope.Rid = response.data.Rid;
+        // // 控制标签显示
+        // $scope.active = [];
+        // // 控制标签页显示
+        // $scope.display = [];
+        // for (i in $scope.operationMetaInfo) {
+        //     $scope.active[i] = "";
+        //     $scope.display[i] = "none";
+        // }
+        // // 初始化显示标签0
+        // $scope.index = 0;
 
-        // $http({
-        //     method: 'GET',
-        //     url: 'manger.json',
-        //     params: {
-        //         token: $window.sessionStorage.token
-        //     }
-        // })
-        //     .then(
-        //     function success(response) {
-        //         // 功能列表
-        //         $scope.operationMetaInfo = response.data.authorityList;
-        //         // 登陆用户id
-        //         $scope.rId = response.data.Rid;
-        //         // 控制标签显示
-        //         $scope.active = [];
-        //         // 控制标签页显示
-        //         $scope.display = [];
-        //         for (i in $scope.operationMetaInfo) {
-        //             $scope.active[i] = "";
-        //             $scope.display[i] = "none";
-        //         }
-        //         // 初始化显示标签0
-        //         $scope.index = 0;
-        //     })
+        $http({
+            method: 'GET',
+            url: 'manger.json',
+            params: {
+                token: $window.sessionStorage.token
+            }
+        })
+            .then(
+            function success(response) {
+                // 功能列表
+                $scope.operationMetaInfo = response.data.authorityList;
+                // 登陆用户id
+                $scope.rId = response.data.Rid;
+                // 控制标签显示
+                $scope.active = [];
+                // 控制标签页显示
+                $scope.display = [];
+                for (i in $scope.operationMetaInfo) {
+                    $scope.active[i] = "";
+                    $scope.display[i] = "none";
+                }
+                // 初始化显示标签0
+                $scope.index = 0;
+            })
  // $http({
         //     method: 'GET',
         //     url: 'roominfo.json',

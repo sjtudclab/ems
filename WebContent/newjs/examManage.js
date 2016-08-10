@@ -1,5 +1,5 @@
 var examManage = angular.module('examManage', ['ui.bootstrap']);
-examManage.controller('examManagerCtrl', function ($scope, $http) {
+examManage.controller('examManagerCtrl', function ($scope, $http,$window) {
     $scope.isCollapsed = false;
 
 
@@ -23,8 +23,8 @@ examManage.controller('examManagerCtrl', function ($scope, $http) {
                 $scope.active[i] = "";
                 $scope.display[i] = "none";
             }
-            // 初始化显示标签0
-            $scope.index = 0;
+            // // 初始化显示标签0
+            // $scope.index = 0;
         })
 
     // $scope.operationMetaInfo = ['单选题', '多选题', '判断题', '匹配题', '简答题'];
@@ -69,51 +69,229 @@ examManage.controller('examManagerCtrl', function ($scope, $http) {
 
 });
 
-examManage.controller('singleCtrl', function ($scope, $http) {
-    $scope.lists = ['A', 'B', 'C', 'D'];
-    $scope.options = ['A', 'B', 'C', 'D'];
-    $scope.op = [];
+examManage.controller('singleCtrl', function ($scope, $http,$window) {
+    $scope.itemMessage = ['',''];
+    $scope.rightAnswer = [];
 
     $scope.save = function () {
-        alert($scope.content + $scope.op);
+        // alert($scope.content + $scope.rightAnswer+$scope.itemMessage);
+        var choice={};
+        for(x in $scope.itemMessage){
+            choice[x*1+1]=$scope.itemMessage[x];
+        }
+        // console.log(choice);
+        // console.log($scope.rightAnswer);
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addTopic',
+			params: {
+				token: $window.sessionStorage.token,
+                typeId:0,
+                content:$scope.content,
+                choice:choice,
+                List:$scope.rightAnswer
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.itemMessage = ['',''];
+        $scope.rightAnswer = [];
+        $scope.content=[];
 
     }
 
 
 });
-examManage.controller('judgeCtrl', function ($scope, $http) {
-    $scope.lists = ['A', 'B'];
-    $scope.options = ['A', 'B'];
-    $scope.op = [];
+examManage.controller('judgeCtrl', function ($scope, $http,$window) {
+    $scope.itemMessage = ['',''];
+    $scope.rightAnswer = [];
 
     $scope.save = function () {
-        alert($scope.content + $scope.op);
+        // alert($scope.content + $scope.rightAnswer+$scope.itemMessage);
+        var choice={};
+        for(x in $scope.itemMessage){
+            choice[x*1+1]=$scope.itemMessage[x];
+        }
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addTopic',
+			params: {
+				token: $window.sessionStorage.token,
+                typeId:2,
+                content:$scope.content,
+                choice:choice,
+                List:$scope.rightAnswer
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.itemMessage = ['',''];
+        $scope.rightAnswer = [];
+        $scope.content=[];
 
     }
 
 
 });
-examManage.controller('multipleCtrl', function ($scope, $http) {
-    $scope.options = ['A', 'B', 'C', 'D'];
-    $scope.op = [];
-    $scope.rightOption = [];
-
-
+examManage.controller('multipleCtrl', function ($scope, $http,$window) {
+    $scope.right = [];
+    $scope.itemMessage = ['',''];
+    var List=[];
     $scope.save = function () {
-        alert($scope.content + $scope.op + $scope.rightOption);
+        // alert($scope.content + $scope.right+$scope.itemMessage);
+        var choice={};
+        for(x in $scope.itemMessage){
+            choice[x]=$scope.itemMessage[x];
+            if($scope.right[x]){
+               List.push(x);
+            }
+
+        }
+        // alert(List+$scope.itemMessage)
+        // console.log(choice);
+        // console.log(List);
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addTopic',
+			params: {
+				token: $window.sessionStorage.token,
+                typeId:1,
+                content:$scope.content,
+                choice:choice,
+                List:List
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.itemMessage = ['',''];
+        $scope.right = [];
+        $scope.content=[];
 
     }
 
 
 });
 
-examManage.controller('mpCtrl', function ($scope) {
+examManage.controller('mpCtrl', function ($scope, $http,$window) {
     $scope.itemMessage = [''];
     $scope.answerMessage = [''];
-    $scope.showMessage = function () {
-        console.log('stem: ' + $scope.stem);
-        for (x in $scope.itemMessage) {
-            console.log($scope.itemMessage[x] + ' ' + $scope.answerMessage[x]);
+    // $scope.showMessage = function () {
+    //     // console.log('stem: ' + $scope.stem);
+    //     for (x in $scope.itemMessage) {
+    //         console.log($scope.itemMessage[x] + ' ' + $scope.answerMessage[x]);
+    //     }
+    // }
+    $scope.save = function () {
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addTopic',
+			params: {
+				token: $window.sessionStorage.token,
+                typeId:4,
+                content:$scope.content
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.content=[];
+
+    }
+});
+
+examManage.controller('mpCtrl', function ($scope, $http,$window) {
+
+    $scope.save = function () {
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addTopic',
+			params: {
+				token: $window.sessionStorage.token,
+                typeId:4,
+                content:$scope.content
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.content=[];
+
+    }
+});
+
+examManage.controller('subjectCtrl', function ($scope, $http,$window) {
+    // alert($scope)
+    $scope.save = function () {
+        // alert($scope.content + $scope.right+$scope.itemMessage);
+        var choice={};
+        if($scope.singleCheckbox){
+            choice[0]=$scope.singleScore;
         }
+        if($scope.multipleCheckbox){
+            choice[1]=$scope.multifulScore+','+$scope.multiScore;
+        }
+        if($scope.judgeCheckbox){
+            choice[2]=$scope.judgeScore;
+        }
+        if($scope.matchCheckbox){
+            choice[3]=$scope.matchScore;
+        }
+        if($scope.simpleCheckbox){
+            choice[4]=$scope.simpleScore;
+        }
+        // console.log(choice);
+        // alert(List+$scope.itemMessage)
+        $http({
+			method: 'GET',
+			url: '/EMS/admin/addSubject',
+			params: {
+				token: $window.sessionStorage.token,
+                name:$scope.name,
+                duration:$scope.duration,
+                earliestSubmit:$scope.earliestSubmit,
+                latestLogin:$scope.latestLogin,
+                map:choice
+
+			}
+		}).then(function success(response) {
+               alert("保存成功！");
+        })
+
+    }
+    $scope.delete = function () {
+        $scope.name = [];
+        $scope.duration = [];
+        $scope.earliestSubmit=[];
+        $scope.latestLogin=[];
+        $scope.singleCheckbox=false;
+        $scope.singleScore=[];
+        $scope.multipleCheckbox=false;
+        $scope.multifulScore=[];
+        $scope.multiScore=[];
+        $scope.judgeCheckbox=false;
+        $scope.judgeScore=[];
+        $scope.matchCheckbox=false;
+        $scope.matchScore=[];
+        $scope.simpleCheckbox=false;
+        $scope.simpleScore=[];
+
     }
 });
