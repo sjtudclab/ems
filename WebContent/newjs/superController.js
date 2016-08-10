@@ -4,7 +4,7 @@ angular
 	.module('supervisor')
 	.controller(
 				'supervisorCtrl',
-				function ($rootScope, $scope, $http, $window) {
+				function ($rootScope, $scope, $http, $window,$uibModal) {
 
 		var infoStatus = JSON
 			.parse($window.sessionStorage.infoStatus);
@@ -165,158 +165,185 @@ angular
 				}
 			}
 			/* alert(uidList); */
-			switch (url) {
-				case "forceStop": // 强制终止
-					alert(url);
-					$http.get('/EMS/supervise/forceStop', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
+			var modalParam = {
+				backdrop: 'static',
+				size: 'sm'
+			};
+			var header = '<div class="modal-header"><h3 class="modal-title">提醒</h3></div>';
+			var footer =
+				'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.confirm=false;$close()">取消</button></div>';
+			modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认操作么？</p></div>' + footer;
+			$uibModal.open(modalParam).result.then(function () {
+				if ($scope.confirm) {
+					modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的确认操作么？</p></div>' + footer;
+					$uibModal.open(modalParam).result.then(function () {
+						if ($scope.confirm) {
+							modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的真的确认操作么？</p></div>' + footer;
+							$uibModal.open(modalParam).result.then(function () {
+								if ($scope.confirm) {
 
-					break;
-				case "allowStart": // 允许开始
-					/* alert(url); */
-					$http.get('/EMS/supervise/allowStart', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
+									switch (url) {
+										case "forceStop": // 强制终止
+											// alert(url);
+											$http.get('/EMS/supervise/forceStop', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+
+											break;
+										case "allowStart": // 允许开始
+											/* alert(url); */
+											$http.get('/EMS/supervise/allowStart', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "allowStop": // 允许终止
+											alert(url);
+											$http.get('/EMS/supervise/allowStop', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "delay": // 延时操作
+											alert(url + $scope.delayTime);
+											$http.get('/EMS/supervise/delay', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList,
+													delayTime: $scope.delayTime
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "deleteExam": // 撤销登录
+											alert(url);
+											$http.get('/EMS/supervise/deleteExam', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "manualAssign": // 强行交卷
+											alert(url);
+											$http.get('/EMS/supervise/manualAssign', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "restart": // 撤销交卷
+											alert(url);
+											$http.get('/EMS/supervise/restart', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "roomChange": // 更换场次
+											alert(url);
+											$http.put('/EMS/supervise/roomChange', {
+												params: {
+													token: $window.sessionStorage.token,
+													uid: uidList,
+													roomNum: roomNum
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "seatChange": // 更换座位
+											alert(url + $scope.seatNum + $scope.seat);
+											$http.post('/EMS/supervise/seatChange', {
+												params: {
+													token: $window.sessionStorage.token,
+													uid: $scope.seat,
+													seatNum: $scope.seatNum
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													alert(response.data.detail)
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										default:
+											alert('考生状态错误！');
+									}
+
+									// $state.go("finish");
+									/* alert('您已提交');*/
+								}
+							});
 						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
 					});
-					break;
-				case "allowStop": // 允许终止
-					alert(url);
-					$http.get('/EMS/supervise/allowStop', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "delay": // 延时操作
-					alert(url + $scope.delayTime);
-					$http.get('/EMS/supervise/delay', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList,
-							delayTime: $scope.delayTime
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "deleteExam": // 撤销登录
-					alert(url);
-					$http.get('/EMS/supervise/deleteExam', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "manualAssign": // 强行交卷
-					alert(url);
-					$http.get('/EMS/supervise/manualAssign', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "restart": // 撤销交卷
-					alert(url);
-					$http.get('/EMS/supervise/restart', {
-						params: {
-							token: $window.sessionStorage.token,
-							uidList: uidList
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "roomChange": // 更换场次
-					alert(url);
-					$http.put('/EMS/supervise/roomChange', {
-						params: {
-							token: $window.sessionStorage.token,
-							uid: uidList,
-							roomNum: roomNum
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				case "seatChange": // 更换座位
-					alert(url + $scope.seatNum + $scope.seat);
-					$http.post('/EMS/supervise/seatChange', {
-						params: {
-							token: $window.sessionStorage.token,
-							uid: $scope.seat,
-							seatNum: $scope.seatNum
-						}
-					}).then(function successCallback(response) {
-						if (response.data.flag) {
-							refresh();
-						} else {
-							alert(response.data.detail)
-						}
-					}, function errorCallback(response) {
-					});
-					break;
-				default:
-					alert('考生状态错误！');
-			}
+				}
+			});
+
 
 		}
 

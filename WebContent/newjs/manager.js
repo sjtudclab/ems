@@ -6,39 +6,57 @@ angular
 				'managerCtrl',
 				function ($rootScope, $scope, $http, $window, $state) {
 
-        // var infoStatus = JSON
-        //     .parse($window.sessionStorage.infoStatus);
-        //  // 功能列表
-        //         $scope.operationMetaInfo = infoStatus.authorityList;
+        var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
+        // 功能列表
+        $scope.operationMetaInfo = adminStatus.authorityList;
+        // 登陆用户id
+        $scope.Rid = response.data.Rid;
+        // 控制标签显示
+        $scope.active = [];
+        // 控制标签页显示
+        $scope.display = [];
+        for (i in $scope.operationMetaInfo) {
+            $scope.active[i] = "";
+            $scope.display[i] = "none";
+        }
+        // 初始化显示标签0
+        $scope.index = 0;
+
+        // $http({
+        //     method: 'GET',
+        //     url: 'manger.json',
+        //     params: {
+        //         token: $window.sessionStorage.token
+        //     }
+        // })
+        //     .then(
+        //     function success(response) {
+        //         // 功能列表
+        //         $scope.operationMetaInfo = response.data.authorityList;
+        //         // 登陆用户id
+        //         $scope.rId = response.data.Rid;
+        //         // 控制标签显示
+        //         $scope.active = [];
+        //         // 控制标签页显示
+        //         $scope.display = [];
+        //         for (i in $scope.operationMetaInfo) {
+        //             $scope.active[i] = "";
+        //             $scope.display[i] = "none";
+        //         }
+        //         // 初始化显示标签0
+        //         $scope.index = 0;
+        //     })
+ // $http({
+        //     method: 'GET',
+        //     url: 'roominfo.json',
+        //     params: {
+        //         token: $window.sessionStorage.token
+        //     }
+        // })
 
         $http({
             method: 'GET',
-            url: 'manger.json',
-            params: {
-                token: $window.sessionStorage.token
-            }
-        })
-            .then(
-            function success(response) {
-                // 功能列表
-                $scope.operationMetaInfo = response.data.authorityList;
-                // 登陆用户id
-                $scope.rId = response.data.Rid;
-                // 控制标签显示
-                $scope.active = [];
-                // 控制标签页显示
-                $scope.display = [];
-                for (i in $scope.operationMetaInfo) {
-                    $scope.active[i] = "";
-                    $scope.display[i] = "none";
-                }
-                // 初始化显示标签0
-                $scope.index = 0;
-            })
-
-        $http({
-            method: 'GET',
-            url: 'roominfo.json',
+            url: '/EMS/admin/Refresh',
             params: {
                 token: $window.sessionStorage.token
             }
@@ -49,9 +67,9 @@ angular
                 $scope.roomsInfo = response.data;
                 $scope.roomMetaInfo = {
                     'roomId': '考场号',
-                    'rmLocate': '考场位置',
+                    'name': '考场位置',
                     'supervisor': '监考老师',
-                    'personNum': '考场人数',
+                    'size': '考场人数',
                     'status': '状态'
                 };
                 // 状态码转化成易读string
@@ -126,21 +144,25 @@ angular
                 }
             }
             // alert(uidList);
-            $http.get('/EMS/supervise/forceStop', {
+            $http.get('/EMS/admin/roomConfirm', {
+            // $http.get('info.json', {
                 params: {
                     token: $window.sessionStorage.token,
-                    uidList: uidList
+                    roomId: uidList
                 }
             }).then(function successCallback(response) {
                 var infoStatus = {};
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
                 //功能列表
-                infoStatus.authorityList = data.authorityList;
+                infoStatus.authorityList = response.data.authorityList;
                 // 考场号
                 infoStatus.roomId = uidList;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                $state.go('supervisor');
+                $window.open('#/supervisor');
+                // var url = 'supervisor';
+                // var urlHref = $state.href(url);
+                // window.open(mv.urlHref);
             }, function errorCallback(response) {
             });
 
@@ -189,7 +211,7 @@ angular
             /* alert(refresh); */
             $http({
                 method: 'GET',
-                url: '/EMS/supervise/Refresh',
+                url: '/EMS/admin/Refresh',
                 params: {
                     token: $window.sessionStorage.token
                 }
@@ -219,21 +241,22 @@ angular
                         + ' ' + response.statusText);
                 });
         }
-
+        //试题装载
         $scope.loadExam = function () {
-            
+
             $scope.loadStyle = 'cursor:wait';
             $scope.loadButtonDisabled = true;
-
-            $http.get('info.json', {
+            $http.get('/EMS/admin/load', {         
+            // $http.get('info.json', {
                 params: {
                     token: $window.sessionStorage.token
                 }
             }).then(function successCallback(response) {
                 console.log('success');
+                alert("试题装载成功");
                 $scope.loadStyle = 'cursor:default';
                 $scope.loadButtonDisabled = false;
             })
         }
-        
+
 				});

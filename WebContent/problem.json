@@ -1,0 +1,24 @@
+
+{
+    "authorityList": [{
+        "name": "科目信息",
+        "url": "subject"
+    },{
+        "name": "单选题",
+        "url": "single"
+    }, {
+        "name": "多选题",
+        "url": "multiple"
+    }, {
+        "name": "判断题",
+        "url": "judge"
+    }, {
+        "name": "匹配题",
+        "url": "match"
+    }, {
+        "name": "简答题",
+        "url": "simple"
+    }],
+    "token": "9b0df69a-f0c6-4a54-b786-5511151af556",
+    "Rid": 2
+}

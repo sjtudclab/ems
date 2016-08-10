@@ -1,41 +1,41 @@
 [
     {
         "roomId": 1,
-        "rmLocate": "软件大楼3号楼508",
+        "name": "软件大楼3号楼508",
         "supervisor": "小李",
-        "personNum": 30,
+        "size": 30,
         "status": 0,
         "detail": "进入考场"
     },
     {
         "roomId": 2,
-        "rmLocate": "软件大楼3号楼508",
+        "name": "软件大楼3号楼508",
         "supervisor": "小宋",
-        "personNum": 30,
+        "size": 30,
         "status": 0,
         "detail": "进入考场"
     },
     {
         "roomId": 3,
-        "rmLocate": "软件大楼3号楼508",
+        "name": "软件大楼3号楼508",
         "supervisor": "小赵",
-        "personNum": 30,
+        "size": 30,
         "status": 0,
         "detail": "进入考场"
     },
     {
         "roomId": 4,
-        "rmLocate": "软件大楼3号楼508",
+        "name": "软件大楼3号楼508",
         "supervisor": "小元",
-        "personNum": 30,
+        "size": 30,
         "status": 0,
         "detail": "进入考场"
     },
     {
         "roomId": 5,
-        "rmLocate": "软件大楼3号楼508",
+        "name": "软件大楼3号楼508",
         "supervisor": "小科",
-        "personNum": 30,
+        "size": 30,
         "status": 0,
         "detail": "进入考场"
     }

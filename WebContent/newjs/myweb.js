@@ -92,9 +92,25 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			'navbar@examImport' : {
 				templateUrl : 'tpls/navbar.html'
 			},
+			'subject@examImport' : {
+				templateUrl : 'tpls/examManage/subjectImport.html'
+			},
 			'single@examImport' : {
 				templateUrl : 'tpls/examManage/singleImport.html'
+			},
+			'multiple@examImport' : {
+				templateUrl : 'tpls/examManage/multipleImport.html'
+			},
+			'judge@examImport' : {
+				templateUrl : 'tpls/examManage/judgeImport.html'
+			},
+			'match@examImport' : {
+				templateUrl : 'tpls/examManage/matchImport.html'
+			},
+			'simple@examImport' : {
+				templateUrl : 'tpls/examManage/simpleImport.html'
 			}
+			
 		}
 	}).state('main', {
 		url : '/main/:active/:num/:type',
@@ -170,7 +186,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			}
 		}
 	}).state('finish', {
-		url : '/finish',
+		url : '/finish/:score/:scoreshow',
 		views : {
 			'' : {
 				templateUrl : 'tpls/finish.html'
