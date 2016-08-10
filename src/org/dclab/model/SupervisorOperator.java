@@ -41,18 +41,19 @@ public class SupervisorOperator {
 			SuperBean superBean=new SuperBean();
 			superBean.setRoomId(roomId);
 			List<Integer> uList=rcmapper.getUidLIstByRoomId(roomId);//获取该考场的考生准考证号list
-			System.out.println("考生list： "+uList);
 			Map<Integer, CandidateBean> map=new HashMap<>();
 			for(int uid :uList){
 				CheckBean checkBean=new CheckBean(roomId, uid);//暂时借用一下这个bean
 				map.put(uid, rcmapper.getUserByRoomId(checkBean));
 			}
+			superBean.setName(mapper.getNmaeByUid(i));
 			superBean.setCanMap(map);
 			superBean.setToken(idTokenMap.get(i));
-			superBean.setAuthorityList(amapper.getListByRid());
+			superBean.setAuthorityList(amapper.getListByRid(1));
 			superBean.setRid(1);
 			superBean.setFreeSeatList(rcmapper.getFreeSeatByRoomId(roomId));
 			tokenSuperMap.put(idTokenMap.get(i), superBean);
+			AdminBean.roomSuperBeanMap.put(roomId, superBean);//给管理员装填考场号和superbean的对应map
 		}
 		
 		sqlsession.close();

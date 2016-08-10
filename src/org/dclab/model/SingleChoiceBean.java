@@ -85,6 +85,10 @@ public class SingleChoiceBean implements Serializable{
 	public void setChoiceList(List<ChoicesBean> choiceList) {
 		this.choiceList = choiceList;
 	}
+	@Override
+	public String toString() {
+		return "SingleChoiceBean [id=" + id +  ", choiceId=" + choiceId  + "]";
+	}
 	
 
 }

@@ -50,12 +50,12 @@ public class SupervisorService {
 			return new SuperRespond(false, "目标座位已有人");
 	}
 	//监考操作之延时操作
-	public SuperRespond delay(List<Integer> uidList,int delayTime){//delayTime是延迟的秒数
+	public SuperRespond delay(List<Integer> uidList,int delayTime){//delayTime是延迟的分钟
 		for(int i : uidList)
 		{
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamBean examBean=ExamOperator.tokenExamMap.get(token);
-			examBean.setDuration(examBean.getDuration()+delayTime);
+			examBean.setExtraTime(examBean.getExtraTime()+delayTime*60);
 		}
 		return new SuperRespond(true);
 	}

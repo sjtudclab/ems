@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.dclab.mapping.choiceMapper">
+<insert id="add" parameterType="org.dclab.model.ChoicesBean" useGeneratedKeys="true" keyProperty="choiceId">
+  insert into choice(content,topicId) values(#{content}, #{topicId})
+</insert>
+ </mapper>

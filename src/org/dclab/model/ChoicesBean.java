@@ -8,6 +8,15 @@ package org.dclab.model;
 public class ChoicesBean {
 	private int choiceId;
 	private String content;
+	private int topicId;
+	
+	
+	public int getTopicId() {
+		return topicId;
+	}
+	public void setTopicId(int topicId) {
+		this.topicId = topicId;
+	}
 	public int getChoiceId() {
 		return choiceId;
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.CorrectAnswerMapperI;
@@ -145,6 +146,8 @@ public class GradingService {
 		List<CorrectAnswerBean> correctAnswerBeans = camapper.getCorrectAnswer();	//TO DO: mapping from DB
 		sqlSession.close();
 		
+		System.out.println(correctAnswerBeans);
+		System.out.println("\n candidate answer： "+examBean.getSingleChoiceList());
 		Map<Integer, CorrectAnswerBean> correctAnswerMap = new HashMap<Integer, CorrectAnswerBean>(128);
 		for (CorrectAnswerBean correctAnswerBean : correctAnswerBeans) {
 			correctAnswerMap.put(correctAnswerBean.getTopicId(), correctAnswerBean);	//for easily fetching
@@ -154,10 +157,10 @@ public class GradingService {
 		for(SingleChoiceBean singleChoice : examBean.getSingleChoiceList()){
 			int topicId = singleChoice.getId();
 			
-			singleChoiceScore += gradeSingleChoice(singleChoice.getId(), correctAnswerMap.get(topicId));
+			singleChoiceScore += gradeSingleChoice(singleChoice.getChoiceId(), correctAnswerMap.get(topicId));
 			
 		}
-		
+		System.out.println("single choice grade: "+singleChoiceScore);
 		//judgment grading
 		for(JudgementBean judgementBean : examBean.getJudgementList()){
 			int topicId = judgementBean.getId();
@@ -177,8 +180,14 @@ public class GradingService {
 		//matching grading
 		for(MatchingBean matchingBean : examBean.getMatchingList()){
 			int topicId = matchingBean.getId();
+			//get answer map, ordered by item id
+			List<Integer> matchList=new ArrayList<>();
+			TreeMap<Integer, Integer> orderedChoiceMap = new TreeMap<>(matchingBean.getChoiceIdMap());
 			
-			matchingScore += gradeMatching((List<Integer>)matchingBean.getChoiceIdMap().values(), correctAnswerMap.get(topicId));
+			matchList.addAll(orderedChoiceMap.values());	//key is item id, value is candidate's answer
+			
+			System.out.println("Matching Topic "+topicId+" : answers: " +matchList);
+			matchingScore += gradeMatching(matchList, correctAnswerMap.get(topicId));
 		}
 		
 		return singleChoiceScore + matchingScore + multiChoicesScore + judgeChoiceScore;

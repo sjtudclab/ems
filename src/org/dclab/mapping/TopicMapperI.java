@@ -2,7 +2,10 @@ package org.dclab.mapping;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.dclab.model.ContentBean;
 import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
@@ -30,5 +33,11 @@ public interface TopicMapperI {
 	
 	@Select("select id,content from topic where typeId=4 and subjectId=#{id}")
 	public List<shortAnswerBean> getShortBeanBySubId(int id);
+	
+/*	@Insert("INSERT INTO topic (content,typeId,subjectId) VALUES (content,typeId,subjectId)")
+	@SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)
+	@Select("select id")
+	public int add(@Param(value="content")String content,@Param(value="typeId")int typeId,
+			@Param(value="currentSubjectId")int subjectId);*/
 	
 }

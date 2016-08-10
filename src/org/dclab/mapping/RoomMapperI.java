@@ -1,6 +1,9 @@
 package org.dclab.mapping;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
+import org.dclab.model.RoomInfoBean;
 
 /**
  * @author alvis
@@ -10,4 +13,7 @@ import org.apache.ibatis.annotations.Select;
 public interface RoomMapperI {
 	@Select("select id from room where Uid=#{Uid}")
 	public int getRoomIdByUid(int Uid);
+	
+	@Select("SELECT id as roomId,name,size,Uid FROM `room`")
+	public List<RoomInfoBean> getRoomInfo();
 }

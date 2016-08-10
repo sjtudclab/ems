@@ -12,6 +12,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
 import org.dclab.mapping.SessionMapperI;
+import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.utils.MyBatisUtil;
@@ -44,15 +45,14 @@ public class ExamOperator {
 	public static void load(int sid/*场次的id*/){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		UserMapperI userMapper=sqlSession.getMapper(UserMapperI.class);
-		SessionMapperI subMapper=sqlSession.getMapper(SessionMapperI.class);
+		SessionMapperI sessionMapper=sqlSession.getMapper(SessionMapperI.class);
 	    TopicMapperI topicMapper=sqlSession.getMapper(TopicMapperI.class);
 	    ChoiceMapperI choiceMapper=sqlSession.getMapper(ChoiceMapperI.class);
 	    MatchItemMapperI matchMapper=sqlSession.getMapper(MatchItemMapperI.class);
+	    SubjectMapperI subMapper=sqlSession.getMapper(SubjectMapperI.class);
 		
-	    
-		ExamBean.setEXAM_TIME(subMapper.getDurationById(sid));//设置考试时长，所有考生是一样的
-		
-		int subId=subMapper.getSubIdById(sid);
+	    int subId=sessionMapper.getSubIdById(sid);
+		ExamBean.setEXAM_TIME(subMapper.getDurationBySubId(subId));//设置考试时长，所有考生是一样的
 	    
 	    boolean flag=false;//因为多媒体资源的前缀path也循环叠加了5次，所以用这个flag控制
 	    
@@ -164,9 +164,8 @@ public class ExamOperator {
 	    for(shortAnswerBean bean: salist){
 	    	bean.setShortNum(salist.size());	
 	    }
-	    System.out.println("成功取出题目");
 	    int count=singleLists.get(0).size()+multiLists.get(0).size()+matchLists.get(0).size()+jlist.size()+salist.size();
-	    
+	    ExamBean.setTopicNum(count);
 		List<Integer> uidList=userMapper.getUid();
 		for(int id:uidList){
 			idTokenMap.put(id, TokenGenerator.generate());
@@ -178,11 +177,10 @@ public class ExamOperator {
 			exambean.setMatchingList(matchLists.get(i));
 			exambean.setJudgementList(jlist);
 			exambean.setShortAnswerList(salist);
-			exambean.setTopicNum(count);
+			
 			tokenExamMap.put(idTokenMap.get(id), exambean);
 		}
 
-		System.out.println("成功装载到map");
 		sqlSession.close();
 		
 	}
@@ -190,7 +188,13 @@ public class ExamOperator {
 	/**
 	 * 交卷之后将考生答题信息写入数据库
 	 */
-	public static void persist(){
+	public static void persist(UUID token){
+		ExamBean examBean=ExamOperator.tokenExamMap.get(token);
+		int uid=examBean.getUid();
+		List<CandidateAnswerBean> candidateList=new ArrayList<>();
 		
+		for(SingleChoiceBean sbean: examBean.getSingleChoiceList()){
+			new CandidateAnswerBean(uid,sbean.getId(),String.valueOf(sbean.getChoiceId()));
+		}
 	}
 }

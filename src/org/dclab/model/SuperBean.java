@@ -19,14 +19,29 @@ public class SuperBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -8957618769067770034L;
 	private int roomId;//考场号
+	private String name;
 	private Map<Integer, CandidateBean> canMap;//该考场的考生信息list
 	private List<AuthorityBean> authorityList;//权限列表
 	private List<Integer> freeSeatList;//考场空闲座位list
 	private UUID token;
 	private int Rid;//角色标识
+	private int sign;//检测监考老师是否登录的标志
 	
 	
 	
+	
+	public int getSign() {
+		return sign;
+	}
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public Map<Integer, CandidateBean> getCanMap() {
 		return canMap;
 	}

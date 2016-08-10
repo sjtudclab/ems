@@ -344,7 +344,7 @@ public class ExamService {
 	public int getTime(ExamBean exambean){
 		if(exambean.getStartTime()!=0)
 		{
-			int time=(int) (exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000);
+			int time=(int) (exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000+exambean.getExtraTime());
 			return time;
 		}
 		else

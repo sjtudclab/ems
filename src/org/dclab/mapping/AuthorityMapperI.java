@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Select;
 import org.dclab.model.AuthorityBean;
 
 public interface AuthorityMapperI {
-	@Select("select name,url from authority where Rid=1")
-	public List<AuthorityBean> getListByRid();//用rid获得包含权限名称和url的对象的list
+	@Select("select name,url from authority where Rid=#{rid}")
+	public List<AuthorityBean> getListByRid(int rid);//用rid获得包含权限名称和url的对象的list
 }
