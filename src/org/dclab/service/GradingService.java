@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.CorrectAnswerMapperI;
@@ -179,14 +180,13 @@ public class GradingService {
 		//matching grading
 		for(MatchingBean matchingBean : examBean.getMatchingList()){
 			int topicId = matchingBean.getId();
-			//把map转化为list，，
+			//get answer map, ordered by item id
 			List<Integer> matchList=new ArrayList<>();
-			for(Integer key : matchingBean.getChoiceIdMap().keySet())
-			{
-				matchList.add(matchingBean.getChoiceIdMap().get(key));
-			}
+			TreeMap<Integer, Integer> orderedChoiceMap = new TreeMap<>(matchingBean.getChoiceIdMap());
 			
-			//********
+			matchList.addAll(orderedChoiceMap.values());	//key is item id, value is candidate's answer
+			
+			System.out.println("Matching Topic "+topicId+" : answers: " +matchList);
 			matchingScore += gradeMatching(matchList, correctAnswerMap.get(topicId));
 		}
 		
