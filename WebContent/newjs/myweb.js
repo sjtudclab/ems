@@ -1,5 +1,5 @@
 var routingDemoApp = angular.module('routingDemoApp', [ 'ui.router',
-		'ui.bootstrap', 'formlogin', 'demo0', 'checkup', 'supervisor','manager'])
+		'ui.bootstrap', 'formlogin', 'demo0', 'checkup', 'supervisor','manager','examManage'])
 routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider.state('index', {
@@ -91,6 +91,9 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			},
 			'navbar@examImport' : {
 				templateUrl : 'tpls/navbar.html'
+			},
+			'single@examImport' : {
+				templateUrl : 'tpls/examManage/singleImport.html'
 			}
 		}
 	}).state('main', {

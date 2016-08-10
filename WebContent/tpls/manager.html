@@ -16,6 +16,7 @@
             <div style="height: 5%">
                 <!--<span>总人数：{{roomsInfo.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
                 <span class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right"> 
+                <button style="{{loadStyle}}" ng-disabled="loadButtonDisabled" ng-click="loadExam()">button</button>
                     <!--<label ng-bind="'已选择:'+selectedNum+'/'+roomsInfo.length"></label>-->
 					<!--<button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
 					<button type="button" class="btn btn-info" ng-click="cancelAll()">取消选择</button>-->
@@ -24,6 +25,8 @@
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <tr>
+
+                        
                         <th ng-repeat="(key,value) in roomMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}} <span class="glyphicon glyphicon-sort"></span>
                         </th>
                         <th>选择</th>

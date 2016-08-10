@@ -6,7 +6,7 @@
 			<a ng-click="superRequest(x.url);$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
 		</li>
 	</ul>
-		<div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}}">
+	<div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}}">
 		<div class='workingSpace'>
 			<div style="margin: 2% auto; width: 80%; text-align: center" ui-view="{{x.url}}">
 				<!-- <p ng-bind="x.url"></p> -->
