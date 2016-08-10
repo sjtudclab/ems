@@ -45,5 +45,10 @@ public class CorrectAnswerBean {
 	public void setPoints(String points) {
 		this.points = points;
 	}
+	@Override
+	public String toString() {
+		return "CorrectAnswer [id=" + id + ", topicId=" + topicId + ", choiceId=" + choiceId + ", points=" + points
+				+ "]";
+	}
 	
 }

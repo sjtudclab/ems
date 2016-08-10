@@ -17,12 +17,14 @@ public class ExamBean implements Serializable{
 	private static final long	serialVersionUID= 15493198966L;
 	private static int EXAM_TIME;	//整场考试的时长，记得加载时初始化 
 	//剩余时长, 装填试卷时将其初始化，每次写log时，获取前台剩余时间，重新setDuration，延时或者减少时间时直接修改这个值
-	private int duration;	//该考生剩余的时长，用于灾备
+	private int extraTime;	//额外添加的时间，用于延时操作
 	private long startTime;//该考生开始考试的时间
 	private int uid; //用户准考证号
 	private int sid;//考试科目id
 	
-	private int topicNum;
+	private int mark;//考生的成绩
+	
+	private static int topicNum;
 	private HashSet<Integer> finishTopic;
 	
 	private boolean ifLogin;//考生是否登录了，主要是用在监考教师的界面显示上
@@ -40,6 +42,16 @@ public class ExamBean implements Serializable{
 	
 	
 	
+	public int getMark() {
+		return mark;
+	}
+
+
+	public void setMark(int mark) {
+		this.mark = mark;
+	}
+
+
 	public List<shortAnswerBean> getShortAnswerList() {
 		return shortAnswerList;
 	}
@@ -72,8 +84,8 @@ public class ExamBean implements Serializable{
 	}
 
 
-	public void setTopicNum(int topicNum) {
-		this.topicNum = topicNum;
+	public static void setTopicNum(int topicNum) {
+		topicNum = topicNum;
 	}
 
 	public static int getEXAM_TIME() {
@@ -189,13 +201,17 @@ public class ExamBean implements Serializable{
 		this.judgementList = judgementList;
 	}
 
-	public int getDuration() {
-		return duration;
+
+
+	public int getExtraTime() {
+		return extraTime;
 	}
 
-	public void setDuration(int duration) {
-		this.duration = duration;
+
+	public void setExtraTime(int extraTime) {
+		this.extraTime = extraTime;
 	}
+
 
 	public boolean isFinished() {
 		return isFinished;

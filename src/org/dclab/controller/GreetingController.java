@@ -28,8 +28,8 @@ public class GreetingController {
 	@RequestMapping("/greeting")
 	public Object greeting(@RequestParam(value = "name") int name) {
 		
-		ExamOperator.load(1);
-		SupervisorOperator.load();
+/*		ExamOperator.load(1);
+		SupervisorOperator.load();*/
 		
 		return userService.login(name);
 	}

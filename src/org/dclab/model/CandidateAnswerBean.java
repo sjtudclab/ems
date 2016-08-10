@@ -15,6 +15,12 @@ public class CandidateAnswerBean {
 	private int candidate_id ;
 	private int topicId;
 	private String choiceId;
+	
+	public CandidateAnswerBean(int candidate_id, int topicId, String choiceId) {
+		this.candidate_id = candidate_id;
+		this.topicId = topicId;
+		this.choiceId = choiceId;
+	}
 	public int getCandidate_id() {
 		return candidate_id;
 	}

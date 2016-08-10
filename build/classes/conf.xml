@@ -36,6 +36,10 @@
         <mapper class="org.dclab.mapping.RoomMapperI"/>
         <mapper class="org.dclab.mapping.AuthorityMapperI"/> 
         <mapper class="org.dclab.mapping.CorrectAnswerMapperI"/>
+        <mapper class="org.dclab.mapping.SubjectMapperI"/>
+        <mapper class="org.dclab.mapping.SubTypeMapperI"/>
+        <mapper resource="org/dclab/mapping/topicMapper.xml"/>
+         <mapper resource="org/dclab/mapping/choiceMapper.xml"/>
     </mappers>
     
 </configuration>

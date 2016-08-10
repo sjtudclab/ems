@@ -22,6 +22,9 @@ public interface UserMapperI {
 	public List<Integer> getUidByRid();
 	
 	
+	@Select("SELECT Uname  FROM `user` WHERE Uid=#{id}")
+	public String getNmaeByUid(int id);
+	
 /*     //使用@Insert注解指明add方法要执行的SQL
 	 @Insert("insert into users(name, age) values(#{name}, #{age})")
 	 public int add(User user);

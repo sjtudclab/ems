@@ -145,6 +145,8 @@ public class GradingService {
 		List<CorrectAnswerBean> correctAnswerBeans = camapper.getCorrectAnswer();	//TO DO: mapping from DB
 		sqlSession.close();
 		
+		System.out.println(correctAnswerBeans);
+		System.out.println("\n candidate answer： "+examBean.getSingleChoiceList());
 		Map<Integer, CorrectAnswerBean> correctAnswerMap = new HashMap<Integer, CorrectAnswerBean>(128);
 		for (CorrectAnswerBean correctAnswerBean : correctAnswerBeans) {
 			correctAnswerMap.put(correctAnswerBean.getTopicId(), correctAnswerBean);	//for easily fetching
@@ -154,10 +156,10 @@ public class GradingService {
 		for(SingleChoiceBean singleChoice : examBean.getSingleChoiceList()){
 			int topicId = singleChoice.getId();
 			
-			singleChoiceScore += gradeSingleChoice(singleChoice.getId(), correctAnswerMap.get(topicId));
+			singleChoiceScore += gradeSingleChoice(singleChoice.getChoiceId(), correctAnswerMap.get(topicId));
 			
 		}
-		
+		System.out.println("single choice grade: "+singleChoiceScore);
 		//judgment grading
 		for(JudgementBean judgementBean : examBean.getJudgementList()){
 			int topicId = judgementBean.getId();
@@ -177,8 +179,15 @@ public class GradingService {
 		//matching grading
 		for(MatchingBean matchingBean : examBean.getMatchingList()){
 			int topicId = matchingBean.getId();
+			//把map转化为list，，
+			List<Integer> matchList=new ArrayList<>();
+			for(Integer key : matchingBean.getChoiceIdMap().keySet())
+			{
+				matchList.add(matchingBean.getChoiceIdMap().get(key));
+			}
 			
-			matchingScore += gradeMatching((List<Integer>)matchingBean.getChoiceIdMap().values(), correctAnswerMap.get(topicId));
+			//********
+			matchingScore += gradeMatching(matchList, correctAnswerMap.get(topicId));
 		}
 		
 		return singleChoiceScore + matchingScore + multiChoicesScore + judgeChoiceScore;

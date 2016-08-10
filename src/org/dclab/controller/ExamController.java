@@ -123,7 +123,9 @@ public class ExamController {
 	public int handin(@RequestParam(value="token")UUID token){
 			ExamBean exambean=examService.getExambeanByToken(token);
 			exambean.setFinished(true);
-			return gradingService.gradePaper(exambean);
+			int mark = gradingService.gradePaper(exambean);
+			System.out.println("mark: "+mark);
+			return mark;
 	}
 	
 	@RequestMapping("/getTime")

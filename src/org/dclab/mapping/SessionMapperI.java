@@ -11,14 +11,13 @@ import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
 public interface SessionMapperI {
 	//获取session对象
-	@Select("select * from session where id=#{id}")
+	@Select("SELECT `name`,startTime,session.subId,earliestSubmit,latestLogin FROM `session` INNER JOIN `subject` on session.subId=subject.subId WHERE id=#{id}")
 	public Session getById(int id);
 	//由id取得session的name
 	@Select("select name from session where id=#{id}")
 	public String getNameById(int id);
-	//获得这场考试的标准考试时长
-	@Select("SELECT  duration FROM `session` WHERE id=#{id}")
-	public int getDurationById(int id);
+
+	
 	//获得这场考试的开始时间
 	@Select("select startTime from session where id=#{id}")
 	public Timestamp getStartTimeById(int id);
