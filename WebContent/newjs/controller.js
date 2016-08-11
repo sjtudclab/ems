@@ -64,7 +64,7 @@ formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $w
                 default:
                     alert(data.detail);
             }
-             
+
             /*  if (data.Rid == 0) {
                  
               } else {
@@ -74,7 +74,7 @@ formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $w
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误');
+            alert('服务器拒绝访问');
         });
     };
 });
@@ -216,37 +216,63 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("单选题succeed");
-
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
+            params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("多选题succeed");
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("判断题succeed");
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
-
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("匹配提succeed");
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("简答题succeed");
-
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
+
     }
 
     $scope.submit_confirm = function () {
@@ -256,13 +282,18 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
             /*alert("单选题succeed");*/
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
         });
         $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
+            params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
         }).success(function (data, status, headers, config) {
             /*alert("多选题succeed");*/
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
 
         });
@@ -270,13 +301,18 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
         }).success(function (data, status, headers, config) {
             /*alert("判断题succeed");*/
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
         }).success(function (data, status, headers, config) {
             /*alert("匹配提succeed");*/
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
 
         });
@@ -284,6 +320,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
         }).success(function (data, status, headers, config) {
             /*alert("简答题succeed");*/
+            if (data.flag == false) {
+                alert(data.detail);
+            }
 
 
         });
@@ -316,6 +355,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
                                     //     scoreshow='none';
                                     // }
                                     $state.go("finish", { score: data, scoreshow: scoreshow });
+                                    if (data.flag == false) {
+                                        alert(data.detail);
+                                    }
 
                                 });
 
@@ -348,6 +390,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
         $http.get('/EMS/exam/getTime', {
             params: { token: $window.sessionStorage.token }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             second = data;
             timePromise = $interval(function () {
                 if (second < 0) {
@@ -360,13 +405,19 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
                     }).success(function (data, status, headers, config) {
                         // alert("单选题succeed");
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
 
 
                     });
                     $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
+                        params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
                     }).success(function (data, status, headers, config) {
                         // alert("多选题succeed");
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
 
 
                     });
@@ -374,6 +425,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
                     }).success(function (data, status, headers, config) {
                         // alert("判断题succeed");
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
 
 
                     });
@@ -381,13 +435,18 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
                     }).success(function (data, status, headers, config) {
                         // alert("匹配提succeed");
-
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
 
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
                     }).success(function (data, status, headers, config) {
                         // alert("简答题succeed");
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
 
 
                     });
@@ -396,6 +455,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         params: { token: $window.sessionStorage.token }
                     }).success(function (data, status, headers, config) {
                         /*alert("简答题succeed");*/
+                        if (data.flag == false) {
+                            alert(data.detail);
+                        }
                         alert("考试时间结束！");
                         var scoreshow = "block";
                         // if(data.flag){
@@ -414,6 +476,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                             params: { token: $window.sessionStorage.token }
                         }).success(function (data, status, headers, config) {
                             second = data;
+                            if (data.flag == false) {
+                                alert(data.detail);
+                            }
                         })
                     }
                     hour = Math.floor(second / 3600);
@@ -423,13 +488,13 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                     $scope.minute = minute;
                     $scope.time = miao;
                     second--;
-                    
+
                 }
             }, 1000);
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+            alert('服务器拒绝访问');
         });
 
     }
@@ -461,7 +526,9 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
             /* $http.get('single.json', {*/
             params: { typeId: 0, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             var singleStatus = JSON.parse($window.sessionStorage.problemStatus);
 
             $scope.totalItems = data.singleNum;
@@ -542,7 +609,7 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('tab1出错！');
+            alert('服务器拒绝访问');
         });
 
     } else {
@@ -607,7 +674,9 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
                 params: { typeId: 0, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 //试题
-
+                if (data.flag == false) {
+                    alert(data.detail);
+                }
                 if (data.audio) {
                     $scope.audiohide = "block";
                     $scope.audio = data.audio;
@@ -685,7 +754,7 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
 
             }).error(function (data, status, headers, config) {
                 //处理错误  
-                alert('用户不存在或密码错误！');
+               alert('服务器拒绝访问');
             });
         }
     }
@@ -711,6 +780,9 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
             /*   $http.get('single0.json', {*/
             params: { token: $window.sessionStorage.token, typeId: 0, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.singleNum;
             $scope.nid = $scope.currentPage;
@@ -787,7 +859,7 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+           alert('服务器拒绝访问');
         });
     };
 
@@ -854,7 +926,9 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
             /* $http.get('multiple.json', {*/
             params: { typeId: 1, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
             $scope.totalItems = data.multiNum;
             $scope.currentPage = $scope.nid;
@@ -930,7 +1004,7 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('tab1出错！');
+            alert('服务器拒绝访问');
         });
 
     } else {
@@ -990,6 +1064,9 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
                 /*  $http.get('multiple.json', {*/
                 params: { typeId: 1, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    alert(data.detail);
+                }
                 //试题
                 $scope.totalItems = data.multiNum;
                 $scope.currentPage = 1;
@@ -1067,7 +1144,7 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
 
             }).error(function (data, status, headers, config) {
                 //处理错误  
-                alert('用户不存在或密码错误！');
+               alert('服务器拒绝访问');
             });
 
         }
@@ -1086,6 +1163,9 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
             /*   $http.get('multiple.json', {*/
             params: { token: $window.sessionStorage.token, typeId: 1, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.multiNum;
             $scope.nid = $scope.currentPage;
@@ -1154,7 +1234,7 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+           alert('服务器拒绝访问');
         });
 
     };
@@ -1204,6 +1284,9 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
             /* $http.get('judg.json', {*/
             params: { typeId: 2, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.judgeNum;
             $scope.currentPage = $scope.nid;
@@ -1277,7 +1360,7 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('tab1出错！');
+            alert('服务器拒绝访问');
         });
 
     } else {
@@ -1335,6 +1418,9 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
                 /* $http.get('judg.json', {*/
                 params: { typeId: 2, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    alert(data.detail);
+                }
                 //试题
                 $scope.totalItems = data.judgeNum;
                 $scope.currentPage = 1;
@@ -1410,7 +1496,7 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
 
             }).error(function (data, status, headers, config) {
                 //处理错误  
-                alert('用户不存在或密码错误！');
+               alert('服务器拒绝访问');
             });
 
 
@@ -1438,6 +1524,9 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
             /*$http.get('judg0.json', {*/
             params: { token: $window.sessionStorage.token, typeId: 2, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.judgeNum;
 
@@ -1509,7 +1598,7 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+           alert('服务器拒绝访问');
         });
 
     };
@@ -1560,6 +1649,9 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
             /*  $http.get('match.json', {*/
             params: { typeId: 3, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.matchNum;
             $scope.currentPage = $scope.nid;
@@ -1634,7 +1726,7 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('tab1出错！');
+           alert('服务器拒绝访问');
         });
 
     } else {
@@ -1691,6 +1783,9 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
                 /*$http.get('match.json', {*/
                 params: { typeId: 3, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    alert(data.detail);
+                }
                 //试题
                 $scope.totalItems = data.matchNum;
                 $scope.currentPage = 1;
@@ -1768,7 +1863,7 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
 
             }).error(function (data, status, headers, config) {
                 //处理错误  
-                alert('用户不存在或密码错误！');
+               alert('服务器拒绝访问');
             });
         }
 
@@ -1800,6 +1895,9 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
             /* $http.get('match0.json', {*/
             params: { token: $window.sessionStorage.token, typeId: 3, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.matchNum;
             $scope.nid = $scope.currentPage;
@@ -1873,7 +1971,7 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+           alert('服务器拒绝访问');
         });
 
     };
@@ -1924,7 +2022,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             /* $http.get('match.json', {*/
             params: { typeId: 4, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
-
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             $scope.totalItems = data.shortNum;
             $scope.currentPage = $scope.nid;
             // 试题
@@ -1992,7 +2092,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('tab1出错！');
+           alert('服务器拒绝访问');
         });
 
     } else {
@@ -2049,6 +2149,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 /* $http.get('judg.json', {*/
                 params: { typeId: 4, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    alert(data.detail);
+                }
                 $scope.totalItems = data.shortNum;
                 $scope.currentPage = 1;
                 //试题
@@ -2118,7 +2221,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
             }).error(function (data, status, headers, config) {
                 //处理错误  
-                alert('用户不存在或密码错误！');
+                alert('服务器拒绝访问');
             });
         }
 
@@ -2143,6 +2246,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             /*   $http.get('judg0.json', {*/
             params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, answer: answer, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            }
             // 试题
             $scope.totalItems = data.shortNum;
 
@@ -2211,7 +2317,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-            alert('用户不存在或密码错误！');
+           alert('服务器拒绝访问');
         });
 
     };
@@ -2271,6 +2377,9 @@ checkup.controller("Ctab1", function ($scope, $http, $state, $window, $rootScope
     $http.get('/EMS/exam/check', {
         params: { token: $window.sessionStorage.token, typeId: 0 }
     }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        }
         // alert(data.checkList[0].status);
         /*var lists=[];
         for (var i = 0; i < 100; i++) {
@@ -2288,7 +2397,7 @@ checkup.controller("Ctab1", function ($scope, $http, $state, $window, $rootScope
 
     }).error(function (data, status, headers, config) {
         //处理错误  
-        alert('用户不存在或密码错误！');
+       alert('服务器拒绝访问');
     });
 
 
@@ -2307,6 +2416,9 @@ checkup.controller("Ctab2", function ($scope, $http, $state, $window) {
     $http.get('/EMS/exam/check', {
         params: { token: $window.sessionStorage.token, typeId: 1 }
     }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        }
         $scope.lists = data.checkList;
         /*  $rootScope.topicNum=data.topicNum;
           $rootScope.finishNum=data.finishNum;
@@ -2314,7 +2426,7 @@ checkup.controller("Ctab2", function ($scope, $http, $state, $window) {
 
     }).error(function (data, status, headers, config) {
         //处理错误  
-        alert('用户不存在或密码错误！');
+       alert('服务器拒绝访问');
     });
 
 
@@ -2332,6 +2444,9 @@ checkup.controller("Ctab3", function ($scope, $http, $state, $window) {
     $http.get('/EMS/exam/check', {
         params: { token: $window.sessionStorage.token, typeId: 2 }
     }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        }
         $scope.lists = data.checkList;
         /* $rootScope.topicNum=data.topicNum;
          $rootScope.finishNum=data.finishNum;
@@ -2339,7 +2454,7 @@ checkup.controller("Ctab3", function ($scope, $http, $state, $window) {
 
     }).error(function (data, status, headers, config) {
         //处理错误  
-        alert('用户不存在或密码错误！');
+        alert('服务器拒绝访问');
     });
 
 
@@ -2357,6 +2472,9 @@ checkup.controller("Ctab4", function ($scope, $http, $state, $window) {
     $http.get('/EMS/exam/check', {
         params: { token: $window.sessionStorage.token, typeId: 3 }
     }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        }
         $scope.lists = data.checkList;
         /* $rootScope.topicNum=data.topicNum;
          $rootScope.finishNum=data.finishNum;
@@ -2364,7 +2482,7 @@ checkup.controller("Ctab4", function ($scope, $http, $state, $window) {
 
     }).error(function (data, status, headers, config) {
         //处理错误  
-        alert('用户不存在或密码错误！');
+        alert('服务器拒绝访问');
     });
 
 
@@ -2382,6 +2500,9 @@ checkup.controller("Ctab5", function ($scope, $http, $state, $window) {
     $http.get('/EMS/exam/check', {
         params: { token: $window.sessionStorage.token, typeId: 4 }
     }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        }
         $scope.lists = data.checkList;
         /* $rootScope.topicNum=data.topicNum;
          $rootScope.finishNum=data.finishNum;
@@ -2389,7 +2510,7 @@ checkup.controller("Ctab5", function ($scope, $http, $state, $window) {
 
     }).error(function (data, status, headers, config) {
         //处理错误  
-        alert('用户不存在或密码错误！');
+        alert('服务器拒绝访问');
     });
 
 
