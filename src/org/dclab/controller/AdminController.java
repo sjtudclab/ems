@@ -1,6 +1,10 @@
 package org.dclab.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +79,12 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/addSubject")
-	public SuperRespond addSubject(/*@RequestParam UUID token, */@RequestParam String name,@RequestParam int duration,
+	public SuperRespond addSubject(@RequestParam UUID token, @RequestParam String name,@RequestParam int duration,
 			@RequestParam int earliestSubmit,@RequestParam int latestLogin,@RequestParam String map)
 	{
-		/*if(AdminBean.adminTokenMap.containsValue(token))
-		{*/
+
+		if(AdminBean.adminTokenMap.containsValue(token))
+		{
 			ObjectMapper mapper = new ObjectMapper();
 			Map<Integer, String> map1=new HashMap<>();
 			try {
@@ -94,16 +99,36 @@ public class AdminController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			};
-			System.out.println(map1);
 			return adminService.subjectAdd(name, duration, earliestSubmit, latestLogin, map1);
-	/*	}
+		}
 		else
-			return new SuperRespond(false, "无此权限");*/
+			return new SuperRespond(false, "无此权限");
 	}
 	
-/*	@RequestMapping("/addTopic")
-	public int addTopic(String content,int typeId)
+	@RequestMapping("/addTopic")
+	public SuperRespond addTopic(@RequestParam UUID token, @RequestParam String content,@RequestParam String choice,
+			@RequestParam List<Integer> List,@RequestParam int typeId)
 	{
-		return adminService.TopicAdd(content, typeId);
-	}*/
+		if(AdminBean.adminTokenMap.containsValue(token))
+		{
+			ObjectMapper mapper = new ObjectMapper();
+			Map<Integer, String> map=new HashMap<>();
+			try {
+				map=mapper.readValue(choice, new TypeReference<Map<Integer, String>>(){});
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+			
+			return adminService.TopicAdd(content, map, List, typeId);
+		}
+		else
+			return new SuperRespond(false, "无此权限");
+	}
 }

@@ -16,26 +16,26 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	private String content;//题干
 	private boolean ifCheck;//检查标记
 	private String answer;//考生答案
-	private static int shortNum;//存储简答题数目
+	private int shortNum;//存储简答题数目
 	
 	public ShortAnswerBean(){}
 	
-	public ShortAnswerBean(int id, String content){
+	public ShortAnswerBean(int id,int shortNum,String content){
 		this.id		=	id;
 		this.content=	content;
-		
+		this.shortNum=	shortNum;
 	}
 	
 	@Override
 	public Object clone(){
 		
-		return new ShortAnswerBean(this.id, this.content);
+		return new ShortAnswerBean(this.id,this.shortNum, this.content);
 	}
-	public static int getShortNum() {
+	public int getShortNum() {
 		return shortNum;
 	}
-	public static void setShortNum(int shortNum) {
-		ShortAnswerBean.shortNum = shortNum;
+	public void setShortNum(int shortNum) {
+		this.shortNum = shortNum;
 	}
 	public int getId() {
 		return id;

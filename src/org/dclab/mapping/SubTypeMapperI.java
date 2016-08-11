@@ -9,6 +9,6 @@ public interface SubTypeMapperI {
 	public int add(@Param(value="typeId")int typeId,@Param(value="subId")int subId,@Param(value="points")String points);
 	
 	
-	@Select("SELECT points FROM `subject_type` where typeId=#{id}")
-	public String getPointsByType(int id);
+	@Select("SELECT points FROM `subject_type` where typeId=#{typeId} and subId=#{currentSubjectId}")
+	public String getPointsByType(@Param(value="typeId")int typeId,@Param(value="currentSubjectId")int currentSubjectId);
 }

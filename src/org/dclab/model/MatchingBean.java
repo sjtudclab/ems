@@ -20,7 +20,7 @@ public class MatchingBean implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1445501220162322852L;
-	private static int matchNum;//匹配题数目
+	private int matchNum;//匹配题数目
 	private int id;//整个题目的id
 	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
@@ -32,7 +32,7 @@ public class MatchingBean implements Serializable, Cloneable {
 	
 	public MatchingBean(){}
 	
-	public MatchingBean(int id, List<ContentBean> contents, List<ChoicesBean> choices, String img, String audio, String video){
+	public MatchingBean(int id,int matchNum, List<ContentBean> contents, List<ChoicesBean> choices, String img, String audio, String video){
 		this.id				=	id;
 		this.contentList	=	contents;
 		this.choiceList		=	choices;
@@ -40,12 +40,13 @@ public class MatchingBean implements Serializable, Cloneable {
 		this.audio			=	audio;
 		this.video			=	video;
 		this.choiceIdMap	= 	new HashMap<Integer, Integer>();
+		this.matchNum      	= 	matchNum;
 		
 	}
 	
 	@Override
 	public Object clone() {
-		return new MatchingBean(this.id, this.contentList, this.choiceList, this.img, this.audio, this.video);
+		return new MatchingBean(this.id,this.matchNum, this.contentList, this.choiceList, this.img, this.audio, this.video);
 	}
 
 	public String getVideo() {
@@ -66,11 +67,11 @@ public class MatchingBean implements Serializable, Cloneable {
 	public void setAudio(String audio) {
 		this.audio = audio;
 	}
-	public static int getMatchNum() {
+	public int getMatchNum() {
 		return matchNum;
 	}
-	public static void setMatchNum(int matchNum) {
-		MatchingBean.matchNum = matchNum;
+	public void setMatchNum(int matchNum) {
+		this.matchNum = matchNum;
 	}
 	public int getId() {
 		return id;

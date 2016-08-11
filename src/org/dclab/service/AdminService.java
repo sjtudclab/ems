@@ -37,8 +37,13 @@ public class AdminService {
 		if(sign1!=1)
 			return new SuperRespond(false, "添加科目失败");
 		
+		try {
+			smapper.getSubIdByName(name);
+		} catch (org.apache.ibatis.exceptions.TooManyResultsException e) {
+			// TODO: handle exception
+			return new SuperRespond(false, "数据库中已有相同科目");
+		}
 		int subId=smapper.getSubIdByName(name);
-		
 		currentSubjectId=subId;
 		
 		SubTypeMapperI stmapper=sqlSession.getMapper(SubTypeMapperI.class);
@@ -47,15 +52,16 @@ public class AdminService {
 		{
 			String points=map.get(typeId);
 			int sign2=stmapper.add(typeId, subId, points);
+			sqlSession.commit();
 			if(sign2!=1)
 				return new SuperRespond(false,"添加科目题型关联失败");
 		}
-		sqlSession.close();
+
 		sqlSession.close();
 		return new SuperRespond(true);
 	}
 	
-	public SuperRespond TopicAdd(String content,Map<String, String> choice,List<String> answer,int typeId){
+	public SuperRespond TopicAdd(String content,Map<Integer, String> choice,List<Integer> answer,int typeId){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.add";
 		TopicBean topicBean=new TopicBean(content, typeId, currentSubjectId);
@@ -64,7 +70,7 @@ public class AdminService {
 		
 		int topicId=topicBean.getId();
 		String choiceId=new String();//这个list存放正确选项的数据库id
-		for(String str : choice.keySet())
+		for(int str : choice.keySet())
 		{
 			ChoicesBean choicesBean=new ChoicesBean();
 			choicesBean.setContent(choice.get(str));
@@ -83,7 +89,7 @@ public class AdminService {
 		
 		SubTypeMapperI stmapper=sqlSession.getMapper(SubTypeMapperI.class);
 		
-		String points=stmapper.getPointsByType(typeId);
+		String points=stmapper.getPointsByType(typeId,currentSubjectId);
 		
 		CorrectAnswerMapperI camapper=sqlSession.getMapper(CorrectAnswerMapperI.class);
 		
@@ -103,7 +109,7 @@ public class AdminService {
 		
 		for(RoomInfoBean bean : list){
 			UUID token=SupervisorOperator.idTokenMap.get(bean.getUid());
-			bean.setName(SupervisorOperator.tokenSuperMap.get(token).getName());
+			bean.setSupervisor(SupervisorOperator.tokenSuperMap.get(token).getName());
 			
 			//检测监考老师是否登录,可以考虑删除，关联的位置有superbean，userservice登录时
 			if(SupervisorOperator.tokenSuperMap.get(token).getSign()==1)
