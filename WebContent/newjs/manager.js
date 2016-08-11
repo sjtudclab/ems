@@ -97,16 +97,15 @@ angular
         };
 
         $scope.confirm = function (url) {
-            /* alert($scope.inputMessage); */
-            /* console.log($scope); */
+      
             var uidList = [];
             for (x in $scope.selectionStatus) {
-                // alert(x + ' ' + $scope.selectionStatus[x]);
+             
                 if ($scope.selectionStatus[x]) {
                     uidList.push(x);
                 }
             }
-            // alert(uidList);
+        
             $http.get('/EMS/admin/roomConfirm', {
                 // $http.get('info.json', {
                 params: {
@@ -172,7 +171,7 @@ angular
             refresh();
         };
         function refresh() {
-            /* alert(refresh); */
+          
             $http({
                 method: 'GET',
                 url: '/EMS/admin/Refresh',

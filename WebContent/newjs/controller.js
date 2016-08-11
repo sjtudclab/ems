@@ -286,6 +286,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
                 alert(data.detail);
             }
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
@@ -296,6 +299,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             }
 
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
@@ -305,6 +311,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
                 alert(data.detail);
             }
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
@@ -315,6 +324,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             }
 
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
@@ -325,6 +337,9 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             }
 
 
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
         });
 
 
@@ -348,17 +363,23 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
                                     params: { token: $window.sessionStorage.token }
                                 }).success(function (data, status, headers, config) {
                                     /*alert("简答题succeed");*/
-                                    var scoreshow = "block";
-                                    // if(data.flag){
-                                    //     scoreshow="block";
-                                    // }else{
-                                    //     scoreshow='none';
-                                    // }
-                                    $state.go("finish", { score: data, scoreshow: scoreshow });
+
                                     if (data.flag == false) {
                                         alert(data.detail);
+                                    } else {
+                                        var scoreshow = "block";
+                                        // if(data.flag){
+                                        //     scoreshow="block";
+                                        // }else{
+                                        //     scoreshow='none';
+                                        // }
+                                        $state.go("finish", { score: data, scoreshow: scoreshow });
+
                                     }
 
+                                }).error(function (data, status, headers, config) {
+                                    //处理错误  
+                                    alert('服务器拒绝访问');
                                 });
 
                                 /* alert('您已提交');*/
@@ -410,6 +431,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         }
 
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
@@ -420,6 +444,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         }
 
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
@@ -430,6 +457,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         }
 
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
@@ -439,6 +469,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                             alert(data.detail);
                         }
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
@@ -449,6 +482,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         }
 
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
 
                     $http.get('/EMS/exam/handExam', {
@@ -467,6 +503,9 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         // }
                         $state.go("finish", { score: data, scoreshow: scoreshow });
 
+                    }).error(function (data, status, headers, config) {
+                        //处理错误  
+                        alert('服务器拒绝访问');
                     });
                     // $state.go('finish');
                     /*alert("重新");*/
@@ -475,9 +514,11 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                         $http.get('/EMS/exam/getTime', {
                             params: { token: $window.sessionStorage.token }
                         }).success(function (data, status, headers, config) {
-                            second = data;
+
                             if (data.flag == false) {
                                 alert(data.detail);
+                            } else {
+                                second = data;
                             }
                         })
                     }
@@ -528,84 +569,84 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
-            }
-            var singleStatus = JSON.parse($window.sessionStorage.problemStatus);
-
-            $scope.totalItems = data.singleNum;
-            $scope.currentPage = $scope.nid;
-
-            // 试题
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
             } else {
-                $scope.audiohide = "none";
+                var singleStatus = JSON.parse($window.sessionStorage.problemStatus);
+
+                $scope.totalItems = data.singleNum;
+                $scope.currentPage = $scope.nid;
+
+                // 试题
+                $scope.content = data.content;
+                $scope.lists = data.choiceList;
+                $scope.lists = data.choiceList;
+                var length = $scope.lists.length;
+                for (var i = 0; i < length; i++) {
+                    $scope.lists[i].alp = String.fromCharCode(i + 65);
+                }
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    /*alert(data.video);*/
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+                } else {
+                    $scope.videohide = "none";
+                }
+
+
+                //试题状态
+
+                $scope.option.optionsRadios = data.choiceId;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+
+                singleStatus.single.nid = $scope.nid;
+                singleStatus.single.content = $scope.content;
+                singleStatus.single.choiceList = $scope.lists;
+                singleStatus.single.totalItems = $scope.totalItems;
+                if ($scope.audiohide == "block") {
+                    singleStatus.single.audio = $scope.sudio;
+                    singleStatus.single.audiohide = $scope.sudiohide;
+                } else {
+                    singleStatus.single.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    singleStatus.single.img = $scope.img;
+                    singleStatus.single.imghide = $scope.imghide;
+                } else {
+                    singleStatus.single.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    singleStatus.single.video = $scope.video;
+                    singleStatus.single.videohide = $scope.videohide;
+                } else {
+                    singleStatus.single.videohide = $scope.videohide;
+                }
+                //status
+                singleStatus.single.option = $scope.option.optionsRadios;
+                singleStatus.single.ifCheck = $scope.count;
+                $window.sessionStorage.counter = $rootScope.counter;
+
+
+                $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
             }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                /*alert(data.video);*/
-                $scope.videohide = "block";
-                $scope.video = data.video;
-            } else {
-                $scope.videohide = "none";
-            }
-
-
-            //试题状态
-
-            $scope.option.optionsRadios = data.choiceId;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-            singleStatus.single.nid = $scope.nid;
-            singleStatus.single.content = $scope.content;
-            singleStatus.single.choiceList = $scope.lists;
-            singleStatus.single.totalItems = $scope.totalItems;
-            if ($scope.audiohide == "block") {
-                singleStatus.single.audio = $scope.sudio;
-                singleStatus.single.audiohide = $scope.sudiohide;
-            } else {
-                singleStatus.single.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                singleStatus.single.img = $scope.img;
-                singleStatus.single.imghide = $scope.imghide;
-            } else {
-                singleStatus.single.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                singleStatus.single.video = $scope.video;
-                singleStatus.single.videohide = $scope.videohide;
-            } else {
-                singleStatus.single.videohide = $scope.videohide;
-            }
-            //status
-            singleStatus.single.option = $scope.option.optionsRadios;
-            singleStatus.single.ifCheck = $scope.count;
-            $window.sessionStorage.counter = $rootScope.counter;
-
-
-            $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
-
 
         }).error(function (data, status, headers, config) {
             //处理错误  
@@ -676,6 +717,122 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
                 //试题
                 if (data.flag == false) {
                     alert(data.detail);
+                } else {
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        /*alert(data.video);*/
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+                    } else {
+                        $scope.videohide = "none";
+                    }
+
+                    $scope.totalItems = data.singleNum;
+                    $scope.currentPage = 1;
+                    $rootScope.counter = 0;
+
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+                    $scope.lists = data.choiceList;
+                    $scope.lists = data.choiceList;
+                    var length = $scope.lists.length;
+                    for (var i = 0; i < length; i++) {
+                        $scope.lists[i].alp = String.fromCharCode(i + 65);
+                    }
+                    //试题状态
+                    $scope.option.optionsRadios = data.choiceId;
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+                    $window.sessionStorage.counter = $rootScope.counter;
+                    var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+
+                    singleStatus.single.nid = $scope.nid;
+                    singleStatus.single.content = $scope.content;
+                    singleStatus.single.choiceList = $scope.lists;
+                    singleStatus.single.totalItems = $scope.totalItems;
+                    if ($scope.audiohide == "block") {
+                        singleStatus.single.audio = $scope.sudio;
+                        singleStatus.single.audiohide = $scope.sudiohide;
+                    } else {
+                        singleStatus.single.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        singleStatus.single.img = $scope.img;
+                        singleStatus.single.imghide = $scope.imghide;
+                    } else {
+                        singleStatus.single.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        singleStatus.single.video = $scope.video;
+                        singleStatus.single.videohide = $scope.videohide;
+                    } else {
+                        singleStatus.single.videohide = $scope.videohide;
+                    }
+                    //status
+                    singleStatus.single.option = $scope.option.optionsRadios;
+                    singleStatus.single.ifCheck = $scope.count;
+                    $window.sessionStorage.counter = $rootScope.counter;
+                    $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+        }
+    }
+
+    $scope.opChanged = function (option) {
+        var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        singleStatus.single.option = option.optionsRadios;
+        $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
+    }
+
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    /* $scope.totalItems = 20;*/
+    $scope.itemsPerPage = 1;
+
+    $scope.maxSize = 2;
+
+    $scope.pageChanged = function (option) {
+
+        var isChecked = $scope.count;
+        $http.get('/EMS/exam/getTopic', {
+            /*   $http.get('single0.json', {*/
+            params: { token: $window.sessionStorage.token, typeId: 0, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            } else {
+                // 试题
+                $scope.totalItems = data.singleNum;
+                $scope.nid = $scope.currentPage;
+                $scope.content = data.content;
+                $scope.lists = data.choiceList;
+                $scope.lists = data.choiceList;
+                var length = $scope.lists.length;
+                for (var i = 0; i < length; i++) {
+                    $scope.lists[i].alp = String.fromCharCode(i + 65);
                 }
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -697,20 +854,8 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
                 } else {
                     $scope.videohide = "none";
                 }
-
-                $scope.totalItems = data.singleNum;
-                $scope.currentPage = 1;
-                $rootScope.counter = 0;
-
-                $scope.nid = 1;
-                $scope.content = data.content;
-                $scope.lists = data.choiceList;
-                $scope.lists = data.choiceList;
-                var length = $scope.lists.length;
-                for (var i = 0; i < length; i++) {
-                    $scope.lists[i].alp = String.fromCharCode(i + 65);
-                }
                 //试题状态
+                /*  alert(data.choiceId);*/
                 $scope.option.optionsRadios = data.choiceId;
                 if (data.ifCheck) {
                     $scope.red = "#FF6347";
@@ -720,9 +865,9 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
                     $scope.count = false;
 
                 }
-                $window.sessionStorage.counter = $rootScope.counter;
-                var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
 
+
+                var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
                 singleStatus.single.nid = $scope.nid;
                 singleStatus.single.content = $scope.content;
                 singleStatus.single.choiceList = $scope.lists;
@@ -751,115 +896,11 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
                 $window.sessionStorage.counter = $rootScope.counter;
                 $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
 
-
-            }).error(function (data, status, headers, config) {
-                //处理错误  
-               alert('服务器拒绝访问');
-            });
-        }
-    }
-
-    $scope.opChanged = function (option) {
-        var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-        singleStatus.single.option = option.optionsRadios;
-        $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
-    }
-
-
-    $scope.previousText = "上一题";
-    $scope.nextText = "下一题";
-    /* $scope.totalItems = 20;*/
-    $scope.itemsPerPage = 1;
-
-    $scope.maxSize = 2;
-
-    $scope.pageChanged = function (option) {
-
-        var isChecked = $scope.count;
-        $http.get('/EMS/exam/getTopic', {
-            /*   $http.get('single0.json', {*/
-            params: { token: $window.sessionStorage.token, typeId: 0, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
-        }).success(function (data, status, headers, config) {
-            if (data.flag == false) {
-                alert(data.detail);
             }
-            // 试题
-            $scope.totalItems = data.singleNum;
-            $scope.nid = $scope.currentPage;
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
-            } else {
-                $scope.audiohide = "none";
-            }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                /*alert(data.video);*/
-                $scope.videohide = "block";
-                $scope.video = data.video;
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-            /*  alert(data.choiceId);*/
-            $scope.option.optionsRadios = data.choiceId;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-
-            var singleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-            singleStatus.single.nid = $scope.nid;
-            singleStatus.single.content = $scope.content;
-            singleStatus.single.choiceList = $scope.lists;
-            singleStatus.single.totalItems = $scope.totalItems;
-            if ($scope.audiohide == "block") {
-                singleStatus.single.audio = $scope.sudio;
-                singleStatus.single.audiohide = $scope.sudiohide;
-            } else {
-                singleStatus.single.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                singleStatus.single.img = $scope.img;
-                singleStatus.single.imghide = $scope.imghide;
-            } else {
-                singleStatus.single.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                singleStatus.single.video = $scope.video;
-                singleStatus.single.videohide = $scope.videohide;
-            } else {
-                singleStatus.single.videohide = $scope.videohide;
-            }
-            //status
-            singleStatus.single.option = $scope.option.optionsRadios;
-            singleStatus.single.ifCheck = $scope.count;
-            $window.sessionStorage.counter = $rootScope.counter;
-            $window.sessionStorage.problemStatus = JSON.stringify(singleStatus);
-
-
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
     };
 
@@ -928,79 +969,79 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
-            }
-            var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
-            $scope.totalItems = data.multiNum;
-            $scope.currentPage = $scope.nid;
-
-            // 试题
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
             } else {
-                $scope.audiohide = "none";
+                var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
+                $scope.totalItems = data.multiNum;
+                $scope.currentPage = $scope.nid;
+
+                // 试题
+                $scope.content = data.content;
+                $scope.lists = data.choiceList;
+                var length = $scope.lists.length;
+                for (var i = 0; i < length; i++) {
+                    $scope.lists[i].alp = String.fromCharCode(i + 65);
+                }
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+
+                $scope.option = data.choiceIdList;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+
+
+                multiStatus.multiple.nid = $scope.nid;
+                multiStatus.multiple.content = $scope.content;
+                multiStatus.multiple.choiceList = $scope.lists;
+                if ($scope.audiohide == "block") {
+                    multiStatus.multiple.audio = $scope.sudio;
+                    multiStatus.multiple.audiohide = $scope.sudiohide;
+                } else {
+                    multiStatus.multiple.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    multiStatus.multiple.img = $scope.img;
+                    multiStatus.multiple.imghide = $scope.imghide;
+                } else {
+                    multiStatus.multiple.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    multiStatus.multiple.video = $scope.video;
+                    multiStatus.multiple.videohide = $scope.videohide;
+                } else {
+                    multiStatus.multiple.videohide = $scope.videohide;
+                }
+                //status
+                multiStatus.multiple.choiceIdList = $scope.option;
+                multiStatus.multiple.ifCheck = $scope.count;
+                $window.sessionStorage.counter = $rootScope.counter;
+
+                $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
             }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-
-            $scope.option = data.choiceIdList;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-
-            multiStatus.multiple.nid = $scope.nid;
-            multiStatus.multiple.content = $scope.content;
-            multiStatus.multiple.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                multiStatus.multiple.audio = $scope.sudio;
-                multiStatus.multiple.audiohide = $scope.sudiohide;
-            } else {
-                multiStatus.multiple.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                multiStatus.multiple.img = $scope.img;
-                multiStatus.multiple.imghide = $scope.imghide;
-            } else {
-                multiStatus.multiple.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                multiStatus.multiple.video = $scope.video;
-                multiStatus.multiple.videohide = $scope.videohide;
-            } else {
-                multiStatus.multiple.videohide = $scope.videohide;
-            }
-            //status
-            multiStatus.multiple.choiceIdList = $scope.option;
-            multiStatus.multiple.ifCheck = $scope.count;
-            $window.sessionStorage.counter = $rootScope.counter;
-
-            $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
-
 
         }).error(function (data, status, headers, config) {
             //处理错误  
@@ -1066,12 +1107,109 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
                     alert(data.detail);
-                }
-                //试题
-                $scope.totalItems = data.multiNum;
-                $scope.currentPage = 1;
+                } else {
+                    //试题
+                    $scope.totalItems = data.multiNum;
+                    $scope.currentPage = 1;
 
-                $scope.nid = 1;
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+                    $scope.lists = data.choiceList;
+                    var length = $scope.lists.length;
+                    for (var i = 0; i < length; i++) {
+                        $scope.lists[i].alp = String.fromCharCode(i + 65);
+                    }
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //试题状态
+
+                    $scope.option = data.choiceIdList;
+                    // alert(data.choiceIdList);
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
+                    multiStatus.multiple.nid = $scope.nid;
+                    multiStatus.multiple.content = $scope.content;
+                    multiStatus.multiple.choiceList = $scope.lists;
+                    if ($scope.audiohide == "block") {
+                        multiStatus.multiple.audio = $scope.sudio;
+                        multiStatus.multiple.audiohide = $scope.sudiohide;
+                    } else {
+                        multiStatus.multiple.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        multiStatus.multiple.img = $scope.img;
+                        multiStatus.multiple.imghide = $scope.imghide;
+                    } else {
+                        multiStatus.multiple.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        multiStatus.multiple.video = $scope.video;
+                        multiStatus.multiple.videohide = $scope.videohide;
+                    } else {
+                        multiStatus.multiple.videohide = $scope.videohide;
+                    }
+                    multiStatus.multiple.totalItems = $scope.totalItems;
+
+                    multiStatus.multiple.choiceIdList = $scope.option;
+                    multiStatus.multiple.ifCheck = $scope.count;
+                    $window.sessionStorage.counter = $rootScope.counter;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+
+        }
+    }
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    $scope.itemsPerPage = 1;
+    $scope.maxSize = 5;
+
+    $scope.pageChanged = function (option) {
+        //alert($scope.currentPage);
+        var isChecked = $scope.count;
+
+        $http.get('/EMS/exam/getTopic', {
+            /*   $http.get('multiple.json', {*/
+            params: { token: $window.sessionStorage.token, typeId: 1, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            } else {
+                // 试题
+                $scope.totalItems = data.multiNum;
+                $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
                 $scope.lists = data.choiceList;
                 var length = $scope.lists.length;
@@ -1091,17 +1229,11 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
                 } else {
                     $scope.imghide = "none";
                 }
-                if (data.video) {
-                    $scope.videohide = "block";
-                    $scope.video = data.video;
-
-                } else {
-                    $scope.videohide = "none";
-                }
                 //试题状态
+                /*   alert("aa"+data.choiceIdList);*/
+                /* $scope.option = data.choiceIdList;*/
+                if (data.choiceIdList) { $scope.option = data.choiceIdList; } else { $scope.option = []; };
 
-                $scope.option = data.choiceIdList;
-                // alert(data.choiceIdList);
                 if (data.ifCheck) {
                     $scope.red = "#FF6347";
                     $scope.count = true;
@@ -1133,108 +1265,17 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
                 } else {
                     multiStatus.multiple.videohide = $scope.videohide;
                 }
-                multiStatus.multiple.totalItems = $scope.totalItems;
 
+                //status
                 multiStatus.multiple.choiceIdList = $scope.option;
                 multiStatus.multiple.ifCheck = $scope.count;
+                /*   alert($scope.count);*/
                 $window.sessionStorage.counter = $rootScope.counter;
-
                 $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
-
-
-            }).error(function (data, status, headers, config) {
-                //处理错误  
-               alert('服务器拒绝访问');
-            });
-
-        }
-    }
-
-    $scope.previousText = "上一题";
-    $scope.nextText = "下一题";
-    $scope.itemsPerPage = 1;
-    $scope.maxSize = 5;
-
-    $scope.pageChanged = function (option) {
-        //alert($scope.currentPage);
-        var isChecked = $scope.count;
-
-        $http.get('/EMS/exam/getTopic', {
-            /*   $http.get('multiple.json', {*/
-            params: { token: $window.sessionStorage.token, typeId: 1, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
-        }).success(function (data, status, headers, config) {
-            if (data.flag == false) {
-                alert(data.detail);
             }
-            // 试题
-            $scope.totalItems = data.multiNum;
-            $scope.nid = $scope.currentPage;
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
-            } else {
-                $scope.audiohide = "none";
-            }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            //试题状态
-            /*   alert("aa"+data.choiceIdList);*/
-            /* $scope.option = data.choiceIdList;*/
-            if (data.choiceIdList) { $scope.option = data.choiceIdList; } else { $scope.option = []; };
-
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-            var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
-            multiStatus.multiple.nid = $scope.nid;
-            multiStatus.multiple.content = $scope.content;
-            multiStatus.multiple.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                multiStatus.multiple.audio = $scope.sudio;
-                multiStatus.multiple.audiohide = $scope.sudiohide;
-            } else {
-                multiStatus.multiple.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                multiStatus.multiple.img = $scope.img;
-                multiStatus.multiple.imghide = $scope.imghide;
-            } else {
-                multiStatus.multiple.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                multiStatus.multiple.video = $scope.video;
-                multiStatus.multiple.videohide = $scope.videohide;
-            } else {
-                multiStatus.multiple.videohide = $scope.videohide;
-            }
-
-            //status
-            multiStatus.multiple.choiceIdList = $scope.option;
-            multiStatus.multiple.ifCheck = $scope.count;
-            /*   alert($scope.count);*/
-            $window.sessionStorage.counter = $rootScope.counter;
-            $window.sessionStorage.problemStatus = JSON.stringify(multiStatus);
-
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     };
@@ -1286,78 +1327,78 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
-            }
-            // 试题
-            $scope.totalItems = data.judgeNum;
-            $scope.currentPage = $scope.nid;
-
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
             } else {
-                $scope.audiohide = "none";
+                // 试题
+                $scope.totalItems = data.judgeNum;
+                $scope.currentPage = $scope.nid;
+
+                $scope.content = data.content;
+                $scope.lists = data.choiceList;
+                var length = $scope.lists.length;
+                for (var i = 0; i < length; i++) {
+                    $scope.lists[i].alp = String.fromCharCode(i + 65);
+                }
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+
+                $scope.option.optionsRadios = data.choiceId;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+
+                var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                judgStatus.judgment.nid = $scope.nid;
+                judgStatus.judgment.content = $scope.content;
+                judgStatus.judgment.choiceList = $scope.lists;
+                if ($scope.audiohide == "block") {
+                    judgStatus.judgment.audio = $scope.sudio;
+                    judgStatus.judgment.audiohide = $scope.sudiohide;
+                } else {
+                    judgStatus.judgment.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    judgStatus.judgment.img = $scope.img;
+                    judgStatus.judgment.imghide = $scope.imghide;
+                } else {
+                    judgStatus.judgment.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    judgStatus.judgment.video = $scope.video;
+                    judgStatus.judgment.videohide = $scope.videohide;
+                } else {
+                    judgStatus.judgment.videohide = $scope.videohide;
+                }
+
+                judgStatus.judgment.option = $scope.option.optionsRadios;
+                judgStatus.judgment.ifCheck = $scope.count;
+
+
+                $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
             }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-
-            $scope.option.optionsRadios = data.choiceId;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-            var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
-            judgStatus.judgment.nid = $scope.nid;
-            judgStatus.judgment.content = $scope.content;
-            judgStatus.judgment.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                judgStatus.judgment.audio = $scope.sudio;
-                judgStatus.judgment.audiohide = $scope.sudiohide;
-            } else {
-                judgStatus.judgment.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                judgStatus.judgment.img = $scope.img;
-                judgStatus.judgment.imghide = $scope.imghide;
-            } else {
-                judgStatus.judgment.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                judgStatus.judgment.video = $scope.video;
-                judgStatus.judgment.videohide = $scope.videohide;
-            } else {
-                judgStatus.judgment.videohide = $scope.videohide;
-            }
-
-            judgStatus.judgment.option = $scope.option.optionsRadios;
-            judgStatus.judgment.ifCheck = $scope.count;
-
-
-            $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
-
         }).error(function (data, status, headers, config) {
             //处理错误  
             alert('服务器拒绝访问');
@@ -1420,12 +1461,117 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
                     alert(data.detail);
-                }
-                //试题
-                $scope.totalItems = data.judgeNum;
-                $scope.currentPage = 1;
+                } else {
+                    //试题
+                    $scope.totalItems = data.judgeNum;
+                    $scope.currentPage = 1;
 
-                $scope.nid = 1;
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+                    $scope.lists = data.choiceList;
+                    var length = $scope.lists.length;
+                    for (var i = 0; i < length; i++) {
+                        $scope.lists[i].alp = String.fromCharCode(i + 65);
+                    }
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //试题状态
+                    $scope.option.optionsRadios = data.choiceId;
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    /*  $scope.before = true;*/
+                    var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                    judgStatus.judgment.nid = $scope.nid;
+                    judgStatus.judgment.content = $scope.content;
+                    judgStatus.judgment.choiceList = $scope.lists;
+                    if ($scope.audiohide == "block") {
+                        judgStatus.judgment.audio = $scope.sudio;
+                        judgStatus.judgment.audiohide = $scope.sudiohide;
+                    } else {
+                        judgStatus.judgment.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        judgStatus.judgment.img = $scope.img;
+                        judgStatus.judgment.imghide = $scope.imghide;
+                    } else {
+                        judgStatus.judgment.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        judgStatus.judgment.video = $scope.video;
+                        judgStatus.judgment.videohide = $scope.videohide;
+                    } else {
+                        judgStatus.judgment.videohide = $scope.videohide;
+                    }
+
+                    judgStatus.judgment.option = $scope.option.optionsRadios;
+                    judgStatus.judgment.ifCheck = $scope.count;
+                    judgStatus.judgment.totalItems = $scope.totalItems;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+
+
+        }
+    }
+
+    $scope.opChanged = function (option) {
+        var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        judgStatus.judgment.option = option.optionsRadios;
+        $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
+    }
+
+
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    $scope.itemsPerPage = 1;
+    $scope.maxSize = 5;
+
+    $scope.pageChanged = function (option) {
+        /*  alert($scope.currentPage);*/
+
+        var isChecked = $scope.count;
+        $http.get('/EMS/exam/getTopic', {
+            /*$http.get('judg0.json', {*/
+            params: { token: $window.sessionStorage.token, typeId: 2, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            } else {
+                // 试题
+                $scope.totalItems = data.judgeNum;
+
+                $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
                 $scope.lists = data.choiceList;
                 var length = $scope.lists.length;
@@ -1462,8 +1608,7 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
                     $scope.count = false;
 
                 }
-
-                /*  $scope.before = true;*/
+                /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
                 var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
                 judgStatus.judgment.nid = $scope.nid;
                 judgStatus.judgment.content = $scope.content;
@@ -1489,116 +1634,12 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
 
                 judgStatus.judgment.option = $scope.option.optionsRadios;
                 judgStatus.judgment.ifCheck = $scope.count;
-                judgStatus.judgment.totalItems = $scope.totalItems;
-
                 $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
-
-
-            }).error(function (data, status, headers, config) {
-                //处理错误  
-               alert('服务器拒绝访问');
-            });
-
-
-        }
-    }
-
-    $scope.opChanged = function (option) {
-        var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-        judgStatus.judgment.option = option.optionsRadios;
-        $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
-    }
-
-
-
-    $scope.previousText = "上一题";
-    $scope.nextText = "下一题";
-    $scope.itemsPerPage = 1;
-    $scope.maxSize = 5;
-
-    $scope.pageChanged = function (option) {
-        /*  alert($scope.currentPage);*/
-
-        var isChecked = $scope.count;
-        $http.get('/EMS/exam/getTopic', {
-            /*$http.get('judg0.json', {*/
-            params: { token: $window.sessionStorage.token, typeId: 2, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
-        }).success(function (data, status, headers, config) {
-            if (data.flag == false) {
-                alert(data.detail);
             }
-            // 试题
-            $scope.totalItems = data.judgeNum;
-
-            $scope.nid = $scope.currentPage;
-            $scope.content = data.content;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
-            } else {
-                $scope.audiohide = "none";
-            }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-            $scope.option.optionsRadios = data.choiceId;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-            /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
-            var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
-            judgStatus.judgment.nid = $scope.nid;
-            judgStatus.judgment.content = $scope.content;
-            judgStatus.judgment.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                judgStatus.judgment.audio = $scope.sudio;
-                judgStatus.judgment.audiohide = $scope.sudiohide;
-            } else {
-                judgStatus.judgment.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                judgStatus.judgment.img = $scope.img;
-                judgStatus.judgment.imghide = $scope.imghide;
-            } else {
-                judgStatus.judgment.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                judgStatus.judgment.video = $scope.video;
-                judgStatus.judgment.videohide = $scope.videohide;
-            } else {
-                judgStatus.judgment.videohide = $scope.videohide;
-            }
-
-            judgStatus.judgment.option = $scope.option.optionsRadios;
-            judgStatus.judgment.ifCheck = $scope.count;
-            $window.sessionStorage.problemStatus = JSON.stringify(judgStatus);
-
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     };
@@ -1651,82 +1692,82 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
-            }
-            // 试题
-            $scope.totalItems = data.matchNum;
-            $scope.currentPage = $scope.nid;
-
-            $scope.contentlists = data.contentList;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
             } else {
-                $scope.audiohide = "none";
+                // 试题
+                $scope.totalItems = data.matchNum;
+                $scope.currentPage = $scope.nid;
+
+                $scope.contentlists = data.contentList;
+                $scope.lists = data.choiceList;
+                var length = $scope.lists.length;
+                for (var i = 0; i < length; i++) {
+                    $scope.lists[i].alp = String.fromCharCode(i + 65);
+                }
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+
+                $scope.option = data.choiceIdMap;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+                /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+                var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
+                matchStatus.match.nid = $scope.nid;
+                matchStatus.match.contentList = $scope.contentlists;
+                matchStatus.match.choiceList = $scope.lists;
+                if ($scope.audiohide == "block") {
+                    matchStatus.match.audio = $scope.sudio;
+                    matchStatus.match.audiohide = $scope.sudiohide;
+                } else {
+                    matchStatus.match.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    matchStatus.match.img = $scope.img;
+                    matchStatus.match.imghide = $scope.imghide;
+                } else {
+                    matchStatus.match.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    matchStatus.match.video = $scope.video;
+                    matchStatus.match.videohide = $scope.videohide;
+                } else {
+                    matchStatus.match.videohide = $scope.videohide;
+                }
+
+
+                matchStatus.match.choiceIdMap = $scope.option;
+                matchStatus.match.ifCheck = $scope.count;
+                matchStatus.match.totalItems = $scope.totalItems;
+
+                $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
             }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-
-            $scope.option = data.choiceIdMap;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-            /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
-            var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
-            matchStatus.match.nid = $scope.nid;
-            matchStatus.match.contentList = $scope.contentlists;
-            matchStatus.match.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                matchStatus.match.audio = $scope.sudio;
-                matchStatus.match.audiohide = $scope.sudiohide;
-            } else {
-                matchStatus.match.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                matchStatus.match.img = $scope.img;
-                matchStatus.match.imghide = $scope.imghide;
-            } else {
-                matchStatus.match.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                matchStatus.match.video = $scope.video;
-                matchStatus.match.videohide = $scope.videohide;
-            } else {
-                matchStatus.match.videohide = $scope.videohide;
-            }
-
-
-            matchStatus.match.choiceIdMap = $scope.option;
-            matchStatus.match.ifCheck = $scope.count;
-            matchStatus.match.totalItems = $scope.totalItems;
-
-            $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
-
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     } else {
@@ -1785,14 +1826,123 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
                     alert(data.detail);
-                }
-                //试题
-                $scope.totalItems = data.matchNum;
-                $scope.currentPage = 1;
+                } else {
+                    //试题
+                    $scope.totalItems = data.matchNum;
+                    $scope.currentPage = 1;
 
-                $scope.nid = 1;
+                    $scope.nid = 1;
+                    $scope.contentlists = data.contentList;
+                    //    alert(data.choiceList);
+                    $scope.lists = data.choiceList;
+                    var length = $scope.lists.length;
+                    for (var i = 0; i < length; i++) {
+                        $scope.lists[i].alp = String.fromCharCode(i + 65);
+                    }
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //试题状态
+                    $scope.option = data.choiceIdMap;
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    /*  $scope.before = true;*/
+                    var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
+                    matchStatus.match.nid = $scope.nid;
+                    matchStatus.match.contentList = $scope.contentlists;
+                    matchStatus.match.choiceList = $scope.lists;
+                    if ($scope.audiohide == "block") {
+                        matchStatus.match.audio = $scope.sudio;
+                        matchStatus.match.audiohide = $scope.sudiohide;
+                    } else {
+                        matchStatus.match.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        matchStatus.match.img = $scope.img;
+                        matchStatus.match.imghide = $scope.imghide;
+                    } else {
+                        matchStatus.match.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        matchStatus.match.video = $scope.video;
+                        matchStatus.match.videohide = $scope.videohide;
+                    } else {
+                        matchStatus.match.videohide = $scope.videohide;
+                    }
+
+
+                    matchStatus.match.choiceIdMap = $scope.option;
+                    matchStatus.match.ifCheck = $scope.count;
+                    matchStatus.match.totalItems = $scope.totalItems;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+        }
+
+
+    }
+
+    $scope.opChanged = function (option) {
+        var matchStatus = JSON.parse($window.sessionStorage.problemStatus);
+        matchStatus.match.choiceIdMap = option;
+        $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
+    }
+
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    /* $scope.totalItems = 20;*/
+    $scope.itemsPerPage = 1;
+
+    $scope.maxSize = 5;
+    $scope.pageChanged = function (option) {
+        //  alert($scope.currentPage);
+        /*  alert(option);*/
+        var isChecked = $scope.count;
+
+
+
+
+        $http.get('/EMS/exam/getTopic', {
+            /* $http.get('match0.json', {*/
+            params: { token: $window.sessionStorage.token, typeId: 3, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            } else {
+                // 试题
+                $scope.totalItems = data.matchNum;
+                $scope.nid = $scope.currentPage;
                 $scope.contentlists = data.contentList;
-                //    alert(data.choiceList);
                 $scope.lists = data.choiceList;
                 var length = $scope.lists.length;
                 for (var i = 0; i < length; i++) {
@@ -1828,8 +1978,7 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
                     $scope.count = false;
 
                 }
-
-                /*  $scope.before = true;*/
+                /* if ($scope.id == 1) { $scope.before = true; } else { $scope.before = false; }*/
                 var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
                 matchStatus.match.nid = $scope.nid;
                 matchStatus.match.contentList = $scope.contentlists;
@@ -1859,119 +2008,11 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
                 matchStatus.match.totalItems = $scope.totalItems;
 
                 $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
-
-
-            }).error(function (data, status, headers, config) {
-                //处理错误  
-               alert('服务器拒绝访问');
-            });
-        }
-
-
-    }
-
-    $scope.opChanged = function (option) {
-        var matchStatus = JSON.parse($window.sessionStorage.problemStatus);
-        matchStatus.match.choiceIdMap = option;
-        $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
-    }
-
-
-    $scope.previousText = "上一题";
-    $scope.nextText = "下一题";
-    /* $scope.totalItems = 20;*/
-    $scope.itemsPerPage = 1;
-
-    $scope.maxSize = 5;
-    $scope.pageChanged = function (option) {
-        //  alert($scope.currentPage);
-        /*  alert(option);*/
-        var isChecked = $scope.count;
-
-
-
-
-        $http.get('/EMS/exam/getTopic', {
-            /* $http.get('match0.json', {*/
-            params: { token: $window.sessionStorage.token, typeId: 3, id: $scope.nid, requestId: $scope.currentPage, choiceIdMap: option, ifCheck: isChecked }
-        }).success(function (data, status, headers, config) {
-            if (data.flag == false) {
-                alert(data.detail);
             }
-            // 试题
-            $scope.totalItems = data.matchNum;
-            $scope.nid = $scope.currentPage;
-            $scope.contentlists = data.contentList;
-            $scope.lists = data.choiceList;
-            var length = $scope.lists.length;
-            for (var i = 0; i < length; i++) {
-                $scope.lists[i].alp = String.fromCharCode(i + 65);
-            }
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
-            } else {
-                $scope.audiohide = "none";
-            }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-            //试题状态
-            $scope.option = data.choiceIdMap;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-            /* if ($scope.id == 1) { $scope.before = true; } else { $scope.before = false; }*/
-            var matchStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近匹配题以及状态
-            matchStatus.match.nid = $scope.nid;
-            matchStatus.match.contentList = $scope.contentlists;
-            matchStatus.match.choiceList = $scope.lists;
-            if ($scope.audiohide == "block") {
-                matchStatus.match.audio = $scope.sudio;
-                matchStatus.match.audiohide = $scope.sudiohide;
-            } else {
-                matchStatus.match.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                matchStatus.match.img = $scope.img;
-                matchStatus.match.imghide = $scope.imghide;
-            } else {
-                matchStatus.match.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                matchStatus.match.video = $scope.video;
-                matchStatus.match.videohide = $scope.videohide;
-            } else {
-                matchStatus.match.videohide = $scope.videohide;
-            }
-
-
-            matchStatus.match.choiceIdMap = $scope.option;
-            matchStatus.match.ifCheck = $scope.count;
-            matchStatus.match.totalItems = $scope.totalItems;
-
-            $window.sessionStorage.problemStatus = JSON.stringify(matchStatus);
-
 
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     };
@@ -2024,75 +2065,75 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
-            }
-            $scope.totalItems = data.shortNum;
-            $scope.currentPage = $scope.nid;
-            // 试题
-            $scope.content = data.content;
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
             } else {
-                $scope.audiohide = "none";
+                $scope.totalItems = data.shortNum;
+                $scope.currentPage = $scope.nid;
+                // 试题
+                $scope.content = data.content;
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+
+                //试题状态
+
+                $scope.answer = data.answer;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+                /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+                var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
+                simpleStatus.simple.nid = $scope.nid;
+                simpleStatus.simple.content = $scope.content;
+                if ($scope.audiohide == "block") {
+                    simpleStatus.simple.audio = $scope.sudio;
+                    simpleStatus.simple.audiohide = $scope.sudiohide;
+                } else {
+                    simpleStatus.simple.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    simpleStatus.simple.img = $scope.img;
+                    simpleStatus.simple.imghide = $scope.imghide;
+                } else {
+                    simpleStatus.simple.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    simpleStatus.simple.video = $scope.video;
+                    simpleStatus.simple.videohide = $scope.videohide;
+                } else {
+                    simpleStatus.simple.videohide = $scope.videohide;
+                }
+
+                simpleStatus.simple.answer = $scope.option;
+                simpleStatus.simple.ifCheck = $scope.count;
+                simpleStatus.simple.totalItems = $scope.totalItems;
+
+                $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
             }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-
-            //试题状态
-
-            $scope.answer = data.answer;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-            /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
-            var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
-            simpleStatus.simple.nid = $scope.nid;
-            simpleStatus.simple.content = $scope.content;
-            if ($scope.audiohide == "block") {
-                simpleStatus.simple.audio = $scope.sudio;
-                simpleStatus.simple.audiohide = $scope.sudiohide;
-            } else {
-                simpleStatus.simple.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                simpleStatus.simple.img = $scope.img;
-                simpleStatus.simple.imghide = $scope.imghide;
-            } else {
-                simpleStatus.simple.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                simpleStatus.simple.video = $scope.video;
-                simpleStatus.simple.videohide = $scope.videohide;
-            } else {
-                simpleStatus.simple.videohide = $scope.videohide;
-            }
-
-            simpleStatus.simple.answer = $scope.option;
-            simpleStatus.simple.ifCheck = $scope.count;
-            simpleStatus.simple.totalItems = $scope.totalItems;
-
-            $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
-
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     } else {
@@ -2151,11 +2192,108 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
                     alert(data.detail);
+                } else {
+                    $scope.totalItems = data.shortNum;
+                    $scope.currentPage = 1;
+                    //试题
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //    alert(data.choiceList);
+
+                    //试题状态
+                    $scope.answer = data.answer;
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
+                    simpleStatus.simple.nid = $scope.nid;
+                    simpleStatus.simple.content = $scope.content;
+                    if ($scope.audiohide == "block") {
+                        simpleStatus.simple.audio = $scope.sudio;
+                        simpleStatus.simple.audiohide = $scope.sudiohide;
+                    } else {
+                        simpleStatus.simple.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        simpleStatus.simple.img = $scope.img;
+                        simpleStatus.simple.imghide = $scope.imghide;
+                    } else {
+                        simpleStatus.simple.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        simpleStatus.simple.video = $scope.video;
+                        simpleStatus.simple.videohide = $scope.videohide;
+                    } else {
+                        simpleStatus.simple.videohide = $scope.videohide;
+                    }
+
+                    simpleStatus.simple.answer = $scope.answer;
+                    simpleStatus.simple.ifCheck = $scope.count;
+                    simpleStatus.simple.totalItems = $scope.totalItems;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
                 }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+        }
+
+
+    }
+
+    $scope.opChanged = function (answer) {
+        var simpleStatus = JSON.parse($window.sessionStorage.problemStatus);
+        simpleStatus.simple.answer = answer;
+        $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
+    }
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    $scope.itemsPerPage = 1;
+    $scope.maxSize = 5;
+
+    $scope.pageChanged = function (answer) {
+        var isChecked = $scope.count;
+
+        $http.get('/EMS/exam/getTopic', {
+            /*   $http.get('judg0.json', {*/
+            params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, answer: answer, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                alert(data.detail);
+            } else {
+                // 试题
                 $scope.totalItems = data.shortNum;
-                $scope.currentPage = 1;
-                //试题
-                $scope.nid = 1;
+
+                $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -2177,7 +2315,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 } else {
                     $scope.videohide = "none";
                 }
-                //    alert(data.choiceList);
+
 
                 //试题状态
                 $scope.answer = data.answer;
@@ -2217,107 +2355,10 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 simpleStatus.simple.totalItems = $scope.totalItems;
 
                 $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
-
-
-            }).error(function (data, status, headers, config) {
-                //处理错误  
-                alert('服务器拒绝访问');
-            });
-        }
-
-
-    }
-
-    $scope.opChanged = function (answer) {
-        var simpleStatus = JSON.parse($window.sessionStorage.problemStatus);
-        simpleStatus.simple.answer = answer;
-        $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
-    }
-
-    $scope.previousText = "上一题";
-    $scope.nextText = "下一题";
-    $scope.itemsPerPage = 1;
-    $scope.maxSize = 5;
-
-    $scope.pageChanged = function (answer) {
-        var isChecked = $scope.count;
-
-        $http.get('/EMS/exam/getTopic', {
-            /*   $http.get('judg0.json', {*/
-            params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, answer: answer, ifCheck: isChecked }
-        }).success(function (data, status, headers, config) {
-            if (data.flag == false) {
-                alert(data.detail);
             }
-            // 试题
-            $scope.totalItems = data.shortNum;
-
-            $scope.nid = $scope.currentPage;
-            $scope.content = data.content;
-            if (data.audio) {
-                $scope.audiohide = "block";
-                $scope.audio = data.audio;
-            } else {
-                $scope.audiohide = "none";
-            }
-            if (data.img) {
-                $scope.imghide = "block";
-                $scope.img = data.img;
-
-            } else {
-                $scope.imghide = "none";
-            }
-            if (data.video) {
-                $scope.videohide = "block";
-                $scope.video = data.video;
-
-            } else {
-                $scope.videohide = "none";
-            }
-
-
-            //试题状态
-            $scope.answer = data.answer;
-            if (data.ifCheck) {
-                $scope.red = "#FF6347";
-                $scope.count = true;
-            } else {
-                $scope.red = "#000000";
-                $scope.count = false;
-
-            }
-
-            var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
-            simpleStatus.simple.nid = $scope.nid;
-            simpleStatus.simple.content = $scope.content;
-            if ($scope.audiohide == "block") {
-                simpleStatus.simple.audio = $scope.sudio;
-                simpleStatus.simple.audiohide = $scope.sudiohide;
-            } else {
-                simpleStatus.simple.audiohide = $scope.sudiohide;
-            }
-            if ($scope.imghide == "block") {
-                simpleStatus.simple.img = $scope.img;
-                simpleStatus.simple.imghide = $scope.imghide;
-            } else {
-                simpleStatus.simple.imghide = $scope.imghide;
-            }
-            if ($scope.videohide == "block") {
-                simpleStatus.simple.video = $scope.video;
-                simpleStatus.simple.videohide = $scope.videohide;
-            } else {
-                simpleStatus.simple.videohide = $scope.videohide;
-            }
-
-            simpleStatus.simple.answer = $scope.answer;
-            simpleStatus.simple.ifCheck = $scope.count;
-            simpleStatus.simple.totalItems = $scope.totalItems;
-
-            $window.sessionStorage.problemStatus = JSON.stringify(simpleStatus);
-
         }).error(function (data, status, headers, config) {
             //处理错误  
-           alert('服务器拒绝访问');
+            alert('服务器拒绝访问');
         });
 
     };
@@ -2379,25 +2420,25 @@ checkup.controller("Ctab1", function ($scope, $http, $state, $window, $rootScope
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
             alert(data.detail);
-        }
-        // alert(data.checkList[0].status);
-        /*var lists=[];
-        for (var i = 0; i < 100; i++) {
-            lists[i]=0;
-        }
-        $scope.lists=lists;*/
-        $scope.lists = data.checkList;
-        $rootScope.topicNum = data.topicNum;
-        $rootScope.finishNum = data.finishNum;
-        $rootScope.otherNum = data.topicNum - data.finishNum;
+        } else {
+            // alert(data.checkList[0].status);
+            /*var lists=[];
+            for (var i = 0; i < 100; i++) {
+                lists[i]=0;
+            }
+            $scope.lists=lists;*/
+            $scope.lists = data.checkList;
+            $rootScope.topicNum = data.topicNum;
+            $rootScope.finishNum = data.finishNum;
+            $rootScope.otherNum = data.topicNum - data.finishNum;
 
-        /* $rootScope.topicNum=3;
-         $rootScope.finishNum=2;
-         $rootScope.otherNum=1;*/
-
+            /* $rootScope.topicNum=3;
+             $rootScope.finishNum=2;
+             $rootScope.otherNum=1;*/
+        }
     }).error(function (data, status, headers, config) {
         //处理错误  
-       alert('服务器拒绝访问');
+        alert('服务器拒绝访问');
     });
 
 
@@ -2418,15 +2459,15 @@ checkup.controller("Ctab2", function ($scope, $http, $state, $window) {
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
             alert(data.detail);
+        } else {
+            $scope.lists = data.checkList;
+            /*  $rootScope.topicNum=data.topicNum;
+              $rootScope.finishNum=data.finishNum;
+              $rootScope.otherNum=data.topicNum-data.finishNum;*/
         }
-        $scope.lists = data.checkList;
-        /*  $rootScope.topicNum=data.topicNum;
-          $rootScope.finishNum=data.finishNum;
-          $rootScope.otherNum=data.topicNum-data.finishNum;*/
-
     }).error(function (data, status, headers, config) {
         //处理错误  
-       alert('服务器拒绝访问');
+        alert('服务器拒绝访问');
     });
 
 
@@ -2446,12 +2487,12 @@ checkup.controller("Ctab3", function ($scope, $http, $state, $window) {
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
             alert(data.detail);
+        } else {
+            $scope.lists = data.checkList;
+            /* $rootScope.topicNum=data.topicNum;
+             $rootScope.finishNum=data.finishNum;
+             $rootScope.otherNum=data.topicNum-data.finishNum;*/
         }
-        $scope.lists = data.checkList;
-        /* $rootScope.topicNum=data.topicNum;
-         $rootScope.finishNum=data.finishNum;
-         $rootScope.otherNum=data.topicNum-data.finishNum;*/
-
     }).error(function (data, status, headers, config) {
         //处理错误  
         alert('服务器拒绝访问');
@@ -2474,12 +2515,12 @@ checkup.controller("Ctab4", function ($scope, $http, $state, $window) {
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
             alert(data.detail);
+        } else {
+            $scope.lists = data.checkList;
+            /* $rootScope.topicNum=data.topicNum;
+             $rootScope.finishNum=data.finishNum;
+             $rootScope.otherNum=data.topicNum-data.finishNum;*/
         }
-        $scope.lists = data.checkList;
-        /* $rootScope.topicNum=data.topicNum;
-         $rootScope.finishNum=data.finishNum;
-         $rootScope.otherNum=data.topicNum-data.finishNum;*/
-
     }).error(function (data, status, headers, config) {
         //处理错误  
         alert('服务器拒绝访问');
@@ -2502,12 +2543,12 @@ checkup.controller("Ctab5", function ($scope, $http, $state, $window) {
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
             alert(data.detail);
+        } else {
+            $scope.lists = data.checkList;
+            /* $rootScope.topicNum=data.topicNum;
+             $rootScope.finishNum=data.finishNum;
+             $rootScope.otherNum=data.topicNum-data.finishNum;*/
         }
-        $scope.lists = data.checkList;
-        /* $rootScope.topicNum=data.topicNum;
-         $rootScope.finishNum=data.finishNum;
-         $rootScope.otherNum=data.topicNum-data.finishNum;*/
-
     }).error(function (data, status, headers, config) {
         //处理错误  
         alert('服务器拒绝访问');

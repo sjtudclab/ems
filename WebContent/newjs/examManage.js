@@ -74,7 +74,7 @@ examManage.controller('singleCtrl', function ($scope, $http, $window) {
     $scope.rightAnswer = [];
 
     $scope.save = function () {
-        // alert($scope.content + $scope.rightAnswer+$scope.itemMessage);
+     
         var choice = {};
         for (x in $scope.itemMessage) {
             choice[x * 1 + 1] = $scope.itemMessage[x];
@@ -111,7 +111,7 @@ examManage.controller('judgeCtrl', function ($scope, $http, $window) {
     $scope.rightAnswer = [];
 
     $scope.save = function () {
-        // alert($scope.content + $scope.rightAnswer+$scope.itemMessage);
+      
         var choice = {};
         for (x in $scope.itemMessage) {
             choice[x * 1 + 1] = $scope.itemMessage[x];
@@ -146,7 +146,7 @@ examManage.controller('multipleCtrl', function ($scope, $http, $window) {
     $scope.itemMessage = ['', '', '', ''];
     var List = [];
     $scope.save = function () {
-        // alert($scope.content + $scope.right+$scope.itemMessage);
+      
         var choice = {};
         for (x in $scope.itemMessage) {
             choice[x] = $scope.itemMessage[x];
@@ -155,9 +155,7 @@ examManage.controller('multipleCtrl', function ($scope, $http, $window) {
             }
 
         }
-        // alert(List+$scope.itemMessage)
-        // console.log(choice);
-        // console.log(List);
+     
         $http({
             method: 'GET',
             url: '/EMS/admin/addTopic',
@@ -242,9 +240,9 @@ examManage.controller('simpleCtrl', function ($scope, $http, $window) {
 });
 
 examManage.controller('subjectCtrl', function ($scope, $http, $window) {
-    // alert($scope)
+ 
     $scope.save = function () {
-        // alert($scope.content + $scope.right+$scope.itemMessage);
+       
         var choice = {};
         if ($scope.singleCheckbox) {
             choice[0] = $scope.singleScore;
@@ -261,8 +259,7 @@ examManage.controller('subjectCtrl', function ($scope, $http, $window) {
         if ($scope.simpleCheckbox) {
             choice[4] = $scope.simpleScore;
         }
-        // console.log(choice);
-        // alert(List+$scope.itemMessage)
+    
         $http({
             method: 'GET',
             url: '/EMS/admin/addSubject',
