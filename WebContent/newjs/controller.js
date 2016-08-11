@@ -1,8 +1,4 @@
-﻿/*routingDemoApp.filter("trustUrl", ['$sce', function ($sce) {
-        return function (recordingUrl) {
-            return $sce.trustAsResourceUrl(recordingUrl);
-        };
-    }]);   */
+﻿
 
 var formlogin = angular.module('formlogin', [])
 
@@ -19,7 +15,7 @@ formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $w
             //  alert(data.name);
             // alert(data.checklist[0]);
 
-            alert(data.Rid);
+            // alert(data.Rid);
             // $state.go('examImport');
             //  $state.go('manager');
             switch (data.Rid) {
@@ -363,35 +359,35 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
                     }).success(function (data, status, headers, config) {
-                        alert("单选题succeed");
+                        // alert("单选题succeed");
 
 
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
                     }).success(function (data, status, headers, config) {
-                        alert("多选题succeed");
+                        // alert("多选题succeed");
 
 
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
                     }).success(function (data, status, headers, config) {
-                        alert("判断题succeed");
+                        // alert("判断题succeed");
 
 
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
                     }).success(function (data, status, headers, config) {
-                        alert("匹配提succeed");
+                        // alert("匹配提succeed");
 
 
                     });
                     $http.get('/EMS/exam/getTopic', {
                         params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
                     }).success(function (data, status, headers, config) {
-                        alert("简答题succeed");
+                        // alert("简答题succeed");
 
 
                     });
@@ -709,8 +705,6 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
     $scope.maxSize = 2;
 
     $scope.pageChanged = function (option) {
-        // alert($scope.currentPage);
-        //  alert($scope.id);
 
         var isChecked = $scope.count;
         $http.get('/EMS/exam/getTopic', {

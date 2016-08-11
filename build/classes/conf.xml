@@ -39,7 +39,7 @@
         <mapper class="org.dclab.mapping.SubjectMapperI"/>
         <mapper class="org.dclab.mapping.SubTypeMapperI"/>
         <mapper resource="org/dclab/mapping/topicMapper.xml"/>
-         <mapper resource="org/dclab/mapping/choiceMapper.xml"/>
+        <mapper resource="org/dclab/mapping/choiceMapper.xml"/>
     </mappers>
     
 </configuration>
