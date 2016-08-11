@@ -26,7 +26,7 @@ angular
             method: 'GET',
             url: 'manger.json',
             params: {
-                token: $window.sessionStorage.token
+                token: $window.sessionStorage.stoken
             }
         })
             .then(
@@ -58,7 +58,7 @@ angular
             method: 'GET',
             url: '/EMS/admin/Refresh',
             params: {
-                token: $window.sessionStorage.token
+                token: $window.sessionStorage.stoken
             }
         })
             .then(
@@ -147,7 +147,7 @@ angular
             $http.get('/EMS/admin/roomConfirm', {
             // $http.get('info.json', {
                 params: {
-                    token: $window.sessionStorage.token,
+                    token: $window.sessionStorage.stoken,
                     roomId: uidList
                 }
             }).then(function successCallback(response) {
@@ -159,6 +159,7 @@ angular
                 // 考场号
                 infoStatus.roomId = uidList;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                $window.sessionStorage.token=response.data.token;
                 $window.open('#/supervisor');
                 // var url = 'supervisor';
                 // var urlHref = $state.href(url);
@@ -213,7 +214,7 @@ angular
                 method: 'GET',
                 url: '/EMS/admin/Refresh',
                 params: {
-                    token: $window.sessionStorage.token
+                    token: $window.sessionStorage.stoken
                 }
             })
                 .then(
@@ -249,7 +250,7 @@ angular
             $http.get('/EMS/admin/load', {         
             // $http.get('info.json', {
                 params: {
-                    token: $window.sessionStorage.token
+                    token: $window.sessionStorage.stoken
                 }
             }).then(function successCallback(response) {
                 console.log('success');

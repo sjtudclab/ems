@@ -53,7 +53,6 @@ public class UserService {
 			UUID token=ExamOperator.idTokenMap.get(Uid);
 			Session session=smapper.getById(sessionId);
 			sqlSession.close();
-			System.out.println("finish: "+ExamOperator.tokenExamMap.get(token).isFinished());
 			if(!ExamOperator.tokenExamMap.get(token).isFinished()){//检测考生ExamBean中的考试结束标志是否为true
 				
 				if(ExamOperator.tokenExamMap.get(token).isAllowStart()==true)//检测该考生是否可在任意时间登录
@@ -85,6 +84,9 @@ public class UserService {
 					String photo=encoder.encode(data);
 				
 					map.put("photo", photo);
+					
+					ExamOperator.tokenExamMap.get(token).setIfLogin(true);
+					
 					return map;
 				}
 				else{
@@ -119,6 +121,9 @@ public class UserService {
 						String photo=encoder.encode(data);
 					
 						map.put("photo", photo);
+						
+						ExamOperator.tokenExamMap.get(token).setIfLogin(true);
+						
 						return map;
 					}
 					else

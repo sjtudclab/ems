@@ -28,13 +28,14 @@ public class SupervisorService {
 	//获得对应考场的考生信息list
 	public Collection<CandidateBean> getInfo(SuperBean superBean){
 		for(CandidateBean cbean : superBean.getCanMap().values()){
-			if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
-					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).getStartTime()==0)
+			UUID token = ExamOperator.idTokenMap.get(cbean.getUid());
+			ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+			
+			if(examBean==null || examBean.isIfLogin() == false)
 				cbean.setStatus(0);
-			else if(ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid()))!=null&&
-					ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(cbean.getUid())).isFinished()==true)
+			else if(examBean.isFinished())
 				cbean.setStatus(2);
-			else
+			else 
 				cbean.setStatus(1);
 		}
 	return superBean.getCanMap().values();
@@ -73,8 +74,8 @@ public class SupervisorService {
 		for(int i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.get(token).setFinished(true);//把ExamBean置为空
-			superBean.getCanMap().get(i).setStatus(2);//把该考生的状态置为已交卷
-		}
+/*			superBean.getCanMap().get(i).setStatus(2);//把该考生的状态置为已交卷
+*/		}
 		return new SuperRespond(true);
 	}
 
@@ -101,8 +102,8 @@ public class SupervisorService {
 		for(int i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.put(token, null);//把ExamBean置为空
-			superBean.getCanMap().get(i).setStatus(0);//把该考生的状态置为未登录
-		}
+/*			superBean.getCanMap().get(i).setStatus(0);//把该考生的状态置为未登录
+*/		}
 		return new SuperRespond(true);
 	}
 }

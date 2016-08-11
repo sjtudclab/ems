@@ -5,12 +5,16 @@ package org.dclab.model;
  *每道题的选项内容及id
  *
  */
-public class ChoicesBean {
+public class ChoicesBean implements Cloneable{
 	private int choiceId;
 	private String content;
 	private int topicId;
 	
-	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 	public int getTopicId() {
 		return topicId;
 	}

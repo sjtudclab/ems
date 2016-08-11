@@ -12,7 +12,7 @@ import java.util.List;
  *
  */
 
-public class SingleChoiceBean implements Serializable{
+public class SingleChoiceBean implements Serializable,Cloneable{
 
 	/**
 	 * 
@@ -28,6 +28,17 @@ public class SingleChoiceBean implements Serializable{
 	private String audio;
 	private String video;
 	
+	public SingleChoiceBean() {
+		// TODO Auto-generated constructor stub
+		
+	}
+	
+
+	@Override
+	public Object clone()  {
+		// TODO Auto-generated method stub
+		return new SingleChoiceBean();
+	}
 	
 	
 	

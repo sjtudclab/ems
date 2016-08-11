@@ -1,5 +1,6 @@
 package org.dclab.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/admin")
@@ -69,9 +75,30 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/addSubject")
-	public SuperRespond addSubject(String name,int duration,int earliestSubmit,int latestLogin,Map<Integer,String> map)
+	public SuperRespond addSubject(/*@RequestParam UUID token, */@RequestParam String name,@RequestParam int duration,
+			@RequestParam int earliestSubmit,@RequestParam int latestLogin,@RequestParam String map)
 	{
-		return adminService.subjectAdd(name, duration, earliestSubmit, latestLogin,map);
+		/*if(AdminBean.adminTokenMap.containsValue(token))
+		{*/
+			ObjectMapper mapper = new ObjectMapper();
+			Map<Integer, String> map1=new HashMap<>();
+			try {
+				map1=mapper.readValue(map, new TypeReference<Map<Integer, String>>(){});
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+			System.out.println(map1);
+			return adminService.subjectAdd(name, duration, earliestSubmit, latestLogin, map1);
+	/*	}
+		else
+			return new SuperRespond(false, "无此权限");*/
 	}
 	
 /*	@RequestMapping("/addTopic")

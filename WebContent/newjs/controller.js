@@ -18,12 +18,13 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
             //加载成功之后做一些事  
             //  alert(data.name);
             // alert(data.checklist[0]);
-            $window.sessionStorage.token = data.token;
+          
             alert(data.Rid);
             // $state.go('examImport');
             //  $state.go('manager');
                  switch (data.Rid) {
                  case 0: //考生登录
+                	  $window.sessionStorage.token = data.token;
                       var infoStatus = {};
                       $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
                       var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
@@ -39,6 +40,7 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
                       $state.go('showinfo');
                      break;
                  case 1:  //监考员登录
+                	  $window.sessionStorage.token = data.token;
                      var infoStatus = {};
                      $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
                      var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
@@ -52,6 +54,7 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
                      $state.go('supervisor');
                      break;
                  case 2:  //管理员登录
+                	  $window.sessionStorage.stoken = data.token;
                      var adminStatus = {};
                      $window.sessionStorage.adminStatus = JSON.stringify(adminStatus);
                      var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
