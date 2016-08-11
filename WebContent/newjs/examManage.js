@@ -85,7 +85,7 @@ examManage.controller('singleCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addTopic',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 typeId:0,
                 content:$scope.content,
                 choice:choice,
@@ -120,7 +120,7 @@ examManage.controller('judgeCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addTopic',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 typeId:2,
                 content:$scope.content,
                 choice:choice,
@@ -162,7 +162,7 @@ examManage.controller('multipleCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addTopic',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 typeId:1,
                 content:$scope.content,
                 choice:choice,
@@ -198,7 +198,7 @@ examManage.controller('mpCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addTopic',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 typeId:4,
                 content:$scope.content
 
@@ -221,7 +221,7 @@ examManage.controller('mpCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addTopic',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 typeId:4,
                 content:$scope.content
 
@@ -263,7 +263,7 @@ examManage.controller('subjectCtrl', function ($scope, $http,$window) {
 			method: 'GET',
 			url: '/EMS/admin/addSubject',
 			params: {
-				token: $window.sessionStorage.token,
+				token: $window.sessionStorage.stoken,
                 name:$scope.name,
                 duration:$scope.duration,
                 earliestSubmit:$scope.earliestSubmit,
