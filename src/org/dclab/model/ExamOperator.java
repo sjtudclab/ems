@@ -53,6 +53,7 @@ public class ExamOperator {
 		
 	    int subId=sessionMapper.getSubIdById(sid);
 		ExamBean.setEXAM_TIME(subMapper.getDurationBySubId(subId));//设置考试时长，所有考生是一样的
+		ExamBean.setEarliestSubmit(subMapper.getEarSubmitBySubId(subId));
 	    
 	    boolean flag=false;//因为多媒体资源的前缀path也循环叠加了5次，所以用这个flag控制
 	    
