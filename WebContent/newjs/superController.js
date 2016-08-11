@@ -4,7 +4,7 @@ angular
 	.module('supervisor')
 	.controller(
 				'supervisorCtrl',
-				function ($rootScope, $scope, $http, $window,$uibModal) {
+				function ($rootScope, $scope, $http, $window, $uibModal) {
 
 		var infoStatus = JSON
 			.parse($window.sessionStorage.infoStatus);

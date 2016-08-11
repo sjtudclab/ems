@@ -6,47 +6,59 @@ angular
 				'managerCtrl',
 				function ($rootScope, $scope, $http, $window, $state) {
 
-        // var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
-        // // 功能列表
-        // $scope.operationMetaInfo = adminStatus.authorityList;
-        // // 登陆用户id
-        // $scope.Rid = response.data.Rid;
-        // // 控制标签显示
-        // $scope.active = [];
-        // // 控制标签页显示
-        // $scope.display = [];
-        // for (i in $scope.operationMetaInfo) {
-        //     $scope.active[i] = "";
-        //     $scope.display[i] = "none";
-        // }
-        // // 初始化显示标签0
-        // $scope.index = 0;
+        var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
+        // 功能列表
+        $scope.operationMetaInfo = adminStatus.authorityList;
+        // 登陆用户id
+        $scope.Rid = response.data.Rid;
+        // 控制标签显示
+        $scope.active = [];
+        // 控制标签页显示
+        $scope.display = [];
+        for (i in $scope.operationMetaInfo) {
+            $scope.active[i] = "";
+            $scope.display[i] = "none";
+        }
+        // 初始化显示标签0
+        $scope.index = 0;
+        //初始化表格
+        $scope.roomMetaInfo = {
+            'roomId': '考场号',
+            'name': '考场位置',
+            'supervisor': '监考老师',
+            'size': '考场人数',
+            'status': '状态'
+        };
+        // 状态码转化成易读string
+        $scope.statusDisplay = ['未登录', '已登录'];
+        $scope.roomsStatus = {};
+        $scope.selectionStatus = {};
 
-        $http({
-            method: 'GET',
-            url: 'manger.json',
-            params: {
-                token: $window.sessionStorage.stoken
-            }
-        })
-            .then(
-            function success(response) {
-                // 功能列表
-                $scope.operationMetaInfo = response.data.authorityList;
-                // 登陆用户id
-                $scope.rId = response.data.Rid;
-                // 控制标签显示
-                $scope.active = [];
-                // 控制标签页显示
-                $scope.display = [];
-                for (i in $scope.operationMetaInfo) {
-                    $scope.active[i] = "";
-                    $scope.display[i] = "none";
-                }
-                // 初始化显示标签0
-                $scope.index = 0;
-            })
- // $http({
+        // $http({
+        //     method: 'GET',
+        //     url: 'manger.json',
+        //     params: {
+        //         token: $window.sessionStorage.stoken
+        //     }
+        // })
+        //     .then(
+        //     function success(response) {
+        //         // 功能列表
+        //         $scope.operationMetaInfo = response.data.authorityList;
+        //         // 登陆用户id
+        //         $scope.rId = response.data.Rid;
+        //         // 控制标签显示
+        //         $scope.active = [];
+        //         // 控制标签页显示
+        //         $scope.display = [];
+        //         for (i in $scope.operationMetaInfo) {
+        //             $scope.active[i] = "";
+        //             $scope.display[i] = "none";
+        //         }
+        //         // 初始化显示标签0
+        //         $scope.index = 0;
+        //     })
+        // $http({
         //     method: 'GET',
         //     url: 'roominfo.json',
         //     params: {
@@ -54,56 +66,7 @@ angular
         //     }
         // })
 
-        $http({
-            method: 'GET',
-            url: '/EMS/admin/Refresh',
-            params: {
-                token: $window.sessionStorage.stoken
-            }
-        })
-            .then(
-            function success(response) {
-                // 考场信息
-                $scope.roomsInfo = response.data;
-                $scope.roomMetaInfo = {
-                    'roomId': '考场号',
-                    'name': '考场位置',
-                    'supervisor': '监考老师',
-                    'size': '考场人数',
-                    'status': '状态'
-                };
-                // 状态码转化成易读string
-                $scope.statusDisplay = ['未登录', '已登录'];
-                $scope.roomsStatus = {};
-                $scope.selectionStatus = {};
-                // 已选人数
-                $scope.selectedNum = 0;
-                // 未登录人数
-                $scope.absentNum = 0;
-                // 已登录人数
-                $scope.examingNum = 0;
 
-                for (x in $scope.roomsInfo) {
-                    switch ($scope.roomsInfo[x].status) {
-                        case 0:
-                            $scope.absentNum += 1;
-                            $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
-                            break;
-                        case 1:
-                            $scope.examingNum += 1;
-                            $scope.roomsStatus[$scope.roomsInfo[x].roomId] = 'info';
-                            break;
-                        default:
-                            alert('考生状态错误！');
-                    }
-                }
-                $scope.orderCondition = 'roomId';
-                $scope.isReverse = false;
-            },
-            function error(response) {
-                alert('出现错误\n' + response.status + ' '
-                    + response.statusText);
-            });
         // 监控index变量控制标签及标签页
         $scope.$watch('index', function () {
             if ($scope.index == undefined) {
@@ -145,7 +108,7 @@ angular
             }
             // alert(uidList);
             $http.get('/EMS/admin/roomConfirm', {
-            // $http.get('info.json', {
+                // $http.get('info.json', {
                 params: {
                     token: $window.sessionStorage.stoken,
                     roomId: uidList
@@ -159,7 +122,7 @@ angular
                 // 考场号
                 infoStatus.roomId = uidList;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                $window.sessionStorage.token=response.data.token;
+                $window.sessionStorage.token = response.data.token;
                 $window.open('#/supervisor');
                 // var url = 'supervisor';
                 // var urlHref = $state.href(url);
@@ -226,6 +189,7 @@ angular
                         switch ($scope.roomsInfo[x].status) {
                             case 0:
                                 $scope.absentNum += 1;
+                                $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
                                 break;
                             case 1:
                                 $scope.examingNum += 1;
@@ -247,16 +211,55 @@ angular
 
             $scope.loadStyle = 'cursor:wait';
             $scope.loadButtonDisabled = true;
-            $http.get('/EMS/admin/load', {         
-            // $http.get('info.json', {
+            $http.get('/EMS/admin/load', {
+                // $http.get('info.json', {
                 params: {
                     token: $window.sessionStorage.stoken
                 }
             }).then(function successCallback(response) {
-                console.log('success');
+                // console.log('success');
                 alert("试题装载成功");
                 $scope.loadStyle = 'cursor:default';
                 $scope.loadButtonDisabled = false;
+                $http({
+                    method: 'GET',
+                    url: '/EMS/admin/Refresh',
+                    params: {
+                        token: $window.sessionStorage.stoken
+                    }
+                })
+                    .then(
+                    function success(response) {
+                        // 考场信息
+                        $scope.roomsInfo = response.data;
+                        // 已选人数
+                        $scope.selectedNum = 0;
+                        // 未登录人数
+                        $scope.absentNum = 0;
+                        // 已登录人数
+                        $scope.examingNum = 0;
+                        for (x in $scope.roomsInfo) {
+                            switch ($scope.roomsInfo[x].status) {
+                                case 0:
+                                    $scope.absentNum += 1;
+                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
+                                    break;
+                                case 1:
+                                    $scope.examingNum += 1;
+                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = 'info';
+                                    break;
+                                default:
+                                    alert('考生状态错误！');
+                            }
+                        }
+                        $scope.orderCondition = 'roomId';
+                        $scope.isReverse = false;
+                    },
+                    function error(response) {
+                        alert('出现错误\n' + response.status + ' '
+                            + response.statusText);
+                    });
+
             })
         }
 
