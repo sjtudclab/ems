@@ -104,6 +104,7 @@ public class ExamController {
 		Map<String, Object> map=new HashMap<String, Object>();
 		List<CheckBean> checkList=examService.getCheckList(exambean, typeId);
 		map.put("checkList", checkList);
+		System.out.println("传给前端的num "+exambean.getTopicNum());
 		map.put("topicNum", exambean.getTopicNum());
 		map.put("finishNum", exambean.getFinishTopic().size());
 		return map;

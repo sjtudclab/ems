@@ -177,8 +177,8 @@ public class ExamOperator {
 	    }
 	    
 	    int count=singleLists.get(0).size()+multiLists.get(0).size()+matchLists.get(0).size()+jlist.size()+salist.size();
-	    ExamBean.setTopicNum(count);
-		List<Integer> uidList=userMapper.getUid();	//添加subjectId
+		System.out.println("总题数"+count);
+	    List<Integer> uidList=userMapper.getUid();	//添加subjectId
 		Random rand=new Random();
 		for(int id:uidList){
 			idTokenMap.put(id, TokenGenerator.generate());
@@ -216,6 +216,7 @@ public class ExamOperator {
 				shortList.add((ShortAnswerBean) shortAnswerBean.clone());
 			}
 			exambean.setShortAnswerList(shortList);
+			exambean.setTopicNum(count);
 			
 			tokenExamMap.put(idTokenMap.get(id), exambean);
 		}
