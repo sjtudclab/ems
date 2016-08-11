@@ -10,7 +10,7 @@ angular
         // 功能列表
         $scope.operationMetaInfo = adminStatus.authorityList;
         // 登陆用户id
-        $scope.Rid = response.data.Rid;
+        $scope.Rid =adminStatus.Rid;
         // 控制标签显示
         $scope.active = [];
         // 控制标签页显示
