@@ -11,7 +11,7 @@ import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
-import org.dclab.model.shortAnswerBean;
+import org.dclab.model.ShortAnswerBean;
 
 public interface TopicMapperI {
 	
@@ -32,7 +32,7 @@ public interface TopicMapperI {
 	public List<ContentBean> getMatchContent(int num);
 	
 	@Select("select id,content from topic where typeId=4 and subjectId=#{id}")
-	public List<shortAnswerBean> getShortBeanBySubId(int id);
+	public List<ShortAnswerBean> getShortBeanBySubId(int id);
 	
 /*	@Insert("INSERT INTO topic (content,typeId,subjectId) VALUES (content,typeId,subjectId)")
 	@SelectKey(statement="call identity()", keyProperty="id", before=false, resultType=int.class)

@@ -38,7 +38,7 @@ public class ExamBean implements Serializable{
 	private List<MultiChoicesBean> multiChoicesList;
 	private List<MatchingBean> matchingList;
 	private List<JudgementBean> judgementList;
-	private List<shortAnswerBean> shortAnswerList;
+	private List<ShortAnswerBean> shortAnswerList;
 	
 	
 	
@@ -52,12 +52,12 @@ public class ExamBean implements Serializable{
 	}
 
 
-	public List<shortAnswerBean> getShortAnswerList() {
+	public List<ShortAnswerBean> getShortAnswerList() {
 		return shortAnswerList;
 	}
 
 
-	public void setShortAnswerList(List<shortAnswerBean> shortAnswerList) {
+	public void setShortAnswerList(List<ShortAnswerBean> shortAnswerList) {
 		this.shortAnswerList = shortAnswerList;
 	}
 
@@ -166,7 +166,7 @@ public class ExamBean implements Serializable{
 	public JudgementBean getJudgementById(int index){
 		return judgementList.get(index);
 	}
-	public shortAnswerBean getShortAnswerById(int index){
+	public ShortAnswerBean getShortAnswerById(int index){
 		return shortAnswerList.get(index);
 	}
 

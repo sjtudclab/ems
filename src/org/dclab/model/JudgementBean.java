@@ -12,12 +12,12 @@ import java.util.List;
  * @author alvis
  *
  */
-public class JudgementBean implements Serializable{
+public class JudgementBean implements Serializable, Cloneable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1233847995962873452L;
-	private int judgeNum;//存储判断题数目
+	private static int judgeNum;//存储判断题数目
 	private int id;//题目id(数据库中id)
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
@@ -28,6 +28,23 @@ public class JudgementBean implements Serializable{
 	private String video;//存储题目中可能存在的视频的地址
 	
 	
+	public JudgementBean(){}
+	
+	public JudgementBean(int id, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
+		this.id			=	id;
+		this.choiceList	=	choiceList;
+		this.content	=	content;
+		this.img		=	img;
+		this.audio		=	audio;
+		this.video		=	video;
+		
+	}
+	
+	@Override
+	public Object clone() {
+		return new JudgementBean(this.id, this.content, this.choiceList, this.img, this.audio, this.video);
+	}
+
 	public String getVideo() {
 		return video;
 	}
@@ -46,11 +63,11 @@ public class JudgementBean implements Serializable{
 	public void setAudio(String audio) {
 		this.audio = audio;
 	}
-	public int getJudgeNum() {
+	public static int getJudgeNum() {
 		return judgeNum;
 	}
-	public void setJudgeNum(int judgeNum) {
-		this.judgeNum = judgeNum;
+	public static void setJudgeNum(int judgeNum) {
+		JudgementBean.judgeNum = judgeNum;
 	}
 	public int getId() {
 		return id;

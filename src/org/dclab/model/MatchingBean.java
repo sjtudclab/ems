@@ -1,8 +1,11 @@
 package org.dclab.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 
 /**
  * 匹配题对象：
@@ -12,12 +15,12 @@ import java.util.Map;
  * @author alvis
  *
  */
-public class MatchingBean implements Serializable {
+public class MatchingBean implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1445501220162322852L;
-	private int matchNum;//匹配题数目
+	private static int matchNum;//匹配题数目
 	private int id;//整个题目的id
 	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
@@ -27,7 +30,24 @@ public class MatchingBean implements Serializable {
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
 	
+	public MatchingBean(){}
 	
+	public MatchingBean(int id, List<ContentBean> contents, List<ChoicesBean> choices, String img, String audio, String video){
+		this.id				=	id;
+		this.contentList	=	contents;
+		this.choiceList		=	choices;
+		this.img			=	img;
+		this.audio			=	audio;
+		this.video			=	video;
+		this.choiceIdMap	= 	new HashMap<Integer, Integer>();
+		
+	}
+	
+	@Override
+	public Object clone() {
+		return new MatchingBean(this.id, this.contentList, this.choiceList, this.img, this.audio, this.video);
+	}
+
 	public String getVideo() {
 		return video;
 	}
@@ -46,11 +66,11 @@ public class MatchingBean implements Serializable {
 	public void setAudio(String audio) {
 		this.audio = audio;
 	}
-	public int getMatchNum() {
+	public static int getMatchNum() {
 		return matchNum;
 	}
-	public void setMatchNum(int matchNum) {
-		this.matchNum = matchNum;
+	public static void setMatchNum(int matchNum) {
+		MatchingBean.matchNum = matchNum;
 	}
 	public int getId() {
 		return id;

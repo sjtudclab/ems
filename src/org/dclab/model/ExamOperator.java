@@ -59,11 +59,13 @@ public class ExamOperator {
 	    List<List<SingleChoiceBean>> singleLists=new ArrayList<>();//这个list中放5个不同的单选题list
 	    for(int i=0;i<5;i++)//往singlelists中加载5套不同的单选题list
 	    {
+	    	//TODO: 优化随机策略，不需要每次都重新从数据库拿题目，题目是一样的，直接使用clone函数
+	    	
 		    List<SingleChoiceBean> slist=topicMapper.getSingleBeanBySubId(subId);//获得单选题题干,id和多媒体资源
+	    	SingleChoiceBean.setSingleNum(slist.size());
 	    	for(SingleChoiceBean bean: slist)
 	    	{//对于每一个 bean，根据topicid填充选项的id和content
 		    	int topicId=bean.getId();
-		    	bean.setSingleNum(slist.size());
 		    	List<ChoicesBean> list=choiceMapper.getChoice(topicId);//随机化题目选项
 		    	Collections.shuffle(list);
 		    	bean.setChoiceList(list);
@@ -88,7 +90,11 @@ public class ExamOperator {
 	    List<List<MultiChoicesBean>> multiLists=new ArrayList<>();//这个list中放5个不同的多选题list
 	    for(int i=0;i<5;i++)
 	    {
+	    	//TODO: 优化随机策略，不需要每次都重新从数据库拿题目，题目是一样的，直接使用clone函数
+
 	    	List<MultiChoicesBean> mlist=topicMapper.getMultiBeanBySubId(subId);//获得多选题题干和id
+	    	MultiChoicesBean.setMultiNum(mlist.size());
+	    	
 	    	for(MultiChoicesBean bean: mlist){
 		    	int topicId=bean.getId();
 		    	List<ChoicesBean> list=choiceMapper.getChoice(topicId);
@@ -96,7 +102,6 @@ public class ExamOperator {
 		    	bean.setChoiceList(list);
 		    	List<Integer> choiceIdList=new ArrayList<>();
 		    	bean.setChoiceIdList(choiceIdList);
-		    	bean.setMultiNum(mlist.size());
 		    	if(flag==false)
 		    	{ 
 		    		if(bean.getImg()!=null&&bean.getImg().length()!=0)
@@ -115,8 +120,12 @@ public class ExamOperator {
 	    List<List<MatchingBean>> matchLists=new ArrayList<>();//这个list中放5个不同的匹配题list
 	    for(int i=0;i<5;i++)
 	    {
+	    	//TODO: 优化随机策略，不需要每次都重新从数据库拿题目，题目是一样的，直接使用clone函数
+
 		    List<Integer> tlist=topicMapper.getMatchTopicIdBySubId(subId);//由于一道匹配题有多个topicid,所以根据number识别
 		    List<MatchingBean>  mlist=new ArrayList<MatchingBean>();
+	    	MatchingBean.setMatchNum(tlist.size());
+	    	
 		    for(int topicId : tlist)
 		    {
 		    	MatchingBean bean=new MatchingBean();
@@ -129,7 +138,6 @@ public class ExamOperator {
 		    	bean.setChoiceList(list1);
 		    	Map<Integer, Integer> choiceIdMap=new HashMap<>();
 		    	bean.setChoiceIdMap(choiceIdMap);
-		    	bean.setMatchNum(tlist.size());
 		    	if(flag==false)
 		    	{ 
 		    		if(bean.getImg()!=null&&bean.getImg().length()!=0)
@@ -146,12 +154,13 @@ public class ExamOperator {
 	    }
 
 	    List<JudgementBean> jlist=topicMapper.getJudgeBeanBySubId(subId);//判断题list
+	    JudgementBean.setJudgeNum(jlist.size());
+	    
 	    for(JudgementBean bean: jlist){
 	    	int topicId=bean.getId();
 	    	List<ChoicesBean> list=choiceMapper.getJudgeChoice();
 	    	Collections.shuffle(list);
 	    	bean.setChoiceList(list);
-	    	bean.setJudgeNum(jlist.size());
 	    	if(bean.getImg()!=null&&bean.getImg().length()!=0)
 	    		bean.setImg(imgPath+bean.getImg());
 	    	if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
@@ -160,10 +169,9 @@ public class ExamOperator {
 	    		bean.setVideo(vedioPath+bean.getVideo());
 	    }
 	    
-	    List<shortAnswerBean> salist=topicMapper.getShortBeanBySubId(subId);//简答题list
-	    for(shortAnswerBean bean: salist){
-	    	bean.setShortNum(salist.size());	
-	    }
+	    List<ShortAnswerBean> salist=topicMapper.getShortBeanBySubId(subId);//简答题list
+	    ShortAnswerBean.setShortNum(salist.size());	
+	    
 	    int count=singleLists.get(0).size()+multiLists.get(0).size()+matchLists.get(0).size()+jlist.size()+salist.size();
 	    ExamBean.setTopicNum(count);
 		List<Integer> uidList=userMapper.getUid();
