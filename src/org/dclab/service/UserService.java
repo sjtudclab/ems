@@ -15,7 +15,10 @@ import org.dclab.mapping.CanSubMapperI;
 import org.dclab.mapping.SessionMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
+import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
+import org.dclab.model.SuperBean;
+import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.utils.MyBatisUtil;
 import org.dclab.utils.TokenGenerator;
@@ -42,20 +45,27 @@ public class UserService {
 		UserMapperI mapper=sqlSession.getMapper(UserMapperI.class);
 		User user=mapper.getByUid(Uid);
 		if(user==null)
-			return null;
+			return new SuperRespond(false, "错误的用户名");
 		Map<String,Object> map=new HashMap<String,Object>();
 		switch(user.getRid()){
 		case 0:
-			System.out.println("进入了考生登录流程");
+
 			CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
 			SessionMapperI smapper=sqlSession.getMapper(SessionMapperI.class);
+			
 			int sessionId=csmapper.getSessionIdByUid(Uid);
 			UUID token=ExamOperator.idTokenMap.get(Uid);
 			Session session=smapper.getById(sessionId);
+			
+			ExamBean examBean=ExamOperator.tokenExamMap.get(token);
+			if(examBean==null)
+				return new SuperRespond(false, "考试尚未开始，不允许登录");
+			
 			sqlSession.close();
-			if(!ExamOperator.tokenExamMap.get(token).isFinished()){//检测考生ExamBean中的考试结束标志是否为true
+			
+			if(!examBean.isFinished()){//检测考生ExamBean中的考试结束标志是否为true
 				
-				if(ExamOperator.tokenExamMap.get(token).isAllowStart()==true)//检测该考生是否可在任意时间登录
+				if(examBean.isAllowStart()==true)//检测该考生是否可在任意时间登录
 				{
 					System.out.println("进入返回map1的分支");
 					map.put("name", user.getUname());
@@ -85,13 +95,11 @@ public class UserService {
 				
 					map.put("photo", photo);
 					
-					ExamOperator.tokenExamMap.get(token).setIfLogin(true);
+					examBean.setIfLogin(true);
 					
 					return map;
 				}
 				else{
-					System.out.println("currentTime - start Time: "+(System.currentTimeMillis()-session.getStartTime().getTime())/1000);
-					System.out.println(" start Time: "+(session.getStartTime()));
 					if(System.currentTimeMillis()-session.getStartTime().getTime()<session.getLatestLogin()*1000)//1800代表半小时，以后可能会改为由数据库中取值
 					{
 						System.out.println("进入返回map2的分支");
@@ -122,19 +130,22 @@ public class UserService {
 					
 						map.put("photo", photo);
 						
-						ExamOperator.tokenExamMap.get(token).setIfLogin(true);
+						examBean.setIfLogin(true);
 						
 						return map;
 					}
 					else
-						return null;
+						return new SuperRespond(false, "已经超过登录时间");
 				}
 			}
 			else
-				return null;
+				return new SuperRespond(false, "已经交卷");
 		case 1:
 			UUID token1=SupervisorOperator.idTokenMap.get(user.getUid());
-			SupervisorOperator.tokenSuperMap.get(token1).setSign(1);
+			SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token1);
+			if(superBean==null)
+				return new SuperRespond(false, "管理员尚未装载，稍等");
+			superBean.setSign(1);
 			map.put("token", token1);
 			map.put("authorityList", SupervisorOperator.tokenSuperMap.get(token1).getAuthorityList());
 			map.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomId());

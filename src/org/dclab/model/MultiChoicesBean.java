@@ -36,6 +36,7 @@ public class MultiChoicesBean implements Serializable, Cloneable {
 		this.img	=	img;
 		this.audio	=	audio;
 		this.video	=	video;
+		this.content	= 	content;
 		this.choiceList	=	choices;
 		this.choiceIdList	=	new ArrayList<Integer>();	//init
 		this.multiNum = multiNum;
@@ -99,6 +100,11 @@ public class MultiChoicesBean implements Serializable, Cloneable {
 	}
 	public void setIfCheck(boolean ifCheck) {
 		this.ifCheck = ifCheck;
+	}
+
+	@Override
+	public String toString() {
+		return "MultiChoicesBean [id=" + id + ", content=" + content + "]";
 	}
 
 	
