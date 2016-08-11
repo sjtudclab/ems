@@ -7,8 +7,8 @@
 var formlogin = angular.module('formlogin', [])
 
 
-formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
-
+formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $window) {
+    $rootScope.timeFlag = true;
     $scope.receive = function (name, password) {
         // alert(name + password);
 
@@ -18,57 +18,57 @@ formlogin.controller('httpCtrl', function ($scope, $state, $http, $window) {
             //加载成功之后做一些事  
             //  alert(data.name);
             // alert(data.checklist[0]);
-          
+
             alert(data.Rid);
             // $state.go('examImport');
             //  $state.go('manager');
-                 switch (data.Rid) {
-                 case 0: //考生登录
-                	  $window.sessionStorage.token = data.token;
-                      var infoStatus = {};
-                      $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                      var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
-                      infoStatus.name = data.name;
-                      infoStatus.gender = data.gender;
-                      infoStatus.id = data.id;
-                      infoStatus.cid = data.cid;
-                      infoStatus.subject = data.subject;
-                      infoStatus.time = data.time;
-                      infoStatus.photo = data.photo;
-                      infoStatus.Rid = data.Rid;
-                      $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                      $state.go('showinfo');
-                     break;
-                 case 1:  //监考员登录
-                	  $window.sessionStorage.token = data.token;
-                     var infoStatus = {};
-                     $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                     var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
-                     //功能列表
-                     infoStatus.authorityList = data.authorityList;
-                     // 考场号
-                     infoStatus.roomId = data.roomId;
-                     // 登陆用户id
-                     infoStatus.Rid = data.Rid;
-                     $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
-                     $state.go('supervisor');
-                     break;
-                 case 2:  //管理员登录
-                	  $window.sessionStorage.stoken = data.token;
-                     var adminStatus = {};
-                     $window.sessionStorage.adminStatus = JSON.stringify(adminStatus);
-                     var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
-                     //功能列表
-                     adminStatus.operationMetaInfo = data.authorityList;
-                     // 登陆用户id
-                     adminStatus.Rid = data.Rid;
-                     $window.sessionStorage.adminStatus = JSON.stringify(adminStatus);
-                     $state.go('manager');
-                     break;
-                 default:
-                     alert('状态错误！');
-             }
-
+            switch (data.Rid) {
+                case 0: //考生登录
+                    $window.sessionStorage.token = data.token;
+                    var infoStatus = {};
+                    $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                    var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+                    infoStatus.name = data.name;
+                    infoStatus.gender = data.gender;
+                    infoStatus.id = data.id;
+                    infoStatus.cid = data.cid;
+                    infoStatus.subject = data.subject;
+                    infoStatus.time = data.time;
+                    infoStatus.photo = data.photo;
+                    infoStatus.Rid = data.Rid;
+                    $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                    $state.go('showinfo');
+                    break;
+                case 1:  //监考员登录
+                    $window.sessionStorage.token = data.token;
+                    var infoStatus = {};
+                    $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                    var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
+                    //功能列表
+                    infoStatus.authorityList = data.authorityList;
+                    // 考场号
+                    infoStatus.roomId = data.roomId;
+                    // 登陆用户id
+                    infoStatus.Rid = data.Rid;
+                    $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
+                    $state.go('supervisor');
+                    break;
+                case 2:  //管理员登录
+                    $window.sessionStorage.stoken = data.token;
+                    var adminStatus = {};
+                    $window.sessionStorage.adminStatus = JSON.stringify(adminStatus);
+                    var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
+                    //功能列表
+                    adminStatus.authorityList = data.authorityList;
+                    // 登陆用户id
+                    adminStatus.Rid = data.Rid;
+                    $window.sessionStorage.adminStatus = JSON.stringify(adminStatus);
+                    $state.go('manager');
+                    break;
+                default:
+                    alert(data.detail);
+            }
+             
             /*  if (data.Rid == 0) {
                  
               } else {
@@ -132,8 +132,8 @@ var demo0 = angular.module('demo0', ['ui.bootstrap'])
 
 demo0.controller('finish', function ($scope, $state, $stateParams, $window) {
 
-   $scope.score=$stateParams.score;
-   $scope.scoreshow=$stateParams.scoreshow;
+    $scope.score = $stateParams.score;
+    $scope.scoreshow = $stateParams.scoreshow;
 
 
 });
@@ -219,35 +219,35 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("单选题succeed");
+            // alert("单选题succeed");
 
 
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("多选题succeed");
+            // alert("多选题succeed");
 
 
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("判断题succeed");
+            // alert("判断题succeed");
 
 
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("匹配提succeed");
+            // alert("匹配提succeed");
 
 
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("简答题succeed");
+            // alert("简答题succeed");
 
 
         });
@@ -313,16 +313,16 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
                                     params: { token: $window.sessionStorage.token }
                                 }).success(function (data, status, headers, config) {
                                     /*alert("简答题succeed");*/
-                                    var scoreshow="block";
+                                    var scoreshow = "block";
                                     // if(data.flag){
                                     //     scoreshow="block";
                                     // }else{
                                     //     scoreshow='none';
                                     // }
-                                        $state.go("finish", {score: data,scoreshow: scoreshow});
+                                    $state.go("finish", { score: data, scoreshow: scoreshow });
 
                                 });
-                               
+
                                 /* alert('您已提交');*/
                             }
                         });
@@ -336,71 +336,107 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
 });
 
 
-demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state) {
-    $http.get('/EMS/exam/getTime', {
-        params: { token: $window.sessionStorage.token }
-    }).success(function (data, status, headers, config) {
-        var second = data,
-            timePromise = undefined;
-        timePromise = $interval(function () {
-            if (second < 0) {
-                $interval.cancel(timePromise);
-                timePromise = undefined;
 
-                var allStatus = JSON.parse($window.sessionStorage.problemStatus);
+demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state, $rootScope) {
 
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    alert("单选题succeed");
+    var second,
+        timePromise = undefined;
+    timeRequest();
 
+    $scope.refreshTime = function () {
+        $interval.cancel(timePromise);
+        timePromise = undefined;
+        timeRequest();
+    }
+    function timeRequest() {
+        $http.get('/EMS/exam/getTime', {
+            params: { token: $window.sessionStorage.token }
+        }).success(function (data, status, headers, config) {
+            second = data;
+            timePromise = $interval(function () {
+                if (second < 0) {
+                    $interval.cancel(timePromise);
+                    timePromise = undefined;
 
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    alert("多选题succeed");
+                    var allStatus = JSON.parse($window.sessionStorage.problemStatus);
 
-
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    alert("判断题succeed");
+                    $http.get('/EMS/exam/getTopic', {
+                        params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
+                    }).success(function (data, status, headers, config) {
+                        alert("单选题succeed");
 
 
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    alert("匹配提succeed");
+                    });
+                    $http.get('/EMS/exam/getTopic', {
+                        params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.option, ifCheck: allStatus.multiple.ifCheck }
+                    }).success(function (data, status, headers, config) {
+                        alert("多选题succeed");
 
 
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    alert("简答题succeed");
+                    });
+                    $http.get('/EMS/exam/getTopic', {
+                        params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
+                    }).success(function (data, status, headers, config) {
+                        alert("判断题succeed");
 
 
-                });
-                $state.go('finish');
-                /*alert("重新");*/
-            } else {
-                hour = Math.floor(second / 3600);
-                minute = Math.floor((second % 3600) / 60);
-                miao = second % 3600 % 60;
-                $scope.hour = hour;
-                $scope.minute = minute;
-                $scope.time = miao;
-                second--;
-            }
-        }, 1000, 0);
+                    });
+                    $http.get('/EMS/exam/getTopic', {
+                        params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
+                    }).success(function (data, status, headers, config) {
+                        alert("匹配提succeed");
 
-    }).error(function (data, status, headers, config) {
-        //处理错误  
-        alert('用户不存在或密码错误！');
-    });
+
+                    });
+                    $http.get('/EMS/exam/getTopic', {
+                        params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
+                    }).success(function (data, status, headers, config) {
+                        alert("简答题succeed");
+
+
+                    });
+
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        /*alert("简答题succeed");*/
+                        alert("考试时间结束！");
+                        var scoreshow = "block";
+                        // if(data.flag){
+                        //     scoreshow="block";
+                        // }else{
+                        //     scoreshow='none';
+                        // }
+                        $state.go("finish", { score: data, scoreshow: scoreshow });
+
+                    });
+                    // $state.go('finish');
+                    /*alert("重新");*/
+                } else {
+                    if (second == 0) {
+                        $http.get('/EMS/exam/getTime', {
+                            params: { token: $window.sessionStorage.token }
+                        }).success(function (data, status, headers, config) {
+                            second = data;
+                        })
+                    }
+                    hour = Math.floor(second / 3600);
+                    minute = Math.floor((second % 3600) / 60);
+                    miao = second % 3600 % 60;
+                    $scope.hour = hour;
+                    $scope.minute = minute;
+                    $scope.time = miao;
+                    second--;
+                    
+                }
+            }, 1000);
+
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('用户不存在或密码错误！');
+        });
+
+    }
 
 });
 
@@ -675,6 +711,7 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
     $scope.pageChanged = function (option) {
         // alert($scope.currentPage);
         //  alert($scope.id);
+
         var isChecked = $scope.count;
         $http.get('/EMS/exam/getTopic', {
             /*   $http.get('single0.json', {*/
@@ -2216,7 +2253,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 });
 
 
-var checkup = angular.module('checkup', [])
+var checkup = angular.module('checkup', []);
 checkup.controller('btnCtrl', function ($scope) {
 
     switch ($scope.list.status) {
@@ -2241,11 +2278,11 @@ checkup.controller("Ctab1", function ($scope, $http, $state, $window, $rootScope
         params: { token: $window.sessionStorage.token, typeId: 0 }
     }).success(function (data, status, headers, config) {
         // alert(data.checkList[0].status);
-    	/*var lists=[];
-    	for (var i = 0; i < 100; i++) {
-    	    lists[i]=0;
-    	}
-    	$scope.lists=lists;*/
+        /*var lists=[];
+        for (var i = 0; i < 100; i++) {
+            lists[i]=0;
+        }
+        $scope.lists=lists;*/
         $scope.lists = data.checkList;
         $rootScope.topicNum = data.topicNum;
         $rootScope.finishNum = data.finishNum;

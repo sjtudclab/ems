@@ -70,7 +70,7 @@ examManage.controller('examManagerCtrl', function ($scope, $http,$window) {
 });
 
 examManage.controller('singleCtrl', function ($scope, $http,$window) {
-    $scope.itemMessage = ['',''];
+    $scope.itemMessage = ['','','',''];
     $scope.rightAnswer = [];
 
     $scope.save = function () {
@@ -98,7 +98,7 @@ examManage.controller('singleCtrl', function ($scope, $http,$window) {
 
     }
     $scope.delete = function () {
-        $scope.itemMessage = ['',''];
+        $scope.itemMessage = ['','','',''];
         $scope.rightAnswer = [];
         $scope.content=[];
 
@@ -143,7 +143,7 @@ examManage.controller('judgeCtrl', function ($scope, $http,$window) {
 });
 examManage.controller('multipleCtrl', function ($scope, $http,$window) {
     $scope.right = [];
-    $scope.itemMessage = ['',''];
+    $scope.itemMessage = ['','','',''];
     var List=[];
     $scope.save = function () {
         // alert($scope.content + $scope.right+$scope.itemMessage);
@@ -175,7 +175,7 @@ examManage.controller('multipleCtrl', function ($scope, $http,$window) {
 
     }
     $scope.delete = function () {
-        $scope.itemMessage = ['',''];
+        $scope.itemMessage = ['','','',''];
         $scope.right = [];
         $scope.content=[];
 
@@ -246,7 +246,7 @@ examManage.controller('subjectCtrl', function ($scope, $http,$window) {
             choice[0]=$scope.singleScore;
         }
         if($scope.multipleCheckbox){
-            choice[1]=$scope.multifulScore+','+$scope.multiScore;
+            choice[1]=$scope.multiScore+','+$scope.multifulScore;
         }
         if($scope.judgeCheckbox){
             choice[2]=$scope.judgeScore;

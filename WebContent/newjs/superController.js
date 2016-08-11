@@ -159,7 +159,7 @@ angular
 			/* console.log($scope); */
 			var uidList = [];
 			for (x in $scope.selectionStatus) {
-				alert(x + ' ' + $scope.selectionStatus[x]);
+				// alert(x + ' ' + $scope.selectionStatus[x]);
 				if ($scope.selectionStatus[x]) {
 					uidList.push(x);
 				}
@@ -217,7 +217,7 @@ angular
 											});
 											break;
 										case "allowStop": // 允许终止
-											alert(url);
+											// alert(url);
 											$http.get('/EMS/supervise/allowStop', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -233,7 +233,7 @@ angular
 											});
 											break;
 										case "delay": // 延时操作
-											alert(url + $scope.delayTime);
+											// alert(url + $scope.delayTime);
 											$http.get('/EMS/supervise/delay', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -250,7 +250,7 @@ angular
 											});
 											break;
 										case "deleteExam": // 撤销登录
-											alert(url);
+											// alert(url);
 											$http.get('/EMS/supervise/deleteExam', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -266,7 +266,7 @@ angular
 											});
 											break;
 										case "manualAssign": // 强行交卷
-											alert(url);
+											// alert(url);
 											$http.get('/EMS/supervise/manualAssign', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -282,7 +282,7 @@ angular
 											});
 											break;
 										case "restart": // 撤销交卷
-											alert(url);
+											// alert(url);
 											$http.get('/EMS/supervise/restart', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -298,7 +298,7 @@ angular
 											});
 											break;
 										case "roomChange": // 更换场次
-											alert(url);
+											// alert(url);
 											$http.put('/EMS/supervise/roomChange', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -315,7 +315,7 @@ angular
 											});
 											break;
 										case "seatChange": // 更换座位
-											alert(url + $scope.seatNum + $scope.seat);
+											// alert(url + $scope.seatNum + $scope.seat);
 											$http.post('/EMS/supervise/seatChange', {
 												params: {
 													token: $window.sessionStorage.token,
