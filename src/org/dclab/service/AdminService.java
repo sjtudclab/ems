@@ -31,6 +31,11 @@ public class AdminService {
 	public SuperRespond subjectAdd(String name,int duration,int earliestSubmit,int latestLogin,Map<Integer, String> map){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
+		//把分钟转化为妙
+		duration=duration*60;
+		earliestSubmit=earliestSubmit*60;
+		latestLogin=latestLogin*60;
+		
 		
 		int sign1=smapper.add(name, duration, earliestSubmit, latestLogin);
 		sqlSession.commit();//没有这个语句就算上条语句执行成功数据库也不会更新的兄弟

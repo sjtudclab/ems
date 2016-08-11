@@ -15,4 +15,8 @@ public interface SubjectMapperI {
 	
 	@Select("SELECT duration FROM `subject` WHERE subId=#{id}")
 	public int getDurationBySubId(int id);
+	
+	
+	@Select("select earliestSubmit from subject where subId=#{id}")
+	public int getEarSubmitBySubId(int id);
 }

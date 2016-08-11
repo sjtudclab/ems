@@ -16,6 +16,7 @@ import java.util.List;
 public class ExamBean implements Serializable{
 	private static final long	serialVersionUID= 15493198966L;
 	private static int EXAM_TIME;	//整场考试的时长，记得加载时初始化 
+	private static int earliestSubmit;//最早可交卷时间
 	//剩余时长, 装填试卷时将其初始化，每次写log时，获取前台剩余时间，重新setDuration，延时或者减少时间时直接修改这个值
 	private int extraTime;	//额外添加的时间，用于延时操作
 	private long startTime;//该考生开始考试的时间
@@ -42,6 +43,16 @@ public class ExamBean implements Serializable{
 	
 	
 	
+	public static int getEarliestSubmit() {
+		return earliestSubmit;
+	}
+
+
+	public static void setEarliestSubmit(int earliestSubmit) {
+		ExamBean.earliestSubmit = earliestSubmit;
+	}
+
+
 	public int getMark() {
 		return mark;
 	}

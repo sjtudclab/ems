@@ -122,16 +122,23 @@ public class ExamController {
 	}
 	
 	@RequestMapping("/handExam")
-	public int handin(@RequestParam(value="token")UUID token){
+	public Object handin(@RequestParam(value="token")UUID token){
 			ExamBean exambean=examService.getExambeanByToken(token);
 			
 			if(exambean==null)
 				return 0;
 			
-			exambean.setFinished(true);
-			int mark = gradingService.gradePaper(exambean);
-			System.out.println("mark: "+mark);
-			return mark;
+			if(exambean.isAllowTerminate()||
+					( ExamBean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<ExamBean.getEarliestSubmit())
+			{
+				exambean.setFinished(true);
+				int mark = gradingService.gradePaper(exambean);
+				System.out.println("mark: "+mark);
+				return mark;
+			}
+			else
+				return new SuperRespond(false, "还没到交卷时间");
+				
 	}
 	
 	@RequestMapping("/getTime")
