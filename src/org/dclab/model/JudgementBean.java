@@ -12,7 +12,7 @@ import java.util.List;
  * @author alvis
  *
  */
-public class JudgementBean implements Serializable{
+public class JudgementBean implements Serializable, Cloneable{
 	/**
 	 * 
 	 */
@@ -28,6 +28,24 @@ public class JudgementBean implements Serializable{
 	private String video;//存储题目中可能存在的视频的地址
 	
 	
+	public JudgementBean(){}
+	
+	public JudgementBean(int id,int judgeNum, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
+		this.id			=	id;
+		this.choiceList	=	choiceList;
+		this.content	=	content;
+		this.img		=	img;
+		this.audio		=	audio;
+		this.video		=	video;
+		this.judgeNum  	=	judgeNum;
+		
+	}
+	
+	@Override
+	public Object clone() {
+		return new JudgementBean(this.id,this.judgeNum, this.content, this.choiceList, this.img, this.audio, this.video);
+	}
+
 	public String getVideo() {
 		return video;
 	}

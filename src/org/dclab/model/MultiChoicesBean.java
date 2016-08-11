@@ -3,6 +3,8 @@ package org.dclab.model;
 import java.io.Serializable;
 import java.util.*;
 
+import org.junit.experimental.theories.Theories;
+
 /**
  * 多选题对象：
  * 1.题干内容以及id。
@@ -11,13 +13,13 @@ import java.util.*;
  * @author alvis
  *
  */
-public class MultiChoicesBean implements Serializable {
+public class MultiChoicesBean implements Serializable, Cloneable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6078271522167915749L;
-	private int multiNum;//存储多选题数目
+	public int multiNum;//存储多选题数目
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
@@ -27,8 +29,22 @@ public class MultiChoicesBean implements Serializable {
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
 	
+	public MultiChoicesBean(){}
+
+	public MultiChoicesBean(int id, int multiNum, String content, List<ChoicesBean> choices, String img, String audio, String video){
+		this.id		=	id;
+		this.img	=	img;
+		this.audio	=	audio;
+		this.video	=	video;
+		this.choiceList	=	choices;
+		this.choiceIdList	=	new ArrayList<Integer>();	//init
+		this.multiNum = multiNum;
+	}
 	
-	
+	@Override
+	public Object clone(){
+		return new MultiChoicesBean(this.id,this.multiNum, this.content, this.choiceList, this.img, this.audio, this.video);
+	}
 	
 	public String getVideo() {
 		return video;

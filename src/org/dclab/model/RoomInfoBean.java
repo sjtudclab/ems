@@ -6,7 +6,7 @@ public class RoomInfoBean {
 	private int size;
 	private int Uid;
 	private int status;
-	private int supervisor;
+	private String supervisor;
 	
 	
 	public int getRoomId() {
@@ -39,10 +39,10 @@ public class RoomInfoBean {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public int getSupervisor() {
+	public String getSupervisor() {
 		return supervisor;
 	}
-	public void setSupervisor(int supervisor) {
+	public void setSupervisor(String supervisor) {
 		this.supervisor = supervisor;
 	}
 	

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author alvis
  *简答题
  */
-public class shortAnswerBean implements Serializable{
+public class ShortAnswerBean implements Serializable, Cloneable{
 
 	/**
 	 * 
@@ -18,8 +18,19 @@ public class shortAnswerBean implements Serializable{
 	private String answer;//考生答案
 	private int shortNum;//存储简答题数目
 	
+	public ShortAnswerBean(){}
 	
+	public ShortAnswerBean(int id,int shortNum,String content){
+		this.id		=	id;
+		this.content=	content;
+		this.shortNum=	shortNum;
+	}
 	
+	@Override
+	public Object clone(){
+		
+		return new ShortAnswerBean(this.id,this.shortNum, this.content);
+	}
 	public int getShortNum() {
 		return shortNum;
 	}
