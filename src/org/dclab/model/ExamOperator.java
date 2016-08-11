@@ -92,6 +92,8 @@ public class ExamOperator {
 
 	    	ArrayList<MultiChoicesBean> mlist=topicMapper.getMultiBeanBySubId(subId);//获得多选题题干和id
 	    	
+	    	System.out.println("get multichoices list: "+mlist);
+	    	
 	    	for(MultiChoicesBean bean: mlist){
 		    	int topicId=bean.getId();
 		    	List<ChoicesBean> list=choiceMapper.getChoice(topicId);

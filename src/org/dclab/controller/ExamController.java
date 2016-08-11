@@ -67,13 +67,15 @@ public class ExamController {
 		int id=request.getId()-1;//list中保存的题是从0开始的
 		int requestId=request.getRequestId()-1;
 		
-		
+	
 		switch (request.getTypeId()) {
 		case 0:
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceId(), request.isIfCheck());
 			break;
 		case 1:
+			System.out.println((id+1)+" "+request.getChoiceIdList());
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getChoiceIdList(), request.isIfCheck());
+			
 			break;
 		case 3:
 			Map<Integer, Integer> map=examService.stringTomap(request.getChoiceIdMap());
