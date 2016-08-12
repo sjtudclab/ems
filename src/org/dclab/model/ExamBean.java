@@ -25,7 +25,7 @@ public class ExamBean implements Serializable{
 	
 	private int mark;//考生的成绩
 	
-	private static int topicNum;
+	private int topicNum;
 	private HashSet<Integer> finishTopic;
 	
 	private boolean ifLogin;//考生是否登录了，主要是用在监考教师的界面显示上
@@ -95,8 +95,8 @@ public class ExamBean implements Serializable{
 	}
 
 
-	public static void setTopicNum(int topicNum) {
-		topicNum = topicNum;
+	public void setTopicNum(int topicNum) {
+		this.topicNum = topicNum;
 	}
 
 	public static int getEXAM_TIME() {
