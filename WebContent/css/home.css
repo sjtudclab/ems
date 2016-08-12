@@ -47,19 +47,19 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-.nav-sidebar > li > a {
+.nav-sidebar> li> a {
     padding-right: 20px;
     padding-left: 20px;
 }
 
-.nav-sidebar > li > h4 {
+.nav-sidebar> li> h4 {
     padding-right: 20px;
     padding-left: 20px;
 }
 
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
+.nav-sidebar> .active> a,
+.nav-sidebar> .active> a:hover,
+.nav-sidebar> .active> a:focus {
     color: #fff;
     background-color: #428bca;
 }
@@ -188,9 +188,10 @@ body {
     text-transform: uppercase;
 }
 
-.page-custom{
+.page-custom {
     color: #fff;
 }
+
 
 /* .home {
     padding-bottom: 150px;
@@ -245,27 +246,34 @@ body {
     color: #fff;
 }
 
-.tag-container{
-   
+.tag-container {
     margin-top: 30px;
     width: 100%;
 }
 
 .info-custom {
-     top: 50%;
-     left: 50%;
+    top: 50%;
+    left: 50%;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
     border-top: 0;
     text-transform: uppercase;
     border: 1px solid transparent;
-    border-bottom-color:/* #3498db *//* rgba(0,0,0,.3) */rgb(125, 185, 232)/* #d9edf7 *//* rgba(51,122,183,.8) */;
-    background-color:#337ab7/* #3A8FB7 *//* #7DB9DE *//* rgb(125, 185, 232) */;
-    color:#fff;
-  /*   background-color:rgba(125, 185, 232, 1); */
+    border-bottom-color: /* #3498db */
+    /* rgba(0,0,0,.3) */
+    rgb(125, 185, 232)/* #d9edf7 */
+    /* rgba(51,122,183,.8) */
+    ;
+    background-color: #337ab7/* #3A8FB7 */
+    /* #7DB9DE */
+    /* rgb(125, 185, 232) */
+    ;
+    color: #fff;
+    /*   background-color:rgba(125, 185, 232, 1); */
 }
-.info-custom li{
+
+.info-custom li {
     display: inline-block;
     margin-bottom: 0;
     font-size: 16px;
@@ -287,12 +295,11 @@ body {
     text-align: center;
     display: inline-block;
     padding-top: 1%;
-
 }
 
-.bottominfo > p:hover{color:#FFFF00;}
-
-
+.bottominfo> p:hover {
+    color: #FFFF00;
+}
 
 .tabcolor {
     background-color: rgba(255, 255, 255, 1);
@@ -301,98 +308,119 @@ body {
     border-color: rgba(238, 238, 238, .3);
 }
 
-.tabtop{
-     
+.tabtop {
     padding: 6px 12px;
     margin-bottom: 0;
-   
     text-align: center;
     white-space: nowrap;
- 
- 
-   
-
 }
 
 .tabfront {
-
     font-size: 16px;
 }
 
 .infoco {
-
-    background-color:rgba(125, 185, 232,.3);
+    background-color: rgba(125, 185, 232, .3);
 }
-.reinfoco {
 
-    background-color:rgba(148, 211, 224,.3);
+.reinfoco {
+    background-color: rgba(148, 211, 224, .3);
 }
 
 .checkdiv {
-    margin:2%;
+    margin: 2%;
 }
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+.nav-tabs> li.active> a,
+.nav-tabs> li.active> a:hover,
+.nav-tabs> li.active> a:focus {
     color: #555;
-    font-weight:bolder;
-/*     border: 2px solid #ddd;
+    font-weight: bolder;
+    /*     border: 2px solid #ddd;
     border-bottom-color:transparent; */
-
-
 }
+
+
 /* .navbarcustom {
     margin-bottom: 0;
     color: rgba(255, 255, 255, .7);
 }
  */
-.supervi{
-	height:100%
+
+.supervi {
+    height: 100%
 }
+
 .supervi ul {
-            float: left;
-            background-color: #CCCCCC;
-            width: 10%;
-            height: 100%
-        }
+    float: left;
+    background-color: #CCCCCC;
+    width: 10%;
+    height: 100%
+}
 
-        .content {
-            float: left;
-            width: 90%;
-            height: 100%
-        }
+.content {
+    float: left;
+    width: 90%;
+    height: 100%
+}
 
-   .supervi li {
-            text-align: center;
-        }
+.supervi li {
+    text-align: center;
+}
 
- .supervi a {
-            margin: 5%
-        }
+.supervi a {
+    margin: 5%
+}
 
-        .workingSpace {
-            height: 20%
-        }
+.workingSpace {
+    height: 20%
+}
 
-        .selectArea {
-            height: 70%
-        }
+.selectArea {
+    height: 70%
+}
 
-        .table-responsive {
-            height: 90%;
-            width: 100%
-        }
+.table-responsive {
+    height: 90%;
+    width: 100%
+}
 
-  .supervi td,th {
-            text-align: center;
-        }
+.supervi td,
+th {
+    text-align: center;
+}
 
-        .cursor-pointer {
-            cursor: pointer;
-        }
+.cursor-pointer {
+    cursor: pointer;
+}
 
-  /* finish page      */
+
+/* finish page      */
+
 .finish {
-	padding: 10%;
-	text-align: center;
-	
+    padding: 10%;
+    text-align: center;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
 }

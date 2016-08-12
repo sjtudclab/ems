@@ -1,18 +1,18 @@
-<div class="bg">
+<div class="bg" style="height:100%">
     <div ui-view="navbar" style="height:3%"></div>
-    <div class="container">
-        <div class="page-header page-custom">
+    <div class="container" style="height:95%">
+        <div class="page-header page-custom" style="height:8%">
             <h1>考试管理系统</h1>
         </div>
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="panel panel-info">
-                <div class="panel-heading panel-text">
+        <div class="col-sm-6 col-sm-offset-3" style="height:92%">
+            <div class="panel panel-info" style="height:78%">
+                <div class="panel-heading panel-text" style="height:8%">
                     <h3 class="panel-title">考生信息</h3>
                 </div>
-                <div class="panel-body">
-                    <div style="border: 1px solid #ccc">
+                <div class="panel-body" style="height:92%">
+                    <div style="border: 1px solid #ccc;height:16%">
                         <!--  <img src="image/inch.jpg" height="80px" width="55px" class="center-block" > -->
-                        <img ng-src="data:image/png;base64,{{photo}}" height="80px" width="55px" class="center-block">
+                        <img ng-src="data:image/png;base64,{{photo}}" height="100%" width="55px" class="center-block">
                     </div>
                     <br>
                     <div class="input-group">
@@ -27,35 +27,30 @@
                     <br>
                     <div class="input-group">
                         <span class="input-group-addon">准考证号</span>
-                        <p ng-bind="id" class="form-control"></p>
+                        <p ng-bind="id" class="form-control" ></p>
                     </div>
                     <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">证件号</span>
+                    <div class="input-group" >
+                        <span class="input-group-addon" >证件号</span>
                         <p ng-bind="cid" id="e-idnum" class="form-control"></p>
                     </div>
                     <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">考试科目</span>
-                        <p ng-bind="subject" class="form-control"></p>
+                    <div class="input-group" >
+                        <span class="input-group-addon" >考试科目</span>
+                        <p ng-bind="subject" class="form-control" ></p>
                     </div>
                     <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">考试时间</span>
+                    <div class="input-group" >
+                        <span class="input-group-addon" >考试时间</span>
                         <p class="form-control">{{time| date:'yyyy-MM-dd HH:mm:ss'}}</p>
                     </div>
                     <br>
-                    <p ng-click="click()" class="btn btn-info btn-pp center-block">确认</p>
+                    <p ng-click="click()" class="btn btn-info btn-pp center-block" style="height:8%">确认</p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+    <div class="container" style="height:2%">
+        
     </div>
 </div>

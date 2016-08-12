@@ -4,7 +4,7 @@ angular
 	.module('supervisor')
 	.controller(
 				'supervisorCtrl',
-				function ($rootScope, $scope, $http, $window, $uibModal) {
+				function ($rootScope, $scope, $http, $window, $uibModal, $interval) {
 
 		var infoStatus = JSON
 			.parse($window.sessionStorage.infoStatus);
@@ -157,12 +157,38 @@ angular
 		$scope.confirm = function (url) {
 			var uidList = [];
 			for (x in $scope.selectionStatus) {
-			
+
 				if ($scope.selectionStatus[x]) {
 					uidList.push(x);
 				}
 			}
-		
+			var showurl;
+			switch (url) {
+				case "forceStop": // 强制终止
+					showurl = "强制终止";
+					break;
+				case "allowStart": // 允许开始
+					showurl = "允许开始";
+					break;
+				case "allowStop": // 允许终止
+					showurl = "允许终止";
+					break;
+				case "delay": // 延时操作
+					showurl = "延时操作";
+					break;
+				case "deleteExam": // 撤销登录
+					showurl = "撤销登录";
+					break;
+				case "manualAssign": // 强行交卷
+					showurl = "强行交卷";
+					break;
+				case "roomChange": // 更换场次
+					showurl = "更换场次";
+					break;
+				case "seatChange": // 更换座位
+					showurl = "更换座位";
+					break;
+			}
 			var modalParam = {
 				backdrop: 'static',
 				size: 'sm'
@@ -170,19 +196,19 @@ angular
 			var header = '<div class="modal-header"><h3 class="modal-title">提醒</h3></div>';
 			var footer =
 				'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.confirm=false;$close()">取消</button></div>';
-			modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认操作么？</p></div>' + footer;
+			modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认{{showurl}}操作1？</p></div>' + footer;
 			$uibModal.open(modalParam).result.then(function () {
 				if ($scope.confirm) {
-					modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的确认操作么？</p></div>' + footer;
+					modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认{{showurl}}操作2？</p></div>' + footer;
 					$uibModal.open(modalParam).result.then(function () {
 						if ($scope.confirm) {
-							modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的真的确认操作么？</p></div>' + footer;
+							modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认{{showurl}}操作3？</p></div>' + footer;
 							$uibModal.open(modalParam).result.then(function () {
 								if ($scope.confirm) {
 
 									switch (url) {
 										case "forceStop": // 强制终止
-										
+
 											$http.get('/EMS/supervise/forceStop', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -199,7 +225,7 @@ angular
 
 											break;
 										case "allowStart": // 允许开始
-										
+
 											$http.get('/EMS/supervise/allowStart', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -215,7 +241,7 @@ angular
 											});
 											break;
 										case "allowStop": // 允许终止
-										
+
 											$http.get('/EMS/supervise/allowStop', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -231,7 +257,7 @@ angular
 											});
 											break;
 										case "delay": // 延时操作
-										
+
 											$http.get('/EMS/supervise/delay', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -248,7 +274,7 @@ angular
 											});
 											break;
 										case "deleteExam": // 撤销登录
-										
+
 											$http.get('/EMS/supervise/deleteExam', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -264,7 +290,7 @@ angular
 											});
 											break;
 										case "manualAssign": // 强行交卷
-										
+
 											$http.get('/EMS/supervise/manualAssign', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -280,7 +306,7 @@ angular
 											});
 											break;
 										case "restart": // 撤销交卷
-									
+
 											$http.get('/EMS/supervise/restart', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -296,7 +322,7 @@ angular
 											});
 											break;
 										case "roomChange": // 更换场次
-										
+
 											$http.put('/EMS/supervise/roomChange', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -313,7 +339,7 @@ angular
 											});
 											break;
 										case "seatChange": // 更换座位
-											
+
 											$http.post('/EMS/supervise/seatChange', {
 												params: {
 													token: $window.sessionStorage.token,
@@ -381,8 +407,12 @@ angular
 		$scope.refresh = function () {
 			refresh();
 		};
+		//每间隔30s自动刷新
+		var timingPromise = undefined;
+		timingPromise = $interval(function(){refresh()}, 30000);
+
 		function refresh() {
-		
+
 			$http({
 				method: 'GET',
 				url: '/EMS/supervise/Refresh',

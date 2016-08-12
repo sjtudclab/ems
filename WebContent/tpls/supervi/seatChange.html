@@ -1,5 +1,5 @@
 <div>
    <p>更换座位：将该考生移动到一个新的空闲座位</p> 
    
-      座位号：<select ng-model="$parent.$parent.seat" ng-options="x.uid as x.seatNum+' '+x.uname for x in examineesInfo | orderBy:'seatNum'" ></select>更换为 座位号：<select ng-model="$parent.$parent.seatNum" ng-options="x for x in lists"></select>
+      座位号：<select style="width:5%" ng-model="$parent.$parent.seat" ng-options="x.uid as x.seatNum+' '+x.uname for x in examineesInfo | orderBy:'seatNum'" ></select>更换为 座位号：<select style="width:5%" ng-model="$parent.$parent.seatNum" ng-options="x for x in lists"></select>
 </div>

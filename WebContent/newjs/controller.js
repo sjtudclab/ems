@@ -4,7 +4,7 @@ var formlogin = angular.module('formlogin', [])
 
 
 formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $window) {
-    $rootScope.timeFlag = true;
+
     $scope.receive = function (name, password) {
         // alert(name + password);
 
@@ -350,13 +350,13 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         var header = '<div class="modal-header"><h3 class="modal-title">提醒</h3></div>';
         var footer =
             '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.confirm=false;$close()">取消</button></div>';
-        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">要提交么？</p></div>' + footer;
+        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷1？</p></div>' + footer;
         $uibModal.open(modalParam).result.then(function () {
             if ($scope.confirm) {
-                modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的要提交么？</p></div>' + footer;
+                modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷2？</p></div>' + footer;
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
-                        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">真的真的要提交么？</p></div>' + footer;
+                        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷3？</p></div>' + footer;
                         $uibModal.open(modalParam).result.then(function () {
                             if ($scope.confirm) {
                                 $http.get('/EMS/exam/handExam', {
@@ -400,143 +400,170 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
 
     var second,
         timePromise = undefined;
-    timeRequest();
+    $http.get('/EMS/exam/getTime', {
+        params: { token: $window.sessionStorage.token }
+    }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            alert(data.detail);
+        } else {
+            second = data;
+            timeRequest();
+        }
+    });
+    // timeRequest();
 
-    $scope.refreshTime = function () {
-        $interval.cancel(timePromise);
-        timePromise = undefined;
-        timeRequest();
-    }
-    function timeRequest() {
+    // $scope.refreshTime = function () {
+    //     $interval.cancel(timePromise);
+    //     timePromise = undefined;
+    //     timeRequest();
+    // }
+    var timingPromise = undefined;
+    timingPromse = $interval(function () {
         $http.get('/EMS/exam/getTime', {
             params: { token: $window.sessionStorage.token }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
+            } else {
+                second = data;
+                // timeRequest();
             }
-            second = data;
-            timePromise = $interval(function () {
-                if (second < 0) {
-                    $interval.cancel(timePromise);
-                    timePromise = undefined;
+        });
 
-                    var allStatus = JSON.parse($window.sessionStorage.problemStatus);
-
-                    $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
-                    }).success(function (data, status, headers, config) {
-                        // alert("单选题succeed");
-                        if (data.flag == false) {
-                            alert(data.detail);
-                        }
+    }, 30000);
 
 
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
-                    $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
-                    }).success(function (data, status, headers, config) {
-                        // alert("多选题succeed");
-                        if (data.flag == false) {
-                            alert(data.detail);
-                        }
+
+    function timeRequest() {
+        // $http.get('/EMS/exam/getTime', {
+        //     params: { token: $window.sessionStorage.token }
+        // }).success(function (data, status, headers, config) {
+        //     if (data.flag == false) {
+        //         alert(data.detail);
+        //     }
+        //     second = data;
+        timePromise = $interval(function () {
+            if (second < 0) {
+                $interval.cancel(timePromise);
+                timePromise = undefined;
+
+                var allStatus = JSON.parse($window.sessionStorage.problemStatus);
+
+                $http.get('/EMS/exam/getTopic', {
+                    params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
+                }).success(function (data, status, headers, config) {
+                    // alert("单选题succeed");
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
 
 
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
-                    $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
-                    }).success(function (data, status, headers, config) {
-                        // alert("判断题succeed");
-                        if (data.flag == false) {
-                            alert(data.detail);
-                        }
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+                $http.get('/EMS/exam/getTopic', {
+                    params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
+                }).success(function (data, status, headers, config) {
+                    // alert("多选题succeed");
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
 
 
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
-                    $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
-                    }).success(function (data, status, headers, config) {
-                        // alert("匹配提succeed");
-                        if (data.flag == false) {
-                            alert(data.detail);
-                        }
-
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
-                    $http.get('/EMS/exam/getTopic', {
-                        params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
-                    }).success(function (data, status, headers, config) {
-                        // alert("简答题succeed");
-                        if (data.flag == false) {
-                            alert(data.detail);
-                        }
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+                $http.get('/EMS/exam/getTopic', {
+                    params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
+                }).success(function (data, status, headers, config) {
+                    // alert("判断题succeed");
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
 
 
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+                $http.get('/EMS/exam/getTopic', {
+                    params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
+                }).success(function (data, status, headers, config) {
+                    // alert("匹配提succeed");
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
 
-                    $http.get('/EMS/exam/handExam', {
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+                $http.get('/EMS/exam/getTopic', {
+                    params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
+                }).success(function (data, status, headers, config) {
+                    // alert("简答题succeed");
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
+
+
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    /*alert("简答题succeed");*/
+                    if (data.flag == false) {
+                        alert(data.detail);
+                    }
+                    alert("考试时间结束！");
+                    var scoreshow = "block";
+                    // if(data.flag){
+                    //     scoreshow="block";
+                    // }else{
+                    //     scoreshow='none';
+                    // }
+                    $state.go("finish", { score: data, scoreshow: scoreshow });
+
+                }).error(function (data, status, headers, config) {
+                    //处理错误  
+                    alert('服务器拒绝访问');
+                });
+                // $state.go('finish');
+                /*alert("重新");*/
+            } else {
+                if (second == 0) {
+                    $http.get('/EMS/exam/getTime', {
                         params: { token: $window.sessionStorage.token }
                     }).success(function (data, status, headers, config) {
-                        /*alert("简答题succeed");*/
+
                         if (data.flag == false) {
                             alert(data.detail);
+                        } else {
+                            second = data;
                         }
-                        alert("考试时间结束！");
-                        var scoreshow = "block";
-                        // if(data.flag){
-                        //     scoreshow="block";
-                        // }else{
-                        //     scoreshow='none';
-                        // }
-                        $state.go("finish", { score: data, scoreshow: scoreshow });
-
-                    }).error(function (data, status, headers, config) {
-                        //处理错误  
-                        alert('服务器拒绝访问');
-                    });
-                    // $state.go('finish');
-                    /*alert("重新");*/
-                } else {
-                    if (second == 0) {
-                        $http.get('/EMS/exam/getTime', {
-                            params: { token: $window.sessionStorage.token }
-                        }).success(function (data, status, headers, config) {
-
-                            if (data.flag == false) {
-                                alert(data.detail);
-                            } else {
-                                second = data;
-                            }
-                        })
-                    }
-                    hour = Math.floor(second / 3600);
-                    minute = Math.floor((second % 3600) / 60);
-                    miao = second % 3600 % 60;
-                    $scope.hour = hour;
-                    $scope.minute = minute;
-                    $scope.time = miao;
-                    second--;
-
+                    })
                 }
-            }, 1000);
+                hour = Math.floor(second / 3600);
+                minute = Math.floor((second % 3600) / 60);
+                miao = second % 3600 % 60;
+                $scope.hour = hour;
+                $scope.minute = minute;
+                $scope.time = miao;
+                second--;
 
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
+            }
+        }, 1000);
+
+        // }).error(function (data, status, headers, config) {
+        //     //处理错误  
+        //     alert('服务器拒绝访问');
+        // });
 
     }
 

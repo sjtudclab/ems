@@ -4,7 +4,7 @@ angular
     .module('manager')
     .controller(
 				'managerCtrl',
-				function ($rootScope, $scope, $http, $window, $state) {
+				function ($rootScope, $scope, $http, $window, $state,$interval) {
 
         var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
         // 功能列表
@@ -170,6 +170,10 @@ angular
         $scope.refresh = function () {
             refresh();
         };
+        //每间隔30s自动刷新
+		var timingPromise=undefined;
+		timingPromise=$interval(function(){refresh()},30000);
+
         function refresh() {
           
             $http({
