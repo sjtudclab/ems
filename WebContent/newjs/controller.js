@@ -92,6 +92,8 @@ formlogin.controller('showCtrl', function ($scope, $state, $stateParams, $window
     problemStatus.judgment = {};
     problemStatus.match = {};
     problemStatus.simple = {};
+    problemStatus.fillgap = {};
+    problemStatus.machine = {};
     $window.sessionStorage.problemStatus = JSON.stringify(problemStatus);
 
     var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
@@ -127,16 +129,15 @@ formlogin.controller('showinfo', function ($scope, $state, $stateParams, $window
 var demo0 = angular.module('demo0', ['ui.bootstrap'])
 
 demo0.controller('finish', function ($scope, $state, $stateParams, $window) {
-
-    $scope.score = $stateParams.score;
-    $scope.scoreshow = $stateParams.scoreshow;
-
+    if ($stateParams.score) {
+        $scope.score = "考试成绩为：" + $stateParams.score;
+    }
 
 });
 
 
 demo0.controller('TabsDemoCtrl', function ($scope, $rootScope) {
-    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题', '简答题'];
+    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题', '简答题','填空题'];
     $scope.active = [];
     $scope.display = [];
     $scope.color = [];
@@ -177,13 +178,19 @@ demo0.controller('TabsDemoCtrl', function ($scope, $rootScope) {
             case 4:
                 $scope.color[$rootScope.index] = "rgba(165,222,228,.8)";
                 break;
+            case 5:
+                $scope.color[$rootScope.index] = "rgba(242,222,222,.8)";
+                break;
+            case 6:
+                $scope.color[$rootScope.index] = "rgba(102,186,183,.8)";
+                break;
             default:
                 alert('error');
             /*   case 0:
         $scope.color[$scope.index] = "#d9edf7";
         break;
     case 1:
-        $scope.color[$scope.index] = "#A8D8B9";
+        $scope.color[$scope.index] = "#A8D8B9";//
         break;
     case 2:
         $scope.color[$scope.index] = "#dff0d8";
@@ -205,19 +212,23 @@ demo0.controller('TabsDemoCtrl', function ($scope, $rootScope) {
 });
 
 
-
 demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $http, $rootScope, $uibModal) {
 
-
-    $scope.submit = function () {
+    function refer() {
         var allStatus = JSON.parse($window.sessionStorage.problemStatus);
 
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
-            // alert("单选题succeed");
+             alert("单选题succeed");
             if (data.flag == false) {
-                alert(data.detail);
+                //  alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
             }
         }).error(function (data, status, headers, config) {
             //处理错误  
@@ -228,7 +239,13 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         }).success(function (data, status, headers, config) {
             // alert("多选题succeed");
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
             }
 
 
@@ -241,7 +258,13 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         }).success(function (data, status, headers, config) {
             // alert("判断题succeed");
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
             }
 
         }).error(function (data, status, headers, config) {
@@ -253,7 +276,13 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         }).success(function (data, status, headers, config) {
             // alert("匹配提succeed");
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
             }
 
 
@@ -266,83 +295,47 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         }).success(function (data, status, headers, config) {
             // alert("简答题succeed");
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
             }
         }).error(function (data, status, headers, config) {
             //处理错误  
             alert('服务器拒绝访问');
         });
+        $http.get('/EMS/exam/getTopic', {
+            params: { token: $window.sessionStorage.token, typeId: 5, id: allStatus.fillgap.nid, requestId: 0, choiceIdList: allStatus.fillgap.option, ifCheck: allStatus.fillgap.ifCheck }
+        }).success(function (data, status, headers, config) {
+            // alert("判断题succeed");
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
+            }
+
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+
 
     }
 
+    $scope.submit = function () {
+        refer();
+    }
+
     $scope.submit_confirm = function () {
-        var allStatus = JSON.parse($window.sessionStorage.problemStatus);
 
-        $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
-        }).success(function (data, status, headers, config) {
-            /*alert("单选题succeed");*/
-            if (data.flag == false) {
-                alert(data.detail);
-            }
-
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
-        $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
-        }).success(function (data, status, headers, config) {
-            /*alert("多选题succeed");*/
-            if (data.flag == false) {
-                alert(data.detail);
-            }
-
-
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
-        $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
-        }).success(function (data, status, headers, config) {
-            /*alert("判断题succeed");*/
-            if (data.flag == false) {
-                alert(data.detail);
-            }
-
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
-        $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
-        }).success(function (data, status, headers, config) {
-            /*alert("匹配提succeed");*/
-            if (data.flag == false) {
-                alert(data.detail);
-            }
-
-
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
-        $http.get('/EMS/exam/getTopic', {
-            params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
-        }).success(function (data, status, headers, config) {
-            /*alert("简答题succeed");*/
-            if (data.flag == false) {
-                alert(data.detail);
-            }
-
-
-        }).error(function (data, status, headers, config) {
-            //处理错误  
-            alert('服务器拒绝访问');
-        });
-
-
+        refer();
         var modalParam = {
             backdrop: 'static',
             size: 'sm'
@@ -366,14 +359,10 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
 
                                     if (data.flag == false) {
                                         alert(data.detail);
+                                        $state.go("finish", { score: data });
                                     } else {
-                                        var scoreshow = "block";
-                                        // if(data.flag){
-                                        //     scoreshow="block";
-                                        // }else{
-                                        //     scoreshow='none';
-                                        // }
-                                        $state.go("finish", { score: data, scoreshow: scoreshow });
+
+                                        $state.go("finish", { score: data });
 
                                     }
 
@@ -404,26 +393,31 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
         params: { token: $window.sessionStorage.token }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             second = data;
             timeRequest();
         }
     });
-    // timeRequest();
 
-    // $scope.refreshTime = function () {
-    //     $interval.cancel(timePromise);
-    //     timePromise = undefined;
-    //     timeRequest();
-    // }
     var timingPromise = undefined;
     timingPromse = $interval(function () {
         $http.get('/EMS/exam/getTime', {
             params: { token: $window.sessionStorage.token }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                // refer();
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 second = data;
                 // timeRequest();
@@ -446,89 +440,23 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
             if (second < 0) {
                 $interval.cancel(timePromise);
                 timePromise = undefined;
-
-                var allStatus = JSON.parse($window.sessionStorage.problemStatus);
-
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    // alert("单选题succeed");
-                    if (data.flag == false) {
-                        alert(data.detail);
-                    }
-
-
-                }).error(function (data, status, headers, config) {
-                    //处理错误  
-                    alert('服务器拒绝访问');
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 1, id: allStatus.multiple.nid, requestId: 0, choiceIdList: allStatus.multiple.choiceIdList, ifCheck: allStatus.multiple.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    // alert("多选题succeed");
-                    if (data.flag == false) {
-                        alert(data.detail);
-                    }
-
-
-                }).error(function (data, status, headers, config) {
-                    //处理错误  
-                    alert('服务器拒绝访问');
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 2, id: allStatus.judgment.nid, requestId: 0, choiceId: allStatus.judgment.option, ifCheck: allStatus.judgment.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    // alert("判断题succeed");
-                    if (data.flag == false) {
-                        alert(data.detail);
-                    }
-
-
-                }).error(function (data, status, headers, config) {
-                    //处理错误  
-                    alert('服务器拒绝访问');
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 3, id: allStatus.match.nid, requestId: 0, choiceIdMap: allStatus.match.choiceIdMap, ifCheck: allStatus.match.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    // alert("匹配提succeed");
-                    if (data.flag == false) {
-                        alert(data.detail);
-                    }
-
-                }).error(function (data, status, headers, config) {
-                    //处理错误  
-                    alert('服务器拒绝访问');
-                });
-                $http.get('/EMS/exam/getTopic', {
-                    params: { token: $window.sessionStorage.token, typeId: 4, id: allStatus.simple.nid, requestId: 0, choiceId: allStatus.simple.answer, ifCheck: allStatus.simple.ifCheck }
-                }).success(function (data, status, headers, config) {
-                    // alert("简答题succeed");
-                    if (data.flag == false) {
-                        alert(data.detail);
-                    }
-
-
-                }).error(function (data, status, headers, config) {
-                    //处理错误  
-                    alert('服务器拒绝访问');
-                });
+                refer();
 
                 $http.get('/EMS/exam/handExam', {
                     params: { token: $window.sessionStorage.token }
                 }).success(function (data, status, headers, config) {
-                    /*alert("简答题succeed");*/
+
                     if (data.flag == false) {
-                        alert(data.detail);
+                        // alert(data.detail);
+                        $http.get('/EMS/exam/handExam', {
+                            params: { token: $window.sessionStorage.token }
+                        }).success(function (data, status, headers, config) {
+                            $state.go("finish", { score: data });
+                        });
                     }
                     alert("考试时间结束！");
-                    var scoreshow = "block";
-                    // if(data.flag){
-                    //     scoreshow="block";
-                    // }else{
-                    //     scoreshow='none';
-                    // }
-                    $state.go("finish", { score: data, scoreshow: scoreshow });
+
+                    $state.go("finish", { score: data });
 
                 }).error(function (data, status, headers, config) {
                     //处理错误  
@@ -543,7 +471,12 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
                     }).success(function (data, status, headers, config) {
 
                         if (data.flag == false) {
-                            alert(data.detail);
+                            // alert(data.detail);
+                            $http.get('/EMS/exam/handExam', {
+                                params: { token: $window.sessionStorage.token }
+                            }).success(function (data, status, headers, config) {
+                                $state.go("finish", { score: data });
+                            });
                         } else {
                             second = data;
                         }
@@ -595,7 +528,12 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
             params: { typeId: 0, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 var singleStatus = JSON.parse($window.sessionStorage.problemStatus);
 
@@ -743,7 +681,12 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
             }).success(function (data, status, headers, config) {
                 //试题
                 if (data.flag == false) {
-                    alert(data.detail);
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
                 } else {
                     if (data.audio) {
                         $scope.audiohide = "block";
@@ -849,7 +792,12 @@ demo0.controller('skiptb1', function ($scope, $http, $window, $state, $statePara
             params: { token: $window.sessionStorage.token, typeId: 0, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.singleNum;
@@ -995,7 +943,12 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
             params: { typeId: 1, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 var multiStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近多选题以及状态
                 $scope.totalItems = data.multiNum;
@@ -1133,7 +1086,12 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
                 params: { typeId: 1, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
-                    alert(data.detail);
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
                 } else {
                     //试题
                     $scope.totalItems = data.multiNum;
@@ -1232,7 +1190,12 @@ demo0.controller('skiptb2', function ($scope, $http, $window, $state, $statePara
             params: { token: $window.sessionStorage.token, typeId: 1, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.multiNum;
@@ -1353,7 +1316,12 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
             params: { typeId: 2, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.judgeNum;
@@ -1433,14 +1401,14 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
 
     } else {
         var judgStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-        if (judgStatus.judgment.id) {
-            $scope.totalItems = judgStatus.judgment.judgeNum;
+        if (judgStatus.judgment.nid) {
+            $scope.totalItems = judgStatus.judgment.totalItems;
             $scope.currentPage = judgStatus.judgment.nid;
 
             $scope.nid = judgStatus.judgment.nid;
             $scope.content = judgStatus.judgment.content;
             $scope.lists = judgStatus.judgment.choiceList;
-            $rootScope.totalItems = judgStatus.judgment.totalItems;
+            // $rootScope.totalItems = judgStatus.judgment.totalItems;
             if (judgStatus.judgment.audiohide == "block") {
                 $scope.audiohide = "block";
                 $scope.audio = judgStatus.judgment.audio;
@@ -1487,7 +1455,12 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
                 params: { typeId: 2, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
-                    alert(data.detail);
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
                 } else {
                     //试题
                     $scope.totalItems = data.judgeNum;
@@ -1593,7 +1566,12 @@ demo0.controller('skiptb3', function ($scope, $http, $window, $state, $statePara
             params: { token: $window.sessionStorage.token, typeId: 2, id: $scope.nid, requestId: $scope.currentPage, choiceId: option.optionsRadios, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.judgeNum;
@@ -1718,7 +1696,12 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
             params: { typeId: 3, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.matchNum;
@@ -1852,7 +1835,12 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
                 params: { typeId: 3, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
-                    alert(data.detail);
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
                 } else {
                     //试题
                     $scope.totalItems = data.matchNum;
@@ -1965,6 +1953,11 @@ demo0.controller('skiptb4', function ($scope, $http, $window, $state, $statePara
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
                 alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.matchNum;
@@ -2091,7 +2084,12 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             params: { typeId: 4, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 $scope.totalItems = data.shortNum;
                 $scope.currentPage = $scope.nid;
@@ -2218,7 +2216,12 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 params: { typeId: 4, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
-                    alert(data.detail);
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
                 } else {
                     $scope.totalItems = data.shortNum;
                     $scope.currentPage = 1;
@@ -2315,7 +2318,12 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             params: { token: $window.sessionStorage.token, typeId: 4, id: $scope.nid, requestId: $scope.currentPage, answer: answer, ifCheck: isChecked }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
-                alert(data.detail);
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
             } else {
                 // 试题
                 $scope.totalItems = data.shortNum;
@@ -2419,7 +2427,379 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
     }
 
 });
+demo0.controller('skiptb6', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
+    //填空题
 
+   
+
+    if ($stateParams.type == 6) {
+        $scope.nid = $stateParams.num * 1;
+        $rootScope.index = $stateParams.active * 1; //面板切换
+        //检查某题
+        // $http.get('/EMS/exam/toTopic', {
+            $http.get('fillgap.json', {
+            params: { typeId: 5, token: $window.sessionStorage.token, id: $stateParams.num }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
+            } else {
+                // 试题
+                $scope.totalItems = data.gapNum;
+                $scope.currentPage = $scope.nid;
+
+                $scope.content = data.content;
+                $scope.fillNum = data.fillNum;
+                $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+
+                $scope.option = data.choiceIdList;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+
+                var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                gapStatus.fillgap.nid = $scope.nid;
+                gapStatus.fillgap.content = $scope.content;
+                gapStatus.fillgap.fillLists = $scope.fillLists;
+                if ($scope.audiohide == "block") {
+                    gapStatus.fillgap.audio = $scope.sudio;
+                    gapStatus.fillgap.audiohide = $scope.sudiohide;
+                } else {
+                    gapStatus.fillgap.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    gapStatus.fillgap.img = $scope.img;
+                    gapStatus.fillgap.imghide = $scope.imghide;
+                } else {
+                    gapStatus.fillgap.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    gapStatus.fillgap.video = $scope.video;
+                    gapStatus.fillgap.videohide = $scope.videohide;
+                } else {
+                    gapStatus.fillgap.videohide = $scope.videohide;
+                }
+
+                gapStatus.fillgap.option = $scope.option;
+                gapStatus.fillgap.ifCheck = $scope.count;
+
+
+                $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+            }
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+
+    } else {
+        var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        if (gapStatus.fillgap.nid) {
+            $scope.totalItems = gapStatus.fillgap.gapNum;
+            $scope.currentPage = gapStatus.fillgap.nid;
+
+            $scope.nid = gapStatus.fillgap.nid;
+            $scope.content = gapStatus.fillgap.content;
+            $scope.fillLists  = gapStatus.fillgap.fillLists ;
+            // $rootScope.totalItems = gapStatus.fillgap.totalItems;
+            if (gapStatus.fillgap.audiohide == "block") {
+                $scope.audiohide = "block";
+                $scope.audio = gapStatus.fillgap.audio;
+            } else {
+                $scope.audiohide = "none";
+                // alert("隐藏");
+
+            }
+            if (gapStatus.fillgap.imghide == "block") {
+                $scope.imghide = "block";
+                $scope.img = gapStatus.fillgap.img;
+
+            } else {
+                $scope.imghide = "none";
+                //alert("隐藏");
+
+            }
+            if (gapStatus.fillgap.videohide == "block") {
+                $scope.videohide = "block";
+                $scope.video = gapStatus.fillgap.video;
+
+            } else {
+                $scope.videohide = "none";
+                //alert("隐藏");
+
+            }
+
+            //status
+            $scope.option.optionsRadios = gapStatus.fillgap.option;
+            if (gapStatus.fillgap.ifCheck) {
+                $scope.red = "#FF6347";
+                $scope.count = true;
+            } else {
+                $scope.red = "#000000";
+                $scope.count = false;
+
+            }
+
+
+        } else {
+            //初始化试题
+            // $http.get('/EMS/exam/start', {
+                 $http.get('fillgap.json', {
+                params: { typeId: 5, token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
+                } else {
+                    //试题
+                    $scope.totalItems = data.gapNum;
+                    $scope.currentPage = 1;
+
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+                    $scope.fillNum = data.fillNum;
+                    $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+                    alert($scope.fillLists);
+                   
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //试题状态
+                    $scope.option = data.choiceIdList;
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    /*  $scope.before = true;*/
+                    var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                    gapStatus.fillgap.nid = $scope.nid;
+                    gapStatus.fillgap.content = $scope.content;
+                    gapStatus.fillgap.fillLists  = $scope.fillLists;
+                    if ($scope.audiohide == "block") {
+                        gapStatus.fillgap.audio = $scope.sudio;
+                        gapStatus.fillgap.audiohide = $scope.sudiohide;
+                    } else {
+                        gapStatus.fillgap.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        gapStatus.fillgap.img = $scope.img;
+                        gapStatus.fillgap.imghide = $scope.imghide;
+                    } else {
+                        gapStatus.fillgap.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        gapStatus.fillgap.video = $scope.video;
+                        gapStatus.fillgap.videohide = $scope.videohide;
+                    } else {
+                        gapStatus.fillgap.videohide = $scope.videohide;
+                    }
+
+                    gapStatus.fillgap.option = $scope.option;
+                    gapStatus.fillgap.ifCheck = $scope.count;
+                    gapStatus.fillgap.gapNum = $scope.totalItems;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+
+
+        }
+    }
+
+    $scope.opChanged = function (option) {
+        var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        gapStatus.fillgap.option = option.optionsRadios;
+        $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+    }
+
+
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    $scope.itemsPerPage = 1;
+    $scope.maxSize = 5;
+
+    $scope.pageChanged = function (option) {
+        /*  alert($scope.currentPage);*/
+        alert(option);
+
+        var isChecked = $scope.count;
+        // $http.get('/EMS/exam/getTopic', {
+        $http.get('fillgap0.json', {
+            params: { token: $window.sessionStorage.token, typeId: 5, id: $scope.nid, requestId: $scope.currentPage, choiceIdList: option, ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
+            } else {
+                // 试题
+                $scope.totalItems = data.gapNum;
+
+                $scope.nid = $scope.currentPage;
+                $scope.content = data.content;
+                $scope.fillNum = data.fillNum;
+                $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+                $scope.option = data.choiceIdList;
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+                /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+                var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                gapStatus.fillgap.nid = $scope.nid;
+                gapStatus.fillgap.content = $scope.content;
+                gapStatus.fillgap.fillLists = $scope.fillLists;
+                if ($scope.audiohide == "block") {
+                    gapStatus.fillgap.audio = $scope.sudio;
+                    gapStatus.fillgap.audiohide = $scope.sudiohide;
+                } else {
+                    gapStatus.fillgap.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    gapStatus.fillgap.img = $scope.img;
+                    gapStatus.fillgap.imghide = $scope.imghide;
+                } else {
+                    gapStatus.fillgap.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    gapStatus.fillgap.video = $scope.video;
+                    gapStatus.fillgap.videohide = $scope.videohide;
+                } else {
+                    gapStatus.fillgap.videohide = $scope.videohide;
+                }
+
+                gapStatus.fillgap.option = $scope.option;
+                gapStatus.fillgap.ifCheck = $scope.count;
+                $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+            }
+
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+
+    };
+
+    //  $rootScope.counter = 0;
+    //标志旗帜颜色
+    $scope.chgColor = function (count) {
+
+
+        if (count) {
+            $scope.red = "#000000";
+            $scope.count = false;
+            $rootScope.counter = $rootScope.counter - 1;
+
+            var gapStatus = JSON.parse($window.sessionStorage.problemStatus);
+            gapStatus.fillgap.ifCheck = $scope.count;
+            $window.sessionStorage.counter = $rootScope.counter;
+            $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+
+        } else {
+            $scope.red = "#FF6347";
+            $scope.count = true;
+            $rootScope.counter = $rootScope.counter + 1;
+
+            var gapStatus = JSON.parse($window.sessionStorage.problemStatus);
+            gapStatus.fillgap.ifCheck = $scope.count;
+            $window.sessionStorage.counter = $rootScope.counter;
+            $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+
+        }
+
+    }
+
+});
 
 var checkup = angular.module('checkup', []);
 checkup.controller('btnCtrl', function ($scope) {
@@ -2446,7 +2826,12 @@ checkup.controller("Ctab1", function ($scope, $http, $state, $window, $rootScope
         params: { token: $window.sessionStorage.token, typeId: 0 }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             // alert(data.checkList[0].status);
             /*var lists=[];
@@ -2485,7 +2870,12 @@ checkup.controller("Ctab2", function ($scope, $http, $state, $window) {
         params: { token: $window.sessionStorage.token, typeId: 1 }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             $scope.lists = data.checkList;
             /*  $rootScope.topicNum=data.topicNum;
@@ -2513,7 +2903,12 @@ checkup.controller("Ctab3", function ($scope, $http, $state, $window) {
         params: { token: $window.sessionStorage.token, typeId: 2 }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             $scope.lists = data.checkList;
             /* $rootScope.topicNum=data.topicNum;
@@ -2541,7 +2936,12 @@ checkup.controller("Ctab4", function ($scope, $http, $state, $window) {
         params: { token: $window.sessionStorage.token, typeId: 3 }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             $scope.lists = data.checkList;
             /* $rootScope.topicNum=data.topicNum;
@@ -2569,7 +2969,12 @@ checkup.controller("Ctab5", function ($scope, $http, $state, $window) {
         params: { token: $window.sessionStorage.token, typeId: 4 }
     }).success(function (data, status, headers, config) {
         if (data.flag == false) {
-            alert(data.detail);
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
         } else {
             $scope.lists = data.checkList;
             /* $rootScope.topicNum=data.topicNum;
@@ -2585,6 +2990,73 @@ checkup.controller("Ctab5", function ($scope, $http, $state, $window) {
     $scope.skip = function (listnum) {
         /*    alert(listnum);*/
         $state.go('main', { active: 4, num: listnum, type: 5 });
+
+    }
+
+
+});
+//填空题
+checkup.controller("Ctab6", function ($scope, $http, $state, $window) {
+
+    $http.get('/EMS/exam/check', {
+        params: { token: $window.sessionStorage.token, typeId: 5 }
+    }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
+        } else {
+            $scope.lists = data.checkList;
+            /* $rootScope.topicNum=data.topicNum;
+             $rootScope.finishNum=data.finishNum;
+             $rootScope.otherNum=data.topicNum-data.finishNum;*/
+        }
+    }).error(function (data, status, headers, config) {
+        //处理错误  
+        alert('服务器拒绝访问');
+    });
+
+
+    $scope.skip = function (listnum) {
+        /*    alert(listnum);*/
+        $state.go('main', { active: 5, num: listnum, type: 6 });
+
+    }
+
+
+});
+
+//上机题
+checkup.controller("Ctab7", function ($scope, $http, $state, $window) {
+
+    $http.get('/EMS/exam/check', {
+        params: { token: $window.sessionStorage.token, typeId: 6 }
+    }).success(function (data, status, headers, config) {
+        if (data.flag == false) {
+            // alert(data.detail);
+            $http.get('/EMS/exam/handExam', {
+                params: { token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                $state.go("finish", { score: data });
+            });
+        } else {
+            $scope.lists = data.checkList;
+            /* $rootScope.topicNum=data.topicNum;
+             $rootScope.finishNum=data.finishNum;
+             $rootScope.otherNum=data.topicNum-data.finishNum;*/
+        }
+    }).error(function (data, status, headers, config) {
+        //处理错误  
+        alert('服务器拒绝访问');
+    });
+
+
+    $scope.skip = function (listnum) {
+        /*    alert(listnum);*/
+        $state.go('main', { active: 6, num: listnum, type: 7 });
 
     }
 

@@ -4,13 +4,13 @@ angular
     .module('manager')
     .controller(
 				'managerCtrl',
-				function ($rootScope, $scope, $http, $window, $state,$interval) {
+				function ($rootScope, $scope, $http, $window, $state, $interval) {
 
         var adminStatus = JSON.parse($window.sessionStorage.adminStatus);
         // 功能列表
         $scope.operationMetaInfo = adminStatus.authorityList;
         // 登陆用户id
-        $scope.Rid =adminStatus.Rid;
+        $scope.Rid = adminStatus.Rid;
         // 控制标签显示
         $scope.active = [];
         // 控制标签页显示
@@ -21,6 +21,18 @@ angular
         }
         // 初始化显示标签0
         $scope.index = 0;
+
+        //初始化表格隐藏
+        $scope.showRoom = "none";
+        //侧边栏左
+        $scope.operationMetaInfo = [
+            { "name": "导入试卷", "url": "importExam" },
+            { "name": "导入考生安排", "url": "importStuArrangement" },
+            { "name": "考场管理", "url": "roomArrangement" },
+            { "name": "成绩导出", "url": "exportExam" },
+            { "name": "系统管理", "url": "systemManagement" }];
+
+        $rootScope.role = "管理员";
         //初始化表格
         $scope.roomMetaInfo = {
             'roomId': '考场号',
@@ -34,39 +46,7 @@ angular
         $scope.roomsStatus = {};
         $scope.selectionStatus = {};
 
-        // $http({
-        //     method: 'GET',
-        //     url: 'manger.json',
-        //     params: {
-        //         token: $window.sessionStorage.stoken
-        //     }
-        // })
-        //     .then(
-        //     function success(response) {
-        //         // 功能列表
-        //         $scope.operationMetaInfo = response.data.authorityList;
-        //         // 登陆用户id
-        //         $scope.rId = response.data.Rid;
-        //         // 控制标签显示
-        //         $scope.active = [];
-        //         // 控制标签页显示
-        //         $scope.display = [];
-        //         for (i in $scope.operationMetaInfo) {
-        //             $scope.active[i] = "";
-        //             $scope.display[i] = "none";
-        //         }
-        //         // 初始化显示标签0
-        //         $scope.index = 0;
-        //     })
-        // $http({
-        //     method: 'GET',
-        //     url: 'roominfo.json',
-        //     params: {
-        //         token: $window.sessionStorage.token
-        //     }
-        // })
-
-
+        
         // 监控index变量控制标签及标签页
         $scope.$watch('index', function () {
             if ($scope.index == undefined) {
@@ -84,28 +64,45 @@ angular
         $scope.superRequest = function (url) {
             /* console.log($scope); */
             /* $parent.index=$index; */
+           
             switch (url) {
                 case "examImport": //试题导入
                     $state.go('examImport');
                     break;
-                case "roomManager": // 考场管理
+
+                case "importExam": // 导入试卷
+                    $scope.showRoom = "none";
+                    break;
+                case "importStuArrangement": // 导入考生安排
+                    $scope.showRoom = "none";
+                    break;
+                case "roomArrangement": // 考场管理
+                    $scope.showRoom = "block";
                     $scope.selectionStatus = {};
                     break;
+                case "exportExam": // 成绩导出
+                    $scope.showRoom = "none";
+                    break;
+                case "systemManagement": // 系统管理
+                    $scope.showRoom = "none";
+                    break;
+                default: 
+                    $scope.showRoom = "none";
 
             }
 
         };
 
         $scope.confirm = function (url) {
-      
+
             var uidList = [];
             for (x in $scope.selectionStatus) {
-             
+
                 if ($scope.selectionStatus[x]) {
                     uidList.push(x);
                 }
             }
-        
+
             $http.get('/EMS/admin/roomConfirm', {
                 // $http.get('info.json', {
                 params: {
@@ -118,6 +115,8 @@ angular
                 var infoStatus = JSON.parse($window.sessionStorage.infoStatus);
                 //功能列表
                 infoStatus.authorityList = response.data.authorityList;
+                //角色
+                infoStatus.Rid = $scope.Rid;
                 // 考场号
                 infoStatus.roomId = uidList;
                 $window.sessionStorage.infoStatus = JSON.stringify(infoStatus);
@@ -171,11 +170,11 @@ angular
             refresh();
         };
         //每间隔30s自动刷新
-		var timingPromise=undefined;
-		timingPromise=$interval(function(){refresh()},30000);
+        var timingPromise = undefined;
+        timingPromise = $interval(function () { refresh() }, 30000);
 
         function refresh() {
-          
+
             $http({
                 method: 'GET',
                 url: '/EMS/admin/Refresh',

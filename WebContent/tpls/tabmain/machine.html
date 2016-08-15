@@ -1,15 +1,13 @@
-<!--text-align:center-->
 <div class="container" style="font-size:125%;height:100%">
     <div class="col-md-10" style="height:100%">
-        <!--简答题 -->
+        <!--上机题 -->
         <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span>{{nid}}.{{content}}
-         <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}};padding-left:5%">
+        <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}};padding-left:5%">
           </audio>
-          <video controls ng-src="{{video}}" type="video/mp4" style="display:{{videohide}};padding-left:5%" height="33%">
+        <video controls ng-src="{{video}}" type="video/mp4" style="display:{{videohide}};padding-left:5%" height="33%">
          </video>
-         <img ng-src="{{img}}" style="display:{{imghide}};padding-left:5%" height="33%">
-        <!--  <input class="input-large"> -->
-        <textarea style="background-position: right top; background-repeat: no-repeat;" class="form-control mono wmd-input tabIndent-rendered" rows="10" placeholder="撰写答案..." ng-click="opChanged(answer)" ng-model="answer"></textarea>
+        <img ng-src="{{img}}" style="display:{{imghide}};padding-left:5%" height="33%">
+
         <div style="padding-left:5%">
             <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(answer)"></ul>
         </div>

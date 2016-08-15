@@ -424,3 +424,25 @@ th {
         transform: scale(1) rotate(360deg);
     }
 }
+
+
+/*.navbar > li > a:hover, .navbar > li > a:focus {
+    color:#337ab7;
+    background-color: #337ab7;
+}*/
+.navbars > li > span {
+   padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right:10px;
+    line-height: 20px;
+        position: relative;
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.modal-open[style] {
+padding-right: 0px !important;
+}

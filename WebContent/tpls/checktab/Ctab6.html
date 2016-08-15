@@ -1,0 +1,8 @@
+<p style="font-size:150%;height:4%">
+    温馨提示：蓝色为已答题，红色为标记题，白色为未答题
+</p>
+<div style="height:90%;overflow-y:scroll">
+    <button type="button" class="{{btnClass}}" style="margin:2%" ng-repeat="list in lists track by $index" ng-controller="btnCtrl" ng-click="skip($index+1)">
+                {{$index+1}}
+            </button>
+</div>

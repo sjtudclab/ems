@@ -79,9 +79,22 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			'navbar@manager' : {
 				templateUrl : 'tpls/navbar.html'
 			},
-			'roomManager@manager' : {
+			'importExam@manager' : { //导入试卷
+				templateUrl : 'tpls/manager/importExam.html'
+			},
+			'importStuArrangement@manager' : { //导入考生安排
+				templateUrl : 'tpls/manager/importStuArrangement.html'
+			},
+			'roomArrangement@manager' : {  //考场管理
 				templateUrl : 'tpls/manager/roomManager.html'
+			},
+			'exportExam@manager' : { //导出试卷
+				templateUrl : 'tpls/manager/exportExam.html'
+			},
+			'systemManagement@manager' : {  //系统管理
+				templateUrl : 'tpls/manager/systemManagement.html'
 			}
+			
 		}
 	}).state('examImport', {
 		url : '/examImport',
@@ -139,6 +152,10 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 				templateUrl : 'tpls/tabmain/tab51.html',
 				controller : 'skiptb5'
 			},
+			'tab6@main' : {
+				templateUrl : 'tpls/tabmain/fillGap.html',
+				controller : 'skiptb6'
+			},
 			'info@main' : {
 				templateUrl : 'tpls/info.html',
 				controller : 'showinfo'
@@ -175,6 +192,14 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 				templateUrl : 'tpls/checktab/Ctab5.html',
 				controller : 'Ctab5'
 			},
+			'Ctab6@checkup' : {
+				templateUrl : 'tpls/checktab/Ctab6.html',
+				controller : 'Ctab6'
+			},
+			'Ctab7@checkup' : {
+				templateUrl : 'tpls/checktab/Ctab7.html',
+				controller : 'Ctab7'
+			},
 			'time@checkup' : {
 				templateUrl : 'tpls/time.html',
 				controller : 'timeinfo'
@@ -186,7 +211,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			}
 		}
 	}).state('finish', {
-		url : '/finish/:score/:scoreshow',
+		url : '/finish/:score',
 		views : {
 			'' : {
 				templateUrl : 'tpls/finish.html'
