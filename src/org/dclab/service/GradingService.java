@@ -146,8 +146,7 @@ public class GradingService {
 		List<CorrectAnswerBean> correctAnswerBeans = camapper.getCorrectAnswer();	//TO DO: mapping from DB
 		sqlSession.close();
 		
-		System.out.println(correctAnswerBeans);
-		System.out.println("\n candidate answer： "+examBean.getSingleChoiceList());
+
 		Map<Integer, CorrectAnswerBean> correctAnswerMap = new HashMap<Integer, CorrectAnswerBean>(128);
 		for (CorrectAnswerBean correctAnswerBean : correctAnswerBeans) {
 			correctAnswerMap.put(correctAnswerBean.getTopicId(), correctAnswerBean);	//for easily fetching

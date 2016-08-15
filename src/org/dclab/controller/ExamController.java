@@ -129,12 +129,17 @@ public class ExamController {
 			if(exambean==null)
 				return 0;
 			
+			ExamOperator.persist(token);
+			
+			
+			if(exambean.isFinished())//处理考生被老师强制终止之后的成绩返回
+				return gradingService.gradePaper(exambean);
+			
 			if(exambean.isAllowTerminate()||
 					( ExamBean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<ExamBean.getEarliestSubmit())
 			{
 				exambean.setFinished(true);
 				int mark = gradingService.gradePaper(exambean);
-				System.out.println("mark: "+mark);
 				return mark;
 			}
 			else
