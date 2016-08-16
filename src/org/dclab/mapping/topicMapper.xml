@@ -12,4 +12,9 @@
 <insert id="add" parameterType="org.dclab.model.TopicBean" useGeneratedKeys="true" keyProperty="id">
   insert into topic(content,typeId,subjectId) values(#{content}, #{typeId},#{subjectId})
 </insert>
+
+<insert id="addTopic" parameterType="org.dclab.model.TopicRow" useGeneratedKeys="true" keyProperty="id">
+	insert into topic(number,content,typeId,img,audio,video,paperId) values
+	(#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId})
+</insert>
  </mapper>

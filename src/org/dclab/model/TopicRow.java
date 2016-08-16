@@ -7,6 +7,7 @@ package org.dclab.model;
  *
  */
 public abstract class TopicRow {
+	protected int id;
 	protected byte TYPE;
 	protected int paperId;
 	protected int number;
@@ -20,6 +21,14 @@ public abstract class TopicRow {
 	public TopicRow(int paperId, byte type){
 		this.paperId = paperId;
 		this.TYPE 	= type;
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public byte getTYPE() {
 		return TYPE;

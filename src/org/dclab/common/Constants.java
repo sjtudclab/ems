@@ -8,4 +8,6 @@ public class Constants {
 	public static final byte SHORT_ANSWER	=	4;
 	public static final byte FILL_BLANK		=	5;
 	public static final byte MACHINE_TEST	=	6;
+	public static final int JUDGEMENT_TRUE  =   61;
+	public static final int JUDGEMENT_FALSE =   62;
 }
