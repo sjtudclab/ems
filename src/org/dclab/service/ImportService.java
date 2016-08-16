@@ -17,6 +17,10 @@ public class ImportService {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.add";
 		sqlSession.insert(statement, subjectRow);
+		sqlSession.commit();
+		
+		
+		return subjectRow.getPaperId();
 		
 	}
 	
