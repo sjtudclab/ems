@@ -3,18 +3,37 @@ package org.dclab.model;
 public class SubjectRow {
 	private int paperId;
 	private String proName;
-	private int proId;
+	private String proId;
 	private String subName;
-	private int subId;
-	private int paperNum;	//试卷编号
+	private String subId;
+	private String paperNum;	//试卷编号
 	private int duration;
 	private int earliestSubmit;
 	private int latestLogin;
 	private int showMark;	//1 yes, 0 no
 	
-	
-	
-	
+	@Override
+	public int hashCode() {
+
+		return subId.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SubjectRow other = (SubjectRow) obj;
+		//only when major id, subject id and paper NO are the same, then they equals
+		if (proId.equals(other.getProId()) && subId.equals(other.getSubId()) && paperNum.equals(other.getPaperNum())) {
+			return true;
+		}
+		return false;
+	}
+
 	public int getPaperId() {
 		return paperId;
 	}
@@ -35,11 +54,11 @@ public class SubjectRow {
 		this.proName = proName;
 	}
 
-	public int getProId() {
+	public String getProId() {
 		return proId;
 	}
 
-	public void setProId(int proId) {
+	public void setProId(String proId) {
 		this.proId = proId;
 	}
 
@@ -51,19 +70,19 @@ public class SubjectRow {
 		this.subName = subName;
 	}
 
-	public int getSubId() {
+	public String getSubId() {
 		return subId;
 	}
 
-	public void setSubId(int subId) {
+	public void setSubId(String subId) {
 		this.subId = subId;
 	}
 
-	public int getPaperNum() {
+	public String getPaperNum() {
 		return paperNum;
 	}
 
-	public void setPaperNum(int paperNum) {
+	public void setPaperNum(String paperNum) {
 		this.paperNum = paperNum;
 	}
 

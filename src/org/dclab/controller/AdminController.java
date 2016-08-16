@@ -140,10 +140,10 @@ public class AdminController {
 		ImportService importService=new ImportService();
 		SubjectRow subjectRow=new SubjectRow();
 		subjectRow.setProName("ruanjian");
-		subjectRow.setProId(123);
+		subjectRow.setProId("123");
 		subjectRow.setSubName("suanfa");
-		subjectRow.setSubId(1234);
-		subjectRow.setPaperNum(123445);
+		subjectRow.setSubId("1234");
+		subjectRow.setPaperNum("12345");
 		subjectRow.setDuration(7200);
 		subjectRow.setEarliestSubmit(1800);
 		subjectRow.setLatestLogin(1800);
