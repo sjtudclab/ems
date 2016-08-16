@@ -1,6 +1,7 @@
 package org.dclab.model;
 
 public class SubjectRow {
+	private int paperId;
 	private String proName;
 	private int proId;
 	private String subName;
@@ -11,6 +12,17 @@ public class SubjectRow {
 	private int latestLogin;
 	private int showMark;	//1 yes, 0 no
 	
+	
+	
+	
+	public int getPaperId() {
+		return paperId;
+	}
+
+	public void setPaperId(int paperId) {
+		this.paperId = paperId;
+	}
+
 	public SubjectRow() {
 		super();
 	}

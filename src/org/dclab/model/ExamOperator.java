@@ -277,5 +277,7 @@ public class ExamOperator {
 				System.err.println("写入数据库失败");
 			sqlSession.commit();
 		}
+		
+		sqlSession.close();
 	}
 }
