@@ -7,9 +7,10 @@ public class FillBlankRow extends TopicRow {
 	private String correctAnswer;
 	
 	public FillBlankRow() {
+		this.TYPE	=	Constants.FILL_BLANK;
 	}
 
-	public FillBlankRow(int paperId, byte type) {
+	public FillBlankRow(int paperId) {
 		super(paperId, Constants.FILL_BLANK);
 	}
 
@@ -29,5 +30,11 @@ public class FillBlankRow extends TopicRow {
 		this.correctAnswer = correctAnswer;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "FillBlankRow [blankNum=" + blankNum + ", correctAnswer=" + correctAnswer + ", id=" + id + ", TYPE="
+				+ TYPE + ", paperId=" + paperId + ", number=" + number + ", fullMark=" + fullMark + ", content="
+				+ content + ", img=" + img + ", audio=" + audio + ", video=" + video + "]";
+	}
+
 }

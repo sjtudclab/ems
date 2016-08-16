@@ -20,23 +20,24 @@ public class ImportService {
 			System.err.println("插入数据库表paper失败");
 		sqlSession.commit();
 		sqlSession.close();
-		
+		/*subjectRow.setPaperId(123);//test
+		System.out.println(subjectRow);*/
 		return subjectRow.getPaperId();
 		
 	}
 	
 	public boolean importTopic(List<TopicRow> topicList){
-		
+		System.out.println(topicList);
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.addTopic";
 		
 		switch (topicList.get(0).getTYPE()) {
 		case 0:
+			break;
 		case 2:
 			for(TopicRow topicRow : topicList){
 				sqlSession.insert(statement, topicRow);//先插入题干并获得topicId
 				sqlSession.commit();
-
 			}
 			
 			break;

@@ -5,24 +5,16 @@ import java.util.List;
 import org.dclab.common.Constants;
 
 public class MatchingRow extends TopicRow {
-	private int matchNum;
 	private String correctAnswerIndices;	//default: order of items
 	private List<String> itemList;
 	private List<String> choiceList;
 
 	public MatchingRow() {
+		this.TYPE	=	Constants.MATCHING;	
 	}
 
 	public MatchingRow(int paperId) {
 		super(paperId, Constants.MATCHING);
-	}
-
-	public int getMatchNum() {
-		return matchNum;
-	}
-
-	public void setMatchNum(int matchNum) {
-		this.matchNum = matchNum;
 	}
 
 	public String getCorrectAnswerIndices() {
@@ -47,6 +39,14 @@ public class MatchingRow extends TopicRow {
 
 	public void setChoiceList(List<String> choiceList) {
 		this.choiceList = choiceList;
+	}
+
+	@Override
+	public String toString() {
+		return "MatchingRow [correctAnswerIndices=" + correctAnswerIndices + ", itemList=" + itemList + ", choiceList="
+				+ choiceList + ", id=" + id + ", TYPE=" + TYPE + ", paperId=" + paperId + ", number=" + number
+				+ ", fullMark=" + fullMark + ", content=" + content + ", img=" + img + ", audio=" + audio + ", video="
+				+ video + "]";
 	}
 
 	

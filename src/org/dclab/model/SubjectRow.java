@@ -15,7 +15,7 @@ public class SubjectRow {
 	@Override
 	public int hashCode() {
 
-		return subId.hashCode();
+		return paperNum.hashCode();
 	}
 
 	@Override
@@ -32,6 +32,15 @@ public class SubjectRow {
 			return true;
 		}
 		return false;
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "SubjectRow [paperId=" + paperId + ", proName=" + proName + ", proId=" + proId + ", subName=" + subName
+				+ ", subId=" + subId + ", paperNum=" + paperNum + ", duration=" + duration + ", earliestSubmit="
+				+ earliestSubmit + ", latestLogin=" + latestLogin + ", showMark=" + showMark + "]";
 	}
 
 	public int getPaperId() {
