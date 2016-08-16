@@ -1,7 +1,6 @@
 { 
 	"content":"今天天气好晴朗",  
 	"ifCheck":true,   
-	"fillNum":5,    
 	"choiceIdList":[], 
-    "gapNum":10 
+    "operationNum":10 
 }

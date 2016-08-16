@@ -8,8 +8,20 @@
          </video>
         <img ng-src="{{img}}" style="display:{{imghide}};padding-left:5%" height="33%">
 
-        <div style="padding-left:5%">
+        <div style="padding-left:5%;height:50%">
+            
+            <input type="file" id="selectFile" style="display:none" custom-on-change="selectFile"> 
+            <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
+            <label for="selectFile" class="btn btn-primary">选择文件</label></button>
+            <button type="button" ng-click="upload()" class="btn btn-info">上传</button>
+              <span>
+            <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
+            {{progressInfo}}
+            </span>
+
+            <div>
             <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(answer)"></ul>
+            </div>
         </div>
     </div>
 </div>

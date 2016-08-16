@@ -156,6 +156,10 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 				templateUrl : 'tpls/tabmain/fillGap.html',
 				controller : 'skiptb6'
 			},
+			'tab7@main' : {
+				templateUrl : 'tpls/tabmain/machine.html',
+				controller : 'skiptb7'
+			},
 			'info@main' : {
 				templateUrl : 'tpls/info.html',
 				controller : 'showinfo'
@@ -216,6 +220,38 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			'' : {
 				templateUrl : 'tpls/finish.html'
 			}
+		}
+	}).state('examManage', {
+		url : '/examManage',
+		views : {
+			'' : {
+				templateUrl : 'tpls/examManage/examManage.html'
+			},
+			'navi@examManage' : {
+				templateUrl : 'tpls/examManage/navbar.html'
+			},
+			'tab1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/examImport.html'
+			},
+			'tab2@examManage' : {
+				templateUrl : 'tpls/examManage/tab/multipleImport.html'
+			},
+			'single@examManage' : {
+				templateUrl : 'tpls/examManage/tab/singleImport.html'
+			},
+			'multiple@examManage' : {
+				templateUrl : 'tpls/examManage/tab/multipleImport.html'
+			},
+			'judge@examManage' : {
+				templateUrl : 'tpls/examManage/tab/judgeImport.html'
+			},
+			'match@examManage' : {
+				templateUrl : 'tpls/examManage/tab/matchImport.html'
+			},
+			'simple@examManage' : {
+				templateUrl : 'tpls/examManage/tab/simpleImport.html'
+			}
+			
 		}
 	});
 
