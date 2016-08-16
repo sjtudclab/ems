@@ -7,12 +7,15 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.dclab.model.ContentBean;
 import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.dclab.model.ShortAnswerBean;
+import org.dclab.model.ShortAnswerRow;
 
 public interface TopicMapperI {
 	
@@ -41,4 +44,13 @@ public interface TopicMapperI {
 	public int add(@Param(value="content")String content,@Param(value="typeId")int typeId,
 			@Param(value="currentSubjectId")int subjectId);*/
 	
+	
+	@Update("UPDATE topic SET points=#{points},correctAnswer=#{correctAnswer} WHERE id=#{topicId}")
+	public int update(@Param(value="points")String points,@Param(value="correctAnswer")String correctAnswer,
+			@Param(value="topicId")int topicId);
+	
+	/*@Insert("insert into topic (number,content,typeId,img,audio,video,paperId,points,correctAnswer) values (#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId},#{fullMark},#{correctAnswer})")
+	public int addShortAnswer(ShortAnswerRow shortAnswerRow);
+	
+	@Insert("insert into topic (number,content,typeId,img,audio,video,paperId,points,correctAnswer) values (#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId},#{fullMark},#{correctAnswerFile})")*/
 }

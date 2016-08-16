@@ -10,6 +10,15 @@ public class ChoicesBean implements Cloneable{
 	private String content;
 	private int topicId;
 	
+	public ChoicesBean() {
+		super();
+	}
+	public ChoicesBean(String content, int topicId) {
+		super();
+		this.content = content;
+		this.topicId = topicId;
+	}
+	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
