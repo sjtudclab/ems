@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
+import org.dclab.mapping.CanAnswerMapperI;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
 import org.dclab.mapping.SessionMapperI;
@@ -233,8 +234,50 @@ public class ExamOperator {
 		int uid=examBean.getUid();
 		List<CandidateAnswerBean> candidateList=new ArrayList<>();
 		
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		CanAnswerMapperI canAnswerMapperI = sqlSession.getMapper(CanAnswerMapperI.class);
+		
+		
 		for(SingleChoiceBean sbean: examBean.getSingleChoiceList()){
-			new CandidateAnswerBean(uid,sbean.getId(),String.valueOf(sbean.getChoiceId()));
+			CandidateAnswerBean candidateAnswerBean = new CandidateAnswerBean(uid,sbean.getId(),String.valueOf(sbean.getChoiceId()));
+			if(canAnswerMapperI.insertAnswer(candidateAnswerBean)!=1)//???????????
+				System.err.println("写入数据库失败");
+			sqlSession.commit();
 		}
+		
+		for(MultiChoicesBean mbean : examBean.getMultiChoicesList()){
+			String str="";
+			for(int i : mbean.getChoiceIdList())
+			{
+				str=str+String.valueOf(i)+",";
+			}
+			CandidateAnswerBean candidateAnswerBean = new CandidateAnswerBean(uid, mbean.getId(), str);
+			if(canAnswerMapperI.insertAnswer(candidateAnswerBean)!=1)
+				System.err.println("写入数据库失败");
+			sqlSession.commit();
+		}
+		
+		for(JudgementBean jBean : examBean.getJudgementList())
+		{
+			CandidateAnswerBean candidateAnswerBean = new CandidateAnswerBean(uid, jBean.getId(), String.valueOf(jBean.getChoiceId()));
+			if(canAnswerMapperI.insertAnswer(candidateAnswerBean)!=1)
+				System.err.println("写入数据库失败");
+			sqlSession.commit();
+		}
+		
+		for(MatchingBean mBean : examBean.getMatchingList()){
+			String str="";
+			Map<Integer,Integer> map=mBean.getChoiceIdMap();
+			for(Object object : map.keySet()){
+				str=str+object+":"+map.get(object)+",";
+				
+			}
+			CandidateAnswerBean candidateAnswerBean = new CandidateAnswerBean(uid, mBean.getId(), str);
+			if(canAnswerMapperI.insertAnswer(candidateAnswerBean)!=1)
+				System.err.println("写入数据库失败");
+			sqlSession.commit();
+		}
+		
+		sqlSession.close();
 	}
 }

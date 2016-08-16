@@ -13,11 +13,14 @@ import java.util.UUID;
 import org.dclab.model.AdminBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.RoomInfoBean;
+import org.dclab.model.SubjectRow;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.service.AdminService;
+import org.dclab.service.ImportService;
 import org.junit.runners.Parameterized.Parameters;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -130,5 +133,24 @@ public class AdminController {
 		}
 		else
 			return new SuperRespond(false, "无此权限");
+	}
+	
+	@RequestMapping("/test")
+	public int test(@RequestParam UUID token){
+		ImportService importService=new ImportService();
+		SubjectRow subjectRow=new SubjectRow();
+		subjectRow.setProName("ruanjian");
+		subjectRow.setProId("123");
+		subjectRow.setSubName("suanfa");
+		subjectRow.setSubId("1234");
+		subjectRow.setPaperNum("12345");
+		subjectRow.setDuration(7200);
+		subjectRow.setEarliestSubmit(1800);
+		subjectRow.setLatestLogin(1800);
+		subjectRow.setShowMark(0);
+		
+		return importService.importSubject(subjectRow);
+		
+		
 	}
 }
