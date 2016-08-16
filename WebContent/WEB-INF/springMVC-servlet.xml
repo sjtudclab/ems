@@ -19,4 +19,10 @@
 
 	<context:component-scan base-package="org.dclab" />
 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1000000000" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
 </beans>
+
