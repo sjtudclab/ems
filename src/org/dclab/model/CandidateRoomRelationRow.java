@@ -7,7 +7,7 @@ public class CandidateRoomRelationRow {
 	private Timestamp startTime;
 	private int seatNum;
 	private String ip;
-	private int Uid;
+	private String Uid;
 	
 	public CandidateRoomRelationRow() {
 	}
@@ -44,13 +44,18 @@ public class CandidateRoomRelationRow {
 		this.ip = ip;
 	}
 
-	public int getUid() {
+	public String getUid() {
 		return Uid;
 	}
 
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		Uid = uid;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "CandidateRoomRelationRow [roomName=" + roomName + ", startTime=" + startTime + ", seatNum=" + seatNum
+				+ ", ip=" + ip + ", Uid=" + Uid + "]";
+	}
+
 }
