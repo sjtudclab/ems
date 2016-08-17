@@ -6,8 +6,6 @@ public class CandidatePaperRelationRow {
 	private String gender;
 	private String Cid;
 	private String photo;
-	private int proId;
-	private int subId;
 	private int paperId;	//paperId in DB
 	
 	public CandidatePaperRelationRow() {
@@ -45,22 +43,6 @@ public class CandidatePaperRelationRow {
 		this.photo = photo;
 	}
 
-	public int getProId() {
-		return proId;
-	}
-
-	public void setProId(int proId) {
-		this.proId = proId;
-	}
-
-	public int getSubId() {
-		return subId;
-	}
-
-	public void setSubId(int subId) {
-		this.subId = subId;
-	}
-
 	public int getPaperId() {
 		return paperId;
 	}
@@ -75,6 +57,12 @@ public class CandidatePaperRelationRow {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	@Override
+	public String toString() {
+		return "CandidatePaperRelationRow [Uid=" + Uid + ", Uname=" + Uname + ", gender=" + gender + ", Cid=" + Cid
+				+ ", photo=" + photo + ", paperId=" + paperId + "]";
 	}
 
 }

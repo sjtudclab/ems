@@ -4,6 +4,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dclab.model.CandidatePaperRelationRow;
+import org.dclab.model.CandidateRoomRelationRow;
 import org.dclab.model.FillBlankRow;
 import org.dclab.model.JudgementRow;
 import org.dclab.model.MachineTestRow;
@@ -19,6 +20,7 @@ import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +31,10 @@ import java.util.Map;
  */
 public class ExcelImporter {
     private Workbook workbook;
-    private Sheet sheet;
-    private static Map<SubjectRow, Integer> subjectPaperMap;	//get paper id by subject info, used in room parsing
+    private Sheet sheet;								
     private Map<String, Integer>	paperIdMap;			//get paper id by paper number, used in topic parsing
-    
+    													//get paper id by subject info, used in room parsing
+    private static Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
     
     //subject sheet column index
     private static final int PRO_NAME	=	0;
@@ -75,6 +77,13 @@ public class ExcelImporter {
     private static final int C_SUB_ID	=	7;
     private static final int C_PAPER_NO	=	9;
     
+    //candidate-room sheet unique column index
+    private static final int R_NAME		=	0;
+    private static final int R_START_TM	=	1;
+    private static final int R_SEAT_NO	=	2;
+    private static final int R_IP		=	3;
+    private static final int R_UID		=	4;
+    
     //default data
     private static final int DEFAULT_EARLIEST_SUB	=	30;	//default: 30 min
     private static final int DEFAULT_LATEST_LOGIN	=	30;
@@ -105,7 +114,6 @@ public class ExcelImporter {
                 this.workbook = WorkbookFactory.create(new File(fileName));
                 //this.sheet = workbook.getSheetAt(0); //default from 0
                 this.paperIdMap			=	new HashMap<String, Integer>();
-                this.subjectPaperMap	=	new HashMap<SubjectRow, Integer>();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -715,7 +723,10 @@ public class ExcelImporter {
     		throw new RuntimeException("试卷编号不能为空！");
 		}
     	subjectRow.setPaperNum(cell.getStringCellValue());
-    	int paperId	=	subjectPaperMap.get(subjectRow);
+    	Integer paperId	=	subjectPaperMap.get(subjectRow);
+    	if (null == paperId) {
+			throw new RuntimeException("数据库中没有这套试卷！");
+		}
     	candidateRow.setPaperId(paperId);
     	
     	return candidateRow;
@@ -735,6 +746,59 @@ public class ExcelImporter {
     		candiateList.add(readCandiateRow(i));
     	}
 
+    	System.out.println(candiateList);
+    	ImportService service = new ImportService();
+    	//import candiate service
+    }
+    
+    public CandidateRoomRelationRow readCandidateRoomRow(int lineNO){
+    	Row row	=	this.sheet.getRow(lineNO);
+    	CandidateRoomRelationRow roomRow	=	new CandidateRoomRelationRow();
+    	Cell cell	=	null;
+    	
+    	cell	=	row.getCell(R_NAME);
+    	if (null == cell) {
+    		throw new RuntimeException("考场不能为空！");
+		}
+    	roomRow.setRoomName(cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(R_START_TM);
+    	if (null == cell) {
+    		throw new RuntimeException("开考时间不能为空！");
+		}
+    	roomRow.setStartTime(new Timestamp(cell.getDateCellValue().getTime()));	//Date -> TimeStamp
+    	
+    	cell	=	row.getCell(R_SEAT_NO);
+    	if (null == cell) {
+    		throw new RuntimeException("座位号不能为空！");
+		}
+    	roomRow.setSeatNum((int)cell.getNumericCellValue());
+    	
+    	cell	=	row.getCell(R_IP);
+    	roomRow.setIp(null == cell ? null : cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(R_UID);
+    	if (null == cell) {
+    		throw new RuntimeException("准考证号不能为空！");
+		}
+    	roomRow.setUid(cell.getStringCellValue());
+    	
+    	return roomRow;
+    }
+    
+    public void parseCanidateRoom(){
+    	this.sheet	=	workbook.getSheet(CAN_ROOM_ST);
+    	if (this.sheet == null) {
+			throw new RuntimeException("没有任何考场信息！");
+		}
+    	
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	List<CandidateRoomRelationRow> roomList	=	new ArrayList<>(rowNum);
+    	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
+    		roomList.add(readCandidateRoomRow(i));
+    	}
+
+    	System.out.println(roomList);
     	ImportService service = new ImportService();
     	//import candiate service
     }
@@ -754,7 +818,8 @@ public class ExcelImporter {
         
         fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
         excel		=	new ExcelImporter(fileName);
-        
+        excel.parseCandidatePaper();
+        excel.parseCanidateRoom();
         
     }
 }
