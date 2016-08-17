@@ -34,7 +34,7 @@
 						<!--<span class="glyphicon glyphicon-sort"></span>-->
 					</tr>
 					<tr class="{{examineesStatus[examinee.uid]}}" ng-repeat="examinee in examineesInfo | orderBy:orderCondition:isReverse">
-						<td ng-bind="examinee.seatNum"></td>
+						<td ng-bind="pad(examinee.seatNum,2)"></td>
 						<td ng-bind="examinee.uname"></td>
 						<td ng-bind="examinee.gender"></td>
 						<td ng-bind="examinee.cid"></td>

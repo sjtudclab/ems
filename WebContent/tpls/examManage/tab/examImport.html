@@ -1,0 +1,43 @@
+<div ng-controller="examImportCtrl" style="height:100%">
+
+    <div ng-controller="ImportFile" style="padding-top:5%;width: 80%;text-align: center;height:25%">
+        <input type="file" id="examFile" style="display:none" custom-on-change="selectFile">
+        <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
+        <label for="examFile" class="btn btn-primary">选择文件</label></button>
+        <button type="button" ng-click="upload()" class="btn btn-info">导入</button>
+        <div style="padding-left:33%">
+            <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" align="center" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
+            {{progressInfo}}
+        </div>
+
+    </div>
+
+
+    <div class="selectArea" style="display: {{showRoom}}">
+        <div style="height: 5%">
+            <!--<span>总人数：{{roomsInfo.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
+            <span class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right"></span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th ng-repeat="(key,value) in examineeMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
+                    </th>
+                    <th>编辑</th>
+                </tr>
+                <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
+                    <td ng-bind="x.examNum"></td>
+                    <td ng-bind="x.number"></td>
+                    <td ng-bind="x.content"></td>
+                    <td ng-bind="x.answer"></td>
+                    <td ng-bind="x.point"></td>
+                    <td ng-bind="x.filePic"></td>
+                    <td ng-bind="x.fileVe"></td>
+                    <td ng-bind="x.fileRR"></td>
+                    <!--<td><input type="checkbox" ng-model="selectionStatus[x.roomId]" ng-click="checkSel(selectionStatus[x.roomId],x.roomId)"></td>-->
+                    <td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

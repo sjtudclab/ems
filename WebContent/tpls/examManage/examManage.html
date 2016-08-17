@@ -1,0 +1,30 @@
+<div ui-view="navi" style="height: 6%; background-color: #337ab7 /* #2aabd2 */"></div>
+<div ng-controller="examManageCtrl" style="height:100%">
+    <!--<div class="supervi">-->
+        <ul class="nav nav-pills nav-stacked" style=" float: left;background-color: #CCCCCC; width: 10%; height: 100%">
+            <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
+                <a ng-click="superRequest(x.url);$parent.index=$index" ng-bind="x" class="cursor-pointer" style=" margin: 5%"></a>
+            </li>
+        </ul>
+    <!--</div>-->
+    <div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}}">
+
+        <!--<div style="margin: 2% auto; width: 80%; text-align: center" ui-view="{{x.url}}">
+            </div>-->
+        <div ng-controller="TabsDCtrl" style="height:100%">
+            <ul class="nav nav-tabs">
+                <li ng-repeat="x in problemMetaInfo" class="active:{{active[$index]}}">
+                    <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-bottom-color:transparent">{{x}}</a>
+                </li>
+            </ul>
+            <div style="height:94%">
+                <div ng-repeat="x in problemMetaInfo" style="background-color:{{color[$index]}};height:100%;display:{{display[$index]}}">
+                  
+                    <div ui-view="{{tab}}{{$index+1}}" style="height:100%" ></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

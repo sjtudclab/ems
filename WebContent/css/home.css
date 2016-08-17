@@ -364,9 +364,9 @@ body {
     height: 100%
 }
 
-.supervi li {
+/*.supervi li {
     text-align: center;
-}
+}*/
 
 .supervi a {
     margin: 5%
@@ -398,7 +398,7 @@ th {
 /* finish page      */
 
 .finish {
-    padding: 10%;
+    padding: 5%;
     text-align: center;
 }
 

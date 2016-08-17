@@ -31,6 +31,15 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 	// 初始化显示标签0
 	$scope.index = 0;
 	 
+    //数字格式化
+	$rootScope.pad= function(num, n) {  
+    var len = num.toString().length;  
+    while(len < n) {  
+        num = "0" + num;  
+        len++;  
+    }  
+    return num;   
+   }  
 
 	 
 
@@ -45,6 +54,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 		function success(response) {
 			// 考生信息
 			$scope.examineesInfo = response.data;
+			
 			$scope.examineeMetaInfo = {
 				'seatNum': '座位号',
 				'uname': '姓名',
@@ -116,6 +126,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 					}
 				}).then(function successCallback(response) {
 					$scope.lists = response.data;
+					
 					$scope.selectionStatus = {};
 					$scope.ifcheck = true;
 					/*
@@ -153,8 +164,16 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 				$scope.ifcheck = false;
 				$scope.selectionStatus = {};
 			case "roomChange": // 更换场次
-				$scope.ifcheck = false;
-				$scope.selectionStatus = {};
+			    $http.get('/EMS/supervise/roomChange', {
+					params: {
+						token: $window.sessionStorage.token
+					}
+				}).then(function successCallback(response) {
+					$scope.roomlists = response.data;
+					$scope.selectionStatus = {};
+					$scope.ifcheck = true;
+				}, function errorCallback(response) {
+				});
 				break;
 			/*
 			 * default: alert('更换座位信息错误！');
@@ -338,8 +357,8 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 										$http.put('/EMS/supervise/roomChange', {
 											params: {
 												token: $window.sessionStorage.token,
-												uid: uidList,
-												roomNum: roomNum
+												uid: $scope.room,
+												roomNum: $scope.roomNum
 											}
 										}).then(function successCallback(response) {
 											if (response.data.flag) {
