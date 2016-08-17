@@ -1,4 +1,4 @@
 <div>
    <p>更换场次：更换该考生到其它场次</p> 
-     场次：<select style="width:5%" ng-model="$parent.$parent.seat" ng-options="x.uid as x.seatNum+' '+x.uname for x in examineesInfo | orderBy:'seatNum'" ></select>更换为场次：<select style="width:5%" ng-model="$parent.$parent.seatNum" ng-options="x for x in lists"></select>
+     场次：<select style="width:5%" ng-model="$parent.$parent.room" ng-options="x.uid as x.roomNum+' '+x.uname for x in examineesInfo | orderBy:'roomNum'" ></select>更换为场次：<select style="width:5%" ng-model="$parent.$parent.roomNum" ng-options="x for x in roomlists"></select>
 </div>
