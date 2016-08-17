@@ -49,7 +49,7 @@ public class ImportService {
 		ChoiceMapperI choiceMapperI = sqlSession.getMapper(ChoiceMapperI.class);
 		
 		switch (topicList.get(0).getTYPE()) {
-		case 0:
+		case Constants.SINGLE_CHOICE:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)//先插入题干并获得topicId
 					System.err.println("插入数据库表topic失败");
@@ -77,7 +77,7 @@ public class ImportService {
 					System.err.println("更新数据库表topic失败");
 			}
 			break;
-		case 1:
+		case Constants.MULTI_CHOICES:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)//先插入题干并获得topicId
 					System.err.println("插入数据库表topic失败");
@@ -108,7 +108,7 @@ public class ImportService {
 				
 			}
 			break;
-		case 2:
+		case Constants.JUDGEMENT:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)//先插入题干并获得topicId
 					System.err.println("插入数据库表topic失败");
@@ -128,7 +128,7 @@ public class ImportService {
 					System.err.println("更新数据库表topic失败");
 			}
 			break;
-		case 3:
+		case Constants.MATCHING:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)//先插入题干并获得topicId
 					System.err.println("插入数据库表topic失败");
@@ -161,7 +161,7 @@ public class ImportService {
 				
 			}
 			break;
-		case 4:
+		case Constants.SHORT_ANSWER:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
@@ -175,7 +175,7 @@ public class ImportService {
 					System.err.println("更新数据库表topic失败");
 			}
 			break;
-		case 5:
+		case Constants.FILL_BLANK:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement,topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
@@ -196,7 +196,7 @@ public class ImportService {
 					System.err.println("更新数据库表topic失败");	
 			}
 			break;
-		case 6:
+		case Constants.MACHINE_TEST:
 			for(TopicRow topicRow : topicList){
 				if(sqlSession.insert(statement, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
