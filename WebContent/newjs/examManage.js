@@ -203,13 +203,38 @@ examManage.controller('examImportCtrl', function ($scope, $http, $window) {
     }
     //控制表格内容
     // $scope.examineesInfo = response.data;
+    $scope.examineesInfo = [{
+        'examNum': 'a1',
+        'number': '1',
+        'content': 'sdhkjsdhf',
+        'answer': 'hahah',
+        'point': '6',
+        'filePic': 'file.img',
+        'fileVe': 'ss.video',
+        'fileRR': 'ss.audio'
+
+    },{
+        'examNum': 'a1',
+        'number': '1',
+        'content': 'sdhkjsdhf',
+        'answer': 'hahah',
+        'point': '6',
+        'filePic': 'file.img',
+        'fileVe': 'ss.video',
+        'fileRR': 'ss.audio'
+
+    }]
+
     $scope.examineeMetaInfo = {
-        'seatNum': '座位号',
-        'uname': '姓名',
-        'gender': '性别',
-        'cid': '证件号',
-        'uid': '准考证号',
-        'status': '状态'
+        'examNum': '试卷号',
+        'number': '序号',
+        'content': '题干',
+        'answer': '参考答案',
+        'point': '分值',
+        'filePic': '图片文件',
+        'fileVe': '视频文件',
+        'fileRR': '音频文件'
+
     };
     
 

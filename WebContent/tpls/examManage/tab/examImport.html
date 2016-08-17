@@ -1,4 +1,4 @@
-<div ng-controller="examImportCtrl" style="height:100%"> 
+<div ng-controller="examImportCtrl" style="height:100%">
 
     <div ng-controller="ImportFile" style="padding-top:5%;width: 80%;text-align: center;height:25%">
         <input type="file" id="examFile" style="display:none" custom-on-change="selectFile">
@@ -26,12 +26,16 @@
                     <th>编辑</th>
                 </tr>
                 <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
-                    <td ng-bind="x.roomId"></td>
-                    <td ng-bind="x.name"></td>
-                    <td ng-bind="x.supervisor"></td>
-                    <td ng-bind="x.size"></td>
+                    <td ng-bind="x.examNum"></td>
+                    <td ng-bind="x.number"></td>
+                    <td ng-bind="x.content"></td>
+                    <td ng-bind="x.answer"></td>
+                    <td ng-bind="x.point"></td>
+                    <td ng-bind="x.filePic"></td>
+                    <td ng-bind="x.fileVe"></td>
+                    <td ng-bind="x.fileRR"></td>
                     <!--<td><input type="checkbox" ng-model="selectionStatus[x.roomId]" ng-click="checkSel(selectionStatus[x.roomId],x.roomId)"></td>-->
-                    <td><a ng-click="edit()">编辑</a></td>
+                    <td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>
                 </tr>
             </table>
         </div>

@@ -4,6 +4,8 @@ var formlogin = angular.module('formlogin', [])
 
 
 formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $window) {
+          
+   
 
     $scope.receive = function (name, password) {
         // alert(name + password);
@@ -310,7 +312,7 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 5, id: allStatus.fillgap.nid, requestId: 0, choiceIdList: allStatus.fillgap.option, ifCheck: allStatus.fillgap.ifCheck }
         }).success(function (data, status, headers, config) {
-            // alert("判断题succeed");
+            // alert("填空题succeed");
             if (data.flag == false) {
                 // alert(data.detail);
                 $http.get('/EMS/exam/handExam', {
@@ -328,7 +330,7 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 6, id: allStatus.machine.nid, requestId: 0, ifCheck: allStatus.machine.ifCheck }
         }).success(function (data, status, headers, config) {
-            // alert("判断题succeed");
+            // alert("上机题succeed");
             if (data.flag == false) {
                 // alert(data.detail);
                 $http.get('/EMS/exam/handExam', {
@@ -2611,7 +2613,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                     $scope.content = data.content;
                     $scope.fillNum = data.fillNum;
                     $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
-                    alert($scope.fillLists);
+                    
 
                     if (data.audio) {
                         $scope.audiohide = "block";
@@ -2834,19 +2836,23 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
     $scope.selectFile = function () {
         $scope.$apply(function () {
             $scope.selectedFile = event.target.files[0];
+            $scope.fileName=$scope.selectedFile.name;
         })
     }
     $scope.upload = function () {
         $scope.ngshow=true;
         var formData = new FormData();
         formData.append("file", $scope.selectedFile);
+        formData.append("token", $window.sessionStorage.token);
+        formData.append("id", $scope.nid);
+        
         if ($scope.selectedFile == undefined) {
             return;
         }
         $scope.progressPer = 0;
         $http({
             method: 'POST',
-            url: 'form',
+            url: '/EMS/exam/machineForm',
             data: formData,
             headers: {
                 'Content-Type': undefined,
@@ -2884,7 +2890,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 });
             } else {
                 // 试题
-                $scope.totalItems = data.operationNum;
+                $scope.totalItems = data.machineNum;
                 $scope.currentPage = $scope.nid;
 
                 $scope.content = data.content;
@@ -2910,6 +2916,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                     $scope.videohide = "none";
                 }
                 //试题状态
+                $scope.fileName=data.fileName;
 
                 if (data.ifCheck) {
                     $scope.red = "#FF6347";
@@ -2941,7 +2948,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 } else {
                     machineStatus.machine.videohide = $scope.videohide;
                 }
-
+                machineStatus.machine.fileName = $scope.fileName;
                 machineStatus.machine.ifCheck = $scope.count;
 
 
@@ -2956,11 +2963,12 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
         $scope.ngshow=false;
         var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
         if (machineStatus.machine.nid) {
-            $scope.totalItems = machineStatus.machine.operationNum;
+            $scope.totalItems = machineStatus.machine.machineNum;
             $scope.currentPage = machineStatus.machine.nid;
 
             $scope.nid = machineStatus.machine.nid;
             $scope.content = machineStatus.machine.content;
+            $scope.fileName=machineStatus.machine.fileName;
 
             // $rootScope.totalItems = gapStatus.fillgap.totalItems;
             if (machineStatus.machine.audiohide == "block") {
@@ -3017,11 +3025,12 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                     });
                 } else {
                     //试题
-                    $scope.totalItems = data.operationNum;
+                    $scope.totalItems = data.machineNum;
                     $scope.currentPage = 1;
 
                     $scope.nid = 1;
                     $scope.content = data.content;
+    
 
                     if (data.audio) {
                         $scope.audiohide = "block";
@@ -3044,6 +3053,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                         $scope.videohide = "none";
                     }
                     //试题状态
+                    $scope.fileName=data.fileName;
                     if (data.ifCheck) {
                         $scope.red = "#FF6347";
                         $scope.count = true;
@@ -3076,9 +3086,9 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                     } else {
                         machineStatus.machine.videohide = $scope.videohide;
                     }
-
+                    machineStatus.machine.fileName = $scope.fileName;
                     machineStatus.machine.ifCheck = $scope.count;
-                    machineStatus.machine.operationNum = $scope.totalItems;
+                    machineStatus.machine.machineNum = $scope.totalItems;
 
                     $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
                 }
@@ -3124,7 +3134,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
             } else {
                 $scope.ngshow=false;
                 // 试题
-                $scope.totalItems = data.operationNum;
+                $scope.totalItems = data.machineNum;
 
                 $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
@@ -3150,6 +3160,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                     $scope.videohide = "none";
                 }
                 //试题状态
+                $scope.fileName=data.fileName;
                 if (data.ifCheck) {
                     $scope.red = "#FF6347";
                     $scope.count = true;
@@ -3180,7 +3191,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 } else {
                     machineStatus.machine.videohide = $scope.videohide;
                 }
-
+                machineStatus.machine.fileName = $scope.fileName;
                 machineStatus.machine.ifCheck = $scope.count;
                 $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
             }
