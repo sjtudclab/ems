@@ -34,13 +34,14 @@ public class ImportService {
 			System.err.println("插入数据库表paper失败");
 		sqlSession.commit();
 		sqlSession.close();
-		
+		/*subjectRow.setPaperId(123);//test
+		System.out.println(subjectRow);*/
 		return subjectRow.getPaperId();
 		
 	}
 	
 	public boolean importTopic(List<TopicRow> topicList){
-		
+		System.out.println(topicList);
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.addTopic";
 		String statement1 = "org.dclab.mapping.choiceMapper.add";
@@ -54,7 +55,7 @@ public class ImportService {
 				if(sqlSession.insert(statement, topicRow)!=1)//先插入题干并获得topicId
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
-				
+	
 				int topicId=topicRow.getId();
 				
 				SingleChoiceRow singleChoiceRow=(SingleChoiceRow)topicRow;
@@ -75,6 +76,7 @@ public class ImportService {
 				String points=String.valueOf(singleChoiceRow.getFullMark());
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+
 			}
 			break;
 		case Constants.MULTI_CHOICES:
@@ -230,7 +232,6 @@ public class ImportService {
 		list.add("12312312");
 		list.add("jdjsjdjdjd");
 		s1.setChoiceList(list);
-		s1.setChoiceNum(1);
 		s1.setPaperId(123);
 		
 		MultiChoicesRow m1= new MultiChoicesRow();
@@ -243,7 +244,6 @@ public class ImportService {
 		list1.add("12312312sdas");
 		list1.add("jdjsjdjdjd1231");
 		s2.setChoiceList(list1);
-		s2.setChoiceNum(1);
 		s2.setPaperId(123);
 		
 		List<TopicRow> list2=new ArrayList<>();

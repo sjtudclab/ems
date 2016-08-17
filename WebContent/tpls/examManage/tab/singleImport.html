@@ -1,0 +1,26 @@
+<div class="col-md-8 col-md-offset-3" ng-controller="singleCtrl">
+    <div class="form-group" style="padding-left:15%;font-size:150%">
+        单选题
+    </div>
+    <div class="form-group">
+        <span style="width:10%;display:inline-block">题干内容：</span><input ng-model="content">
+    </div>
+    <div class="form-group">
+        <span>选项</span>
+        <button class="btn btn-info" type="button" ng-click="itemMessage.push('')">添加</button>
+        <button class="btn btn-info" type="button" ng-click="itemMessage.pop()">删除</button>
+    </div>
+    <div class="form-group" ng-repeat="x in itemMessage track by $index">
+        <br> 选项{{$index+1}}: <input type="text" ng-model="itemMessage[$index]">
+        </input>
+    </div>
+    <div class="form-group">
+        <span style="width:10%;display:inline-block">正确选项：</span>
+        <select  ng-model="rightAnswer">
+            <option ng-repeat="x in itemMessage track by $index">{{$index+1}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" ng-click="save()">保存</button> <button class="btn btn-warning" ng-click="delete()">下一题</button>
+    </div>
+</div>

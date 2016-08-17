@@ -17,7 +17,7 @@ formlogin.controller('httpCtrl', function ($rootScope, $scope, $state, $http, $w
 
             // alert(data.Rid);
             // $state.go('examImport');
-            //  $state.go('manager');
+            //   $state.go('examManage');
             switch (data.Rid) {
                 case 0: //考生登录
                     $window.sessionStorage.token = data.token;
@@ -137,7 +137,7 @@ demo0.controller('finish', function ($scope, $state, $stateParams, $window) {
 
 
 demo0.controller('TabsDemoCtrl', function ($scope, $rootScope) {
-    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题', '简答题','填空题'];
+    $scope.problemMetaInfo = ['单选题', '多选题', '判断题', '匹配题', '简答题', '填空题','上机题'];
     $scope.active = [];
     $scope.display = [];
     $scope.color = [];
@@ -220,7 +220,7 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
-             alert("单选题succeed");
+            alert("单选题succeed");
             if (data.flag == false) {
                 //  alert(data.detail);
                 $http.get('/EMS/exam/handExam', {
@@ -309,6 +309,24 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         });
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 5, id: allStatus.fillgap.nid, requestId: 0, choiceIdList: allStatus.fillgap.option, ifCheck: allStatus.fillgap.ifCheck }
+        }).success(function (data, status, headers, config) {
+            // alert("判断题succeed");
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    // alert(data);
+                    $state.go("finish", { score: data });
+                });
+            }
+
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+        $http.get('/EMS/exam/getTopic', {
+            params: { token: $window.sessionStorage.token, typeId: 6, id: allStatus.machine.nid, requestId: 0, ifCheck: allStatus.machine.ifCheck }
         }).success(function (data, status, headers, config) {
             // alert("判断题succeed");
             if (data.flag == false) {
@@ -2430,14 +2448,14 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 demo0.controller('skiptb6', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
     //填空题
 
-   
+
 
     if ($stateParams.type == 6) {
         $scope.nid = $stateParams.num * 1;
         $rootScope.index = $stateParams.active * 1; //面板切换
         //检查某题
         // $http.get('/EMS/exam/toTopic', {
-            $http.get('fillgap.json', {
+        $http.get('fillgap.json', {
             params: { typeId: 5, token: $window.sessionStorage.token, id: $stateParams.num }
         }).success(function (data, status, headers, config) {
             if (data.flag == false) {
@@ -2454,7 +2472,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
 
                 $scope.content = data.content;
                 $scope.fillNum = data.fillNum;
-                $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+                $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -2530,7 +2548,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
 
             $scope.nid = gapStatus.fillgap.nid;
             $scope.content = gapStatus.fillgap.content;
-            $scope.fillLists  = gapStatus.fillgap.fillLists ;
+            $scope.fillLists = gapStatus.fillgap.fillLists;
             // $rootScope.totalItems = gapStatus.fillgap.totalItems;
             if (gapStatus.fillgap.audiohide == "block") {
                 $scope.audiohide = "block";
@@ -2560,7 +2578,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
             }
 
             //status
-            $scope.option.optionsRadios = gapStatus.fillgap.option;
+            $scope.option = gapStatus.fillgap.option;
             if (gapStatus.fillgap.ifCheck) {
                 $scope.red = "#FF6347";
                 $scope.count = true;
@@ -2574,7 +2592,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
         } else {
             //初始化试题
             // $http.get('/EMS/exam/start', {
-                 $http.get('fillgap.json', {
+            $http.get('fillgap.json', {
                 params: { typeId: 5, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
@@ -2592,9 +2610,9 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                     $scope.nid = 1;
                     $scope.content = data.content;
                     $scope.fillNum = data.fillNum;
-                    $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+                    $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
                     alert($scope.fillLists);
-                   
+
                     if (data.audio) {
                         $scope.audiohide = "block";
                         $scope.audio = data.audio;
@@ -2630,7 +2648,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                     var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
                     gapStatus.fillgap.nid = $scope.nid;
                     gapStatus.fillgap.content = $scope.content;
-                    gapStatus.fillgap.fillLists  = $scope.fillLists;
+                    gapStatus.fillgap.fillLists = $scope.fillLists;
                     if ($scope.audiohide == "block") {
                         gapStatus.fillgap.audio = $scope.sudio;
                         gapStatus.fillgap.audiohide = $scope.sudiohide;
@@ -2702,7 +2720,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                 $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
                 $scope.fillNum = data.fillNum;
-                $scope.fillLists = Array(data.fillNum+1).join('a').split('');
+                $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -2800,7 +2818,410 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
     }
 
 });
+demo0.directive('customOnChange', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var onChangeFunc = scope.$eval(attrs.customOnChange);
+            element.bind('change', onChangeFunc);
+        }
+    };
+});
+demo0.controller('skiptb7', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
+    //上机题
+    $scope.progressPer = 0;
+    
+    $scope.selectFile = function () {
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+        })
+    }
+    $scope.upload = function () {
+        $scope.ngshow=true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: 'form',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
 
+
+
+    if ($stateParams.type == 7) {
+        $scope.nid = $stateParams.num * 1;
+        $rootScope.index = $stateParams.active * 1; //面板切换
+        $scope.ngshow=false;
+        //检查某题
+        // $http.get('/EMS/exam/toTopic', {
+        $http.get('machine.json', {
+            params: { typeId: 6, token: $window.sessionStorage.token, id: $stateParams.num }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
+            } else {
+                // 试题
+                $scope.totalItems = data.operationNum;
+                $scope.currentPage = $scope.nid;
+
+                $scope.content = data.content;
+
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+              
+                var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                machineStatus.machine.nid = $scope.nid;
+                machineStatus.machine.content = $scope.content;
+                if ($scope.audiohide == "block") {
+                    machineStatus.machine.audio = $scope.sudio;
+                    machineStatus.machine.audiohide = $scope.sudiohide;
+                } else {
+                    machineStatus.machine.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    machineStatus.machine.img = $scope.img;
+                    machineStatus.machine.imghide = $scope.imghide;
+                } else {
+                    machineStatus.machine.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    machineStatus.machine.video = $scope.video;
+                    machineStatus.machine.videohide = $scope.videohide;
+                } else {
+                    machineStatus.machine.videohide = $scope.videohide;
+                }
+
+                machineStatus.machine.ifCheck = $scope.count;
+
+
+                $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+            }
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+
+    } else {
+        $scope.ngshow=false;
+        var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        if (machineStatus.machine.nid) {
+            $scope.totalItems = machineStatus.machine.operationNum;
+            $scope.currentPage = machineStatus.machine.nid;
+
+            $scope.nid = machineStatus.machine.nid;
+            $scope.content = machineStatus.machine.content;
+
+            // $rootScope.totalItems = gapStatus.fillgap.totalItems;
+            if (machineStatus.machine.audiohide == "block") {
+                $scope.audiohide = "block";
+                $scope.audio = machineStatus.machine.audio;
+            } else {
+                $scope.audiohide = "none";
+                // alert("隐藏");
+
+            }
+            if (machineStatus.machine.imghide == "block") {
+                $scope.imghide = "block";
+                $scope.img = machineStatus.machine.img;
+
+            } else {
+                $scope.imghide = "none";
+                //alert("隐藏");
+
+            }
+            if (machineStatus.machine.videohide == "block") {
+                $scope.videohide = "block";
+                $scope.video = machineStatus.machine.video;
+
+            } else {
+                $scope.videohide = "none";
+                //alert("隐藏");
+
+            }
+
+            //status
+           
+            if (machineStatus.machine.ifCheck) {
+                $scope.red = "#FF6347";
+                $scope.count = true;
+            } else {
+                $scope.red = "#000000";
+                $scope.count = false;
+
+            }
+
+
+        } else {
+            //初始化试题
+            // $http.get('/EMS/exam/start', {
+            $http.get('machine.json', {
+                params: { typeId: 6, token: $window.sessionStorage.token }
+            }).success(function (data, status, headers, config) {
+                if (data.flag == false) {
+                    // alert(data.detail);
+                    $http.get('/EMS/exam/handExam', {
+                        params: { token: $window.sessionStorage.token }
+                    }).success(function (data, status, headers, config) {
+                        $state.go("finish", { score: data });
+                    });
+                } else {
+                    //试题
+                    $scope.totalItems = data.operationNum;
+                    $scope.currentPage = 1;
+
+                    $scope.nid = 1;
+                    $scope.content = data.content;
+
+                    if (data.audio) {
+                        $scope.audiohide = "block";
+                        $scope.audio = data.audio;
+                    } else {
+                        $scope.audiohide = "none";
+                    }
+                    if (data.img) {
+                        $scope.imghide = "block";
+                        $scope.img = data.img;
+
+                    } else {
+                        $scope.imghide = "none";
+                    }
+                    if (data.video) {
+                        $scope.videohide = "block";
+                        $scope.video = data.video;
+
+                    } else {
+                        $scope.videohide = "none";
+                    }
+                    //试题状态
+                    if (data.ifCheck) {
+                        $scope.red = "#FF6347";
+                        $scope.count = true;
+                    } else {
+                        $scope.red = "#000000";
+                        $scope.count = false;
+
+                    }
+
+                    /*  $scope.before = true;*/
+                    var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                    machineStatus.machine.nid = $scope.nid;
+                    machineStatus.machine.content = $scope.content;
+                  
+                    if ($scope.audiohide == "block") {
+                        machineStatus.machine.audio = $scope.sudio;
+                        machineStatus.machine.audiohide = $scope.sudiohide;
+                    } else {
+                        machineStatus.machine.audiohide = $scope.sudiohide;
+                    }
+                    if ($scope.imghide == "block") {
+                        machineStatus.machine.img = $scope.img;
+                        machineStatus.machine.imghide = $scope.imghide;
+                    } else {
+                        machineStatus.machine.imghide = $scope.imghide;
+                    }
+                    if ($scope.videohide == "block") {
+                        machineStatus.machine.video = $scope.video;
+                        machineStatus.machine.videohide = $scope.videohide;
+                    } else {
+                        machineStatus.machine.videohide = $scope.videohide;
+                    }
+
+                    machineStatus.machine.ifCheck = $scope.count;
+                    machineStatus.machine.operationNum = $scope.totalItems;
+
+                    $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+                }
+
+            }).error(function (data, status, headers, config) {
+                //处理错误  
+                alert('服务器拒绝访问');
+            });
+
+
+        }
+    }
+
+    $scope.opChanged = function (option) {
+        var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+        gapStatus.fillgap.option = option.optionsRadios;
+        $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+    }
+
+
+
+    $scope.previousText = "上一题";
+    $scope.nextText = "下一题";
+    $scope.itemsPerPage = 1;
+    $scope.maxSize = 5;
+
+    $scope.pageChanged = function (option) {
+        /*  alert($scope.currentPage);*/
+        alert(option);
+
+        var isChecked = $scope.count;
+        // $http.get('/EMS/exam/getTopic', {
+        $http.get('machine.json', {
+            params: { token: $window.sessionStorage.token, typeId: 6, id: $scope.nid, requestId: $scope.currentPage,ifCheck: isChecked }
+        }).success(function (data, status, headers, config) {
+            if (data.flag == false) {
+                // alert(data.detail);
+                $http.get('/EMS/exam/handExam', {
+                    params: { token: $window.sessionStorage.token }
+                }).success(function (data, status, headers, config) {
+                    $state.go("finish", { score: data });
+                });
+            } else {
+                $scope.ngshow=false;
+                // 试题
+                $scope.totalItems = data.operationNum;
+
+                $scope.nid = $scope.currentPage;
+                $scope.content = data.content;
+
+                if (data.audio) {
+                    $scope.audiohide = "block";
+                    $scope.audio = data.audio;
+                } else {
+                    $scope.audiohide = "none";
+                }
+                if (data.img) {
+                    $scope.imghide = "block";
+                    $scope.img = data.img;
+
+                } else {
+                    $scope.imghide = "none";
+                }
+                if (data.video) {
+                    $scope.videohide = "block";
+                    $scope.video = data.video;
+
+                } else {
+                    $scope.videohide = "none";
+                }
+                //试题状态
+                if (data.ifCheck) {
+                    $scope.red = "#FF6347";
+                    $scope.count = true;
+                } else {
+                    $scope.red = "#000000";
+                    $scope.count = false;
+
+                }
+                /* if ( $scope.id == 1) { $scope.before = true; }else{$scope.before = false; }*/
+                var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
+                machineStatus.machine.nid = $scope.nid;
+                machineStatus.machine.content = $scope.content;
+                if ($scope.audiohide == "block") {
+                    machineStatus.machine.audio = $scope.sudio;
+                    machineStatus.machine.audiohide = $scope.sudiohide;
+                } else {
+                    machineStatus.machine.audiohide = $scope.sudiohide;
+                }
+                if ($scope.imghide == "block") {
+                    machineStatus.machine.img = $scope.img;
+                    machineStatus.machine.imghide = $scope.imghide;
+                } else {
+                    machineStatus.machine.imghide = $scope.imghide;
+                }
+                if ($scope.videohide == "block") {
+                    machineStatus.machine.video = $scope.video;
+                    machineStatus.machine.videohide = $scope.videohide;
+                } else {
+                    machineStatus.machine.videohide = $scope.videohide;
+                }
+
+                machineStatus.machine.ifCheck = $scope.count;
+                $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+            }
+
+        }).error(function (data, status, headers, config) {
+            //处理错误  
+            alert('服务器拒绝访问');
+        });
+
+    };
+
+    //  $rootScope.counter = 0;
+    //标志旗帜颜色
+    $scope.chgColor = function (count) {
+
+
+        if (count) {
+            $scope.red = "#000000";
+            $scope.count = false;
+            $rootScope.counter = $rootScope.counter - 1;
+
+            var machineStatus = JSON.parse($window.sessionStorage.problemStatus);
+            machineStatus.machine.ifCheck = $scope.count;
+            $window.sessionStorage.counter = $rootScope.counter;
+            $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+
+        } else {
+            $scope.red = "#FF6347";
+            $scope.count = true;
+            $rootScope.counter = $rootScope.counter + 1;
+
+            var machineStatus = JSON.parse($window.sessionStorage.problemStatus);
+            machineStatus.machine.ifCheck = $scope.count;
+            $window.sessionStorage.counter = $rootScope.counter;
+            $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+
+        }
+
+    }
+
+});
 var checkup = angular.module('checkup', []);
 checkup.controller('btnCtrl', function ($scope) {
 

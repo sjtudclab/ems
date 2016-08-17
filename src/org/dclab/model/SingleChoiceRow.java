@@ -5,22 +5,15 @@ import java.util.List;
 import org.dclab.common.Constants;
 
 public class SingleChoiceRow extends TopicRow {
-	private int choiceNum;
 	private List<String> choiceList;	//a list of choice content
 	private int correctAnswerIndex;		//correct answer index, start from 1
 	
-	public SingleChoiceRow(){}
+	public SingleChoiceRow(){
+		this.TYPE	=	Constants.SINGLE_CHOICE;
+	}
 	
 	public SingleChoiceRow(int paperId){
 		super(paperId, Constants.SINGLE_CHOICE);
-	}
-
-	public int getChoiceNum() {
-		return choiceNum;
-	}
-
-	public void setChoiceNum(int choiceNum) {
-		this.choiceNum = choiceNum;
 	}
 
 	public List<String> getChoiceList() {
@@ -37,6 +30,13 @@ public class SingleChoiceRow extends TopicRow {
 
 	public void setCorrectAnswerIndex(int correctAnswerIndex) {
 		this.correctAnswerIndex = correctAnswerIndex;
+	}
+
+	@Override
+	public String toString() {
+		return "SingleChoiceRow [choiceList=" + choiceList + ", correctAnswerIndex=" + correctAnswerIndex + ", id=" + id
+				+ ", TYPE=" + TYPE + ", paperId=" + paperId + ", number=" + number + ", fullMark=" + fullMark
+				+ ", content=" + content + ", img=" + img + ", audio=" + audio + ", video=" + video + "]";
 	}
 	
 	

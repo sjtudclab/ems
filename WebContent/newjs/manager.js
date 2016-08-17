@@ -46,7 +46,7 @@ angular
         $scope.roomsStatus = {};
         $scope.selectionStatus = {};
 
-        
+
         // 监控index变量控制标签及标签页
         $scope.$watch('index', function () {
             if ($scope.index == undefined) {
@@ -59,12 +59,13 @@ angular
             ;
             $scope.active[$scope.index] = "active";
             $scope.display[$scope.index] = "block";
+            $scope.ngshow=false;
         });
         //试题导入
         $scope.superRequest = function (url) {
             /* console.log($scope); */
             /* $parent.index=$index; */
-           
+
             switch (url) {
                 case "examImport": //试题导入
                     $state.go('examImport');
@@ -86,7 +87,7 @@ angular
                 case "systemManagement": // 系统管理
                     $scope.showRoom = "none";
                     break;
-                default: 
+                default:
                     $scope.showRoom = "none";
 
             }
@@ -266,3 +267,84 @@ angular
         }
 
 				});
+angular.module('manager').controller('ImportFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
+
+    $scope.progressPer = 0;
+    $scope.ngshow=false;
+    $scope.selectFile = function () {
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+        })
+    }
+
+    $scope.upload = function () {
+        $scope.ngshow=true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: 'form',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
+
+
+});
+angular.module('manager').controller('ImportStuFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
+
+    $scope.progressPer = 0;
+    $scope.ngshow=false;
+    $scope.selectFile = function () {
+
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+        })
+    }
+
+    $scope.upload = function () {
+        $scope.ngshow=true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: 'form',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
+
+
+});

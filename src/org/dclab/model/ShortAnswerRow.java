@@ -6,6 +6,7 @@ public class ShortAnswerRow extends TopicRow{
 	private String correctAnswer;
 	
 	public ShortAnswerRow() {
+		this.TYPE	=	Constants.SHORT_ANSWER;
 	}
 
 	public ShortAnswerRow(int paperId){
@@ -19,6 +20,12 @@ public class ShortAnswerRow extends TopicRow{
 	public void setCorrectAnswer(String correctAnswer) {
 		this.correctAnswer = correctAnswer;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ShortAnswerRow [correctAnswer=" + correctAnswer + ", id=" + id + ", TYPE=" + TYPE + ", paperId="
+				+ paperId + ", number=" + number + ", fullMark=" + fullMark + ", content=" + content + ", img=" + img
+				+ ", audio=" + audio + ", video=" + video + "]";
+	}
 	
 }
