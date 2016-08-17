@@ -102,19 +102,23 @@ examManage.controller('examManageCtrl', function ($scope, $http, $window) {
                 break;
             case 1:
                 $scope.problemMetaInfo = ['考生导入', '考生录入'];
-                $scope.tab = "tjjj";
+                $scope.tab = "stu";
                 break;
             case 2:
                 $scope.problemMetaInfo = ['考场导入', '考场录入'];
+                $scope.tab = "room";
                 break;
             case 3:
                 $scope.problemMetaInfo = ['考生试卷安排'];
+                $scope.tab = "stuExam";
                 break;
             case 4:
                 $scope.problemMetaInfo = ['考生考场安排'];
+                $scope.tab = "stuRoom";
                 break;
             case 5:
                 $scope.problemMetaInfo = ['系统管理'];
+                $scope.tab = "setSystem";
                 break;
         }
 
@@ -164,6 +168,12 @@ examManage.controller('TabsDCtrl', function ($scope, $rootScope) {
 });
 
 examManage.controller('examImportCtrl', function ($scope, $http, $window) {
+    //编辑
+    $scope.edit = function () {
+        $scope.sel(1);
+
+    }
+
     //控制导入文件
     $scope.progressPer = 0;
     $scope.ngshow = false;
@@ -213,17 +223,17 @@ examManage.controller('examImportCtrl', function ($scope, $http, $window) {
         'fileVe': 'ss.video',
         'fileRR': 'ss.audio'
 
-    },{
-        'examNum': 'a1',
-        'number': '1',
-        'content': 'sdhkjsdhf',
-        'answer': 'hahah',
-        'point': '6',
-        'filePic': 'file.img',
-        'fileVe': 'ss.video',
-        'fileRR': 'ss.audio'
+    }, {
+            'examNum': 'a1',
+            'number': '1',
+            'content': 'sdhkjsdhf',
+            'answer': 'hahah',
+            'point': '6',
+            'filePic': 'file.img',
+            'fileVe': 'ss.video',
+            'fileRR': 'ss.audio'
 
-    }]
+        }]
 
     $scope.examineeMetaInfo = {
         'examNum': '试卷号',
@@ -236,7 +246,7 @@ examManage.controller('examImportCtrl', function ($scope, $http, $window) {
         'fileRR': '音频文件'
 
     };
-    
+
 
     $scope.orderCondition = 'seatNum';
     $scope.isReverse = false;
@@ -248,7 +258,392 @@ examManage.controller('examImportCtrl', function ($scope, $http, $window) {
     }
 
 });
+examManage.controller('stuImportCtrl', function ($scope, $http,$rootScope, $window) {
+    //编辑
+    $scope.edit = function (name,gender,id,subject,subjectNum) {
+        $scope.sel(1);
+        $rootScope.stuName=name ;
+        $rootScope.stuGender=gender ;
+        $rootScope.stuId=id;
+        $rootScope.stuSubject=subject;
+        $rootScope.stuSubNum=subjectNum ;
 
+    }
+
+    //控制导入文件
+    $scope.progressPer = 0;
+    $scope.ngshow = false;
+    $scope.selectFile = function () {
+
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+        })
+    }
+
+    $scope.upload = function () {
+        $scope.ngshow = true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: 'form',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
+    //控制表格内容
+    // $scope.examineesInfo = response.data;
+    $scope.examineesInfo = [{
+        'name': '小宋',
+        'gender': '男',
+        'id': '87798',
+        'picture': '1.jpg',
+        'subject': '政治',
+        'subjectNum': 'de'
+
+    }, {
+            'name': '小李',
+            'gender': '男',
+            'id': '5687687',
+            'picture': '2.jpg',
+            'subject': '地理',
+            'subjectNum': 'e3'
+
+        }]
+
+    $scope.examineeMetaInfo = {
+        'name': '姓名',
+        'gender': '性别',
+        'id': '证件号',
+        'picture': '照片',
+        'subject': '科目',
+        'subjectNum': '科目编号'
+
+    }
+
+
+    $scope.orderCondition = 'name';
+    $scope.isReverse = false;
+
+    // 排序变量
+    $scope.thClick = function (value) {
+        $scope.orderCondition = value;
+        $scope.isReverse = !$scope.isReverse;
+    }
+
+});
+examManage.controller('stuInputCtrl', function ($scope, $http, $rootScope, $window, roomManage) {
+
+    // $scope.$watch("roomManage.ipAdd", function (newVal, oldVal) {
+    //     if (newVal !== oldVal) {
+    //  alert("ahha"+roomManage.roomName);
+
+    //     $scope.roomName = roomManage.roomName;
+    //     $scope.seatName = roomManage.seatName;
+    //     $scope.ipAdd = roomManage.ipAdd;
+    // }
+
+    // }, true);
+    $scope.save = function () {
+        alert($scope.roomName + $scope.seatName);
+        $rootScope.stuName = '';
+        $rootScope.stuGender = '';
+        $rootScope.stuId = '';
+        $rootScope.stuSubject = '';
+        $rootScope.stuSubNum = '';
+
+
+
+    }
+
+
+});
+examManage.factory('roomManage', function () {
+    return {
+        roomName: '',
+        seatName: '',
+        ipAdd: ''
+
+    };
+})
+examManage.controller('roomImportCtrl', function ($scope, $http,$rootScope, $window, roomManage) {
+    //编辑
+    $scope.edit = function (roomNum, seatNum, ip) {
+        // roomManage.roomName = roomNum;
+        // roomManage.seatName = seatNum;
+        // roomManage.ipAdd = ip;
+        $scope.sel(1);
+
+        $rootScope.roomName = roomNum;
+        $rootScope.seatName = seatNum;
+        $rootScope.ipAdd = ip;
+        // alert(roomManage.seatName);
+
+    }
+
+    //控制导入文件
+    $scope.progressPer = 0;
+    $scope.ngshow = false;
+    $scope.selectFile = function () {
+
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+        })
+    }
+
+    $scope.upload = function () {
+        $scope.ngshow = true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: 'form',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
+    //控制表格内容
+    // $scope.examineesInfo = response.data;
+    $scope.examineesInfo = [{
+        'roomNum': '东中院3-213',
+        'seatNum': '7',
+        'ip': '192.168.3.234'
+
+    }, {
+            'roomNum': '东中院1-311',
+            'seatNum': '5',
+            'ip': '192.168.0.343'
+
+        }]
+
+    $scope.examineeMetaInfo = {
+        'roomNum': '考场名',
+        'seatNum': '座位号',
+        'ip': 'IP'
+
+    }
+
+
+    $scope.orderCondition = 'roomNum';
+    $scope.isReverse = false;
+
+    // 排序变量
+    $scope.thClick = function (value) {
+        $scope.orderCondition = value;
+        $scope.isReverse = !$scope.isReverse;
+    }
+
+});
+examManage.controller('roomIputCtrl', function ($scope, $http, $rootScope, $window, roomManage) {
+
+    // $scope.$watch("roomManage.ipAdd", function (newVal, oldVal) {
+    //     if (newVal !== oldVal) {
+    //  alert("ahha"+roomManage.roomName);
+
+    //     $scope.roomName = roomManage.roomName;
+    //     $scope.seatName = roomManage.seatName;
+    //     $scope.ipAdd = roomManage.ipAdd;
+    // }
+
+    // }, true);
+    $scope.save = function () {
+        alert($scope.roomName + $scope.seatName);
+        $rootScope.roomName = '';
+        $rootScope.seatName = '';
+        $rootScope.ipAdd = '';
+
+
+
+    }
+
+
+});
+
+examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
+
+    //控制表格内容
+    // $scope.examineesInfo = response.data;
+
+
+    $scope.examineeMetaInfo = {
+        'name': '姓名',
+        'id': '证件号',
+        'subject': '科目名称'
+
+    }
+
+
+    $scope.orderCondition = 'name';
+    $scope.isReverse = false;
+
+    // 排序变量
+    $scope.thClick = function (value) {
+        $scope.orderCondition = value;
+        $scope.isReverse = !$scope.isReverse;
+    }
+
+    //选择相应科目
+    $scope.sumSub = [{
+        "subName": "政治",
+        "subNum": ["a1", "a2"]
+    }, {
+            "subName": "英语",
+            "subNum": ["b1", "b2"]
+        }, {
+            "subName": "数学",
+            "subNum": ["c1", "c2"]
+        }];
+    $scope.selectSubject = function (selectedSub) {
+
+        switch (selectedSub.subName) {
+            case '政治':
+                $scope.subNumlists = selectedSub.subNum;
+                $scope.examineesInfo = [{
+                    'name': '李煜',
+                    'id': '678689',
+                    'subject': '政治'
+
+                }, {
+                        'name': '李静',
+                        'id': '678689',
+                        'subject': '政治'
+
+                    }]
+                break;
+            case '英语':
+                $scope.subNumlists = selectedSub.subNum;
+                $scope.examineesInfo = [{
+                    'name': '李煜',
+                    'id': '678689',
+                    'subject': '英语'
+
+                }, {
+                        'name': '李静',
+                        'id': '678689',
+                        'subject': '英语'
+
+                    }]
+                break;
+            case '数学':
+                $scope.subNumlists = selectedSub.subNum;
+                break;
+
+        }
+    }
+
+
+});
+examManage.controller('stuRoomCtrl', function ($scope, $http, $window) {
+
+    //控制表格内容
+    $scope.selectionStatus = [];
+    // 全选
+    $scope.selectAll = function () {
+        for (x in $scope.examineesInfo) {
+            $scope.selectionStatus[$scope.examineesInfo[x].id] = true;
+        }
+    }
+
+    // 取消选择
+    $scope.cancelAll = function () {
+        for (x in $scope.examineesInfo) {
+            $scope.selectionStatus[$scope.examineesInfo[x].id] = false;
+        }
+    }
+
+    // $scope.examineesInfo = response.data;
+
+    $scope.examineesInfo = [{
+        'name': '李煜',
+        'id': '678689',
+        'subject': '政治'
+
+    }, {
+            'name': '李静',
+            'id': '6789',
+            'subject': '政治'
+
+        }, {
+            'name': '于一',
+            'id': '678349',
+            'subject': '政治'
+
+        }]
+    $scope.examineeMetaInfo = {
+        'name': '姓名',
+        'id': '证件号',
+        'subject': '科目名称'
+
+    }
+
+
+    $scope.orderCondition = 'name';
+    $scope.isReverse = false;
+
+    // 排序变量
+    $scope.thClick = function (value) {
+        $scope.orderCondition = value;
+        $scope.isReverse = !$scope.isReverse;
+    }
+
+    //选择相应科目
+    $scope.sumSub = [{
+        "subName": "东中院1-101",
+        "subNum": ["a1", "a2"]
+    }, {
+            "subName": "东中院1-103",
+            "subNum": ["b1", "b2"]
+        }, {
+            "subName": "东中院1-104",
+            "subNum": ["c1", "c2"]
+        }];
+    $scope.selectSubject = function (selectedSub) {
+        var uidList = [];
+        for (x in $scope.selectionStatus) {
+
+            if ($scope.selectionStatus[x]) {
+                uidList.push(x);
+            }
+        }
+        alert(selectedSub.subName);
+        alert(uidList);
+
+    }
+
+
+});
 examManage.controller('singleCtrl', function ($scope, $http, $window) {
     $scope.itemMessage = ['', '', '', ''];
     $scope.rightAnswer = [];

@@ -1,0 +1,32 @@
+<div ng-controller="stuExamCtrl" style="height:100%">
+
+    <div style="height:20%;text-align:center;padding-top:5%;font-size:120%;width: 80%;">
+        <span class="font-size:150%">科目</span><select style="width:10%" ng-model="selectedSub" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
+        <button class="btn btn-primary" ng-click="selectSubject(selectedSub)">确认</button>
+    </div>
+
+
+    <div class="selectArea" style="display: {{showRoom}}">
+        <div style="height: 5%">
+            <!--<span>总人数：{{roomsInfo.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
+            <span class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right"></span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th ng-repeat="(key,value) in examineeMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
+                    </th>
+                    <th>选择试卷号</th>
+                </tr>
+                <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
+                    <td ng-bind="x.name"></td>
+                    <td ng-bind="x.id"></td>
+                    <td ng-bind="x.subject"></td>
+                    <!--<td><input type="checkbox" ng-model="selectionStatus[x.roomId]" ng-click="checkSel(selectionStatus[x.roomId],x.roomId)"></td>-->
+                    <!--<td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>-->
+                    <td><select ng-model="examNum" ng-options="x for x in subNumlists"></select></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

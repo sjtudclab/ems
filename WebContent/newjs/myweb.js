@@ -236,20 +236,26 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 			'tab2@examManage' : {
 				templateUrl : 'tpls/examManage/tab/multipleImport.html'
 			},
-			'single@examManage' : {
-				templateUrl : 'tpls/examManage/tab/singleImport.html'
+			'stu1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/stuImport.html'
 			},
-			'multiple@examManage' : {
-				templateUrl : 'tpls/examManage/tab/multipleImport.html'
+			'stu2@examManage' : {
+				templateUrl : 'tpls/examManage/tab/stuInput.html'
 			},
-			'judge@examManage' : {
-				templateUrl : 'tpls/examManage/tab/judgeImport.html'
+			'room1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/roomImport.html'
 			},
-			'match@examManage' : {
-				templateUrl : 'tpls/examManage/tab/matchImport.html'
+			'room2@examManage' : {
+				templateUrl : 'tpls/examManage/tab/roomInput.html'
 			},
-			'simple@examManage' : {
-				templateUrl : 'tpls/examManage/tab/simpleImport.html'
+			'stuExam1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/stuExam.html'
+			},
+			'stuRoom1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/stuRoom.html'
+			},
+			'setSystem1@examManage' : {
+				templateUrl : 'tpls/examManage/tab/setSystem.html'
 			}
 			
 		}

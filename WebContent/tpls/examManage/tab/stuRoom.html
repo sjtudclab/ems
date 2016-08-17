@@ -1,0 +1,36 @@
+<div ng-controller="stuRoomCtrl" style="height:100%">
+
+    <div style="height:20%;text-align:center;padding-top:5%;font-size:120%;width: 80%;">
+        <span class="font-size:150%">考场</span><select style="width:10%" ng-model="selectedRoom" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
+        <button class="btn btn-primary" ng-click="selectSubject(selectedRoom)">确认</button>
+    </div>
+
+
+    <div class="selectArea" style="display: {{showRoom}}">
+        <div style="height: 5%">
+            <!--<span>总人数：{{roomsInfo.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
+            <span class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right"></span>
+            <span style="float: right"> 
+					<button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
+					<button type="button" class="btn btn-info" ng-click="cancelAll()">取消选择</button>
+			</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th ng-repeat="(key,value) in examineeMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
+                    </th>
+                    <th>选择</th>
+                </tr>
+                <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
+                    <td ng-bind="x.name"></td>
+                    <td ng-bind="x.id"></td>
+                    <td ng-bind="x.subject"></td>
+                    <td><input type="checkbox" ng-model="selectionStatus[x.id]"></td>
+                    <!--<td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>-->
+                    <!--<td><select ng-model="examNum" ng-options="x for x in subNumlists"></select></td>-->
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
