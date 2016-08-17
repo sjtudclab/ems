@@ -3,6 +3,7 @@ package org.dclab.utils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dclab.model.CandidatePaperRelationRow;
 import org.dclab.model.FillBlankRow;
 import org.dclab.model.JudgementRow;
 import org.dclab.model.MachineTestRow;
@@ -64,8 +65,15 @@ public class ExcelImporter {
     private static final int M_CHOICE_N	=	10;
     private static final int M_CHOICE_1	=	11;
     
-    //matching sheet unique column index
-//    private static final int 
+    //candidate-paper sheet unique column index
+    private static final int C_UID		=	0;
+    private static final int C_NAME		=	1;
+    private static final int C_GENDER	=	2;
+    private static final int C_CID		=	3;
+    private static final int C_PHOTO	=	4;
+    private static final int C_PRO_ID	=	5;
+    private static final int C_SUB_ID	=	7;
+    private static final int C_PAPER_NO	=	9;
     
     //default data
     private static final int DEFAULT_EARLIEST_SUB	=	30;	//default: 30 min
@@ -82,7 +90,8 @@ public class ExcelImporter {
     private static final String SHORT_ST	=	"简答题";
     private static final String FILL_ST		=	"填空题";
     private static final String MACHINE_ST	=	"上机题";
-    
+    private static final String CAN_PAPER_ST=	"考生试卷安排";
+    private static final String CAN_ROOM_ST=	"考生考场安排";
     //start row in each sheet
     private static final int SUBJECT_1_ROW	=	1;
     private static final int TOPIC_1_ROW	=	1;
@@ -672,6 +681,64 @@ public class ExcelImporter {
     	service.importTopic(topicList);
     }
     
+    public CandidatePaperRelationRow readCandiateRow(int lineNo){
+    	Row	row	=	this.sheet.getRow(lineNo);
+    	CandidatePaperRelationRow candidateRow	=	new CandidatePaperRelationRow();    	
+    	Cell	cell	=	null;
+    	
+    	cell	=	row.getCell(C_UID);
+    	if (null == cell) {
+    		throw new RuntimeException("准考证号不能为空！");
+		}
+    	candidateRow.setUid(cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(C_NAME);
+    	candidateRow.setUname(null == cell ? null : cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(C_GENDER);
+    	candidateRow.setGender(null == cell ? null : cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(C_CID);
+    	candidateRow.setCid(null == cell ? null : cell.getStringCellValue());
+    	
+    	cell	=	row.getCell(C_PHOTO);
+    	candidateRow.setPhoto(null == cell ? null : cell.getStringCellValue());
+    	
+    	//in order to get paper id in DB, assemble subject row, retrieve id in subjectPaperMap
+    	SubjectRow	subjectRow	=	new	SubjectRow();
+    	cell	=	row.getCell(C_PRO_ID);
+    	subjectRow.setProId(cell == null ? null : cell.getStringCellValue());
+    	cell	=	row.getCell(C_SUB_ID);
+    	subjectRow.setSubId(cell == null ? null : cell.getStringCellValue());
+    	cell	=	row.getCell(C_PAPER_NO);
+    	if (cell == null) {
+    		throw new RuntimeException("试卷编号不能为空！");
+		}
+    	subjectRow.setPaperNum(cell.getStringCellValue());
+    	int paperId	=	subjectPaperMap.get(subjectRow);
+    	candidateRow.setPaperId(paperId);
+    	
+    	return candidateRow;
+    }
+    
+    /**
+     * Get all candidates info & their paper id
+     */
+    public void parseCandidatePaper(){
+    	this.sheet	=	workbook.getSheet(CAN_PAPER_ST);
+    	if (this.sheet == null) {
+			throw new RuntimeException("没有任何考生信息！");
+		}
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	List<CandidatePaperRelationRow> candiateList	=	new ArrayList<>(rowNum);
+    	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
+    		candiateList.add(readCandiateRow(i));
+    	}
+
+    	ImportService service = new ImportService();
+    	//import candiate service
+    }
+    
     public static void main(String[] ags) {
         String fileName = "E:\\dclab\\考试管理云平台需求材料\\试卷模板_final.xls";//试卷模板.xlsx
         ExcelImporter excel = new ExcelImporter(fileName);
@@ -684,5 +751,10 @@ public class ExcelImporter {
         excel.parseShortAnswer();
         excel.parseFillBlank();
         excel.parseMachineTest();
+        
+        fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
+        excel		=	new ExcelImporter(fileName);
+        
+        
     }
 }

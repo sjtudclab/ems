@@ -1,23 +1,24 @@
 package org.dclab.model;
 
 public class CandidatePaperRelationRow {
-	private int Uid;
+	private String Uid;
 	private String Uname;
+	private String gender;
 	private String Cid;
 	private String photo;
 	private int proId;
 	private int subId;
-	private int paperNum;	//original paperNum
+	private int paperId;	//paperId in DB
 	
 	public CandidatePaperRelationRow() {
 	}
 
-	public int getUid() {
+	public String getUid() {
 		return Uid;
 	}
 
-	public void setUid(int uid) {
-		Uid = uid;
+	public void setUid(String string) {
+		Uid = string;
 	}
 
 	public String getUname() {
@@ -60,13 +61,20 @@ public class CandidatePaperRelationRow {
 		this.subId = subId;
 	}
 
-	public int getPaperNum() {
-		return paperNum;
+	public int getPaperId() {
+		return paperId;
 	}
 
-	public void setPaperNum(int paperNum) {
-		this.paperNum = paperNum;
+	public void setPaperId(int paperId) {
+		this.paperId = paperId;
 	}
 
-	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 }
