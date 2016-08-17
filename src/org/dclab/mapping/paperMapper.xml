@@ -5,4 +5,10 @@
   		INSERT INTO paper(proName,proId,subName,subId,paperNum,duration,earliestSubmit,latestLogin,showMark) VALUES(
   		#{proName},#{proId},#{subName},#{subId},#{paperNum},#{duration},#{earliestSubmit},#{latestLogin},#{showMark})
 	</insert>
+	
+	<select id="getSubName" parameterType="int" resultType="String">
+		SELECT subName FROM `paper` WHERE paperId=#{id}
+	</select>
+	
+	
 </mapper>

@@ -42,6 +42,8 @@
         <mapper resource="org/dclab/mapping/choiceMapper.xml"/>
         <mapper resource="org/dclab/mapping/paperMapper.xml"/>
         <mapper class="org.dclab.mapping.CanAnswerMapperI"/>
+        <mapper resource="org/dclab/mapping/sessionMapper.xml"/>
+        <mapper class="org.dclab.mapping.SessionCanMapperI"/>
         
     </mappers>
     

@@ -19,6 +19,7 @@ import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.service.AdminService;
 import org.dclab.service.ImportService;
+import org.dclab.utils.ExcelImporter;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Import;
 
 @RestController
 @RequestMapping("/admin")
@@ -40,6 +42,11 @@ public class AdminController {
 	public void setAdminService(AdminService adminService) {
 		this.adminService = adminService;
 	}
+/*	@Autowired
+	private ImportService importService;
+	public void setImportService(ImportService importService) {
+		this.importService = importService;
+	}*/
 
 	@RequestMapping("/load")
 	public SuperRespond loadBean(@RequestParam UUID token){
@@ -135,6 +142,26 @@ public class AdminController {
 			return new SuperRespond(false, "无此权限");
 	}
 	
+	@RequestMapping("/import")
+	public boolean Import(@RequestParam UUID token){
+		
+		String path=System.getProperty("project.root");
+		System.out.println("根目录  ："+path);
+		String fileName=path+"/files/import/试卷模板_final.xls";
+		System.out.println("文件路径  ："+fileName);
+		ExcelImporter excel = new ExcelImporter(fileName);
+        //System.out.println(excel.readLine(0));
+        excel.parseSubjectSheet();
+        excel.parseSingleChoice();
+        excel.parseMultiChoice();
+        excel.parseJudgement();
+        excel.parseMatching();
+        excel.parseShortAnswer();
+        excel.parseFillBlank();
+        excel.parseMachineTest();
+        return true;
+	}
+	
 	@RequestMapping("/test")
 	public int test(@RequestParam UUID token){
 		ImportService importService=new ImportService();
@@ -150,7 +177,6 @@ public class AdminController {
 		subjectRow.setShowMark(0);
 		
 		return importService.importSubject(subjectRow);
-		
-		
 	}
+
 }

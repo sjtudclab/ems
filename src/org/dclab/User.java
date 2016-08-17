@@ -8,6 +8,22 @@ public class User {
 	private String Cid;
 	private String photo;
 	private String gender;
+	private int paperId;
+	private int mark;
+	
+	
+	public int getPaperId() {
+		return paperId;
+	}
+	public void setPaperId(int paperId) {
+		this.paperId = paperId;
+	}
+	public int getMark() {
+		return mark;
+	}
+	public void setMark(int mark) {
+		this.mark = mark;
+	}
 	public int getUid() {
 		return Uid;
 	}

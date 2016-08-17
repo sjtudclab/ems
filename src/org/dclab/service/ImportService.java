@@ -1,24 +1,37 @@
 package org.dclab.service;
 
+import java.nio.channels.SeekableByteChannel;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
+import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.TopicMapperI;
+import org.dclab.mapping.UserMapperI;
+import org.dclab.model.CandidatePaperRelationRow;
+import org.dclab.model.CandidateRoomRelationRow;
 import org.dclab.model.ChoicesBean;
 import org.dclab.model.FillBlankRow;
 import org.dclab.model.JudgementRow;
 import org.dclab.model.MachineTestRow;
 import org.dclab.model.MatchingRow;
 import org.dclab.model.MultiChoicesRow;
+import org.dclab.model.SessionBean;
 import org.dclab.model.ShortAnswerRow;
 import org.dclab.model.SingleChoiceRow;
 import org.dclab.model.SubjectRow;
 import org.dclab.model.TopicRow;
 import org.dclab.utils.MyBatisUtil;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
+
+import com.sun.corba.se.impl.protocol.giopmsgheaders.ReplyMessage_1_2;
+
 import org.dclab.common.Constants;
 
 public class ImportService {
@@ -36,6 +49,7 @@ public class ImportService {
 		sqlSession.close();
 		/*subjectRow.setPaperId(123);//test
 		System.out.println(subjectRow);*/
+		System.out.println("subject row 是"+subjectRow);
 		return subjectRow.getPaperId();
 		
 	}
@@ -61,6 +75,7 @@ public class ImportService {
 				SingleChoiceRow singleChoiceRow=(SingleChoiceRow)topicRow;
 				
 				String correctAnswer="";
+				int index=singleChoiceRow.getCorrectAnswerIndex()-1;
 				//开始插入选项
 				for(int i=0;i<singleChoiceRow.getChoiceList().size();i++)
 				{
@@ -69,13 +84,14 @@ public class ImportService {
 						System.err.println("插入数据库表choice失败");
 					sqlSession.commit();
 					
-					if(i==singleChoiceRow.getCorrectAnswerIndex())//如果传过来的正确答案下标和i相等，就转换correAnswer
+					if(i==index)//如果传过来的正确答案下标和i相等，就转换correAnswer
 						correctAnswer=String.valueOf(choicesBean.getChoiceId());
 				}
 				//update topic 表，更新points和正确答案
 				String points=String.valueOf(singleChoiceRow.getFullMark());
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+				sqlSession.commit();
 
 			}
 			break;
@@ -100,13 +116,14 @@ public class ImportService {
 						System.err.println("插入数据库表choice失败");
 					sqlSession.commit();
 					
-					if(Arrays.asList(index).contains(String.valueOf(i)))
+					if(Arrays.asList(index).contains(String.valueOf(i+1)))
 						correctAnswer=correctAnswer+choicesBean.getChoiceId()+",";
 				}
 				
 				String points = multiChoicesRow.getFullMark()+","+multiChoicesRow.getHalfMark();
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+				sqlSession.commit();
 				
 			}
 			break;
@@ -128,6 +145,7 @@ public class ImportService {
 				String points = judgementRow.getFullMark()+"";
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+				sqlSession.commit();
 			}
 			break;
 		case Constants.MATCHING:
@@ -148,18 +166,30 @@ public class ImportService {
 					sqlSession.commit();
 				}
 				
+				List<String> list=Arrays.asList(index);
+				
 				for(int i=0;i<matchingRow.getChoiceList().size();i++){//插入选项
 					ChoicesBean choicesBean = new ChoicesBean(matchingRow.getChoiceList().get(i), topicId);
 					if(sqlSession.insert(statement1, choicesBean)!=1)
 						System.err.println("插入数据库表choice失败");
 					sqlSession.commit();
 					
-					if(Arrays.asList(index).contains(String.valueOf(i)))
-						correctAnswer=correctAnswer+choicesBean.getChoiceId()+",";
+					if(list.contains(String.valueOf(i+1)))
+					{
+						int index1=list.indexOf(String.valueOf(i+1));
+						list.set(index1, String.valueOf(i+1));
+					}
 				}
+				
+				for(int i=0;i<list.size();i++)
+				{
+					correctAnswer=correctAnswer+list.get(i)+",";
+				}
+				
 				String points=String.valueOf(matchingRow.getFullMark());
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+				sqlSession.commit();
 				
 			}
 			break;
@@ -175,6 +205,7 @@ public class ImportService {
 				String points = String.valueOf(shortAnswerRow.getFullMark());
 				if(topicMapperI.update(points, shortAnswerRow.getCorrectAnswer(), topicId)!=1)
 					System.err.println("更新数据库表topic失败");
+				sqlSession.commit();
 			}
 			break;
 		case Constants.FILL_BLANK:
@@ -196,6 +227,7 @@ public class ImportService {
 				
 				if(topicMapperI.update(points, fillBlankRow.getCorrectAnswer(), topicId)!=1)
 					System.err.println("更新数据库表topic失败");	
+				sqlSession.commit();
 			}
 			break;
 		case Constants.MACHINE_TEST:
@@ -213,6 +245,7 @@ public class ImportService {
 				
 				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
 					System.err.println("更新数据库表topic失败");	
+				sqlSession.commit();
 			}
 			break;
 		default:
@@ -223,35 +256,74 @@ public class ImportService {
 	}
 	
 	
+	public boolean importCandidatePaper(List<CandidatePaperRelationRow> list){
+		
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
+		for(CandidatePaperRelationRow row : list)
+		{
+			if(userMapperI.addUser(row)!=1)
+			{
+				System.err.println("插入user表失败");
+				sqlSession.close();
+				return false;
+			}
+			sqlSession.commit();
+		}
+		
+		return true;
+	}
+	
+	public boolean importCandidateRoom(List<CandidateRoomRelationRow> list){
+		
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		String statement = "org.dclab.mapping.sessionMapper.add";
+		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		
+		Map<String  , Integer> unique = new HashMap<>();
+		
+		for(CandidateRoomRelationRow row : list){
+			int sid;
+			String str = row.getRoomName()+row.getStartTime().toString();
+			if(unique.containsKey(str))//检测是否已插入过该场次
+				sid=unique.get(str);
+			else
+			{
+				SessionBean sessionBean = new SessionBean(row.getRoomName(), row.getStartTime());
+				if(sqlSession.insert(statement, sessionBean)!=1){
+					System.err.println("插入session表失败");
+					sqlSession.close();
+					return false;
+				}
+				sqlSession.commit();//插入场次
+				sid=sessionBean.getId();
+			}
+			
+			if(sessionCanMapperI.addSessionCan(sid, row.getSeatNum(), row.getIp(), row.getUid())!=1)
+			{
+				System.err.println("插入session_candidate表失败");
+				sqlSession.close();
+				return false;
+			}
+			sqlSession.commit();
+		}
+		sqlSession.close(); 
+		return true;
+	}
+	
+	
 	public static void main (String [] args) {
-		SingleChoiceRow s1=new SingleChoiceRow();
-		s1.setNumber(1);
-		s1.setTYPE(Constants.SINGLE_CHOICE);
-		s1.setContent("测试题目导入1");
-		List<String> list=new ArrayList<>();
-		list.add("12312312");
-		list.add("jdjsjdjdjd");
-		s1.setChoiceList(list);
-		s1.setPaperId(123);
-		
-		MultiChoicesRow m1= new MultiChoicesRow();
-		
-		SingleChoiceRow s2=new SingleChoiceRow();
-		s2.setNumber(1);
-		s2.setTYPE(Constants.SINGLE_CHOICE);
-		s2.setContent("测试题目导入2");
-		List<String> list1=new ArrayList<>();
-		list1.add("12312312sdas");
-		list1.add("jdjsjdjdjd1231");
-		s2.setChoiceList(list1);
-		s2.setPaperId(123);
-		
-		List<TopicRow> list2=new ArrayList<>();
-		list2.add(s1);
-		list2.add(s2);
-		
+		CandidateRoomRelationRow row = new CandidateRoomRelationRow();
+		Timestamp startTime = new Timestamp(System.currentTimeMillis());
+		row.setStartTime(startTime);
+		row.setIp("127.12.12.12");
+		row.setRoomName("软件大楼");
+		row.setSeatNum(12);
+		row.setUid("1234a");
+		List<CandidateRoomRelationRow> list= new ArrayList<>();
+		list.add(row);
 		ImportService importService= new ImportService();
-		boolean flag=importService.importTopic(list2);
+		boolean flag=importService.importCandidateRoom(list);
 		System.out.println(flag);
 	}
 }

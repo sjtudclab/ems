@@ -1,5 +1,6 @@
 package org.dclab.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.CanAnswerMapperI;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
+import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.SessionMapperI;
 import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
@@ -39,6 +41,21 @@ public class ExamOperator {
 	 * 考生token 到 examBean的映射
 	 */
 	public static Map<UUID, ExamBean> tokenExamMap = new HashMap<>();
+	
+	
+	public static void newLoad(Timestamp startTime){
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		
+		List<Integer> sidList = sessionMapperI.getSidByTime(startTime);
+		List<String> uidList = new ArrayList<>();
+		
+		for(int sid : sidList)
+		{
+			
+		}
+	}
 	
 	/**
 	 * 从数据库加载数据装填考生id与token及试卷
