@@ -19,6 +19,25 @@ public class FillBlankBean implements Serializable{
 	private String video;//存储题目中可能存在的视频的地址
 	
 	
+	
+	public FillBlankBean() {
+		super();
+	}
+	public FillBlankBean(int id, String content, int fillNum, int gapNum, String img, String audio, String video) {
+		super();
+		this.id = id;
+		this.content = content;
+		this.fillNum = fillNum;
+		GapNum = gapNum;
+		this.img = img;
+		this.audio = audio;
+		this.video = video;
+	}
+	@Override
+	protected Object clone(){
+		// TODO Auto-generated method stub
+		return new FillBlankBean(this.id, this.content, this.fillNum, this.GapNum, this.img, this.audio, this.video);
+	}
 	public int getId() {
 		return id;
 	}

@@ -147,6 +147,11 @@ public class ExamOperator {
 					bean.setChoiceIdList(new ArrayList<>());
 				}
 				
+				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
+				for(MachineTestBean bean : mList2){
+					bean.setMachineNum(mList2.size());
+				}
+				
 				
 				examBean.setEXAM_TIME(sqlSession.selectOne(statement, paperId));
 				examBean.setEarliestSubmit(sqlSession.selectOne(statement1, paperId));
@@ -155,7 +160,9 @@ public class ExamOperator {
 				examBean.setJudgementList(jList);
 				examBean.setMatchingList(mlist1);
 				examBean.setShortAnswerList(saList);
-				examBean.setTopicNum(sList.size()+mList.size()+jList.size()+mlist1.size()+saList.size());
+				examBean.setFillBlankList(fList);
+				examBean.setMachineList(mList2);
+				examBean.setTopicNum(sList.size()+mList.size()+jList.size()+mlist1.size()+saList.size()+fList.size()+mList2.size());
 				examBean.setPaperId(paperId);
 				map.put(paperId, examBean);
 			}
@@ -200,11 +207,23 @@ public class ExamOperator {
 					sList2.add((ShortAnswerBean) shortAnswerBean.clone());
 				}
 				
+				List<FillBlankBean> fList = new ArrayList<>();
+				for(FillBlankBean fillBlankBean : examBean.getFillBlankList()){
+					fList.add((FillBlankBean) fillBlankBean.clone());
+				}
+				
+				List<MachineTestBean> mList3 = new ArrayList<>();
+				for(MachineTestBean machineTestBean : examBean.getMachineList()){
+					mList3.add((MachineTestBean) machineTestBean.clone());
+				}
+				
 				examBean2.setSingleChoiceList(sList);
 				examBean2.setMultiChoicesList(mList);
 				examBean2.setJudgementList(jList);
 				examBean2.setMatchingList(mList2);
 				examBean2.setShortAnswerList(sList2);
+				examBean2.setFillBlankList(fList);
+				examBean2.setMachineList(mList3);
 				examBean2.setTopicNum(examBean.getTopicNum());
 				examBean2.setFinishTopic(new HashSet<>());
 				examBean2.setUid(uid);

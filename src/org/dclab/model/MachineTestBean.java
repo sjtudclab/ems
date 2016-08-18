@@ -12,12 +12,30 @@ public class MachineTestBean implements Serializable {
 	private String content;
 	private String fileName;//考生上传的文件名
 	private boolean ifCheck;
-	private int machineName;
+	private int machineNum;
 	private String img;//存储题目中可能存在的图片的地址
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
 	
 	
+	
+	public MachineTestBean() {
+		super();
+	}
+	public MachineTestBean(int id, String content, int machineNum, String img, String audio, String video) {
+		super();
+		this.id = id;
+		this.content = content;
+		this.machineNum = machineNum;
+		this.img = img;
+		this.audio = audio;
+		this.video = video;
+	}
+	@Override
+	protected Object clone() {
+		// TODO Auto-generated method stub
+		return new MachineTestBean(this.id, this.content, this.machineNum, this.img, this.audio, this.video);
+	}
 	public int getId() {
 		return id;
 	}
@@ -42,11 +60,12 @@ public class MachineTestBean implements Serializable {
 	public void setIfCheck(boolean ifCheck) {
 		this.ifCheck = ifCheck;
 	}
-	public int getMachineName() {
-		return machineName;
+
+	public int getMachineNum() {
+		return machineNum;
 	}
-	public void setMachineName(int machineName) {
-		this.machineName = machineName;
+	public void setMachineNum(int machineNum) {
+		this.machineNum = machineNum;
 	}
 	public String getImg() {
 		return img;

@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 import org.dclab.model.ContentBean;
 import org.dclab.model.FillBlankBean;
 import org.dclab.model.JudgementBean;
+import org.dclab.model.MachineTestBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
@@ -75,4 +76,7 @@ public interface TopicMapperI {
 	
 	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=5 AND paperId=#{paperId}")
 	public List<FillBlankBean> getFillBlankByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=6 AND paperId=#{paperId}")
+	public List<MachineTestBean> getMachineByPaperId(int paperId);
 }

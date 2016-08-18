@@ -19,13 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileUploadController {
 
-	@PostMapping("/form")
+	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
-
+		String path=System.getProperty("project.root")+"/files/import/";
+		System.out.println(path);
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			FileOutputStream fos = new FileOutputStream("C:/Users/ljkxy/Desktop/" + file.getOriginalFilename());
+			FileOutputStream fos = new FileOutputStream(path + file.getOriginalFilename());
 			fos.write(file.getBytes());
+			fos.flush();
 			fos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
