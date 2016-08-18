@@ -1,6 +1,8 @@
 package org.dclab.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -15,14 +17,14 @@ import java.util.List;
  */
 public class ExamBean implements Serializable{
 	private static final long	serialVersionUID= 15493198966L;
-	private static int EXAM_TIME;	//整场考试的时长，记得加载时初始化 
-	private static int earliestSubmit;//最早可交卷时间
+	private int EXAM_TIME;	//整场考试的时长，记得加载时初始化 
+	private int earliestSubmit;//最早可交卷时间
 	//剩余时长, 装填试卷时将其初始化，每次写log时，获取前台剩余时间，重新setDuration，延时或者减少时间时直接修改这个值
 	private int extraTime;	//额外添加的时间，用于延时操作
 	private long startTime;//该考生开始考试的时间
-	private int uid; //用户准考证号
+	private String uid; //用户准考证号
 	private int sid;//考试科目id
-	
+	private int paperId;//考生所考试卷的试卷号
 	private int mark;//考生的成绩
 	
 	private int topicNum;
@@ -42,14 +44,70 @@ public class ExamBean implements Serializable{
 	private List<ShortAnswerBean> shortAnswerList;
 	
 	
+	public ExamBean(ExamBean examBean){
+		this.EXAM_TIME=examBean.getEXAM_TIME();
+		this.earliestSubmit = examBean.getEarliestSubmit();
+		this.paperId = examBean.getPaperId();
+		
+		List<SingleChoiceBean> sList = new ArrayList<>();
+		for(SingleChoiceBean singleChoiceBean : examBean.getSingleChoiceList())
+		{
+			Collections.shuffle(singleChoiceBean.getChoiceList());
+			sList.add((SingleChoiceBean) singleChoiceBean.clone());
+		}
+		
+		List<MultiChoicesBean> mList = new ArrayList<>();
+		for(MultiChoicesBean multiChoicesBean : examBean.getMultiChoicesList())
+		{
+			Collections.shuffle(multiChoicesBean.getChoiceList());
+			mList.add((MultiChoicesBean) multiChoicesBean.clone());
+		}
+		
+		List<JudgementBean> jList = new ArrayList<>();
+		for(JudgementBean judgementBean : examBean.getJudgementList())
+		{
+			jList.add((JudgementBean) judgementBean.clone());
+		}
+		
+		List<MatchingBean> mList2 = new ArrayList<>();
+		for(MatchingBean matchingBean : examBean.getMatchingList()){
+			Collections.shuffle(matchingBean.getChoiceList());
+			mList2.add((MatchingBean) matchingBean.clone());
+		}
+		
+		List<ShortAnswerBean> sList2 = new ArrayList<>();
+		for(ShortAnswerBean shortAnswerBean : examBean.getShortAnswerList()){
+			sList2.add((ShortAnswerBean) shortAnswerBean.clone());
+		}
+		
+		this.singleChoiceList=sList;
+		this.multiChoicesList=mList;
+		this.judgementList=jList;
+		this.matchingList=mList2;
+		this.shortAnswerList=sList2;
+		this.topicNum = examBean.getTopicNum();
+	}
 	
-	public static int getEarliestSubmit() {
+	public ExamBean() {
+		super();
+	}
+
+
+	public int getPaperId() {
+		return paperId;
+	}
+
+	public void setPaperId(int paperId) {
+		this.paperId = paperId;
+	}
+
+	public int getEarliestSubmit() {
 		return earliestSubmit;
 	}
 
 
-	public static void setEarliestSubmit(int earliestSubmit) {
-		ExamBean.earliestSubmit = earliestSubmit;
+	public void setEarliestSubmit(int earliestSubmit) {
+		this.earliestSubmit = earliestSubmit;
 	}
 
 
@@ -73,12 +131,6 @@ public class ExamBean implements Serializable{
 	}
 
 
-	public ExamBean(int id, int sid2){
-		uid=id;
-		sid=sid2;
-		finishTopic=new HashSet<>();
-	}
-	
 	
 	public HashSet<Integer> getFinishTopic() {
 		return finishTopic;
@@ -99,13 +151,13 @@ public class ExamBean implements Serializable{
 		this.topicNum = topicNum;
 	}
 
-	public static int getEXAM_TIME() {
+	public int getEXAM_TIME() {
 		return EXAM_TIME;
 	}
 
 
-	public static void setEXAM_TIME(int eXAM_TIME) {
-		EXAM_TIME = eXAM_TIME;
+	public void setEXAM_TIME(int eXAM_TIME) {
+		this.EXAM_TIME = eXAM_TIME;
 	}
 
 
@@ -139,11 +191,11 @@ public class ExamBean implements Serializable{
 	}
 
 
-	public int getUid() {
+	public String getUid() {
 		return uid;
 	}
 
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		this.uid = uid;
 	}
 	public boolean isAllowStart() {
@@ -230,6 +282,17 @@ public class ExamBean implements Serializable{
 
 	public void setFinished(boolean isFinished) {
 		this.isFinished = isFinished;
+	}
+
+	@Override
+	public String toString() {
+		return "ExamBean [EXAM_TIME=" + EXAM_TIME + ", earliestSubmit=" + earliestSubmit + ", extraTime=" + extraTime
+				+ ", startTime=" + startTime + ", uid=" + uid + ", sid=" + sid + ", paperId=" + paperId + ", mark="
+				+ mark + ", topicNum=" + topicNum + ", finishTopic=" + finishTopic + ", ifLogin=" + ifLogin
+				+ ", allowStart=" + allowStart + ", allowTerminate=" + allowTerminate + ", isFinished=" + isFinished
+				+ ", lastModifiedTime=" + lastModifiedTime + ", singleChoiceList=" + singleChoiceList
+				+ ", multiChoicesList=" + multiChoicesList + ", matchingList=" + matchingList + ", judgementList="
+				+ judgementList + ", shortAnswerList=" + shortAnswerList + "]";
 	}
 
 	

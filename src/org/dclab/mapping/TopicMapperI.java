@@ -53,4 +53,22 @@ public interface TopicMapperI {
 	public int addShortAnswer(ShortAnswerRow shortAnswerRow);
 	
 	@Insert("insert into topic (number,content,typeId,img,audio,video,paperId,points,correctAnswer) values (#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId},#{fullMark},#{correctAnswerFile})")*/
+	
+	
+	//数据库修改之后的操作语句
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=0 AND paperId=#{paperId}")
+	public List<SingleChoiceBean> getSingleByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=1 AND paperId=#{paperId}")
+	public List<MultiChoicesBean> getMultiByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=2 AND paperId=#{paperId}")
+	public List<JudgementBean> getJudgeByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=3 AND paperId=#{paperId}")
+	public List<MatchingBean> getMatchByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=4 AND paperId=#{paperId}")
+	public List<ShortAnswerBean> getShortByPaperId(int paperId);
 }

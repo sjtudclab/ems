@@ -2,9 +2,14 @@ package org.dclab.mapping;
 
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.dclab.User;
+import org.dclab.model.CandidatePaperRelationRow;
 
 /**
  * @author alvis
@@ -19,11 +24,23 @@ public interface UserMapperI {
 	public List<Integer> getUid();
 	
 	@Select("select Uid from user where Rid=1")
-	public List<Integer> getUidByRid();
+	public List<String> getUidByRid();
 	
 	
 	@Select("SELECT Uname  FROM `user` WHERE Uid=#{id}")
-	public String getNmaeByUid(int id);
+	public String getNmaeByUid(String id);
+	
+	
+	@Insert("INSERT INTO `user` (Uid,Uname,Cid,photo,gender,paperId) VALUES (#{Uid},#{Uname},#{Cid},#{photo},#{gender},#{paperId})")
+	public int addUser(CandidatePaperRelationRow row);
+	
+	
+	@Select("SELECT mark FROM `user` WHERE Uid=#{uid}")
+	public int getMarkByUid(String uid);
+	
+	
+	@Select("SELECT paperId FROM `user` WHERE Uid=#{uid}")
+	public int getPaperIdByUid(String uid);
 	
 /*     //使用@Insert注解指明add方法要执行的SQL
 	 @Insert("insert into users(name, age) values(#{name}, #{age})")

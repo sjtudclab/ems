@@ -136,7 +136,7 @@ public class ExamController {
 				return gradingService.gradePaper(exambean);
 			
 			if(exambean.isAllowTerminate()||
-					( ExamBean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<ExamBean.getEarliestSubmit())
+					( exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<exambean.getEarliestSubmit())
 			{
 				exambean.setFinished(true);
 				int mark = gradingService.gradePaper(exambean);

@@ -17,6 +17,9 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	private boolean ifCheck;//检查标记
 	private String answer;//考生答案
 	private int shortNum;//存储简答题数目
+	private String img;//存储题目中可能存在的图片的地址
+	private String audio;//存储题目中可能存在的音频的地址
+	private String video;//存储题目中可能存在的视频的地址
 	
 	public ShortAnswerBean(){}
 	
@@ -31,6 +34,32 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 		
 		return new ShortAnswerBean(this.id,this.shortNum, this.content);
 	}
+	
+	
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getAudio() {
+		return audio;
+	}
+
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
+
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
 	public int getShortNum() {
 		return shortNum;
 	}

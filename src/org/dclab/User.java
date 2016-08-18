@@ -1,17 +1,33 @@
 package org.dclab;
 
 public class User {
-	private int Uid;
+	private String Uid;
 	private int Rid;
 	private String Uname;
 	private String password;
 	private String Cid;
 	private String photo;
 	private String gender;
-	public int getUid() {
+	private int paperId;
+	private int mark;
+	
+	
+	public int getPaperId() {
+		return paperId;
+	}
+	public void setPaperId(int paperId) {
+		this.paperId = paperId;
+	}
+	public int getMark() {
+		return mark;
+	}
+	public void setMark(int mark) {
+		this.mark = mark;
+	}
+	public String getUid() {
 		return Uid;
 	}
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		Uid = uid;
 	}
 	public int getRid() {

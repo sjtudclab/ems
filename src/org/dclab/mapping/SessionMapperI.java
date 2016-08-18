@@ -3,9 +3,11 @@ package org.dclab.mapping;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
 import org.dclab.Session;
+import org.dclab.model.RoomInfoBean;
 
 import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
@@ -26,4 +28,18 @@ public interface SessionMapperI {
 	//由场次id获得科目id
 	@Select("SELECT subId FROM `session` WHERE id=#{id}")
 	public int getSubIdById(int id);
+	
+	
+	@Select("SELECT id FROM `session` WHERE startTime=#{time}")
+	public List<Integer> getSidByTime(Timestamp time);
+	
+	
+	@Select("select roomName from session where Uid=#{uid}")
+	public String getRoomNameByUid(String uid);
+	
+	@Select("SELECT id FROM `session` WHERE Uid=#{uid}")
+	public int getIdByUid(String uid);
+	
+	@Select("SELECT * FROM `session` WHERE Uid IS NOT NULL")
+	public List<RoomInfoBean> getRoomInfo();
 }

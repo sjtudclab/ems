@@ -1,25 +1,34 @@
 package org.dclab.model;
 
+import java.sql.Timestamp;
+
 public class RoomInfoBean {
-	private int roomId;
-	private String name;
+	private int id;//场次id
+	private Timestamp startTime;
+	private String roomName;
 	private int size;
-	private int Uid;
+	private String Uid;
 	private int status;
-	private String supervisor;
 	
 	
-	public int getRoomId() {
-		return roomId;
+
+	public int getId() {
+		return id;
 	}
-	public void setRoomId(int roomId) {
-		this.roomId = roomId;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public Timestamp getStartTime() {
+		return startTime;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setStartTime(Timestamp startTime) {
+		this.startTime = startTime;
+	}
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
 	public int getSize() {
 		return size;
@@ -27,10 +36,10 @@ public class RoomInfoBean {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	public int getUid() {
+	public String getUid() {
 		return Uid;
 	}
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		Uid = uid;
 	}
 	public int getStatus() {
@@ -39,12 +48,6 @@ public class RoomInfoBean {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public String getSupervisor() {
-		return supervisor;
-	}
-	public void setSupervisor(String supervisor) {
-		this.supervisor = supervisor;
-	}
-	
+
 	
 }

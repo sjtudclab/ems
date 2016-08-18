@@ -133,14 +133,16 @@ public class RoomService {
 		for (SessionBean sessionBean : sessions) {
 
 			// get all available rooms in this time period
-			rooms = getAvailableRooms(sessionBean.getStartTime().getTime(), sessionBean.getDuration());
+			int duration=1900;//以后还用这个service的话删掉这个
+			
+			rooms = getAvailableRooms(sessionBean.getStartTime().getTime(),duration/*sessionBean.getDuration()*/);
 
 			for (RoomBean roomBean : rooms) {
 				int size = roomBean.getSize();
 				int roomId = roomBean.getId();
 
 				for (int i = 0; i < size - reservedSeatNum; i++) {
-					students.get(curPos).setRoomId(roomId); // set seat for each
+					/*students.get(curPos).setRoomId(roomId);*/ // set seat for each
 															// student
 					students.get(curPos).setSeatNum(i);
 					curPos++;

@@ -4,19 +4,29 @@ import java.sql.Timestamp;
 
 public class SessionBean {
 	private int id;
-	private int duration;
+	private String roomName;
 	private Timestamp startTime;
+	
+	public SessionBean() {
+		super();
+	}
+	public SessionBean(String roomName, Timestamp startTime) {
+		super();
+		this.roomName = roomName;
+		this.startTime = startTime;
+	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getDuration() {
-		return duration;
+
+	public String getRoomName() {
+		return roomName;
 	}
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
 	public Timestamp getStartTime() {
 		return startTime;

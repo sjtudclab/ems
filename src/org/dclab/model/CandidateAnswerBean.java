@@ -12,19 +12,19 @@ package org.dclab.model;
  *
  */
 public class CandidateAnswerBean {
-	private int candidate_id ;
+	private String candidate_id ;
 	private int topicId;
 	private String choiceId;
 	
-	public CandidateAnswerBean(int candidate_id, int topicId, String choiceId) {
+	public CandidateAnswerBean(String candidate_id, int topicId, String choiceId) {
 		this.candidate_id = candidate_id;
 		this.topicId = topicId;
 		this.choiceId = choiceId;
 	}
-	public int getCandidate_id() {
+	public String getCandidate_id() {
 		return candidate_id;
 	}
-	public void setCandidate_id(int candidate_id) {
+	public void setCandidate_id(String candidate_id) {
 		this.candidate_id = candidate_id;
 	}
 	public int getTopicId() {
