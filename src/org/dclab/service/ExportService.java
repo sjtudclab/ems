@@ -22,7 +22,7 @@ public class ExportService {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
 		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
-		String statement = "org.dclab.mapping.paperMapper.getSubName";
+		String statement = "org.dclab.mapping.paperMapper.getPSPName";
 		
 		List<String> uidList=new ArrayList<String>();
 		uidList=sessionCanMapperI.getUidListBySid(sid);
@@ -39,20 +39,22 @@ public class ExportService {
 		{
 			
 			int mark = 0, paperId = 0;
+			String Uname;
 			
 			try {
 				mark = userMapperI.getMarkByUid(str);//可能会影响性能，因为数据库查了两次
 				paperId = userMapperI.getPaperIdByUid(str);
+				Uname = userMapperI.getNmaeByUid(str);
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				continue;
 			}
-
 			
-			String subName = sqlSession.selectOne(statement, paperId);
-			
-			ScoreCollectBean scoreCollectBean = new ScoreCollectBean(str, subName, mark);
+			ScoreCollectBean scoreCollectBean = sqlSession.selectOne(statement, paperId);
+			scoreCollectBean.setMark(mark);
+			scoreCollectBean.setUname(Uname);
+			scoreCollectBean.setUid(str);
 			list.add(scoreCollectBean);
 			
 		}

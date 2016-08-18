@@ -24,11 +24,11 @@ public interface UserMapperI {
 	public List<Integer> getUid();
 	
 	@Select("select Uid from user where Rid=1")
-	public List<Integer> getUidByRid();
+	public List<String> getUidByRid();
 	
 	
 	@Select("SELECT Uname  FROM `user` WHERE Uid=#{id}")
-	public String getNmaeByUid(int id);
+	public String getNmaeByUid(String id);
 	
 	
 	@Insert("INSERT INTO `user` (Uid,Uname,Cid,photo,gender,paperId) VALUES (#{Uid},#{Uname},#{Cid},#{photo},#{gender},#{paperId})")

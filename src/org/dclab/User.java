@@ -1,7 +1,7 @@
 package org.dclab;
 
 public class User {
-	private int Uid;
+	private String Uid;
 	private int Rid;
 	private String Uname;
 	private String password;
@@ -24,10 +24,10 @@ public class User {
 	public void setMark(int mark) {
 		this.mark = mark;
 	}
-	public int getUid() {
+	public String getUid() {
 		return Uid;
 	}
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		Uid = uid;
 	}
 	public int getRid() {

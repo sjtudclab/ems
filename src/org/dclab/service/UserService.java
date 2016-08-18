@@ -3,6 +3,7 @@ package org.dclab.service;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import org.dclab.Session;
 import org.dclab.User;
 import org.dclab.mapping.AuthorityMapperI;
 import org.dclab.mapping.CanSubMapperI;
+import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.SessionMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
@@ -43,26 +45,29 @@ public class UserService {
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		//得到UserMapperI接口的实现类对象，UserMapperI接口的实现类对象由sqlSession.getMapper(UserMapperI.class)动态构建出来
 		UserMapperI mapper=sqlSession.getMapper(UserMapperI.class);
+		String statement = "org.dclab.mapping.paperMapper.getSubName";
+		String statement1 = "org.dclab.mapping.paperMapper.getLatest";
+		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		
 		User user=mapper.getByUid(Uid);
 		if(user==null)
 			return new SuperRespond(false, "错误的用户名");
 		Map<String,Object> map=new HashMap<String,Object>();
 		switch(user.getRid()){
 		case 0:
-
-			CanSubMapperI csmapper=sqlSession.getMapper(CanSubMapperI.class);
-			SessionMapperI smapper=sqlSession.getMapper(SessionMapperI.class);
 			
-			int sessionId=csmapper.getSessionIdByUid(Uid);
+
 			UUID token=ExamOperator.idTokenMap.get(Uid);
-			Session session=smapper.getById(sessionId);
 			
 			ExamBean examBean=ExamOperator.tokenExamMap.get(token);
 			if(examBean==null)
 				return new SuperRespond(false, "考试尚未开始，不允许登录");
 			
-			sqlSession.close();
-			
+			int sid = sessionCanMapperI.getSidByUid(user.getUid());
+			Timestamp startTime = sessionMapperI.getStartTimeById(sid);
+			int paperId= examBean.getPaperId();
+			int latestLogin = sqlSession.selectOne(statement1, paperId);
 			if(!examBean.isFinished()){//检测考生ExamBean中的考试结束标志是否为true
 				
 				if(examBean.isAllowStart()==true)//检测该考生是否可在任意时间登录
@@ -71,8 +76,8 @@ public class UserService {
 					map.put("name", user.getUname());
 					map.put("id", user.getUid());
 					map.put("cid", user.getCid());
-					map.put("subject",session.getName());
-					map.put("time", session.getStartTime());
+					map.put("subject",sqlSession.selectOne(statement, paperId));
+					map.put("time", startTime);
 					map.put("Rid",user.getRid());
 					map.put("gender", user.getGender());
 					map.put("token", token);
@@ -100,14 +105,14 @@ public class UserService {
 					return map;
 				}
 				else{
-					if(System.currentTimeMillis()-session.getStartTime().getTime()<session.getLatestLogin()*1000)//1800代表半小时，以后可能会改为由数据库中取值
+					if(System.currentTimeMillis()-startTime.getTime()<latestLogin*1000)//1800代表半小时，以后可能会改为由数据库中取值
 					{
 						System.out.println("进入返回map2的分支");
 						map.put("name", user.getUname());
 						map.put("id", user.getUid());
 						map.put("cid", user.getCid());
-						map.put("subject",session.getName());
-						map.put("time", session.getStartTime());
+						map.put("subject",sqlSession.selectOne(statement, paperId));
+						map.put("time", startTime);
 						map.put("Rid",user.getRid());
 						map.put("gender", user.getGender());
 						map.put("token", token);
@@ -148,7 +153,7 @@ public class UserService {
 			superBean.setSign(1);
 			map.put("token", token1);
 			map.put("authorityList", SupervisorOperator.tokenSuperMap.get(token1).getAuthorityList());
-			map.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomId());
+			map.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomName());
 			map.put("Rid", SupervisorOperator.tokenSuperMap.get(token1).getRid());
 			sqlSession.close();
 			return map;

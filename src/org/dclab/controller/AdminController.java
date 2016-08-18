@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.ibatis.session.SqlSession;
+import org.dclab.mapping.SessionMapperI;
 import org.dclab.model.AdminBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.RoomInfoBean;
@@ -20,6 +23,7 @@ import org.dclab.model.SupervisorOperator;
 import org.dclab.service.AdminService;
 import org.dclab.service.ImportService;
 import org.dclab.utils.ExcelImporter;
+import org.dclab.utils.MyBatisUtil;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +56,12 @@ public class AdminController {
 	public SuperRespond loadBean(@RequestParam UUID token){
 		if(AdminBean.adminTokenMap.containsValue(token))
 		{
-			ExamOperator.load(1);
+			//**************************
+			SqlSession sqlSession = MyBatisUtil.getSqlSession();
+			SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+			Timestamp timestamp = sessionMapperI.getStartTimeById(6);
+			//*********************************
+			ExamOperator.newLoad(timestamp);
 			SupervisorOperator.load();
 			return new SuperRespond(true);
 		}
@@ -81,7 +90,7 @@ public class AdminController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("token", superBean.getToken());
 			map.put("authorityList", superBean.getAuthorityList());
-			map.put("roomId", superBean.getRoomId());
+			map.put("roomName", superBean.getRoomName());
 			return map;
 		}
 		else

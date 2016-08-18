@@ -142,7 +142,7 @@ public class RoomService {
 				int roomId = roomBean.getId();
 
 				for (int i = 0; i < size - reservedSeatNum; i++) {
-					students.get(curPos).setRoomId(roomId); // set seat for each
+					/*students.get(curPos).setRoomId(roomId);*/ // set seat for each
 															// student
 					students.get(curPos).setSeatNum(i);
 					curPos++;
