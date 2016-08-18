@@ -364,6 +364,7 @@ body {
     height: 100%
 }
 
+
 /*.supervi li {
     text-align: center;
 }*/
@@ -430,12 +431,13 @@ th {
     color:#337ab7;
     background-color: #337ab7;
 }*/
-.navbars > li > span {
-   padding-top: 15px;
+
+.navbars> li> span {
+    padding-top: 15px;
     padding-bottom: 15px;
-    padding-right:10px;
+    padding-right: 10px;
     line-height: 20px;
-        position: relative;
+    position: relative;
     display: block;
     color: #fff;
     font-size: 14px;
@@ -444,5 +446,9 @@ th {
 }
 
 .modal-open[style] {
-padding-right: 0px !important;
+    padding-right: 0px !important;
+}
+
+.popover {
+    max-width: 100%;
 }

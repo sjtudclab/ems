@@ -1,8 +1,10 @@
 <div ng-controller="exportFile" style="font-size:150%">
     <div style="margin-bottom:3%">
+        场次<select style="width:10%" ng-model="selectedRoom" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
         成绩汇总 <button type="button" ng-click="sumExport()" class="btn btn-primary">导出</button>
     </div>
     <div>
+        场次<select style="width:10%" ng-model="selectedRoom" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
         考生答卷 <button type="button" ng-click="stuExport()" class="btn btn-primary">导出</button>
     </div>
 </div>

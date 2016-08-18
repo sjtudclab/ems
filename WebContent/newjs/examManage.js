@@ -69,7 +69,7 @@ examManage.controller('examManagerCtrl', function ($scope, $http, $window) {
 
 });
 
-examManage.controller('examManageCtrl', function ($scope, $http, $window) {
+examManage.controller('examManageCtrl', function ($scope,$rootScope,$http, $window) {
 
 
     $scope.operationMetaInfo = ['试卷管理', '考生管理', '考场管理', '考生试卷安排', '考生考场安排', '系统管理'];
@@ -99,6 +99,7 @@ examManage.controller('examManageCtrl', function ($scope, $http, $window) {
             case 0:
                 $scope.problemMetaInfo = ['试卷导入', '试卷录入'];
                 $scope.tab = "tab";
+                $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
                 break;
             case 1:
                 $scope.problemMetaInfo = ['考生导入', '考生录入'];
@@ -167,10 +168,13 @@ examManage.controller('TabsDCtrl', function ($scope, $rootScope) {
 
 });
 
-examManage.controller('examImportCtrl', function ($scope, $http, $window) {
+examManage.controller('examImportCtrl', function ($state,$scope,$rootScope, $http, $window) {
     //编辑
     $scope.edit = function () {
+        alert( $scope.tab);
+        // $scope.tab="haha";
         $scope.sel(1);
+        $rootScope.exInput='tpls/examManage/tab/singleImport.html';
 
     }
 
@@ -258,15 +262,16 @@ examManage.controller('examImportCtrl', function ($scope, $http, $window) {
     }
 
 });
-examManage.controller('stuImportCtrl', function ($scope, $http,$rootScope, $window) {
+examManage.controller('stuImportCtrl', function ($scope, $http, $rootScope, $window) {
     //编辑
-    $scope.edit = function (name,gender,id,subject,subjectNum) {
+    $scope.edit = function (name, gender, id, picture, subject, subjectNum) {
         $scope.sel(1);
-        $rootScope.stuName=name ;
-        $rootScope.stuGender=gender ;
-        $rootScope.stuId=id;
-        $rootScope.stuSubject=subject;
-        $rootScope.stuSubNum=subjectNum ;
+        $rootScope.stuName = name;
+        $rootScope.stuGender = gender;
+        $rootScope.stuId = id;
+        $rootScope.stuSubject = subject;
+        $rootScope.stuSubNum = subjectNum;
+        $rootScope.stuPicture = picture;
 
     }
 
@@ -360,6 +365,46 @@ examManage.controller('stuInputCtrl', function ($scope, $http, $rootScope, $wind
     // }
 
     // }, true);
+    //上传考生照片
+    $scope.progressPer = 0;
+    $scope.ngshow = false;
+    $scope.selectFile = function () {
+
+        $scope.$apply(function () {
+            $scope.selectedFile = event.target.files[0];
+            $rootScope.stuPicture = $scope.selectedFile.name;
+        })
+    }
+
+    $scope.upload = function () {
+        $scope.ngshow = true;
+        var formData = new FormData();
+        formData.append("file", $scope.selectedFile);
+        formData.append("token", $window.sessionStorage.stoken);
+        if ($scope.selectedFile == undefined) {
+            return;
+        }
+        $scope.progressPer = 0;
+        $http({
+            method: 'POST',
+            url: '/EMS/examManage/stuPicture',
+            data: formData,
+            headers: {
+                'Content-Type': undefined,
+            },
+            uploadEventHandlers: {
+                progress: function (e) {
+                    $scope.progressPer = e.loaded / e.total * 100;
+                    $scope.progressInfo = '上传中';
+                }
+            }
+        }).then(function success(response) {
+            $scope.progressInfo = response.data.info;
+        }, function error(response) {
+            alert('出现错误\n' + response.status + ' ' + response.statusText);
+        });
+    }
+
     $scope.save = function () {
         alert($scope.roomName + $scope.seatName);
         $rootScope.stuName = '';
@@ -367,6 +412,7 @@ examManage.controller('stuInputCtrl', function ($scope, $http, $rootScope, $wind
         $rootScope.stuId = '';
         $rootScope.stuSubject = '';
         $rootScope.stuSubNum = '';
+        $rootScope.stuPicture = '';
 
 
 
@@ -382,7 +428,7 @@ examManage.factory('roomManage', function () {
 
     };
 })
-examManage.controller('roomImportCtrl', function ($scope, $http,$rootScope, $window, roomManage) {
+examManage.controller('roomImportCtrl', function ($scope, $http, $rootScope, $window, roomManage) {
     //编辑
     $scope.edit = function (roomNum, seatNum, ip) {
         // roomManage.roomName = roomNum;
@@ -500,6 +546,7 @@ examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
     $scope.examineeMetaInfo = {
         'name': '姓名',
         'id': '证件号',
+        'major': "专业名称",
         'subject': '科目名称'
 
     }
@@ -525,6 +572,16 @@ examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
             "subName": "数学",
             "subNum": ["c1", "c2"]
         }];
+    $scope.sumSub1 = [{
+        "subName1": "计算机",
+        "subNum": ["a1", "a2"]
+    }, {
+            "subName1": "新闻传播",
+            "subNum": ["b1", "b2"]
+        }, {
+            "subName1": "美术专业",
+            "subNum": ["c1", "c2"]
+        }];
     $scope.selectSubject = function (selectedSub) {
 
         switch (selectedSub.subName) {
@@ -533,12 +590,14 @@ examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
                 $scope.examineesInfo = [{
                     'name': '李煜',
                     'id': '678689',
-                    'subject': '政治'
+                    'subject': '政治',
+                    'major': "计算机"
 
                 }, {
                         'name': '李静',
                         'id': '678689',
-                        'subject': '政治'
+                        'subject': '政治',
+                        'major': "计算机"
 
                     }]
                 break;
@@ -547,12 +606,14 @@ examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
                 $scope.examineesInfo = [{
                     'name': '李煜',
                     'id': '678689',
-                    'subject': '英语'
+                    'subject': '英语',
+                    'major': "专业名称"
 
                 }, {
                         'name': '李静',
                         'id': '678689',
-                        'subject': '英语'
+                        'subject': '英语',
+                        'major': "专业名称"
 
                     }]
                 break;
@@ -566,6 +627,38 @@ examManage.controller('stuExamCtrl', function ($scope, $http, $window) {
 
 });
 examManage.controller('stuRoomCtrl', function ($scope, $http, $window) {
+
+    //时间选择器
+    // 开始时间
+    $scope.myDay = new Date();
+    $scope.myTime = new Date();
+    $scope.myDayTime = new Date();
+
+    $scope.changed = function () {
+        // $scope.poop = false;
+        $scope.myDayTime.setTime($scope.myDay.getTime());
+        $scope.myDayTime.setHours($scope.myTime.getHours());
+        $scope.myDayTime.setMinutes($scope.myTime.getMinutes());
+        $scope.myDayTime.setSeconds($scope.myTime.getSeconds());
+        var month=$scope.myDayTime.getMonth() + 1;
+        $scope.startSelected = $scope.myDayTime.getFullYear() + "年" +month+ "月" + $scope.myDayTime.getDate() + "日" + $scope.myDayTime.getHours() + "时" + $scope.myDayTime.getMinutes() + "分" + $scope.myDayTime.getSeconds() + "秒";
+    }
+    //结束时间
+    $scope.endDay = new Date();
+    $scope.endTime = new Date();
+    $scope.endDayTime = new Date();
+
+    $scope.endchanged = function () {
+        // $scope.poop = false;
+        $scope.endDayTime.setTime($scope.endDay.getTime());
+        $scope.endDayTime.setHours($scope.endTime.getHours());
+        $scope.endDayTime.setMinutes($scope.endTime.getMinutes());
+        $scope.endDayTime.setSeconds($scope.endTime.getSeconds());
+         var month=$scope.endDayTime.getMonth() + 1;
+        $scope.finishSelected = $scope.endDayTime.getFullYear() + "年" + month + "月" + $scope.endDayTime.getDate() + "日" + $scope.endDayTime.getHours() + "时" + $scope.endDayTime.getMinutes() + "分" + $scope.endDayTime.getSeconds() + "秒";
+    }
+
+
 
     //控制表格内容
     $scope.selectionStatus = [];
@@ -644,12 +737,12 @@ examManage.controller('stuRoomCtrl', function ($scope, $http, $window) {
 
 
 });
-examManage.controller('singleCtrl', function ($scope, $http, $window) {
+examManage.controller('singleCtrl', function ($scope,$rootScope, $http, $window) {
     $scope.itemMessage = ['', '', '', ''];
     $scope.rightAnswer = [];
 
     $scope.save = function () {
-
+        
         var choice = {};
         for (x in $scope.itemMessage) {
             choice[x * 1 + 1] = $scope.itemMessage[x];
@@ -678,10 +771,18 @@ examManage.controller('singleCtrl', function ($scope, $http, $window) {
         $scope.content = [];
 
     }
+    $scope.singleReturn=function(){
+       $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
+
+    }
+    $scope.singleFinish=function(){
+       $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
+
+    }
 
 
 });
-examManage.controller('judgeCtrl', function ($scope, $http, $window) {
+examManage.controller('judgeCtrl', function ($scope,$rootScope, $http, $window) {
     $scope.itemMessage = ['', ''];
     $scope.rightAnswer = [];
 
@@ -714,9 +815,17 @@ examManage.controller('judgeCtrl', function ($scope, $http, $window) {
 
     }
 
+    $scope.singleReturn=function(){
+       $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
+
+    }
+    $scope.singleFinish=function(){
+       $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
+
+    }
 
 });
-examManage.controller('multipleCtrl', function ($scope, $http, $window) {
+examManage.controller('multipleCtrl', function ($scope,$rootScope, $http, $window) {
     $scope.right = [];
     $scope.itemMessage = ['', '', '', ''];
     var List = [];
@@ -753,11 +862,19 @@ examManage.controller('multipleCtrl', function ($scope, $http, $window) {
         $scope.content = [];
 
     }
+    
+    $scope.singleReturn=function(){
+       $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
 
+    }
+    $scope.singleFinish=function(){
+       $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
+
+    }
 
 });
 
-examManage.controller('mpCtrl', function ($scope, $http, $window) {
+examManage.controller('mpCtrl', function ($scope, $http,$rootScope, $window) {
     $scope.itemMessage = ['', ''];
     $scope.answerMessage = ['', ''];
     var choice = {};
@@ -789,9 +906,17 @@ examManage.controller('mpCtrl', function ($scope, $http, $window) {
         $scope.content = [];
 
     }
+    $scope.singleReturn=function(){
+       $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
+
+    }
+    $scope.singleFinish=function(){
+       $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
+
+    }
 });
 
-examManage.controller('simpleCtrl', function ($scope, $http, $window) {
+examManage.controller('simpleCtrl', function ($scope, $http,$rootScope, $window) {
 
     $scope.save = function () {
         $http({
@@ -812,9 +937,17 @@ examManage.controller('simpleCtrl', function ($scope, $http, $window) {
         $scope.content = [];
 
     }
+    $scope.singleReturn=function(){
+       $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
+
+    }
+    $scope.singleFinish=function(){
+       $rootScope.exInput='tpls/examManage/tab/subjectImport.html';
+
+    }
 });
 
-examManage.controller('subjectCtrl', function ($scope, $http, $window) {
+examManage.controller('subjectCtrl', function ($scope,$rootScope, $http, $window) {
 
     $scope.save = function () {
 
@@ -870,4 +1003,41 @@ examManage.controller('subjectCtrl', function ($scope, $http, $window) {
         $scope.simpleScore = [];
 
     }
+    $scope.startType=function(){
+
+         $rootScope.exInput='tpls/examManage/tab/typeChoice.html';
+    }
+});
+examManage.controller('typeCtrl', function ($scope,$rootScope, $http, $window) {
+    $scope.typeLists=["单选题","多选题","判断题","匹配题","简答题"];
+    $scope.typeSelected={};
+    $scope.typeConfirm=function(type){
+        alert(type);
+        switch(type){
+            case "单选题":
+               $rootScope.exInput='tpls/examManage/tab/singleImport.html';
+               break;
+            case "多选题":
+               $rootScope.exInput='tpls/examManage/tab/multipleImport.html';
+               break;
+            case "判断题":
+               $rootScope.exInput='tpls/examManage/tab/judgeImport.html';
+               break;
+            case "匹配题":
+               $rootScope.exInput='tpls/examManage/tab/matchImport.html';
+               break;
+            case "简答题":
+               $rootScope.exInput='tpls/examManage/tab/simpleImport.html';
+               break;
+            case "填空题":
+               $rootScope.exInput='tpls/examManage/tab/singleImport.html';
+               break;
+            case "上机题":
+               $rootScope.exInput='tpls/examManage/tab/singleImport.html';
+               break;
+
+        }
+ 
+    }
+
 });
