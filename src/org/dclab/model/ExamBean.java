@@ -42,51 +42,11 @@ public class ExamBean implements Serializable{
 	private List<MatchingBean> matchingList;
 	private List<JudgementBean> judgementList;
 	private List<ShortAnswerBean> shortAnswerList;
+	private List<FillBlankBean> fillBlankList;
+	private List<MachineTestBean> machineList;
 	
 	
-	public ExamBean(ExamBean examBean){
-		this.EXAM_TIME=examBean.getEXAM_TIME();
-		this.earliestSubmit = examBean.getEarliestSubmit();
-		this.paperId = examBean.getPaperId();
-		
-		List<SingleChoiceBean> sList = new ArrayList<>();
-		for(SingleChoiceBean singleChoiceBean : examBean.getSingleChoiceList())
-		{
-			Collections.shuffle(singleChoiceBean.getChoiceList());
-			sList.add((SingleChoiceBean) singleChoiceBean.clone());
-		}
-		
-		List<MultiChoicesBean> mList = new ArrayList<>();
-		for(MultiChoicesBean multiChoicesBean : examBean.getMultiChoicesList())
-		{
-			Collections.shuffle(multiChoicesBean.getChoiceList());
-			mList.add((MultiChoicesBean) multiChoicesBean.clone());
-		}
-		
-		List<JudgementBean> jList = new ArrayList<>();
-		for(JudgementBean judgementBean : examBean.getJudgementList())
-		{
-			jList.add((JudgementBean) judgementBean.clone());
-		}
-		
-		List<MatchingBean> mList2 = new ArrayList<>();
-		for(MatchingBean matchingBean : examBean.getMatchingList()){
-			Collections.shuffle(matchingBean.getChoiceList());
-			mList2.add((MatchingBean) matchingBean.clone());
-		}
-		
-		List<ShortAnswerBean> sList2 = new ArrayList<>();
-		for(ShortAnswerBean shortAnswerBean : examBean.getShortAnswerList()){
-			sList2.add((ShortAnswerBean) shortAnswerBean.clone());
-		}
-		
-		this.singleChoiceList=sList;
-		this.multiChoicesList=mList;
-		this.judgementList=jList;
-		this.matchingList=mList2;
-		this.shortAnswerList=sList2;
-		this.topicNum = examBean.getTopicNum();
-	}
+
 	
 	public ExamBean() {
 		super();
@@ -213,6 +173,14 @@ public class ExamBean implements Serializable{
 	public void setAllowTerminate(boolean allowTerminate) {
 		this.allowTerminate = allowTerminate;
 	}
+	
+	public FillBlankBean getFillBlankById(int index){
+		return fillBlankList.get(index);
+	}
+	public MachineTestBean getMachineTestById(int index){
+		return machineList.get(index);
+	}
+	
 	//get single choice by Id
 	public SingleChoiceBean getSingleChoiceById(int index){
 		return singleChoiceList.get(index);
@@ -264,6 +232,26 @@ public class ExamBean implements Serializable{
 		this.judgementList = judgementList;
 	}
 
+
+
+	public List<FillBlankBean> getFillBlankList() {
+		return fillBlankList;
+	}
+
+
+	public void setFillBlankList(List<FillBlankBean> fillBlankList) {
+		this.fillBlankList = fillBlankList;
+	}
+
+
+	public List<MachineTestBean> getMachineList() {
+		return machineList;
+	}
+
+
+	public void setMachineList(List<MachineTestBean> machineList) {
+		this.machineList = machineList;
+	}
 
 
 	public int getExtraTime() {

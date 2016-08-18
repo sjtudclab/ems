@@ -31,14 +31,14 @@
                         </th>
                         <th>选择</th>
                     </tr>
-                    <tr class="{{roomsStatus[room.roomId]}}" ng-repeat="room in roomsInfo | orderBy:orderCondition:isReverse">
-                        <td ng-bind="room.roomId"></td>
-                        <td ng-bind="room.name"></td>
-                        <td ng-bind="room.supervisor"></td>
+                    <tr class="{{roomsStatus[room.id]}}" ng-repeat="room in roomsInfo | orderBy:orderCondition:isReverse">
+                        <td ng-bind="room.id"></td>
+                        <td ng-bind="room.roomName"></td>
+                        <td ng-bind="room.startTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
                         <td ng-bind="room.size"></td>
                         <td ng-bind="statusDisplay[room.status]"></td>
                         <!--<td ng-bind="room.detail"></td>-->
-                        <td><input type="checkbox" ng-model="selectionStatus[room.roomId]" ng-click="checkSel(selectionStatus[room.roomId],room.roomId)"></td>
+                        <td><input type="checkbox" ng-model="selectionStatus[room.id]" ng-click="checkSel(selectionStatus[room.id],room.id)"></td>
                     </tr>
                 </table>
             </div>

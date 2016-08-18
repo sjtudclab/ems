@@ -40,7 +40,7 @@ import sun.misc.BASE64Encoder;
 @Service
 public class UserService {
 
-	public Object login(int Uid)
+	public Object login(String Uid)
 	{
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		//得到UserMapperI接口的实现类对象，UserMapperI接口的实现类对象由sqlSession.getMapper(UserMapperI.class)动态构建出来

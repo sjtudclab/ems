@@ -28,12 +28,13 @@ import org.dclab.model.SingleChoiceRow;
 import org.dclab.model.SubjectRow;
 import org.dclab.model.TopicRow;
 import org.dclab.utils.MyBatisUtil;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import com.sun.corba.se.impl.protocol.giopmsgheaders.ReplyMessage_1_2;
 
 import org.dclab.common.Constants;
-
+@Service
 public class ImportService {
 	
 	

@@ -46,11 +46,11 @@ public class AdminController {
 	public void setAdminService(AdminService adminService) {
 		this.adminService = adminService;
 	}
-/*	@Autowired
+	@Autowired
 	private ImportService importService;
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
-	}*/
+	}
 
 	@RequestMapping("/load")
 	public SuperRespond loadBean(@RequestParam UUID token){
@@ -151,8 +151,8 @@ public class AdminController {
 			return new SuperRespond(false, "无此权限");
 	}
 	
-	@RequestMapping("/import")
-	public boolean Import(@RequestParam UUID token){
+	@RequestMapping("/examForm")
+	public boolean ImportExam(@RequestParam UUID token){
 		
 		String path=System.getProperty("project.root");
 		System.out.println("根目录  ："+path);
@@ -171,21 +171,9 @@ public class AdminController {
         return true;
 	}
 	
-	@RequestMapping("/test")
-	public int test(@RequestParam UUID token){
-		ImportService importService=new ImportService();
-		SubjectRow subjectRow=new SubjectRow();
-		subjectRow.setProName("ruanjian");
-		subjectRow.setProId("123");
-		subjectRow.setSubName("suanfa");
-		subjectRow.setSubId("1234");
-		subjectRow.setPaperNum("12345");
-		subjectRow.setDuration(7200);
-		subjectRow.setEarliestSubmit(1800);
-		subjectRow.setLatestLogin(1800);
-		subjectRow.setShowMark(0);
-		
-		return importService.importSubject(subjectRow);
+	@RequestMapping("/stuForm")
+	public boolean importRelations(@RequestParam UUID token){
+		return true;
 	}
-
+	
 }

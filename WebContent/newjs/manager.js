@@ -32,9 +32,9 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
     $rootScope.role = "管理员";
     //初始化表格
     $scope.roomMetaInfo = {
-        'roomId': '考场号',
-        'name': '考场位置',
-        'supervisor': '监考老师',
+        'id': '场次',
+        'roomName': '考场名',
+        'startTime': '开考时间',
         'size': '考场人数',
         'status': '状态'
     };

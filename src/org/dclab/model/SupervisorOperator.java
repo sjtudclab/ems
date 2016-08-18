@@ -55,7 +55,7 @@ public class SupervisorOperator {
 			superBean.setRid(1);
 			superBean.setFreeSeatList(sessionCanMapperI.getFreeSeat());
 			tokenSuperMap.put(idTokenMap.get(i), superBean);
-			AdminBean.roomSuperBeanMap.put(superBean.getRoomName(), superBean);//给管理员装填考场号和superbean的对应map
+			AdminBean.roomSuperBeanMap.put(sid, superBean);//给管理员装填考场号和superbean的对应map
 		}
 		
 		sqlsession.close();

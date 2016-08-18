@@ -40,7 +40,7 @@ public class SupervisorService {
 		}
 	return superBean.getCanMap().values();
 	}
-	//更换座位
+	//更换座位--+
 	public SuperRespond seatChange(SuperBean superBean,int Uid,Integer seatNum){
 		System.out.println(superBean);
 		if(superBean.getFreeSeatList()!=null&&superBean.getFreeSeatList().remove(seatNum)==true){//从空闲座位list中删去目标座位
@@ -51,8 +51,8 @@ public class SupervisorService {
 			return new SuperRespond(false, "目标座位已有人");
 	}
 	//监考操作之延时操作
-	public SuperRespond delay(List<Integer> uidList,int delayTime){//delayTime是延迟的分钟
-		for(int i : uidList)
+	public SuperRespond delay(List<String> uidList,int delayTime){//delayTime是延迟的分钟
+		for(String i : uidList)
 		{
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamBean examBean=ExamOperator.tokenExamMap.get(token);
@@ -61,8 +61,8 @@ public class SupervisorService {
 		return new SuperRespond(true);
 	}
 	//监考操作之撤销交卷
-	public SuperRespond returnToExam(List<Integer> uidList){
-		for(int i : uidList)
+	public SuperRespond returnToExam(List<String> uidList){
+		for(String i : uidList)
 		{
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.get(token).setFinished(false);
@@ -70,8 +70,8 @@ public class SupervisorService {
 		return new SuperRespond(true);
 	}
 	// 监考操作之强制终止
-	public SuperRespond forceTerminate(SuperBean superBean,List<Integer> uidList) {
-		for(int i: uidList){
+	public SuperRespond forceTerminate(SuperBean superBean,List<String> uidList) {
+		for(String i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.get(token).setFinished(true);//把ExamBean置为空
 /*			superBean.getCanMap().get(i).setStatus(2);//把该考生的状态置为已交卷
@@ -80,8 +80,8 @@ public class SupervisorService {
 	}
 
 	// 监考操作之允许开始
-	public SuperRespond allowStart(List<Integer> uidList) {
-		for(int i: uidList){
+	public SuperRespond allowStart(List<String> uidList) {
+		for(String i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.get(token).setAllowStart(true);
 		}
@@ -89,8 +89,8 @@ public class SupervisorService {
 	}
 
 	// 监考操作之允许终止
-	public SuperRespond allowTerminate(List<Integer> uidList) {
-		for(int i: uidList){
+	public SuperRespond allowTerminate(List<String> uidList) {
+		for(String i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.get(token).setAllowTerminate(true);
 		}
@@ -98,8 +98,8 @@ public class SupervisorService {
 	}
 
 	// 监考操作之删除试卷
-	public SuperRespond deleteExamInfo(SuperBean superBean,List<Integer> uidList) {
-		for(int i: uidList){
+	public SuperRespond deleteExamInfo(SuperBean superBean,List<String> uidList) {
+		for(String i: uidList){
 			UUID token=ExamOperator.idTokenMap.get(i);
 			ExamOperator.tokenExamMap.put(token, null);//把ExamBean置为空
 /*			superBean.getCanMap().get(i).setStatus(0);//把该考生的状态置为未登录

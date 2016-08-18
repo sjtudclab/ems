@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.dclab.model.ContentBean;
+import org.dclab.model.FillBlankBean;
 import org.dclab.model.JudgementBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
@@ -71,4 +72,7 @@ public interface TopicMapperI {
 	
 	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=4 AND paperId=#{paperId}")
 	public List<ShortAnswerBean> getShortByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=5 AND paperId=#{paperId}")
+	public List<FillBlankBean> getFillBlankByPaperId(int paperId);
 }
