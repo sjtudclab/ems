@@ -1,5 +1,6 @@
 package org.dclab.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -27,9 +28,11 @@ import org.dclab.utils.MyBatisUtil;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -150,9 +153,29 @@ public class AdminController {
 		else
 			return new SuperRespond(false, "无此权限");
 	}
+	@PostMapping("/examForm")
+	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
+
+		String path=System.getProperty("project.root")+"files\\import\\";
+		Map<String, String> map = new HashMap<String, String>();
+		String fileName = path+file.getOriginalFilename();
+		System.out.println(fileName);
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			fos.write(file.getBytes());
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("info", "上传失败");
+			return map;
+		}
+		map.put("info", "上传成功");
+		return map;
+
+	}
 	
-	@RequestMapping("/examForm")
-	public boolean ImportExam(@RequestParam UUID token){
+/*	@RequestMapping("/examForm")
+	public boolean ImportExam(){
 		
 		String path=System.getProperty("project.root");
 		System.out.println("根目录  ："+path);
@@ -169,7 +192,7 @@ public class AdminController {
         excel.parseFillBlank();
         excel.parseMachineTest();
         return true;
-	}
+	}*/
 	
 	@RequestMapping("/stuForm")
 	public boolean importRelations(@RequestParam UUID token){
