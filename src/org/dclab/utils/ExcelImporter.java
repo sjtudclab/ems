@@ -749,6 +749,7 @@ public class ExcelImporter {
     	System.out.println(candiateList);
     	ImportService service = new ImportService();
     	//import candiate service
+    	service.importCandidatePaper(candiateList);
     }
     
     public CandidateRoomRelationRow readCandidateRoomRow(int lineNO){
@@ -801,6 +802,7 @@ public class ExcelImporter {
     	System.out.println(roomList);
     	ImportService service = new ImportService();
     	//import candiate service
+    	service.importCandidateRoom(roomList);
     }
     
     public static void main(String[] ags) {
