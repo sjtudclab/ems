@@ -18,17 +18,17 @@ import org.dclab.model.CandidatePaperRelationRow;
 public interface UserMapperI {
 	
 	@Select("select * from user where Uid=#{uid}")
-	public User getByUid(int uid);
+	public User getByUid(String uid);
 	
 	@Select("select Uid from user inner join candidate_session on user.Uid=candidate_session.candidateId")
 	public List<Integer> getUid();
 	
 	@Select("select Uid from user where Rid=1")
-	public List<Integer> getUidByRid();
+	public List<String> getUidByRid();
 	
 	
 	@Select("SELECT Uname  FROM `user` WHERE Uid=#{id}")
-	public String getNmaeByUid(int id);
+	public String getNmaeByUid(String id);
 	
 	
 	@Insert("INSERT INTO `user` (Uid,Uname,Cid,photo,gender,paperId) VALUES (#{Uid},#{Uname},#{Cid},#{photo},#{gender},#{paperId})")

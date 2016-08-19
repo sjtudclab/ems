@@ -18,7 +18,7 @@ public class SingleChoiceBean implements Serializable,Cloneable{
 	 * 
 	 */
 	private static final long serialVersionUID = 7633906860972374279L;
-	private int singleNum;//存储单选题数目; （!!静态变量
+	private int singleNum;//存储单选题数目; 
 	private int id;//题目id
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查

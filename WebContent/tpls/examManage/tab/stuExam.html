@@ -1,7 +1,9 @@
-<div ng-controller="stuExamCtrl" style="height:100%">
 
+<div ng-controller="stuExamCtrl" style="height:100%">
+   
     <div style="height:20%;text-align:center;padding-top:5%;font-size:120%;width: 80%;">
-        <span class="font-size:150%">科目</span><select style="width:10%" ng-model="selectedSub" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
+        <span class="font-size:150%">专业名称</span><select style="width:10%" ng-model="selectedSub1" ng-options="x as x.subName1 for x in sumSub1 | orderBy:'subName1'"></select>
+         <span class="font-size:150%">科目</span><select style="width:10%" ng-model="selectedSub" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
         <button class="btn btn-primary" ng-click="selectSubject(selectedSub)">确认</button>
     </div>
 
@@ -21,6 +23,7 @@
                 <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
                     <td ng-bind="x.name"></td>
                     <td ng-bind="x.id"></td>
+                    <td ng-bind="x.major"></td>
                     <td ng-bind="x.subject"></td>
                     <!--<td><input type="checkbox" ng-model="selectionStatus[x.roomId]" ng-click="checkSel(selectionStatus[x.roomId],x.roomId)"></td>-->
                     <!--<td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>-->

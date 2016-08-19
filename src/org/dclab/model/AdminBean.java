@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public class AdminBean {
 	public static Map<Integer, SuperBean> roomSuperBeanMap=new HashMap<Integer, SuperBean>();
-	public static Map<Integer, UUID> adminTokenMap=new HashMap<>();
+	public static Map<String, UUID> adminTokenMap=new HashMap<>();
 }

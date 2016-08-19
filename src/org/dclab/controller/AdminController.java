@@ -1,15 +1,19 @@
 package org.dclab.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.ibatis.session.SqlSession;
+import org.dclab.mapping.SessionMapperI;
 import org.dclab.model.AdminBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.RoomInfoBean;
@@ -20,12 +24,15 @@ import org.dclab.model.SupervisorOperator;
 import org.dclab.service.AdminService;
 import org.dclab.service.ImportService;
 import org.dclab.utils.ExcelImporter;
+import org.dclab.utils.MyBatisUtil;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,17 +49,22 @@ public class AdminController {
 	public void setAdminService(AdminService adminService) {
 		this.adminService = adminService;
 	}
-/*	@Autowired
+	@Autowired
 	private ImportService importService;
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
-	}*/
+	}
 
 	@RequestMapping("/load")
 	public SuperRespond loadBean(@RequestParam UUID token){
 		if(AdminBean.adminTokenMap.containsValue(token))
 		{
-			ExamOperator.load(1);
+			//**************************
+			SqlSession sqlSession = MyBatisUtil.getSqlSession();
+			SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+			Timestamp timestamp = sessionMapperI.getStartTimeById(6);
+			//*********************************
+			ExamOperator.newLoad(timestamp);
 			SupervisorOperator.load();
 			return new SuperRespond(true);
 		}
@@ -81,7 +93,7 @@ public class AdminController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("token", superBean.getToken());
 			map.put("authorityList", superBean.getAuthorityList());
-			map.put("roomId", superBean.getRoomId());
+			map.put("roomName", superBean.getRoomName());
 			return map;
 		}
 		else
@@ -141,9 +153,29 @@ public class AdminController {
 		else
 			return new SuperRespond(false, "无此权限");
 	}
+	@PostMapping("/examForm")
+	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
+
+		String path=System.getProperty("project.root")+"files\\import\\";
+		Map<String, String> map = new HashMap<String, String>();
+		String fileName = path+file.getOriginalFilename();
+		System.out.println(fileName);
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			fos.write(file.getBytes());
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("info", "上传失败");
+			return map;
+		}
+		map.put("info", "上传成功");
+		return map;
+
+	}
 	
-	@RequestMapping("/import")
-	public boolean Import(@RequestParam UUID token){
+/*	@RequestMapping("/examForm")
+	public boolean ImportExam(){
 		
 		String path=System.getProperty("project.root");
 		System.out.println("根目录  ："+path);
@@ -160,23 +192,11 @@ public class AdminController {
         excel.parseFillBlank();
         excel.parseMachineTest();
         return true;
+	}*/
+	
+	@RequestMapping("/stuForm")
+	public boolean importRelations(@RequestParam UUID token){
+		return true;
 	}
 	
-	@RequestMapping("/test")
-	public int test(@RequestParam UUID token){
-		ImportService importService=new ImportService();
-		SubjectRow subjectRow=new SubjectRow();
-		subjectRow.setProName("ruanjian");
-		subjectRow.setProId("123");
-		subjectRow.setSubName("suanfa");
-		subjectRow.setSubId("1234");
-		subjectRow.setPaperNum("12345");
-		subjectRow.setDuration(7200);
-		subjectRow.setEarliestSubmit(1800);
-		subjectRow.setLatestLogin(1800);
-		subjectRow.setShowMark(0);
-		
-		return importService.importSubject(subjectRow);
-	}
-
 }

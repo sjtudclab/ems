@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class SuperRequest {
 	private UUID token;
-	private List<Integer> uidList;
+	private List<String> uidList;
 	private int delayTime;
 	
 	
@@ -19,10 +19,10 @@ public class SuperRequest {
 	public void setToken(UUID token) {
 		this.token = token;
 	}
-	public List<Integer> getUidList() {
+	public List<String> getUidList() {
 		return uidList;
 	}
-	public void setUidList(List<Integer> uidList) {
+	public void setUidList(List<String> uidList) {
 		this.uidList = uidList;
 	}
 	public int getDelayTime() {

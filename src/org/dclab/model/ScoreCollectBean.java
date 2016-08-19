@@ -5,17 +5,33 @@ package org.dclab.model;
  *成绩汇总文件需要的数据
  */
 public class ScoreCollectBean {
+	private String proName;
+	private String paperNum;
+	private String Uname;
 	private String Uid;
 	private String subName;
 	private int mark;
 	
 	
 	
-	public ScoreCollectBean(String uid, String subName, int mark) {
-		super();
-		Uid = uid;
-		this.subName = subName;
-		this.mark = mark;
+	
+	public String getProName() {
+		return proName;
+	}
+	public void setProName(String proName) {
+		this.proName = proName;
+	}
+	public String getPaperNum() {
+		return paperNum;
+	}
+	public void setPaperNum(String paperNum) {
+		this.paperNum = paperNum;
+	}
+	public String getUname() {
+		return Uname;
+	}
+	public void setUname(String uname) {
+		Uname = uname;
 	}
 	public String getUid() {
 		return Uid;

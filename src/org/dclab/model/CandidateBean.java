@@ -3,27 +3,27 @@ package org.dclab.model;
 /**
  * @author alvis
  *为了给每个监考老师装载所监考教室的考生的名单创建的bean
+ *监考那个界面显示的学生信息列表
  */
 public class CandidateBean {
-	private int roomId;	//房间号
+	private String roomName;//房间号
 	private int seatNum;//座位号
 	private String Uname;//姓名
 	private String gender;//性别
-	private int Uid;//准考证号
+	private String Uid;//准考证号
 	private String Cid;//身份证号
 	private int status;//考生状态
+	
+		
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
 	public int getSeatNum() {
 		return seatNum;
 	}
-	
-	public int getRoomId() {
-		return roomId;
-	}
-
-	public void setRoomId(int roomId) {
-		this.roomId = roomId;
-	}
-
 	public void setSeatNum(int seatNum) {
 		this.seatNum = seatNum;
 	}
@@ -39,10 +39,10 @@ public class CandidateBean {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public int getUid() {
+	public String getUid() {
 		return Uid;
 	}
-	public void setUid(int uid) {
+	public void setUid(String uid) {
 		Uid = uid;
 	}
 	public String getCid() {

@@ -18,8 +18,10 @@
     <span class="form-group" ng-repeat="x in itemMessage track by $index">
        <input type="checkbox" ng-model="right[$index]">{{$index+1}}
     </span>
-    
-    <div class="form-group">
-        <button class="btn btn-primary" ng-click="save()">保存</button> <button class="btn btn-warning" ng-click="delete()">下一题</button>
+
+    <div class="form-group" style="padding-left:12%">
+        <button class="btn btn-primary" ng-click="save()">保存</button> <button class="btn btn-info" ng-click="delete()">下一题</button>
+        <a ng-click="singleReturn()" style="text-decoration:underline;padding-left:3%;cursor:pointer">返回选择题型</a>
+        <a ng-click="singleFinish()" style="text-decoration:underline;padding-left:3%;cursor:pointer">结束试卷录入</a>
     </div>
 </div>

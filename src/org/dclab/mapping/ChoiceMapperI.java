@@ -16,4 +16,7 @@ public interface ChoiceMapperI {
 	@Insert("insert into choice (topicId) values (#{topicId})")
 	public int addGapChoice(int topicId);
 	
+	@Select("SELECT COUNT(*) FROM `choice` WHERE topicId=#{topicId}")
+	public int getFillNumById(int topicId);
+	
 }

@@ -9,7 +9,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.dclab.model.ContentBean;
+import org.dclab.model.FillBlankBean;
 import org.dclab.model.JudgementBean;
+import org.dclab.model.MachineTestBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
@@ -53,4 +55,28 @@ public interface TopicMapperI {
 	public int addShortAnswer(ShortAnswerRow shortAnswerRow);
 	
 	@Insert("insert into topic (number,content,typeId,img,audio,video,paperId,points,correctAnswer) values (#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId},#{fullMark},#{correctAnswerFile})")*/
+	
+	
+	//数据库修改之后的操作语句
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=0 AND paperId=#{paperId}")
+	public List<SingleChoiceBean> getSingleByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=1 AND paperId=#{paperId}")
+	public List<MultiChoicesBean> getMultiByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=2 AND paperId=#{paperId}")
+	public List<JudgementBean> getJudgeByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=3 AND paperId=#{paperId}")
+	public List<MatchingBean> getMatchByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=4 AND paperId=#{paperId}")
+	public List<ShortAnswerBean> getShortByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=5 AND paperId=#{paperId}")
+	public List<FillBlankBean> getFillBlankByPaperId(int paperId);
+	
+	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=6 AND paperId=#{paperId}")
+	public List<MachineTestBean> getMachineByPaperId(int paperId);
 }

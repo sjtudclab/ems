@@ -1,8 +1,34 @@
-<div ng-controller="exportFile" style="font-size:150%">
+<div ng-controller="exportFile">
     <div style="margin-bottom:3%">
+        <!--场次<select style="width:10%" ng-model="sumSelected" ng-options="x for x in sumLists | orderBy:'subName'"><input type="checkbox" ng-model="x"></select>-->
         成绩汇总 <button type="button" ng-click="sumExport()" class="btn btn-primary">导出</button>
     </div>
     <div>
+        <!--场次<select style="width:10%" ng-model="stuSelected" ng-options="x for x in sumLists | orderBy:'subName'"></select>-->
         考生答卷 <button type="button" ng-click="stuExport()" class="btn btn-primary">导出</button>
+    </div>
+    <div class="selectArea">
+        <div style="height: 5%;padding-bottom:3%">
+            <!--<span>总人数：{{exportByRoom.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
+            <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right">
+                    <!--<label ng-bind="'已选择:'+selectedNum+'/'+roomsInfo.length"></label>-->
+					<button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
+					<button type="button" class="btn btn-info" ng-click="cancelAll()">取消选择</button>
+				</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th ng-repeat="(key,value) in roomMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
+                    </th>
+                    <th>选择</th>
+                </tr>
+                <tr class="{{roomsStatus[room.id]}}" ng-repeat="room in exportByRoom | orderBy:orderCondition:isReverse">
+                    <td ng-bind="room.id"></td>
+                    <!--<td ng-bind="room.detail"></td>-->
+                    <td><input type="checkbox" ng-model="selectionStatus[room.id]" ng-click="checkSel(selectionStatus[room.id],room.id)"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

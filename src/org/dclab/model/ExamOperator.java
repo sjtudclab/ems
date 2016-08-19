@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -35,7 +36,7 @@ public class ExamOperator {
 	private static final String imgPath="EMSdata\\img\\";
 	private static final String audioPath="EMSdata\\audio\\";
 	private static final String vedioPath="EMSdata\\video\\";
-	public static Map<Integer, UUID> idTokenMap = new HashMap<>();
+	public static Map<String, UUID> idTokenMap = new HashMap<>();
 	
 	/**
 	 * 考生token 到 examBean的映射
@@ -47,20 +48,195 @@ public class ExamOperator {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
+		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
+		ChoiceMapperI choiceMapperI = sqlSession.getMapper(ChoiceMapperI.class);
+		MatchItemMapperI matchItemMapperI = sqlSession.getMapper(MatchItemMapperI.class);
+		String statement = "org.dclab.mapping.paperMapper.getDuration";
+		String statement1= "org.dclab.mapping.paperMapper.getEarliest";
 		
 		List<Integer> sidList = sessionMapperI.getSidByTime(startTime);
 		List<String> uidList = new ArrayList<>();
-		
+		System.out.println(sidList);
 		for(int sid : sidList)
 		{
-			
+			uidList.addAll(sessionCanMapperI.getUidListBySid(sid));
 		}
+		System.out.println(uidList);
+		
+		Map<Integer, ExamBean> map = new HashMap<>();//用这个map确保每个paperId对应的试卷只从数据库去一次
+		
+		for(String uid : uidList)
+		{
+			
+			idTokenMap.put(uid, TokenGenerator.generate());
+			int paperId = userMapperI.getPaperIdByUid(uid);
+			System.out.println("装载的考生的uid："+uid);
+			if(!map.containsKey(paperId))
+			{
+				ExamBean examBean = new ExamBean();
+				
+				List<SingleChoiceBean> sList = topicMapperI.getSingleByPaperId(paperId);
+				for(SingleChoiceBean bean : sList){
+					int topicId = bean.getId();
+					bean.setChoiceList(choiceMapperI.getChoice(topicId));
+					bean.setSingleNum(sList.size());
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+				}
+				
+				List<MultiChoicesBean> mList = topicMapperI.getMultiByPaperId(paperId);
+				for(MultiChoicesBean bean : mList){
+					int topicId = bean.getId();
+					bean.setChoiceList(choiceMapperI.getChoice(topicId));
+					bean.setMultiNum(mList.size());
+					
+					bean.setChoiceIdList(new ArrayList<Integer>());//初始化一下考生的答案，奇怪的要求
+					
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+				}
+				
+				List<JudgementBean> jList = topicMapperI.getJudgeByPaperId(paperId);
+				for(JudgementBean bean : jList){
+					int topicId = bean.getId();
+					bean.setChoiceList(choiceMapperI.getChoice(topicId));
+					bean.setJudgeNum(jList.size());
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+				}
+				
+				List<MatchingBean> mlist1 = topicMapperI.getMatchByPaperId(paperId);
+				for(MatchingBean bean : mlist1){
+					int topicId= bean.getId();
+					bean.setContentList(matchItemMapperI.getItem(topicId));
+					bean.setChoiceList(choiceMapperI.getChoice(topicId));
+					bean.setMatchNum(mlist1.size());
+					
+					bean.setChoiceIdMap(new HashMap<>());//初始化一下考生的答案，奇怪的要求
+					
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+				}
+				
+				List<ShortAnswerBean> saList = topicMapperI.getShortByPaperId(paperId);
+				for(ShortAnswerBean bean : saList){
+					bean.setShortNum(saList.size());
+				}
+				
+				List<FillBlankBean> fList = topicMapperI.getFillBlankByPaperId(paperId);
+				for(FillBlankBean bean : fList){
+					bean.setFillNum(choiceMapperI.getFillNumById(bean.getId()));
+					bean.setGapNum(fList.size());
+					bean.setChoiceIdList(new ArrayList<>());
+				}
+				
+				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
+				for(MachineTestBean bean : mList2){
+					bean.setMachineNum(mList2.size());
+				}
+				
+				
+				examBean.setEXAM_TIME(sqlSession.selectOne(statement, paperId));
+				examBean.setEarliestSubmit(sqlSession.selectOne(statement1, paperId));
+				examBean.setSingleChoiceList(sList);
+				examBean.setMultiChoicesList(mList);
+				examBean.setJudgementList(jList);
+				examBean.setMatchingList(mlist1);
+				examBean.setShortAnswerList(saList);
+				examBean.setFillBlankList(fList);
+				examBean.setMachineList(mList2);
+				examBean.setTopicNum(sList.size()+mList.size()+jList.size()+mlist1.size()+saList.size()+fList.size()+mList2.size());
+				examBean.setPaperId(paperId);
+				map.put(paperId, examBean);
+			}
+			
+			
+			
+			ExamBean examBean = map.get(paperId);
+			ExamBean examBean2 = new ExamBean();
+			
+				examBean2.setEXAM_TIME(examBean.getEXAM_TIME());
+				examBean2.setEarliestSubmit(examBean.getEarliestSubmit());
+				examBean2.setPaperId(examBean.getPaperId());
+				
+				List<SingleChoiceBean> sList = new ArrayList<>();
+				for(SingleChoiceBean singleChoiceBean : examBean.getSingleChoiceList())
+				{
+					Collections.shuffle(singleChoiceBean.getChoiceList());
+					sList.add((SingleChoiceBean) singleChoiceBean.clone());
+				}
+				
+				List<MultiChoicesBean> mList = new ArrayList<>();
+				for(MultiChoicesBean multiChoicesBean : examBean.getMultiChoicesList())
+				{
+					Collections.shuffle(multiChoicesBean.getChoiceList());
+					mList.add((MultiChoicesBean) multiChoicesBean.clone());
+				}
+				
+				List<JudgementBean> jList = new ArrayList<>();
+				for(JudgementBean judgementBean : examBean.getJudgementList())
+				{
+					jList.add((JudgementBean) judgementBean.clone());
+				}
+				
+				List<MatchingBean> mList2 = new ArrayList<>();
+				for(MatchingBean matchingBean : examBean.getMatchingList()){
+					Collections.shuffle(matchingBean.getChoiceList());
+					mList2.add((MatchingBean) matchingBean.clone());
+				}
+				
+				List<ShortAnswerBean> sList2 = new ArrayList<>();
+				for(ShortAnswerBean shortAnswerBean : examBean.getShortAnswerList()){
+					sList2.add((ShortAnswerBean) shortAnswerBean.clone());
+				}
+				
+				List<FillBlankBean> fList = new ArrayList<>();
+				for(FillBlankBean fillBlankBean : examBean.getFillBlankList()){
+					fList.add((FillBlankBean) fillBlankBean.clone());
+				}
+				
+				List<MachineTestBean> mList3 = new ArrayList<>();
+				for(MachineTestBean machineTestBean : examBean.getMachineList()){
+					mList3.add((MachineTestBean) machineTestBean.clone());
+				}
+				
+				examBean2.setSingleChoiceList(sList);
+				examBean2.setMultiChoicesList(mList);
+				examBean2.setJudgementList(jList);
+				examBean2.setMatchingList(mList2);
+				examBean2.setShortAnswerList(sList2);
+				examBean2.setFillBlankList(fList);
+				examBean2.setMachineList(mList3);
+				examBean2.setTopicNum(examBean.getTopicNum());
+				examBean2.setFinishTopic(new HashSet<>());
+				examBean2.setUid(uid);
+			
+			tokenExamMap.put(idTokenMap.get(uid), examBean2);
+		}
+		sqlSession.close();
 	}
 	
 	/**
 	 * 从数据库加载数据装填考生id与token及试卷
 	 */
-	public static void load(int sid/*场次的id*/){
+	/*public static void load(int sid场次的id){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		UserMapperI userMapper=sqlSession.getMapper(UserMapperI.class);
 		SessionMapperI sessionMapper=sqlSession.getMapper(SessionMapperI.class);
@@ -241,14 +417,14 @@ public class ExamOperator {
 
 		sqlSession.close();
 		
-	}
+	}*/
 	
 	/**
 	 * 交卷之后将考生答题信息写入数据库
 	 */
 	public static void persist(UUID token){
 		ExamBean examBean=ExamOperator.tokenExamMap.get(token);
-		int uid=examBean.getUid();
+		String uid=examBean.getUid();
 		List<CandidateAnswerBean> candidateList=new ArrayList<>();
 		
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
@@ -296,5 +472,21 @@ public class ExamOperator {
 		}
 		
 		sqlSession.close();
+	}
+	
+	public static void main (String[] args){
+		
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		Timestamp timestamp = sessionMapperI.getStartTimeById(6);
+		long time = timestamp.getTime();
+		System.out.println("转换得到的long："+time);
+		Timestamp timestamp2 = new Timestamp(time);
+		System.out.println("long转换timestamp:"+timestamp2);
+		System.out.println(timestamp);
+		
+		ExamOperator.newLoad(timestamp);
+		System.out.println(ExamOperator.idTokenMap);
+		System.out.println(ExamOperator.tokenExamMap);
 	}
 }

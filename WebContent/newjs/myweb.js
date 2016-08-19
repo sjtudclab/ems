@@ -234,7 +234,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 				templateUrl : 'tpls/examManage/tab/examImport.html'
 			},
 			'tab2@examManage' : {
-				templateUrl : 'tpls/examManage/tab/multipleImport.html'
+				templateUrl : 'tpls/examManage/tab/tab2.html'
 			},
 			'stu1@examManage' : {
 				templateUrl : 'tpls/examManage/tab/stuImport.html'
