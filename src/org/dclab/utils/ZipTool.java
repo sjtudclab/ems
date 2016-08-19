@@ -1,4 +1,4 @@
-package org.dclab.utils；
+package org.dclab.utils;
 
 import java.io.*;
 import java.util.Enumeration;
