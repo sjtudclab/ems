@@ -2,15 +2,15 @@ package org.dclab.model;
 
 public class SubjectRow {
 	private int paperId;
-	private String proName;
-	private String proId;
-	private String subName;
-	private String subId;
-	private String paperNum;	//试卷编号
-	private int duration;
-	private int earliestSubmit;
-	private int latestLogin;
-	private int showMark;	//1 yes, 0 no
+	public String proName;
+	public String proId;
+	public String subName;
+	public String subId;
+	public String paperNum;	//试卷编号
+	public int duration;
+	public int earliestSubmit;
+	public int latestLogin;
+	public int showMark;	//1 yes, 0 no
 	
 	@Override
 	public int hashCode() {

@@ -4,6 +4,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.dclab.model.ScoreCollectBean;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,13 +21,27 @@ import java.util.Random;
 public class ExcelExporter {
     private String fileName;
     private static String[] markHeaders	=	{"专业名", "科目名",  "试卷号", "准考证号", "考生姓名", "成绩"};
-    
+    private static String[] subjctHeaders = {"专业名称", "专业编号", "科目名称", "科目编号", "试卷号", "考试时长（分钟）",
+    		"最早提前交卷时间（默认为30min)", "最晚登陆时间(默认为30min)", "考试结束后是否立即显示分数（1是,0否,默认为1是）"};
+
     public ExcelExporter(String fileName){
         this.fileName   =   fileName;
     }
 
-    public void exportMarks(List<List<Object>> markList){
-    	exportList(markList, markHeaders);
+    /**
+     * export score collection to excel file
+     * @param markList
+     */
+    public void exportMarks(List<? extends Object> markList, String sheetName){
+    	export(markList, markHeaders, sheetName);
+    }
+    
+    /**
+     * subjectRow list
+     * @param subjectList
+     */
+    public void exportSubject(List<? extends Object> subjectList, String sheetName){
+    	export(subjectList, subjctHeaders, sheetName);
     }
     
     /**
@@ -37,12 +52,12 @@ public class ExcelExporter {
      *
      * @param beansList
      */
-    public void export(List<Object> beansList, String[] headers){
+    public void export(List<? extends Object> beansList, String[] headers, String sheetName){
         try {
             SimpleDateFormat    sf  =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             HSSFWorkbook workbook   =   new HSSFWorkbook();
-            HSSFSheet   sheet       =   workbook.createSheet();
-            Row row =   sheet.createRow(5);
+            HSSFSheet   sheet       =   workbook.createSheet(sheetName);
+            Row row =   sheet.createRow(0);
             Cell cell   =   null;
             for (int i = 0; i < headers.length; i++){
                 String  content     =   headers[i];
@@ -102,11 +117,11 @@ public class ExcelExporter {
      * @param data
      * @param headers
      */
-    public void exportList(List<List<Object>> data, String[] headers){
+    public void exportList(List<List<? extends Object>> data, String[] headers, String sheetName){
         try {
             SimpleDateFormat    sf  =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             HSSFWorkbook workbook   =   new HSSFWorkbook();
-            HSSFSheet   sheet       =   workbook.createSheet();
+            HSSFSheet   sheet       =   workbook.createSheet(sheetName);
             Row row =   sheet.createRow(0);
             Cell cell   =   null;
             for (int i = 0; i < headers.length; i++){
@@ -153,24 +168,23 @@ public class ExcelExporter {
         System.out.println("成功导出："+fileName);
     }
     
-
     public static void main(String args[]){
-        String[] headers = {"专业名", "科目名",  "准考证号", "考生姓名", "成绩","日期"};
-        ExcelExporter excel =   new ExcelExporter("test.xls");
-        List<List<Object>>  list=   new ArrayList<List<Object>>();
+        //String[] headers = {"专业名", "科目名",  "准考证号", "考生姓名", "成绩","日期"};
+        ExcelExporter excel =   new ExcelExporter("D:\\test.xls");
+        List<ScoreCollectBean>  list=   new ArrayList<ScoreCollectBean>();
         for (int i = 0; i < 4; i++) {
-            List<Object> row = new ArrayList<Object>(headers.length);
-            row.add("软件工程");
-            row.add("政治");
-            row.add("s_p_"+i);
-            row.add("test"+i);
-            row.add(new Random().nextInt(100));
-            row.add(new Date());
+        	ScoreCollectBean bean = new ScoreCollectBean();
+            bean.setProName("软件工程");
+            bean.setSubName("政治");
+            bean.setPaperNum(i+"");
+            bean.setUid("s_p_"+i);
+            bean.setUname("test"+i);
+            bean.setMark(new Random().nextInt(100));
 
-            list.add(row);
+            list.add(bean);
         }
 
-        excel.exportList(list, headers);
+        excel.exportMarks(list,"成绩汇总");
     }
 }
 
