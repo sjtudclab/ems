@@ -2832,10 +2832,10 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
     //     $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
     // }
     $scope.$watch("option", function () {
+        alert("ff");
         var gapStatus = JSON.parse($window.sessionStorage.problemStatus);
         gapStatus.fillgap.option = $scope.option;
         $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
-        alert($scope.option);
 
     });
 

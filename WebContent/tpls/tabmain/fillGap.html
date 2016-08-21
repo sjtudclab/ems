@@ -11,7 +11,7 @@
         <!-- gap -->
         <div style="padding-left:5%;height:50%">
             <div ng-repeat="x in fillLists track by $index" style="margin-bottom:10px">
-                ({{$index+1}}).<input ng-model="option[$index]" ng-click="opChanged(option[$index],$index)">
+                ({{$index+1}}).<input ng-model="option[$index]">
             </div>
              <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" previous-text="{{previousText}}" next-text="{{nextText}}" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged(option)"></ul>
         </div>
