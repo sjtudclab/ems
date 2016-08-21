@@ -4,15 +4,15 @@
         科目
     </div>
     <div class="form-group">
-        <span style="width:15%;display:inline-block">专业名称：</span><input ng-model="name">
-        <span style="width:15%;display:inline-block;padding-left:1%">专业编号：</span><input ng-model="name">
+        <span style="width:15%;display:inline-block">专业名称：</span><input ng-model="majorName">
+        <span style="width:15%;display:inline-block;padding-left:1%">专业编号：</span><input ng-model="majorNum">
     </div>
     <div class="form-group">
         <span style="width:15%;display:inline-block">科目名称：</span><input ng-model="name">
-        <span style="width:15%;display:inline-block;padding-left:1%">科目编号：</span><input ng-model="name">
+        <span style="width:15%;display:inline-block;padding-left:1%">科目编号：</span><input ng-model="nameNum">
     </div>
     <div class="form-group">
-        <span style="width:15%;display:inline-block">试卷号：</span><input ng-model="name">
+        <span style="width:15%;display:inline-block">试卷号：</span><input ng-model="examNumber">
     </div>
     <div class="form-group">
         <span style="width:15%;display:inline-block">考试时长：</span><input ng-model="duration">分钟
@@ -44,10 +44,10 @@
         <input type="checkbox" ng-model="simpleCheckbox">简答题 分值：<input ng-model="simpleScore">分
     </div>
     <div class="form-group">
-        <input type="checkbox" ng-model="simpleCheckbox">填空题 单个空正确分值：<input ng-model="simpleScore">分
+        <input type="checkbox" ng-model="fillBlankCheckbox">填空题 单个空正确分值：<input ng-model="fillBlankScore">分
     </div>
     <div class="form-group">
-        <input type="checkbox" ng-model="simpleCheckbox">上机题 分值：<input ng-model="simpleScore">分
+        <input type="checkbox" ng-model="machineCheckbox">上机题 分值：<input ng-model="machineScore">分
     </div>
     <div class="form-group" style="padding-left:12%">
         <button class="btn btn-primary" ng-click="save()">保存</button> <button class="btn btn-info" ng-click="startType()">开始录入题目</button>

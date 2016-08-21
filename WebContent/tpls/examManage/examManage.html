@@ -12,13 +12,14 @@
 
         <!--<div style="margin: 2% auto; width: 80%; text-align: center" ui-view="{{x.url}}">
             </div>-->
-        <div ng-controller="TabsDCtrl" style="height:100%">
-            <ul class="nav nav-tabs">
+        <div ng-controller="TabsDCtrl" style="height:100%;padding-top:0.5%">
+            <ul class="nav nav-tabs" >
                 <li ng-repeat="x in problemMetaInfo" class="active:{{active[$index]}}">
-                    <a ng-click="sel($index)" style="background-color:{{color[$index]}};border-bottom-color:transparent">{{x}}</a>
+                    <a ng-click="sel($index)" style="background-color:#fff;border-top-color:#ddd;border-left-color:#ddd;border-right-color:#ddd;border-bottom-color:{{color[$index]}}">{{x}}</a>
                 </li>
             </ul>
             <div style="height:94%">
+                <!--<div ng-repeat="x in problemMetaInfo" style="background-color:{{color[$index]}};height:100%;display:{{display[$index]}}">-->
                 <div ng-repeat="x in problemMetaInfo" style="background-color:{{color[$index]}};height:100%;display:{{display[$index]}}">
                   
                     <div ui-view="{{tab}}{{$index+1}}" style="height:100%" ></div>

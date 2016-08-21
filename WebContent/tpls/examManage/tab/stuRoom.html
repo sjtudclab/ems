@@ -19,9 +19,9 @@
         <span>开始时间<input ng-model="startSelected">
             <button uib-popover-template="'myday.html'" type="button" class="btn btn-primary" popover-placement="bottom-left">选择日期</button>
          <p></p>
-            结束时间<input ng-model="finishSelected">
-            <button uib-popover-template="'endday.html'" type="button" class="btn btn-primary" popover-placement="bottom-left">选择日期</button>
-            </span>
+            考试时长<input ng-model="finishSelected">分钟
+            <!--<button uib-popover-template="'endday.html'" type="button" class="btn btn-primary" popover-placement="bottom-left">选择日期</button>
+            </span>-->
         <p></p>
         <!--</div>-->
         <span>选择考场</span><select ng-model="selectedRoom" ng-options="x as x.subName for x in sumSub | orderBy:'subName'"></select>
@@ -51,6 +51,7 @@
                 <tr ng-repeat="x in examineesInfo | orderBy:orderCondition:isReverse">
                     <td ng-bind="x.name"></td>
                     <td ng-bind="x.id"></td>
+                    <td ng-bind="x.major"></td>
                     <td ng-bind="x.subject"></td>
                     <td><input type="checkbox" ng-model="selectionStatus[x.id]"></td>
                     <!--<td><a ng-click="edit()"  class="cursor-pointer" >编辑</a></td>-->
