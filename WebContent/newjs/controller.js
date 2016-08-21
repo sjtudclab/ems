@@ -2826,15 +2826,16 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
         }
     }
 
-    // $scope.opChanged = function (option) {
+    // $scope.opChanged = function (option,index) {
     //     var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-    //     gapStatus.fillgap.option = option.optionsRadios;
+    //     gapStatus.fillgap.option[index] = option;
     //     $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
     // }
     $scope.$watch("option", function () {
         var gapStatus = JSON.parse($window.sessionStorage.problemStatus);
         gapStatus.fillgap.option = $scope.option;
         $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+        alert($scope.option);
 
     });
 
@@ -2845,7 +2846,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
 
     $scope.pageChanged = function (option) {
         /*  alert($scope.currentPage);*/
-        alert(option);
+        // alert(option);
 
         var isChecked = $scope.count;
         $http.get('/EMS/exam/getTopic', {
@@ -3246,12 +3247,18 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
         }
     }
 
-    $scope.opChanged = function (option) {
-        var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
-        gapStatus.fillgap.option = option.optionsRadios;
-        $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
-    }
+    // $scope.opChanged = function (option) {
+    //     var gapStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近单选题以及状态
+    //     gapStatus.fillgap.option = option.optionsRadios;
+    //     $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
+    // }
+     $scope.$watch("fileName", function () {
+        var machineStatus = JSON.parse($window.sessionStorage.problemStatus);
+        machineStatus.machine.fileName = $scope.fileName;
+        $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
+        // alert($scope.option);
 
+    });
 
 
     $scope.previousText = "上一题";
