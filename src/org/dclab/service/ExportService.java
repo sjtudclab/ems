@@ -9,11 +9,13 @@ import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.ScoreCollectBean;
 import org.dclab.utils.MyBatisUtil;
+import org.springframework.stereotype.Service;
 
 /**
  * @author alvis
  *getScoreCollect返回导出成绩汇总所需的数据的list
  */
+@Service
 public class ExportService {
 	
 	

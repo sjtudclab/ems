@@ -104,11 +104,11 @@ public class ExamOperator {
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
 		    			bean.setVideo(vedioPath+bean.getVideo());
 				}
-				
+
 				List<JudgementBean> jList = topicMapperI.getJudgeByPaperId(paperId);
 				for(JudgementBean bean : jList){
 					int topicId = bean.getId();
-					bean.setChoiceList(choiceMapperI.getChoice(topicId));
+					bean.setChoiceList(choiceMapperI.getJudgeChoice());
 					bean.setJudgeNum(jList.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
 		    			bean.setImg(imgPath+bean.getImg());

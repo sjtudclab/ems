@@ -42,4 +42,7 @@ public interface SessionMapperI {
 	
 	@Select("SELECT * FROM `session` WHERE Uid IS NOT NULL")
 	public List<RoomInfoBean> getRoomInfo();
+	
+	@Select("SELECT id FROM `session`")
+	public List<Integer> getSessionList();
 }

@@ -390,14 +390,14 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.exportByRoom) {
-            $scope.selectionStatus[$scope.exportByRoom[x].id] = true;
+            $scope.selectionStatus[$scope.exportByRoom[x]] = true;
         }
     }
 
     // 取消选择
     $scope.cancelAll = function () {
         for (x in $scope.exportByRoom) {
-            $scope.selectionStatus[$scope.exportByRoom[x].id] = false;
+            $scope.selectionStatus[$scope.exportByRoom[x]] = false;
         }
     }
 
@@ -452,7 +452,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
             }
         }
         alert(uidList);
-        window.open("/EMS/admin/sumDownload?token=" + $window.sessionStorage.stoken);
+        window.open("/EMS/admin/sumDownload?token=" + $window.sessionStorage.stoken+"&id="+uidList);
     };
     $scope.stuExport = function () {
         var uidList = [];
@@ -462,7 +462,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
                 uidList.push(x);
             }
         }
-        window.open("/EMS/admin/stuDownload?token=" + $window.sessionStorage.stoken);
+        window.open("/EMS/admin/stuDownload?token=" + $window.sessionStorage.stoken+"&id="+uidList);
     }
 
 
