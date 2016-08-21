@@ -1,7 +1,10 @@
 package org.dclab.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -12,19 +15,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.SessionMapperI;
+import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
+import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
+import org.dclab.model.Paper4PDF;
 import org.dclab.model.RoomInfoBean;
+import org.dclab.model.ShortAnswerBean;
+import org.dclab.model.SingleChoiceBean;
 import org.dclab.model.SubjectRow;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
+import org.dclab.model.Topic4PDF;
 import org.dclab.service.AdminService;
+import org.dclab.service.ExportService;
 import org.dclab.service.ImportService;
+import org.dclab.utils.ExcelExporter;
 import org.dclab.utils.ExcelImporter;
 import org.dclab.utils.MyBatisUtil;
+import org.dclab.utils.PDFWriter;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +68,13 @@ public class AdminController {
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
+	
+	@Autowired
+	private ExportService exportService;
+	public void setExportService(ExportService exportService) {
+		this.exportService = exportService;
+	}
+	
 
 	@RequestMapping("/load")
 	public SuperRespond loadBean(@RequestParam UUID token){
@@ -163,26 +184,150 @@ public class AdminController {
 		try {
 			FileOutputStream fos = new FileOutputStream(fileName);
 			fos.write(file.getBytes());
+			fos.flush();
 			fos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			map.put("info", "上传失败");
 			return map;
 		}
+		
+		Thread thread = new examImportThread(fileName);
+		thread.start();
 		map.put("info", "上传成功");
 		return map;
 
 	}
 	
-/*	@RequestMapping("/examForm")
-	public boolean ImportExam(){
+	@RequestMapping("/roomLists")
+	public List<Integer> getSessionList(@RequestParam UUID token){
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		List<Integer> list = sessionMapperI.getSessionList();
 		
-		String path=System.getProperty("project.root");
-		System.out.println("根目录  ："+path);
-		String fileName=path+"/files/import/试卷模板_final.xls";
-		System.out.println("文件路径  ："+fileName);
-		ExcelImporter excel = new ExcelImporter(fileName);
-        //System.out.println(excel.readLine(0));
+		return list;
+	}
+	
+	@PostMapping("/stuForm")
+	public Map<String, String> relationsUpload(@RequestParam("file") MultipartFile file) {
+		String path= System.getProperty("project.root")+"files\\import\\";
+		Map<String, String> map = new HashMap<>();
+		String fileName = path +file.getOriginalFilename();
+		
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			fos.write(file.getBytes());
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			map.put("info", "上传失败");
+			return map;
+		}
+		
+		Thread thread = new relationImportThread(fileName);
+		thread.start();
+		map.put("info", "上传成功");
+		return map;
+	}
+	
+	@RequestMapping("/sumDownload")
+	public void getFile(@RequestParam String token, @RequestParam int id ,HttpServletResponse response) {
+		System.out.println(token);
+		
+		String path = System.getProperty("project.root")+"files\\export\\test.xls";
+		
+		ExcelExporter excel = new ExcelExporter(path);
+		
+		excel.exportMarks(exportService.getScoreCollect(id), "成绩汇总");
+		
+		
+		try {
+			// get your file as InputStream
+			InputStream is = new FileInputStream(new File(
+					path));
+			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+			response.flushBuffer();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/stuDownload")
+	public void getStuFile(@RequestParam UUID token , HttpServletResponse response){
+
+		String path = System.getProperty("project.root")+"files\\export\\";
+		
+		String uid= "70112";
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
+		String statement = "org.dclab.mapping.paperMapper.getSubName";
+		
+		int paperId= userMapperI.getPaperIdByUid(uid);
+		
+		String title = "科目："+sqlSession.selectOne(statement, paperId)+" 姓名："+userMapperI.getNmaeByUid(uid)+" 准考证号："+uid;
+		List<List<Topic4PDF>> topicList	=	new ArrayList<>();
+		List<String> topicNameList	=	new ArrayList<String>();
+		topicNameList.add("选择题");
+		topicNameList.add("简答题");
+		
+		UUID token1 = ExamOperator.idTokenMap.get(uid);
+		ExamBean examBean = ExamOperator.tokenExamMap.get(token1);
+		List<Topic4PDF>	singleChoiceList	=	new ArrayList<>();
+		for(SingleChoiceBean bean : examBean.getSingleChoiceList()){
+			List<String> item = new ArrayList<>();
+			String answer = "";
+			for(int i=0 ;i<bean.getChoiceList().size();i++)
+			{
+				item.add(bean.getChoiceList().get(i).getContent());
+				if(bean.getChoiceList().get(i).getChoiceId()==bean.getChoiceId())
+					answer=String.valueOf(i+1);
+			}
+			Topic4PDF topic4pdf = new Topic4PDF(bean.getContent(), answer, item);
+			singleChoiceList.add(topic4pdf);
+		}
+		topicList.add(singleChoiceList);
+		
+		List<Topic4PDF> shortAnswerList		=	new ArrayList<>();
+		for(ShortAnswerBean bean : examBean.getShortAnswerList()){
+			List<String> item = new ArrayList<>();
+			item.add(bean.getAnswer());
+			
+			Topic4PDF topic4pdf = new Topic4PDF(bean.getContent(), "", item);
+			shortAnswerList.add(topic4pdf);
+		}
+		topicList.add(shortAnswerList);
+		
+		Paper4PDF	paper	=	new Paper4PDF(uid, title, topicList, topicNameList);
+        PDFWriter.writePaper(paper, path);
+        System.out.println(path+uid);
+        try {
+			// get your file as InputStream
+			InputStream is = new FileInputStream(new File(
+					path+uid));
+			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+			response.flushBuffer();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		
+	}
+	
+}
+ class examImportThread extends Thread{
+	private String fileName;
+	 
+	public examImportThread(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		ExcelImporter excel = new ExcelImporter(this.fileName);
         excel.parseSubjectSheet();
         excel.parseSingleChoice();
         excel.parseMultiChoice();
@@ -191,12 +336,24 @@ public class AdminController {
         excel.parseShortAnswer();
         excel.parseFillBlank();
         excel.parseMachineTest();
-        return true;
-	}*/
-	
-	@RequestMapping("/stuForm")
-	public boolean importRelations(@RequestParam UUID token){
-		return true;
-	}
-	
+	}	
 }
+ 
+ class relationImportThread extends Thread{
+	 private String fileName;
+
+	public relationImportThread(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+        ExcelImporter	excel	=	new ExcelImporter(this.fileName);
+        excel.parseCandidatePaper();
+        excel.parseCanidateRoom();
+	}
+	 
+	
+ }

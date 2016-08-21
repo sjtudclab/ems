@@ -271,7 +271,7 @@ public class ImportService {
 			}
 			sqlSession.commit();
 		}
-		
+		sqlSession.close();
 		return true;
 	}
 	

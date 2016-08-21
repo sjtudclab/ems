@@ -806,7 +806,7 @@ public class ExcelImporter {
     }
     
     public static void main(String[] ags) {
-        String fileName = "E:\\dclab\\考试管理云平台需求材料\\试卷模板_final.xls";//试卷模板.xlsx
+       /* String fileName = "E:\\dclab\\考试管理云平台需求材料\\试卷模板_final.xls";//试卷模板.xlsx
         ExcelImporter excel = new ExcelImporter(fileName);
         //System.out.println(excel.readLine(0));
         excel.parseSubjectSheet();
@@ -816,9 +816,10 @@ public class ExcelImporter {
         excel.parseMatching();
         excel.parseShortAnswer();
         excel.parseFillBlank();
-        excel.parseMachineTest();
+        excel.parseMachineTest();*/
         
-        fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
+        String fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
+        ExcelImporter excel = new ExcelImporter(fileName);
         excel		=	new ExcelImporter(fileName);
         excel.parseCandidatePaper();
         excel.parseCanidateRoom();

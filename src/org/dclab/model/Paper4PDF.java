@@ -16,10 +16,10 @@ public class Paper4PDF {
 	public List<String>		topicNameList;	//每种题型的名字，添加顺序必须跟topicList添加顺序一致
 	
 	public Paper4PDF(String fileName, String title, List<List<Topic4PDF>> topicList, List<String> topicNameList) {
-		this.fileName	=	fileName;
-		this.title	=	title;
-		this.topicList	=	topicList;		
-		this.topicNameList	=	topicNameList;
+		this.fileName	=	fileName;  
+		this.title	=	title;  
+		this.topicList	=	topicList; 
+		this.topicNameList	=	topicNameList;  
 	}
 
 }
