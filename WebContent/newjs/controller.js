@@ -222,7 +222,7 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("单选题succeed");
+            // alert("单选题succeed");
             if (data.flag == false) {
                 //  alert(data.detail);
                 $http.get('/EMS/exam/handExam', {
@@ -413,7 +413,7 @@ demo0.controller("timeinfo", function ($scope, $interval, $window, $http, $state
         $http.get('/EMS/exam/getTopic', {
             params: { token: $window.sessionStorage.token, typeId: 0, id: allStatus.single.nid, requestId: 0, choiceId: allStatus.single.option, ifCheck: allStatus.single.ifCheck }
         }).success(function (data, status, headers, config) {
-            alert("单选题succeed");
+            // alert("单选题succeed");
             if (data.flag == false) {
                 //  alert(data.detail);
                 $http.get('/EMS/exam/handExam', {
@@ -2731,8 +2731,8 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
 
         } else {
             //初始化试题
-            // $http.get('/EMS/exam/start', {
-                $http.get('fillgap.json', {
+            $http.get('/EMS/exam/start', {
+                // $http.get('fillgap.json', {
                 params: { typeId: 5, token: $window.sessionStorage.token }
             }).success(function (data, status, headers, config) {
                 if (data.flag == false) {
@@ -2832,12 +2832,12 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
     //     $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
     // }
     $scope.$watch("option", function () {
-        alert("ff");
+        // alert("ff");
         var gapStatus = JSON.parse($window.sessionStorage.problemStatus);
         gapStatus.fillgap.option = $scope.option;
         $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
 
-    });
+    },true);
 
     $scope.previousText = "上一题";
     $scope.nextText = "下一题";
