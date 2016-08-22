@@ -227,13 +227,13 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 		var header = '<div class="modal-header"><h3 class="modal-title">提醒</h3></div>';
 		var footer =
 			'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.okay=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.okay=false;$close()">取消</button></div>';
-		modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'操作1？</p></div>' + footer;
+		modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'1？</p></div>' + footer;
 		$uibModal.open(modalParam).result.then(function () {
 			if ($scope.okay) {
-				modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'操作2？</p></div>' + footer;
+				modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'2？</p></div>' + footer;
 				$uibModal.open(modalParam).result.then(function () {
 					if ($scope.okay) {
-						modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'操作3？</p></div>' + footer;
+						modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'3？</p></div>' + footer;
 						$uibModal.open(modalParam).result.then(function () {
 							if ($scope.okay) {
 
