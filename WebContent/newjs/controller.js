@@ -360,16 +360,17 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
             backdrop: 'static',
             size: 'sm'
         };
-        var header = '<div class="modal-header"><h3 class="modal-title">提醒</h3></div>';
+        var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+        var headerBottom = '</h3></div>';
         var footer =
             '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.confirm=false;$close()">取消</button></div>';
-        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷1？</p></div>' + footer;
+        modalParam.template = headerTop + '1' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认交卷？</p></div>' + footer;
         $uibModal.open(modalParam).result.then(function () {
             if ($scope.confirm) {
-                modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷2？</p></div>' + footer;
+                modalParam.template = headerTop + '2' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认交卷？</p></div>' + footer;
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
-                        modalParam.template = header + '<div class="modal-body"><p style="font-size:150%">确认交卷3？</p></div>' + footer;
+                        modalParam.template = headerTop + '3' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认交卷？</p></div>' + footer;
                         $uibModal.open(modalParam).result.then(function () {
                             if ($scope.confirm) {
                                 $http.get('/EMS/exam/handExam', {
@@ -2225,6 +2226,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
     //简答题
 
     /*$scope.option = "撰写答案";*/
+    $scope.askPdf=function(){
+         window.open("/EMS/exam/stuSimple?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+    }
 
 
     if ($stateParams.type == 5) {
@@ -2246,6 +2250,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
             } else {
                 $scope.totalItems = data.shortNum;
                 $scope.currentPage = $scope.nid;
+                $scope.showPdf = data.showPdf;
                 // 试题
                 $scope.content = data.content;
                 if (data.audio) {
@@ -2284,6 +2289,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
                 simpleStatus.simple.nid = $scope.nid;
                 simpleStatus.simple.content = $scope.content;
+                simpleStatus.simple.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     simpleStatus.simple.audio = $scope.sudio;
                     simpleStatus.simple.audiohide = $scope.sudiohide;
@@ -2323,6 +2329,8 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
             $scope.nid = simpleStatus.simple.nid;
             $scope.content = simpleStatus.simple.content;
+            $scope.showPdf=simpleStatus.simple.showPdf;
+           
             if (simpleStatus.simple.audiohide == "block") {
                 $scope.audiohide = "block";
                 $scope.audio = simpleStatus.simple.audio;
@@ -2378,6 +2386,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 } else {
                     $scope.totalItems = data.shortNum;
                     $scope.currentPage = 1;
+                    //是否有PDF
+                    // $scope.showPdf = true;
+                    $scope.showPdf = data.showPdf;
                     //试题
                     $scope.nid = 1;
                     $scope.content = data.content;
@@ -2417,6 +2428,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                     var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
                     simpleStatus.simple.nid = $scope.nid;
                     simpleStatus.simple.content = $scope.content;
+                    simpleStatus.simple.showPdf = $scope.showPdf;
                     if ($scope.audiohide == "block") {
                         simpleStatus.simple.audio = $scope.sudio;
                         simpleStatus.simple.audiohide = $scope.sudiohide;
@@ -2488,6 +2500,8 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
                 $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
+
+                $scope.showPdf = data.showPdf;
                 if (data.audio) {
                     $scope.audiohide = "block";
                     $scope.audio = data.audio;
@@ -2524,6 +2538,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
                 var simpleStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近简答题以及状态
                 simpleStatus.simple.nid = $scope.nid;
                 simpleStatus.simple.content = $scope.content;
+                simpleStatus.simple.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     simpleStatus.simple.audio = $scope.sudio;
                     simpleStatus.simple.audiohide = $scope.sudiohide;
@@ -2588,7 +2603,10 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 demo0.controller('skiptb6', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
     //填空题
 
-
+    $scope.showPdf = true;
+    $scope.askPdf=function(){
+         window.open("/EMS/exam/stuFillgap?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+    }
 
     if ($stateParams.type == 6) {
         $scope.nid = $stateParams.num * 1;
@@ -2613,6 +2631,8 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                 $scope.content = data.content;
                 $scope.fillNum = data.fillNum;
                 $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
+
+                $scope.showPdf = data.showPdf;
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -2650,6 +2670,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                 gapStatus.fillgap.nid = $scope.nid;
                 gapStatus.fillgap.content = $scope.content;
                 gapStatus.fillgap.fillLists = $scope.fillLists;
+                gapStatus.fillgap.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     gapStatus.fillgap.audio = $scope.sudio;
                     gapStatus.fillgap.audiohide = $scope.sudiohide;
@@ -2689,6 +2710,8 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
             $scope.nid = gapStatus.fillgap.nid;
             $scope.content = gapStatus.fillgap.content;
             $scope.fillLists = gapStatus.fillgap.fillLists;
+            $scope.showPdf=gapStatus.fillgap.showPdf;
+            
             // $rootScope.totalItems = gapStatus.fillgap.totalItems;
             if (gapStatus.fillgap.audiohide == "block") {
                 $scope.audiohide = "block";
@@ -2753,6 +2776,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                     $scope.fillNum = data.fillNum;
                     $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
 
+                     $scope.showPdf=data.showPdf;
 
                     if (data.audio) {
                         $scope.audiohide = "block";
@@ -2775,7 +2799,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                         $scope.videohide = "none";
                     }
                     //试题状态
-                    $scope.option=[];
+                    $scope.option = [];
                     // $scope.option = data.answerList;
                     if (data.ifCheck) {
                         $scope.red = "#FF6347";
@@ -2791,6 +2815,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                     gapStatus.fillgap.nid = $scope.nid;
                     gapStatus.fillgap.content = $scope.content;
                     gapStatus.fillgap.fillLists = $scope.fillLists;
+                    gapStatus.fillgap.showPdf = $scope.showPdf;
                     if ($scope.audiohide == "block") {
                         gapStatus.fillgap.audio = $scope.sudio;
                         gapStatus.fillgap.audiohide = $scope.sudiohide;
@@ -2837,7 +2862,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
         gapStatus.fillgap.option = $scope.option;
         $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
 
-    },true);
+    }, true);
 
     $scope.previousText = "上一题";
     $scope.nextText = "下一题";
@@ -2868,6 +2893,8 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                 $scope.content = data.content;
                 $scope.fillNum = data.fillNum;
                 $scope.fillLists = Array(data.fillNum + 1).join('a').split('');
+
+                $scope.showPdf=data.showPdf;
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -2904,6 +2931,7 @@ demo0.controller('skiptb6', function ($scope, $http, $window, $state, $statePara
                 gapStatus.fillgap.nid = $scope.nid;
                 gapStatus.fillgap.content = $scope.content;
                 gapStatus.fillgap.fillLists = $scope.fillLists;
+                gapStatus.fillgap.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     gapStatus.fillgap.audio = $scope.sudio;
                     gapStatus.fillgap.audiohide = $scope.sudiohide;
@@ -2975,6 +3003,10 @@ demo0.directive('customOnChange', function () {
     };
 });
 demo0.controller('skiptb7', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
+    $scope.showPdf = true;
+    $scope.askPdf=function(){
+         window.open("/EMS/exam/stuMachine?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+    }
     //上机题
     $scope.progressPer = 0;
 
@@ -3039,6 +3071,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 $scope.currentPage = $scope.nid;
 
                 $scope.content = data.content;
+                $scope.showPdf=data.showPdf;
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -3075,6 +3108,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
                 machineStatus.machine.nid = $scope.nid;
                 machineStatus.machine.content = $scope.content;
+                machineStatus.machine.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     machineStatus.machine.audio = $scope.sudio;
                     machineStatus.machine.audiohide = $scope.sudiohide;
@@ -3114,6 +3148,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
             $scope.nid = machineStatus.machine.nid;
             $scope.content = machineStatus.machine.content;
             $scope.fileName = machineStatus.machine.fileName;
+            $scope.showPdf=machineStatus.machine.showPdf;
 
             // $rootScope.totalItems = gapStatus.fillgap.totalItems;
             if (machineStatus.machine.audiohide == "block") {
@@ -3175,7 +3210,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
 
                     $scope.nid = 1;
                     $scope.content = data.content;
-
+                    $scope.showPdf=data.showPdf;
 
                     if (data.audio) {
                         $scope.audiohide = "block";
@@ -3212,6 +3247,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                     var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
                     machineStatus.machine.nid = $scope.nid;
                     machineStatus.machine.content = $scope.content;
+                     machineStatus.machine.showPdf=$scope.showPdf;
 
                     if ($scope.audiohide == "block") {
                         machineStatus.machine.audio = $scope.sudio;
@@ -3252,7 +3288,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
     //     gapStatus.fillgap.option = option.optionsRadios;
     //     $window.sessionStorage.problemStatus = JSON.stringify(gapStatus);
     // }
-     $scope.$watch("fileName", function () {
+    $scope.$watch("fileName", function () {
         var machineStatus = JSON.parse($window.sessionStorage.problemStatus);
         machineStatus.machine.fileName = $scope.fileName;
         $window.sessionStorage.problemStatus = JSON.stringify(machineStatus);
@@ -3289,6 +3325,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
 
                 $scope.nid = $scope.currentPage;
                 $scope.content = data.content;
+                $scope.showPdf=data.showPdf;
 
                 if (data.audio) {
                     $scope.audiohide = "block";
@@ -3324,6 +3361,7 @@ demo0.controller('skiptb7', function ($scope, $http, $window, $state, $statePara
                 var machineStatus = JSON.parse($window.sessionStorage.problemStatus); //解析存储最近判断题以及状态
                 machineStatus.machine.nid = $scope.nid;
                 machineStatus.machine.content = $scope.content;
+                machineStatus.machine.showPdf = $scope.showPdf;
                 if ($scope.audiohide == "block") {
                     machineStatus.machine.audio = $scope.sudio;
                     machineStatus.machine.audiohide = $scope.sudiohide;

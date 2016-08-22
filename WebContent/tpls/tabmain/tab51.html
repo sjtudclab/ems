@@ -2,7 +2,7 @@
 <div class="container" style="font-size:125%;height:100%">
     <div class="col-md-10" style="height:100%">
         <!--简答题 -->
-        <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span>{{nid}}.{{content}}
+        <span class="glyphicon glyphicon-flag btn" aria-hidden="false" style="font-size: 20px;color:{{red}}" ng-model="count" ng-click="chgColor(count)" id="{{ID}}"> </span>{{nid}}.{{content}}<button class="btn btn-info" ng-click="askPdf()" ng-show=showPdf>详细内容</button>
          <audio controls ng-src="{{audio}}" type="audio/mp3" style="display:{{audiohide}};padding-left:5%">
           </audio>
           <video controls ng-src="{{video}}" type="video/mp4" style="display:{{videohide}};padding-left:5%" height="33%">
