@@ -27,7 +27,7 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
     $scope.index = 0;
 
     $rootScope.role = "管理员";
-   
+
 
     // 监控index变量控制标签及标签页
     $scope.$watch('index', function () {
@@ -69,7 +69,7 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
                     id: 1
                 }, { id: 31 }, { id: 11 }, { id: 14 }]
                 $scope.orderCondition = 'id';
-			    $scope.isReverse = false;
+                $scope.isReverse = false;
                 //请求场次列表/sumList在父域中赋值
                 $http.get('/EMS/admin/roomLists', {
                     // $http.get('info.json', {
@@ -79,7 +79,7 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
                 }).then(function successCallback(response) {
                     $scope.exportByRoom = response.data;
                     $scope.orderCondition = 'id';
-			        $scope.isReverse = false;
+                    $scope.isReverse = false;
                 }, function errorCallback(response) {
                 });
                 break;
@@ -227,7 +227,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                 }
                 $scope.cancelAll();
                 $scope.orderCondition = 'id';
-			    $scope.isReverse = false;
+                $scope.isReverse = false;
             },
             function error(response) {
                 alert('刷新出错\n' + response.status
@@ -299,6 +299,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     $scope.selectFile = function () {
         $scope.$apply(function () {
             $scope.selectedFile = event.target.files[0];
+            $scope.fileName = $scope.selectedFile.name;
         })
     }
 
@@ -329,7 +330,17 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
             alert('出现错误\n' + response.status + ' ' + response.statusText);
         });
     }
-
+    $scope.clear = function () {
+        $http.get('/EMS/admin/examClear', {
+            params: {
+                token: $window.sessionStorage.stoken,
+                fileName: $scope.fileName
+            }
+        }).then(function successCallback(response) {
+            alert(response.data);
+        }, function errorCallback(response) {
+        });
+    }
 
 });
 angular.module('manager').controller('ImportStuFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
@@ -371,7 +382,17 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
             alert('出现错误\n' + response.status + ' ' + response.statusText);
         });
     }
-
+    $scope.clear = function () {
+        $http.get('/EMS/admin/stuClear', {
+            params: {
+                token: $window.sessionStorage.stoken,
+                fileName: $scope.fileName
+            }
+        }).then(function successCallback(response) {
+            alert(response.data);
+        }, function errorCallback(response) {
+        });
+    }
 
 });
 angular.module('manager').controller('exportFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
@@ -410,7 +431,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
         }
         if (status == false) {
             $scope.selectedNum -= 1;
-            
+
         }
     }
 
@@ -429,20 +450,20 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     timingPromise = $interval(function () { refresh() }, 30000);
 
     function refresh() {
-         $http.get('/EMS/admin/roomLists', {
-                    // $http.get('info.json', {
-                    params: {
-                        token: $window.sessionStorage.stoken
-                    }
-                }).then(function successCallback(response) {
-                    $scope.exportByRoom = response.data;
-                    $scope.orderCondition = 'id';
-			        $scope.isReverse = false;
-                }, function errorCallback(response) {})
-              
+        $http.get('/EMS/admin/roomLists', {
+            // $http.get('info.json', {
+            params: {
+                token: $window.sessionStorage.stoken
+            }
+        }).then(function successCallback(response) {
+            $scope.exportByRoom = response.data;
+            $scope.orderCondition = 'id';
+            $scope.isReverse = false;
+        }, function errorCallback(response) { })
+
     }
 
-  //导出信息
+    //导出信息
     $scope.sumExport = function () {
         var uidList = [];
         for (x in $scope.selectionStatus) {
@@ -451,9 +472,29 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
                 uidList.push(x);
             }
         }
-        alert(uidList);
-        window.open("/EMS/admin/sumDownload?token=" + $window.sessionStorage.stoken+"&id="+uidList);
+        window.open("/EMS/admin/sumDownload?token=" + $window.sessionStorage.stoken + "&id=" + uidList);
     };
+    //成绩汇总 清空
+    $scope.clear = function () {
+        var uidList = [];
+        for (x in $scope.selectionStatus) {
+
+            if ($scope.selectionStatus[x]) {
+                uidList.push(x);
+            }
+        }
+        $http.get('/EMS/admin/sumDownloadClear', {
+            params: {
+                token: $window.sessionStorage.stoken,
+                id:uidList
+                
+            }
+        }).then(function successCallback(response) {
+            alert("清空成功！");
+            alert(response.data);
+        }, function errorCallback(response) {
+        });
+    }
     $scope.stuExport = function () {
         var uidList = [];
         for (x in $scope.selectionStatus) {
@@ -462,7 +503,27 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
                 uidList.push(x);
             }
         }
-        window.open("/EMS/admin/stuDownload?token=" + $window.sessionStorage.stoken+"&id="+uidList);
+        window.open("/EMS/admin/stuDownload?token=" + $window.sessionStorage.stoken + "&id=" + uidList);
+    }
+    //考生答卷清空
+    $scope.stuClear = function () {
+        var uidList = [];
+        for (x in $scope.selectionStatus) {
+
+            if ($scope.selectionStatus[x]) {
+                uidList.push(x);
+            }
+        }
+        $http.get('/EMS/admin/stuDownloadClear', {
+            params: {
+                token: $window.sessionStorage.stoken,
+                id:uidList
+            }
+        }).then(function successCallback(response) {
+            alert("清空成功！");
+            alert(response.data);
+        }, function errorCallback(response) {
+        });
     }
 
 

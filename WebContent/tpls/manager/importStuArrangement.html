@@ -4,6 +4,7 @@
     <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
     <label for="StuFile" class="btn btn-primary">选择文件</label></button>
     <button type="button" ng-click="upload()" class="btn btn-info">导入</button>
+    <button type="button" ng-click="clear()" class="btn btn-info">清空</button>
     <div style="padding-left:33%">
         <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
         {{progressInfo}}
