@@ -380,7 +380,10 @@ demo0.controller('showMain', function ($scope, $state, $stateParams, $window, $h
 
                                     if (data.flag == false) {
                                         alert(data.detail);
-                                        $state.go("finish", { score: data });
+                                        if(data.detail=="还没到交卷时间"){}else{
+                                         $state.go("finish", { score: data });
+                                        }
+                                      
                                     } else {
 
                                         $state.go("finish", { score: data });
