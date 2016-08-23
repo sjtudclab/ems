@@ -282,7 +282,7 @@ body {
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    cursor: pointer;
+    /*cursor: pointer;*/
     -moz-user-select: none;
     background-image: none;
     border: 1px solid transparant;

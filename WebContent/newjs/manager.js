@@ -398,7 +398,8 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
 angular.module('manager').controller('exportFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
     //初始化表格
     $scope.roomMetaInfo = {
-        'id': '场次'
+        'id': '场次',
+        'time':'时间'
     };
     // 状态码转化成易读string
     // $scope.statusDisplay = ['未登录', '已登录'];
