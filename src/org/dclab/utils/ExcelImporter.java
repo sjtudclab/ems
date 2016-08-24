@@ -67,6 +67,15 @@ public class ExcelImporter {
     private static final int M_CHOICE_N	=	10;
     private static final int M_CHOICE_1	=	11;
     
+    //short answer sheet unique pdf cell
+    private static final int S_PDF		=	9;
+    
+    //online-judge sheet unique pdf cell
+    private static final int O_PDF		=	10;
+    
+    //blank-filing sheet unique pdf cell
+    private static final int B_PDF		=	9;
+    
     //candidate-paper sheet unique column index
     private static final int C_UID		=	0;
     private static final int C_NAME		=	1;
@@ -549,6 +558,9 @@ public class ExcelImporter {
     	cell		=	row.getCell(T_VIDEO);
     	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
     	
+    	cell		=	row.getCell(S_PDF);
+    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
+    	
     	return topicRow;
     }
     
@@ -606,7 +618,9 @@ public class ExcelImporter {
     	
     	cell		=	row.getCell(T_VIDEO);
     	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
-    	
+
+    	cell		=	row.getCell(O_PDF);
+    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
     	return topicRow;
     }
     
@@ -669,6 +683,9 @@ public class ExcelImporter {
     	if(cell == null)
     		throw new RuntimeException("填空个数不能为空！");
     	topicRow.setBlankNum((int)cell.getNumericCellValue());
+    	
+    	cell		=	row.getCell(B_PDF);
+    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
     	
     	return topicRow;
     }
