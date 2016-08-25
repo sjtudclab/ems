@@ -63,6 +63,7 @@ public class ImportService {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.addTopic";
 		String statement1 = "org.dclab.mapping.choiceMapper.add";
+		String statement2 = "org.dclab.mapping.topicMapper.addSFM";
 		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
 		MatchItemMapperI matchItemMapperI = sqlSession.getMapper(MatchItemMapperI.class);
 		ChoiceMapperI choiceMapperI = sqlSession.getMapper(ChoiceMapperI.class);
@@ -199,7 +200,7 @@ public class ImportService {
 			break;
 		case Constants.SHORT_ANSWER:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement, topicRow)!=1)
+				if(sqlSession.insert(statement2, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				
@@ -214,7 +215,7 @@ public class ImportService {
 			break;
 		case Constants.FILL_BLANK:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement,topicRow)!=1)
+				if(sqlSession.insert(statement2,topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				int topicId=topicRow.getId();
@@ -236,7 +237,7 @@ public class ImportService {
 			break;
 		case Constants.MACHINE_TEST:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement, topicRow)!=1)
+				if(sqlSession.insert(statement2, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				
@@ -317,17 +318,18 @@ public class ImportService {
 	
 	
 	public static void main (String [] args) {
-		CandidateRoomRelationRow row = new CandidateRoomRelationRow();
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
-		row.setStartTime(startTime);
-		row.setIp("127.12.12.12");
-		row.setRoomName("软件大楼");
-		row.setSeatNum(12);
-		row.setUid("1234a");
-		List<CandidateRoomRelationRow> list= new ArrayList<>();
-		list.add(row);
-		ImportService importService= new ImportService();
-		boolean flag=importService.importCandidateRoom(list);
-		System.out.println(flag);
+		ShortAnswerRow shortAnswerRow = new ShortAnswerRow(26);
+		shortAnswerRow.setContent("test");
+		shortAnswerRow.setCorrectAnswer("success");
+		shortAnswerRow.setPdf("pdf");
+		shortAnswerRow.setFullMark(5);
+		shortAnswerRow.setTYPE(Constants.SHORT_ANSWER);
+		
+		List<TopicRow> list = new ArrayList<>();
+		list.add(shortAnswerRow);
+		
+		ImportService importService = new ImportService();
+		importService.importTopic(list);
+		
 	}
 }

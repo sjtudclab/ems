@@ -412,6 +412,20 @@ public class ExamService {
 		else
 			return exambean.getEXAM_TIME();
 	}
+	
+	public String getPdf(ExamBean examBean,int typeId,int id){
+		switch (typeId) {
+		case 4:
+			return examBean.getShortAnswerById(id).getPdf();
+		case 5:
+			return examBean.getFillBlankById(id).getPdf();
+		case 6:
+			return examBean.getMachineTestById(id).getPdf();
+		default:
+			System.err.println("getPdf出错");
+			return null;
+		}
+	}
 
 
 

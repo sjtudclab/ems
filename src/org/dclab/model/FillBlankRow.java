@@ -46,4 +46,5 @@ public class FillBlankRow extends TopicRow {
 				+ ", content=" + content + ", img=" + img + ", audio=" + audio + ", video=" + video + "]";
 	}
 
+
 }

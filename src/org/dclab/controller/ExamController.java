@@ -131,6 +131,15 @@ public class ExamController {
 		return examService.getTopic(exambean, typeId, --id);
 	}
 	
+	@RequestMapping("/getPdf")
+	public Object getPdf(@RequestParam UUID token,@RequestParam int typeId,@RequestParam int id){
+		ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+		if(examBean==null||examBean.isFinished()==true)
+			return new SuperRespond(false, "考试已经结束");
+		
+		return examService.getPdf(examBean, typeId, --id);
+	}
+	
 	@RequestMapping("/handExam")
 	public Object handin(@RequestParam(value="token")UUID token){
 			ExamBean exambean=examService.getExambeanByToken(token);
