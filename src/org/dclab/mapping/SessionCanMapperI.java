@@ -29,5 +29,8 @@ public interface SessionCanMapperI {
 	
 	@Select("SELECT COUNT(*) FROM `session_candidate` WHERE sid=#{sid}")
 	public int getSizeOfSession(int sid);
+	
+	@Select("TRUNCATE TABLE session_candidate")
+	public void deleteAll();
 
 }

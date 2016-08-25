@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Select;
 import org.dclab.Session;
 import org.dclab.model.RoomInfoBean;
+import org.dclab.model.SessionBean;
 
 import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
@@ -24,6 +25,8 @@ public interface SessionMapperI {
 	@Select("select startTime from session where id=#{id}")
 	public Timestamp getStartTimeById(int id);
 	
+	@Select("select startTime from session")
+	public List<Timestamp> getStartTime();
 	
 	//由场次id获得科目id
 	@Select("SELECT subId FROM `session` WHERE id=#{id}")
@@ -43,6 +46,9 @@ public interface SessionMapperI {
 	@Select("SELECT * FROM `session` WHERE Uid IS NOT NULL")
 	public List<RoomInfoBean> getRoomInfo();
 	
-	@Select("SELECT id FROM `session`")
-	public List<Integer> getSessionList();
+	@Select("SELECT id,startTime FROM `session`")
+	public List<SessionBean> getSessionList();
+	
+	@Select("TRUNCATE TABLE session")
+	public void deleteAll();
 }

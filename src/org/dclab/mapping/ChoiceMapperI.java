@@ -19,6 +19,8 @@ public interface ChoiceMapperI {
 	@Select("SELECT COUNT(*) FROM `choice` WHERE topicId=#{topicId}")
 	public int getFillNumById(int topicId);
 	
+	@Select("TRUNCATE TABLE choice")
+	public void deleteAll();
 	
 	
 }

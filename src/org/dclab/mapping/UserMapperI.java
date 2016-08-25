@@ -4,10 +4,13 @@ package org.dclab.mapping;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.dclab.User;
 import org.dclab.model.CandidatePaperRelationRow;
 
@@ -53,5 +56,11 @@ public interface UserMapperI {
      //使用@Update注解指明update方法要执行的SQL
 	 @Update("update users set name=#{name},age=#{age} where id=#{id}")
 	 public int update(User user);*/
+	
+	@Delete("delete FROM `user` WHERE Rid=0")
+	public void deleteAll();
+	
+	@Update("UPDATE `user` SET mark=#{mark} WHERE Uid=#{uid}")
+	public int updateMark(@Param(value="mark")int mark,@Param(value="uid")String uid);
 }
 

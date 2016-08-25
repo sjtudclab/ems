@@ -200,7 +200,7 @@ public class ImportService {
 			break;
 		case Constants.SHORT_ANSWER:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement2, topicRow)!=1)
+				if(sqlSession.insert(statement, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				
@@ -208,14 +208,14 @@ public class ImportService {
 				ShortAnswerRow shortAnswerRow = (ShortAnswerRow) topicRow;
 				
 				String points = String.valueOf(shortAnswerRow.getFullMark());
-				if(topicMapperI.update(points, shortAnswerRow.getCorrectAnswer(), topicId)!=1)
+				if(topicMapperI.updateSFM(points, shortAnswerRow.getCorrectAnswer(), shortAnswerRow.getPdf(), topicId)!=1)
 					System.err.println("更新数据库表topic失败");
 				sqlSession.commit();
 			}
 			break;
 		case Constants.FILL_BLANK:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement2,topicRow)!=1)
+				if(sqlSession.insert(statement,topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				int topicId=topicRow.getId();
@@ -230,14 +230,14 @@ public class ImportService {
 				}
 				String points=String.valueOf(fillBlankRow.getFullMark());
 				
-				if(topicMapperI.update(points, fillBlankRow.getCorrectAnswer(), topicId)!=1)
+				if(topicMapperI.updateSFM(points, fillBlankRow.getCorrectAnswer(),fillBlankRow.getPdf(), topicId)!=1)
 					System.err.println("更新数据库表topic失败");	
 				sqlSession.commit();
 			}
 			break;
 		case Constants.MACHINE_TEST:
 			for(TopicRow topicRow : topicList){
-				if(sqlSession.insert(statement2, topicRow)!=1)
+				if(sqlSession.insert(statement, topicRow)!=1)
 					System.err.println("插入数据库表topic失败");
 				sqlSession.commit();
 				
@@ -248,7 +248,7 @@ public class ImportService {
 				String points=String.valueOf(machineTestRow.getFullMark());
 				String correctAnswer = machineTestRow.getCorrectAnswerFile();
 				
-				if(topicMapperI.update(points, correctAnswer, topicId)!=1)
+				if(topicMapperI.updateSFM(points, correctAnswer,machineTestRow.getPdf(), topicId)!=1)
 					System.err.println("更新数据库表topic失败");	
 				sqlSession.commit();
 			}

@@ -52,6 +52,10 @@ public interface TopicMapperI {
 	public int update(@Param(value="points")String points,@Param(value="correctAnswer")String correctAnswer,
 			@Param(value="topicId")int topicId);
 	
+	@Update("UPDATE topic SET points=#{points},correctAnswer=#{correctAnswer},pdf=#{pdf} WHERE id=#{topicId}")
+	public int updateSFM(@Param(value="points")String points,@Param(value="correctAnswer")String correctAnswer,
+			@Param(value="pdf")String pdf,@Param(value="topicId")int topicId);
+	
 	/*@Insert("insert into topic (number,content,typeId,img,audio,video,paperId,points,correctAnswer) values (#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId},#{fullMark},#{correctAnswer})")
 	public int addShortAnswer(ShortAnswerRow shortAnswerRow);
 	
@@ -83,4 +87,7 @@ public interface TopicMapperI {
 	
 	@Select("SELECT id AS topicId,correctAnswer AS choiceId,points FROM `topic` WHERE paperId=#{paperId}")
 	public List<CorrectAnswerBean> getCorrectAnswerByPaperId(int paperId);
+	
+	@Select("TRUNCATE TABLE topic")
+	public void delteAll();
 }

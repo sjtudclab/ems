@@ -36,7 +36,6 @@ public class ExamOperator {
 	private static final String imgPath="EMSdata\\img\\";
 	private static final String audioPath="EMSdata\\audio\\";
 	private static final String vedioPath="EMSdata\\video\\";
-	private static final String pdfPath="EMSdata\\pdf\\";
 	public static Map<String, UUID> idTokenMap = new HashMap<>();
 	
 	/**
@@ -45,7 +44,7 @@ public class ExamOperator {
 	public static Map<UUID, ExamBean> tokenExamMap = new HashMap<>();
 	
 	
-	public static void newLoad(Timestamp startTime){
+	public static void newLoad(List<Timestamp> list){
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
@@ -56,7 +55,11 @@ public class ExamOperator {
 		String statement = "org.dclab.mapping.paperMapper.getDuration";
 		String statement1= "org.dclab.mapping.paperMapper.getEarliest";
 		
-		List<Integer> sidList = sessionMapperI.getSidByTime(startTime);
+		List<Integer> sidList = new ArrayList<>();
+		for(Timestamp timestamp : list)
+		{
+			sidList.addAll(sessionMapperI.getSidByTime(timestamp));
+		}
 		List<String> uidList = new ArrayList<>();
 		System.out.println(sidList);
 		for(int sid : sidList)
@@ -146,10 +149,7 @@ public class ExamOperator {
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
 		    			bean.setVideo(vedioPath+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    		{
-		    			bean.setPdf(pdfPath+bean.getPdf());
 		    			bean.setShowPdf(true);
-		    		}
 				}
 				
 				List<FillBlankBean> fList = topicMapperI.getFillBlankByPaperId(paperId);
@@ -164,10 +164,7 @@ public class ExamOperator {
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
 		    			bean.setVideo(vedioPath+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    		{
-		    			bean.setPdf(pdfPath+bean.getPdf());
 		    			bean.setShowPdf(true);
-		    		}
 				}
 				
 				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
@@ -180,10 +177,8 @@ public class ExamOperator {
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
 		    			bean.setVideo(vedioPath+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    		{
-		    			bean.setPdf(pdfPath+bean.getPdf());
 		    			bean.setShowPdf(true);
-		    		}
+		    		
 				}
 				
 				
@@ -456,14 +451,14 @@ public class ExamOperator {
 	/**
 	 * 交卷之后将考生答题信息写入数据库
 	 */
-	public static void persist(UUID token){
+	public static void persist(UUID token,int mark){
 		ExamBean examBean=ExamOperator.tokenExamMap.get(token);
 		String uid=examBean.getUid();
 		List<CandidateAnswerBean> candidateList=new ArrayList<>();
 		
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		CanAnswerMapperI canAnswerMapperI = sqlSession.getMapper(CanAnswerMapperI.class);
-		
+		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		
 		for(SingleChoiceBean sbean: examBean.getSingleChoiceList()){
 			CandidateAnswerBean candidateAnswerBean = new CandidateAnswerBean(uid,sbean.getId(),String.valueOf(sbean.getChoiceId()));
@@ -505,6 +500,10 @@ public class ExamOperator {
 			sqlSession.commit();
 		}
 		
+		if(userMapperI.updateMark(mark, uid)!=1)
+			System.err.println("写入考生成绩失败");
+		sqlSession.commit();
+		
 		sqlSession.close();
 	}
 	
@@ -518,8 +517,8 @@ public class ExamOperator {
 		Timestamp timestamp2 = new Timestamp(time);
 		System.out.println("long转换timestamp:"+timestamp2);
 		System.out.println(timestamp);
-		
-		ExamOperator.newLoad(timestamp);
+/*		
+		ExamOperator.newLoad(timestamp);*/
 		System.out.println(ExamOperator.idTokenMap);
 		System.out.println(ExamOperator.tokenExamMap);
 	}

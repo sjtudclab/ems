@@ -103,7 +103,6 @@ public class MachineTestBean implements Serializable {
 	public void setVideo(String video) {
 		this.video = video;
 	}
-
 	
 	
 	

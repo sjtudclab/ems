@@ -1,11 +1,16 @@
 package org.dclab.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.dclab.model.CheckBean;
 import org.dclab.model.ExamBean;
@@ -132,12 +137,40 @@ public class ExamController {
 	}
 	
 	@RequestMapping("/getPdf")
-	public Object getPdf(@RequestParam UUID token,@RequestParam int typeId,@RequestParam int id){
+	public void getPdf(@RequestParam UUID token,@RequestParam int typeId,@RequestParam int id,HttpServletResponse response){
 		ExamBean examBean = ExamOperator.tokenExamMap.get(token);
 		if(examBean==null||examBean.isFinished()==true)
-			return new SuperRespond(false, "考试已经结束");
+			System.err.println("考试已经结束");
+		String name= new String();
+		switch (typeId) {
+		case 4:
+			name = examBean.getShortAnswerById(--id).getPdf();
+			break;
+		case 5:
+			name = examBean.getFillBlankById(--id).getPdf();
+			break;
+		case 6:
+			name = examBean.getMachineTestById(--id).getPdf();
+			break;
+		default:
+			System.err.println("getPdf错误的typeId");
+			break;
+		}
 		
-		return examService.getPdf(examBean, typeId, --id);
+		String path = System.getProperty("project.root")+"EMSdata\\pdf\\";
+		String myfileName = typeId+"-"+id+".pdf";
+/*		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); */
+		response.setHeader("Content-type", "application/pdf");
+        
+        try {
+			// get your file as InputStream
+			InputStream is = new FileInputStream(new File(
+					path+name));
+			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+			response.flushBuffer();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	@RequestMapping("/handExam")
@@ -147,8 +180,6 @@ public class ExamController {
 			if(exambean==null)
 				return 0;
 			
-			ExamOperator.persist(token);
-			
 			
 			if(exambean.isFinished())//处理考生被老师强制终止之后的成绩返回
 				return gradingService.gradePaper(exambean);
@@ -157,9 +188,9 @@ public class ExamController {
 					( exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<exambean.getEarliestSubmit())
 			{
 				exambean.setFinished(true);
-				Thread thread = new persist(token);
-				thread.start();
 				int mark = gradingService.gradePaper(exambean);
+				Thread thread = new persist(token,mark);
+				thread.start();
 				return mark;
 			}
 			else
@@ -201,15 +232,17 @@ public class ExamController {
 
 class persist extends Thread{//将考生答题情况写会数据库
 	private UUID token ;
+	private int mark;
 	
-	public persist(UUID token){
+	public persist(UUID token,int mark){
 		this.token=token;
+		this.mark=mark;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		ExamOperator.persist(token);
+		ExamOperator.persist(token,mark);
 	}
 	
 	
