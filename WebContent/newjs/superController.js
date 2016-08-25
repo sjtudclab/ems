@@ -163,6 +163,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 			case "restart": // 撤销交卷
 				$scope.ifcheck = false;
 				$scope.selectionStatus = {};
+				break;
 			case "roomChange": // 更换场次
 			    $http.get('/EMS/supervise/roomChange', {
 					params: {
@@ -479,8 +480,8 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 				$scope.cancelAll();
 			},
 			function error(response) {
-				alert('刷新出错\n' + response.status
-					+ ' ' + response.statusText);
+				// alert('刷新出错\n' + response.status
+				// 	+ ' ' + response.statusText);
 			});
 	}
 });

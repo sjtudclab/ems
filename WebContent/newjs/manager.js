@@ -228,11 +228,11 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                 $scope.cancelAll();
                 $scope.orderCondition = 'id';
                 $scope.isReverse = false;
-            },
-            function error(response) {
-                alert('刷新出错\n' + response.status
-                    + ' ' + response.statusText);
-            });
+            },function error(){});
+            // function error(response) {
+            //     alert('刷新出错\n' + response.status
+            //         + ' ' + response.statusText);
+            // });
     }
     //试题装载
     $scope.loadExam = function () {
