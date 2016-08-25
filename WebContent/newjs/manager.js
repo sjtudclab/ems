@@ -333,11 +333,10 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     $scope.clear = function () {
         $http.get('/EMS/admin/examClear', {
             params: {
-                token: $window.sessionStorage.stoken,
-                fileName: $scope.fileName
+                token: $window.sessionStorage.stoken
             }
         }).then(function successCallback(response) {
-            alert(response.data);
+            alert(response.data.info);
         }, function errorCallback(response) {
         });
     }
@@ -385,11 +384,10 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     $scope.clear = function () {
         $http.get('/EMS/admin/stuClear', {
             params: {
-                token: $window.sessionStorage.stoken,
-                fileName: $scope.fileName
+                token: $window.sessionStorage.stoken
             }
         }).then(function successCallback(response) {
-            alert(response.data);
+            alert(response.data.info);
         }, function errorCallback(response) {
         });
     }
@@ -399,7 +397,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     //初始化表格
     $scope.roomMetaInfo = {
         'id': '场次',
-        'time':'时间'
+        'time':'开始时间'
     };
     // 状态码转化成易读string
     // $scope.statusDisplay = ['未登录', '已登录'];
@@ -412,14 +410,14 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.exportByRoom) {
-            $scope.selectionStatus[$scope.exportByRoom[x]] = true;
+            $scope.selectionStatus[$scope.exportByRoom[x].id] = true;
         }
     }
 
     // 取消选择
     $scope.cancelAll = function () {
         for (x in $scope.exportByRoom) {
-            $scope.selectionStatus[$scope.exportByRoom[x]] = false;
+            $scope.selectionStatus[$scope.exportByRoom[x].id] = false;
         }
     }
 
@@ -427,13 +425,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     $scope.checkSel = function (status, roomId) {
         $scope.cancelAll();
         $scope.selectionStatus[roomId] = true;
-        if (status == true) {
-            $scope.selectedNum += 1;
-        }
-        if (status == false) {
-            $scope.selectedNum -= 1;
-
-        }
+        
     }
 
     // 排序变量
@@ -486,13 +478,12 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
         }
         $http.get('/EMS/admin/sumDownloadClear', {
             params: {
-                token: $window.sessionStorage.stoken,
-                id:uidList
+                token: $window.sessionStorage.stoken
                 
             }
         }).then(function successCallback(response) {
-            alert("清空成功！");
-            alert(response.data);
+            // alert("清空成功！");
+            alert(response.data.info);
         }, function errorCallback(response) {
         });
     }
@@ -517,12 +508,11 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
         }
         $http.get('/EMS/admin/stuDownloadClear', {
             params: {
-                token: $window.sessionStorage.stoken,
-                id:uidList
+                token: $window.sessionStorage.stoken
             }
         }).then(function successCallback(response) {
-            alert("清空成功！");
-            alert(response.data);
+            // alert("清空成功！");
+            alert(response.data.info);
         }, function errorCallback(response) {
         });
     }
