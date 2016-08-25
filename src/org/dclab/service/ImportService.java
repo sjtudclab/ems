@@ -44,6 +44,9 @@ public class ImportService {
 		
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.paperMapper.add";
+		subjectRow.setDuration(subjectRow.getDuration()*60);
+		subjectRow.setEarliestSubmit(subjectRow.getEarliestSubmit()*60);
+		subjectRow.setLatestLogin(subjectRow.getLatestLogin()*60);
 		if(sqlSession.insert(statement, subjectRow)!=1)
 			System.err.println("插入数据库表paper失败");
 		sqlSession.commit();

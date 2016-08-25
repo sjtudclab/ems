@@ -144,7 +144,7 @@ public class ExamOperator {
 				for(FillBlankBean bean : fList){
 					bean.setFillNum(choiceMapperI.getFillNumById(bean.getId()));
 					bean.setGapNum(fList.size());
-					bean.setChoiceIdList(new ArrayList<>());
+					bean.setAnswerList(new ArrayList<>());
 				}
 				
 				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
