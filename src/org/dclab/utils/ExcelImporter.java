@@ -71,10 +71,10 @@ public class ExcelImporter {
     private static final int S_PDF		=	9;
     
     //online-judge sheet unique pdf cell
-    private static final int O_PDF		=	10;
+    private static final int O_PDF		=	9;
     
     //blank-filing sheet unique pdf cell
-    private static final int B_PDF		=	9;
+    private static final int B_PDF		=	10;
     
     //candidate-paper sheet unique column index
     private static final int C_UID		=	0;
