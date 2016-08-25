@@ -17,4 +17,9 @@
 	insert into topic(number,content,typeId,img,audio,video,paperId) values
 	(#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{paperId})
 </insert>
+
+<insert id="addSFM" parameterType="org.dclab.model.TopicRow" useGeneratedKeys="true" keyProperty="id">
+	insert into topic(number,content,typeId,img,audio,video,pdf,paperId) values
+	(#{number},#{content},#{TYPE},#{img},#{audio},#{video},#{pdf},#{paperId})
+</insert>
  </mapper>

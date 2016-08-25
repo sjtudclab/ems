@@ -123,11 +123,9 @@ public class AdminService {
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
 		
 		List<RoomInfoBean> list=sessionMapperI.getRoomInfo();
-		System.out.println(list);
 		for(RoomInfoBean bean : list){
 			System.out.println(bean.getUid());
 			UUID token=SupervisorOperator.idTokenMap.get(bean.getUid());
-			System.out.println(token);
 			bean.setSize(sessionCanMapperI.getSizeOfSession(bean.getId()));
 			//检测监考老师是否登录,可以考虑删除，关联的位置有superbean，userservice登录时
 			if(SupervisorOperator.tokenSuperMap.get(token).getSign()==1)

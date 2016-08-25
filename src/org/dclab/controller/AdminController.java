@@ -241,8 +241,8 @@ public class AdminController {
 		ExcelExporter excel = new ExcelExporter(path);
 		
 		excel.exportMarks(exportService.getScoreCollect(id), "成绩汇总");
-		
-		
+		String myfileName = path.substring(path.lastIndexOf('\\')+1);
+		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
 		try {
 			// get your file as InputStream
 			InputStream is = new FileInputStream(new File(
@@ -302,10 +302,14 @@ public class AdminController {
 		Paper4PDF	paper	=	new Paper4PDF(uid, title, topicList, topicNameList);
         PDFWriter.writePaper(paper, path);
         System.out.println(path+uid);
+        
+        String myfileName = uid+".pdf";
+		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
+        
         try {
 			// get your file as InputStream
 			InputStream is = new FileInputStream(new File(
-					path+uid));
+					path+uid+".pdf"));
 			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 			response.flushBuffer();
 		} catch (IOException ex) {

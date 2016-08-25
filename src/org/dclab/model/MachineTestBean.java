@@ -16,13 +16,15 @@ public class MachineTestBean implements Serializable {
 	private String img;//存储题目中可能存在的图片的地址
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
+	private boolean showPdf;
+	private String pdf;
 	
 	
 	
 	public MachineTestBean() {
 		super();
 	}
-	public MachineTestBean(int id, String content, int machineNum, String img, String audio, String video) {
+	public MachineTestBean(int id, String content, int machineNum, String img, String audio, String video,boolean showPdf,String pdf) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -30,11 +32,27 @@ public class MachineTestBean implements Serializable {
 		this.img = img;
 		this.audio = audio;
 		this.video = video;
+		this.showPdf=showPdf;
+		this.pdf=pdf;
 	}
 	@Override
 	protected Object clone() {
 		// TODO Auto-generated method stub
-		return new MachineTestBean(this.id, this.content, this.machineNum, this.img, this.audio, this.video);
+		return new MachineTestBean(this.id, this.content, this.machineNum, this.img, this.audio, this.video, this.showPdf,this.pdf);
+	}
+	
+	
+	public boolean isShowPdf() {
+		return showPdf;
+	}
+	public void setShowPdf(boolean showPdf) {
+		this.showPdf = showPdf;
+	}
+	public String getPdf() {
+		return pdf;
+	}
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
 	}
 	public int getId() {
 		return id;
@@ -85,6 +103,7 @@ public class MachineTestBean implements Serializable {
 	public void setVideo(String video) {
 		this.video = video;
 	}
+
 	
 	
 	

@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.dclab.model.ContentBean;
+import org.dclab.model.CorrectAnswerBean;
 import org.dclab.model.FillBlankBean;
 import org.dclab.model.JudgementBean;
 import org.dclab.model.MachineTestBean;
@@ -71,12 +72,15 @@ public interface TopicMapperI {
 	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=3 AND paperId=#{paperId}")
 	public List<MatchingBean> getMatchByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=4 AND paperId=#{paperId}")
+	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=4 AND paperId=#{paperId}")
 	public List<ShortAnswerBean> getShortByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=5 AND paperId=#{paperId}")
+	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=5 AND paperId=#{paperId}")
 	public List<FillBlankBean> getFillBlankByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=6 AND paperId=#{paperId}")
+	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=6 AND paperId=#{paperId}")
 	public List<MachineTestBean> getMachineByPaperId(int paperId);
+	
+	@Select("SELECT id AS topicId,correctAnswer AS choiceId,points FROM `topic` WHERE paperId=#{paperId}")
+	public List<CorrectAnswerBean> getCorrectAnswerByPaperId(int paperId);
 }

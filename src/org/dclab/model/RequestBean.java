@@ -14,8 +14,22 @@ public class RequestBean {
 	private String choiceIdMap;
 	private String answer;//简答题的答案
 	private boolean ifCheck;
+	private List<String> answerList;//填空题答案
+	public String fileName;
 	
 	
+	public List<String> getAnswerList() {
+		return answerList;
+	}
+	public void setAnswerList(List<String> answerList) {
+		this.answerList = answerList;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	public String getAnswer() {
 		return answer;
 	}
@@ -70,6 +84,7 @@ public class RequestBean {
 	public void setChoiceIdMap(String choiceIdMap) {
 		this.choiceIdMap = choiceIdMap;
 	}
+
 	
 	
 }

@@ -20,6 +20,8 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	private String img;//存储题目中可能存在的图片的地址
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
+	private boolean showPdf;
+	private String pdf;
 	
 	public ShortAnswerBean(){}
 	
@@ -36,6 +38,22 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	}
 	
 	
+	public boolean isShowPdf() {
+		return showPdf;
+	}
+
+	public void setShowPdf(boolean showPdf) {
+		this.showPdf = showPdf;
+	}
+
+	public String getPdf() {
+		return pdf;
+	}
+
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
+	}
+
 	public String getImg() {
 		return img;
 	}

@@ -36,6 +36,7 @@ public class ExamOperator {
 	private static final String imgPath="EMSdata\\img\\";
 	private static final String audioPath="EMSdata\\audio\\";
 	private static final String vedioPath="EMSdata\\video\\";
+	private static final String pdfPath="EMSdata\\pdf\\";
 	public static Map<String, UUID> idTokenMap = new HashMap<>();
 	
 	/**
@@ -138,18 +139,51 @@ public class ExamOperator {
 				List<ShortAnswerBean> saList = topicMapperI.getShortByPaperId(paperId);
 				for(ShortAnswerBean bean : saList){
 					bean.setShortNum(saList.size());
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
+		    		{
+		    			bean.setPdf(pdfPath+bean.getPdf());
+		    			bean.setShowPdf(true);
+		    		}
 				}
 				
 				List<FillBlankBean> fList = topicMapperI.getFillBlankByPaperId(paperId);
 				for(FillBlankBean bean : fList){
 					bean.setFillNum(choiceMapperI.getFillNumById(bean.getId()));
 					bean.setGapNum(fList.size());
-					bean.setChoiceIdList(new ArrayList<>());
+					bean.setAnswerList(new ArrayList<>());
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
+		    		{
+		    			bean.setPdf(pdfPath+bean.getPdf());
+		    			bean.setShowPdf(true);
+		    		}
 				}
 				
 				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
 				for(MachineTestBean bean : mList2){
 					bean.setMachineNum(mList2.size());
+					if(bean.getImg()!=null&&bean.getImg().length()!=0)
+		    			bean.setImg(imgPath+bean.getImg());
+		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
+		    			bean.setAudio(audioPath+bean.getAudio());
+		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
+		    			bean.setVideo(vedioPath+bean.getVideo());
+		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
+		    		{
+		    			bean.setPdf(pdfPath+bean.getPdf());
+		    			bean.setShowPdf(true);
+		    		}
 				}
 				
 				

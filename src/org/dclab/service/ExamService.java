@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
@@ -57,6 +58,10 @@ public class ExamService {
 			return exambean.getJudgementById(0);
 		case 4:
 			return exambean.getShortAnswerById(0);
+		case 5:
+			return exambean.getFillBlankById(0);
+		case 6:
+			return exambean.getMachineTestById(0);
 		default:
 			System.out.println("获取第一题出错");
 		return null;
@@ -89,14 +94,24 @@ public class ExamService {
 		}
 	}
 	//多选题存储，重载
-	public void storeTopic(ExamBean exambean,int typeId,int id,List<Integer> choiceIdList,boolean ifCheck)
+	public void storeTopic(ExamBean exambean,int typeId,int id,List<?> List,boolean ifCheck)
 	{
-		if(choiceIdList!=null)
-			exambean.getMultiChoiceById(id).setChoiceIdList(choiceIdList);
+		if(typeId==1)
+		{
+		if(List!=null)
+			exambean.getMultiChoiceById(id).setChoiceIdList((java.util.List<Integer>) List);
 		if(exambean.getMultiChoiceById(id).getChoiceIdList()!=null&&
 				exambean.getMultiChoiceById(id).getChoiceIdList().size()!=0)
 			exambean.getFinishTopic().add(exambean.getMultiChoiceById(id).getId());
 		exambean.getMultiChoiceById(id).setIfCheck(ifCheck);
+		}
+		else{
+			if(List!=null)
+				exambean.getFillBlankById(id).setAnswerList((java.util.List<String>) List);
+			if(exambean.getFillBlankById(id).getAnswerList()!=null&&exambean.getFillBlankById(id).getAnswerList().size()!=0)
+				exambean.getFinishTopic().add(exambean.getFillBlankById(id).getId());
+			exambean.getFillBlankById(id).setIfCheck(ifCheck);
+		}
 	}
 	//匹配题
 	public void storeTopic(ExamBean exambean,int typeId,int id,Map<Integer, Integer> choiceIdMap,boolean ifCheck)
@@ -108,11 +123,23 @@ public class ExamService {
 	}
 	//简答题存储
 	public void storeTopic(ExamBean exambean,int typeId,int id,String answer,boolean ifCheck){
+		if(typeId==4)
+		{
 		exambean.getShortAnswerById(id).setAnswer(answer);
 		if(exambean.getShortAnswerById(id).getAnswer()!=null)
 			exambean.getFinishTopic().add(exambean.getShortAnswerById(id).getId());
 		exambean.getShortAnswerById(id).setIfCheck(ifCheck);
+		}
+		else
+		{
+			exambean.getMachineTestById(id).setFileName(answer);
+			if(exambean.getMachineTestById(id).getFileName()!=null)
+				exambean.getFinishTopic().add(exambean.getMachineTestById(id).getId());
+			exambean.getMachineTestById(id).setIfCheck(ifCheck);
+		}
 	}
+
+
 	//根据typeid和id获取题目。
 	public Object getTopic(ExamBean exambean,int typeId,int id)
 	{
@@ -143,6 +170,18 @@ public class ExamService {
 				return null;
 			else
 				return exambean.getShortAnswerById(id);
+		case 5:
+			if(id==exambean.getFillBlankList().size()||id<0)
+				return null;
+			else {
+				return exambean.getFillBlankById(id);
+			}
+		case 6:
+			if(id==exambean.getMachineList().size()||id<0)
+				return null;
+			else {
+				return exambean.getMachineTestById(id);
+			}
 		default:
 			System.out.println("getTopic error");
 			return null;
@@ -335,6 +374,29 @@ public class ExamService {
 					list.add(new CheckBean(i+1, 2));
 			}
 			break;
+		case 5:
+			for(int i=0;i<exambean.getFillBlankList().size();i++){
+				if(exambean.getFillBlankById(i).isIfCheck()==true)
+					list.add(new CheckBean(i+1, 0));
+				else if(exambean.getFillBlankById(i).getAnswerList()!=null&&
+						exambean.getFillBlankById(i).getAnswerList().size()!=0)
+					list.add(new CheckBean(i+1, 1));
+				else {
+					list.add(new CheckBean(i+1, 2));
+				}
+			}
+			break;
+		case 6:
+			 for(int i =0; i<exambean.getMachineList().size();i++){
+				 if(exambean.getMachineTestById(i).isIfCheck()==true)
+					 list.add(new CheckBean(i+1, 0));
+				 else if(exambean.getMachineTestById(i).getFileName()!=null)
+					 list.add(new CheckBean(i+1, 1));
+				 else {
+					list.add(new CheckBean(i+1, 2));
+				}
+			 }
+			 break;
 		default:
 			System.out.println("getchecklist error");
 		}
@@ -349,6 +411,20 @@ public class ExamService {
 		}
 		else
 			return exambean.getEXAM_TIME();
+	}
+	
+	public String getPdf(ExamBean examBean,int typeId,int id){
+		switch (typeId) {
+		case 4:
+			return examBean.getShortAnswerById(id).getPdf();
+		case 5:
+			return examBean.getFillBlankById(id).getPdf();
+		case 6:
+			return examBean.getMachineTestById(id).getPdf();
+		default:
+			System.err.println("getPdf出错");
+			return null;
+		}
 	}
 
 

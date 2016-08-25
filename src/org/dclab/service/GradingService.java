@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.CorrectAnswerMapperI;
+import org.dclab.mapping.TopicMapperI;
 import org.dclab.model.CorrectAnswerBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.JudgementBean;
@@ -140,10 +141,11 @@ public class GradingService {
 		int matchingScore		=	0;
 		
 		//load correct answer from database
-		SqlSession sqlSession=MyBatisUtil.getSqlSession();
-		CorrectAnswerMapperI camapper=sqlSession.getMapper(CorrectAnswerMapperI.class);
 		
-		List<CorrectAnswerBean> correctAnswerBeans = camapper.getCorrectAnswer();	//TO DO: mapping from DB
+		SqlSession sqlSession=MyBatisUtil.getSqlSession();
+		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
+		int paperId=examBean.getPaperId();
+		List<CorrectAnswerBean> correctAnswerBeans = topicMapperI.getCorrectAnswerByPaperId(paperId);	//TO DO: mapping from DB
 		sqlSession.close();
 		
 

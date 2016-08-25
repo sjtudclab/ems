@@ -37,4 +37,5 @@ public class ShortAnswerRow extends TopicRow{
 				+ ", img=" + img + ", audio=" + audio + ", video=" + video + "]";
 	}
 
+
 }

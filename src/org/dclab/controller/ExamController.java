@@ -1,5 +1,7 @@
 package org.dclab.controller;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,11 @@ import org.dclab.model.SuperRespond;
 import org.dclab.service.ExamService;
 import org.dclab.service.GradingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/exam")
@@ -87,6 +91,11 @@ public class ExamController {
 		case 4:
 			examService.storeTopic(exambean, request.getTypeId(), id, request.getAnswer(), request.isIfCheck());
 			break;
+		case 5:
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getAnswerList(), request.isIfCheck());
+			break;
+		case 6:
+			examService.storeTopic(exambean, request.getTypeId(), id, request.getFileName(), request.isIfCheck());
 		default:
 			System.out.println("controller getTopic 出错");
 			break;
@@ -122,6 +131,15 @@ public class ExamController {
 		return examService.getTopic(exambean, typeId, --id);
 	}
 	
+	@RequestMapping("/getPdf")
+	public Object getPdf(@RequestParam UUID token,@RequestParam int typeId,@RequestParam int id){
+		ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+		if(examBean==null||examBean.isFinished()==true)
+			return new SuperRespond(false, "考试已经结束");
+		
+		return examService.getPdf(examBean, typeId, --id);
+	}
+	
 	@RequestMapping("/handExam")
 	public Object handin(@RequestParam(value="token")UUID token){
 			ExamBean exambean=examService.getExambeanByToken(token);
@@ -139,12 +157,33 @@ public class ExamController {
 					( exambean.getEXAM_TIME()-(System.currentTimeMillis()-exambean.getStartTime())/1000  )<exambean.getEarliestSubmit())
 			{
 				exambean.setFinished(true);
+				Thread thread = new persist(token);
+				thread.start();
 				int mark = gradingService.gradePaper(exambean);
 				return mark;
 			}
 			else
 				return new SuperRespond(false, "还没到交卷时间");
 				
+	}
+	
+	@PostMapping("/machineForm")
+	public Map<String, String> machineFormUpload(@RequestParam("file") MultipartFile file) {
+		String path=System.getProperty("project.root")+"/files/import/";
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			FileOutputStream fos = new FileOutputStream(path + file.getOriginalFilename());
+			fos.write(file.getBytes());
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			map.put("info", "上传失败");
+			return map;
+		}
+		map.put("info", "上传成功");
+		return map;
+
 	}
 	
 	@RequestMapping("/getTime")
@@ -158,5 +197,21 @@ public class ExamController {
 	}
 
 
+}
+
+class persist extends Thread{//将考生答题情况写会数据库
+	private UUID token ;
+	
+	public persist(UUID token){
+		this.token=token;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		ExamOperator.persist(token);
+	}
+	
+	
 }
 

@@ -2230,7 +2230,7 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 
     /*$scope.option = "撰写答案";*/
     $scope.askPdf=function(){
-         window.open("/EMS/exam/stuSimple?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+         window.open("/EMS/exam/getPdf?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage+"&typeId=4");
     }
 
 
@@ -2606,9 +2606,9 @@ demo0.controller('skiptb5', function ($scope, $http, $window, $state, $statePara
 demo0.controller('skiptb6', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
     //填空题
 
-    $scope.showPdf = true;
+    // $scope.showPdf = true;
     $scope.askPdf=function(){
-         window.open("/EMS/exam/stuFillgap?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+         window.open("/EMS/exam/getPdf?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage+"&typeId=5");
     }
 
     if ($stateParams.type == 6) {
@@ -3006,9 +3006,9 @@ demo0.directive('customOnChange', function () {
     };
 });
 demo0.controller('skiptb7', function ($scope, $http, $window, $state, $stateParams, $rootScope) {
-    $scope.showPdf = true;
+    // /$scope.showPdf = true;
     $scope.askPdf=function(){
-         window.open("/EMS/exam/stuMachine?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage);
+         window.open("/EMS/exam/getPdf?token=" + $window.sessionStorage.token + "&id=" + $scope.currentPage+"&typeId=6");
     }
     //上机题
     $scope.progressPer = 0;

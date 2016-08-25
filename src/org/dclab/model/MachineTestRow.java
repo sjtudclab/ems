@@ -37,4 +37,5 @@ public class MachineTestRow extends TopicRow {
 				+ content + ", img=" + img + ", audio=" + audio + ", video=" + video + "]";
 	}
 
+
 }

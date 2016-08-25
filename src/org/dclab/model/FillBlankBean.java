@@ -1,6 +1,7 @@
 package org.dclab.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FillBlankBean implements Serializable{
@@ -12,18 +13,20 @@ public class FillBlankBean implements Serializable{
 	private String content;//题干
 	private boolean ifCheck;//检查标记
 	private int fillNum;//需要填的空的个数
-	private List<String> choiceIdList;
+	private List<String> answerList;
 	private int GapNum;//存储简答题数目
 	private String img;//存储题目中可能存在的图片的地址
 	private String audio;//存储题目中可能存在的音频的地址
 	private String video;//存储题目中可能存在的视频的地址
+	private boolean showPdf;
+	private String pdf;
 	
 	
 	
 	public FillBlankBean() {
 		super();
 	}
-	public FillBlankBean(int id, String content, int fillNum, int gapNum, String img, String audio, String video) {
+	public FillBlankBean(int id, String content, int fillNum, int gapNum, String img, String audio, String video, boolean showPdf,String pdf) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -32,11 +35,33 @@ public class FillBlankBean implements Serializable{
 		this.img = img;
 		this.audio = audio;
 		this.video = video;
+		this.showPdf=showPdf;
+		this.pdf=pdf;
 	}
 	@Override
 	protected Object clone(){
 		// TODO Auto-generated method stub
-		return new FillBlankBean(this.id, this.content, this.fillNum, this.GapNum, this.img, this.audio, this.video);
+		return new FillBlankBean(this.id, this.content, this.fillNum, this.GapNum, this.img, this.audio, this.video,this.showPdf,this.pdf);
+	}
+	
+	
+	public boolean isShowPdf() {
+		return showPdf;
+	}
+	public void setShowPdf(boolean showPdf) {
+		this.showPdf = showPdf;
+	}
+	public String getPdf() {
+		return pdf;
+	}
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
+	}
+	public List<String> getAnswerList() {
+		return answerList;
+	}
+	public void setAnswerList(List<String> answerList) {
+		this.answerList = answerList;
 	}
 	public int getId() {
 		return id;
@@ -62,12 +87,7 @@ public class FillBlankBean implements Serializable{
 	public void setFillNum(int fillNum) {
 		this.fillNum = fillNum;
 	}
-	public List<String> getChoiceIdList() {
-		return choiceIdList;
-	}
-	public void setChoiceIdList(List<String> choiceIdList) {
-		this.choiceIdList = choiceIdList;
-	}
+
 	public int getGapNum() {
 		return GapNum;
 	}
@@ -92,6 +112,7 @@ public class FillBlankBean implements Serializable{
 	public void setVideo(String video) {
 		this.video = video;
 	}
+
 	
 	
 }
