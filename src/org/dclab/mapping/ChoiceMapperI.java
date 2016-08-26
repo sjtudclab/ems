@@ -22,5 +22,4 @@ public interface ChoiceMapperI {
 	@Select("TRUNCATE TABLE choice")
 	public void deleteAll();
 	
-	
 }

@@ -112,8 +112,6 @@ public class FillBlankBean implements Serializable{
 	public void setVideo(String video) {
 		this.video = video;
 	}
-
-
 	
 	
 }

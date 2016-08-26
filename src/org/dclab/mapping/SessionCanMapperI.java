@@ -33,4 +33,5 @@ public interface SessionCanMapperI {
 	@Select("TRUNCATE TABLE session_candidate")
 	public void deleteAll();
 
+
 }

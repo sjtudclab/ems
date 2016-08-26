@@ -84,7 +84,6 @@ public class RequestBean {
 	public void setChoiceIdMap(String choiceIdMap) {
 		this.choiceIdMap = choiceIdMap;
 	}
-
 	
 	
 }

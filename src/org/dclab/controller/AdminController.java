@@ -85,6 +85,7 @@ public class AdminController {
 	
 	@RequestMapping("/examClear")
 	public Map<String, String> clearExam(@RequestParam UUID token){
+		System.out.println("进入试卷清空函数");
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		PaperMapperI paperMapperI = sqlSession.getMapper(PaperMapperI.class);
 		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
@@ -102,6 +103,7 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
+		sqlSession.close();
 		return map;
 	}
 	
@@ -121,6 +123,7 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
+		sqlSession.close();
 		return map;
 	}
 	
@@ -136,6 +139,7 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
+		sqlSession.close();
 		return map;
 	}
 
@@ -151,6 +155,7 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
+		sqlSession.close();
 		return map;
 	}
 	
@@ -166,6 +171,7 @@ public class AdminController {
 			List<Timestamp> list = sessionMapperI.getStartTime();
 			ExamOperator.newLoad(list);
 			SupervisorOperator.load();
+			sqlSession.close();
 			return new SuperRespond(true);
 		}
 		else
@@ -283,7 +289,7 @@ public class AdminController {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		List<SessionBean> list = sessionMapperI.getSessionList();
-		 
+		sqlSession.close();
 		return list;
 	}
 	
@@ -395,7 +401,7 @@ public class AdminController {
 			ex.printStackTrace();
 		}
 		
-		
+		sqlSession.close();
 	}
 	
 }

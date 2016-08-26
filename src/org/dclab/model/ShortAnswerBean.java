@@ -112,7 +112,4 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 		return serialVersionUID;
 	}
 
-
-	
-
 }

@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Update;
 
 public interface PaperMapperI {
 	@Update("TRUNCATE TABLE paper")
-	public void deleteAll();
+	public void deleteAll(); 
 }

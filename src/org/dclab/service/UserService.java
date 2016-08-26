@@ -39,7 +39,7 @@ import sun.misc.BASE64Encoder;
  */
 @Service
 public class UserService {
-
+	private static final String imgPath="EMSdata\\img\\";
 	public Object login(String Uid)
 	{
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
@@ -82,7 +82,7 @@ public class UserService {
 					map.put("gender", user.getGender());
 					map.put("token", token);
 				
-					String dir=user.getPhoto();
+					String dir=System.getProperty("project.root")+imgPath+user.getPhoto();
 					InputStream in=null;
 					byte[] data=null;
 					try{
