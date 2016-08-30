@@ -36,7 +36,8 @@ import com.sun.corba.se.impl.protocol.giopmsgheaders.ReplyMessage_1_2;
 import org.dclab.common.Constants;
 @Service
 public class ImportService {
-	
+	private static final String right = "对";
+	private static final String error = "错";
 	
 	//返回paperId
 	public int importSubject(SubjectRow subjectRow){
@@ -64,9 +65,24 @@ public class ImportService {
 		String statement = "org.dclab.mapping.topicMapper.addTopic";
 		String statement1 = "org.dclab.mapping.choiceMapper.add";
 		String statement2 = "org.dclab.mapping.topicMapper.addSFM";
+		String statement3 = "org.dclab.mapping.choiceMapper.addJudge";
 		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
 		MatchItemMapperI matchItemMapperI = sqlSession.getMapper(MatchItemMapperI.class);
 		ChoiceMapperI choiceMapperI = sqlSession.getMapper(ChoiceMapperI.class);
+		
+		//插入选择题的选项
+		ChoicesBean choicesBean1 = new ChoicesBean(right);
+		if(sqlSession.insert(statement3, choicesBean1)!=1)
+			System.err.println("插入choice失败");
+		sqlSession.commit();
+		Constants.JUDGEMENT_TRUE = choicesBean1.getChoiceId();
+		
+		choicesBean1.setContent(error);
+		if(sqlSession.insert(statement3, choicesBean1)!=1)
+			System.err.println("插入choice失败");
+		sqlSession.commit();
+		Constants.JUDGEMENT_FALSE = choicesBean1.getChoiceId();
+		
 		
 		switch (topicList.get(0).getTYPE()) {
 		case Constants.SINGLE_CHOICE:

@@ -4,4 +4,8 @@
 <insert id="add" parameterType="org.dclab.model.ChoicesBean" useGeneratedKeys="true" keyProperty="choiceId">
   insert into choice(content,topicId) values(#{content}, #{topicId})
 </insert>
+
+<insert id="addJudge" parameterType="string" useGeneratedKeys="true" keyProperty="choiceId">
+	INSERT INTO choice (content) VALUES (#{content})
+</insert>
  </mapper>

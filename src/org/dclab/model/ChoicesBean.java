@@ -13,6 +13,12 @@ public class ChoicesBean implements Cloneable{
 	public ChoicesBean() {
 		super();
 	}
+	
+	public ChoicesBean(String content) {
+		super();
+		this.content = content;
+	}
+
 	public ChoicesBean(String content, int topicId) {
 		super();
 		this.content = content;
