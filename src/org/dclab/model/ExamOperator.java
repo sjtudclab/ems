@@ -56,6 +56,9 @@ public class ExamOperator {
 		String statement = "org.dclab.mapping.paperMapper.getDuration";
 		String statement1= "org.dclab.mapping.paperMapper.getEarliest";
 		
+		idTokenMap = new HashMap<>();
+		idTokenMap = new HashMap<>();
+		
 		List<Integer> sidList = new ArrayList<>();
 		for(Timestamp timestamp : list)
 		{
