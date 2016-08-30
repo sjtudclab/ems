@@ -158,8 +158,13 @@ public class UserService {
 			sqlSession.close();
 			return map;
 		case 2:
-			UUID token2=TokenGenerator.generate();
-			AdminBean.adminTokenMap.put(Uid, token2);
+			UUID token2;
+			if(AdminBean.adminTokenMap.containsKey(Uid))
+				token2 = AdminBean.adminTokenMap.get(Uid);
+			else {
+				token2=TokenGenerator.generate();
+				AdminBean.adminTokenMap.put(Uid, token2);
+			}
 
 			map.put("Rid",2);
 			AuthorityMapperI amapper=sqlSession.getMapper(AuthorityMapperI.class);
