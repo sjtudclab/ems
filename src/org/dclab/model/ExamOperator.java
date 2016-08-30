@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
+import org.dclab.common.Constants;
 import org.dclab.mapping.CanAnswerMapperI;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
@@ -112,7 +113,10 @@ public class ExamOperator {
 				List<JudgementBean> jList = topicMapperI.getJudgeByPaperId(paperId);
 				for(JudgementBean bean : jList){
 					int topicId = bean.getId();
-					bean.setChoiceList(choiceMapperI.getJudgeChoice());
+					int right = Constants.JUDGEMENT_TRUE;
+					int error = Constants.JUDGEMENT_FALSE;
+					
+					bean.setChoiceList(choiceMapperI.getJudgeChoice(right,error));
 					bean.setJudgeNum(jList.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
 		    			bean.setImg(imgPath+bean.getImg());
