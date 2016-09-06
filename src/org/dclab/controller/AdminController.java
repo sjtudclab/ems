@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -340,8 +341,16 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/stuDownload")
-	public void getStuFile(@RequestParam UUID token , HttpServletResponse response){
+	public void getStuFile(@RequestParam UUID token , HttpServletResponse response) throws IOException{
 
+		if(ExamOperator.tokenExamMap.isEmpty())
+		{
+			response.setHeader("Content-type","text/html;charset=UTF-8");
+			 String data = "试卷尚未装载，不能导出";
+			 OutputStream stream = response.getOutputStream();
+			 stream.write(data.getBytes("UTF-8"));
+		}
+		else{
 		String path = System.getProperty("project.root")+"files\\export\\";
 		
 		String uid= "a70012";
@@ -403,7 +412,7 @@ public class AdminController {
 		
 		sqlSession.close();
 	}
-	
+	}
 }
  class examImportThread extends Thread{
 	private String fileName;
