@@ -23,7 +23,7 @@
 	</select>
 	
 	<select id="getPSPName" parameterType="int" resultType="org.dclab.model.ScoreCollectBean">
-		SELECT proName,subName,paperNum FROM `paper` WHERE paperId=#{id}
+		SELECT proName,proId,subName,subId,paperNum FROM `paper` WHERE paperId=#{id}
 	</select>
 	
 </mapper>

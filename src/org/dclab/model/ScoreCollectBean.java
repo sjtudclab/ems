@@ -6,7 +6,9 @@ package org.dclab.model;
  */
 public class ScoreCollectBean {
 	public String proName;
+	public String proId;	//newly add
 	public String subName;
+	public String subId;	//newly add
 	public String paperNum;
 	public String Uid;
 	public String Uname;	
