@@ -16,5 +16,19 @@
             <uib-progressbar class="progress-striped active" animate='false' value="clearPer" type="success" style="width:30%" ng-show=clearshow>{{clearPer}}%</uib-progressbar>
         </div>
     </div>
+    <div ng-controller="TabsDemoCtrl" style="height:84%">
+        <ul class="nav nav-tabs">
+            <li ng-repeat="x in problemMetaInfo" class="active:{{active[$index]}}">
+                <a ng-click="sel($index)" style="background-color:#fff;border-top-color:#ddd;border-left-color:#ddd;border-right-color:#ddd;border-bottom-color:{{color[$index]}};" class="cursor-pointer">{{x}}</a>
+            </li>
+        </ul>
+        <div style="height:94%">
+            <div ng-repeat="x in problemMetaInfo" style="background-color:{{color[$index]}};height:100%;display:{{display[$index]}}">
+                <!--                  <div  style="height:100%">ff</div>-->
+                <!--<div ui-view="tab{{$index+1}}" style="height:100%"></div>-->
+                <div ng-include="exInput"></div>
+            </div>
+        </div>
+    </div>
     <!--</div>-->
 </div>
