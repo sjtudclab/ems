@@ -4,17 +4,22 @@
             导入试卷
 
         </div>-->
-
     <div class="panel-body" ng-controller="ImportFile">
         <input type="file" id="selectFile" style="display:none" custom-on-change="selectFile">
         <input ng-model="fileName" placeholder="选择文件" disabled>
-        <label for="selectFile" class="btn btn-primary">选择文件</label></button>
+        <label for="selectFile" class="btn btn-primary">选择文件</label>
         <button type="button" ng-click="upload()" class="btn btn-info">导入文件</button>
         <button type="button" ng-click="clear()" class="btn btn-info">清空卷库</button>
+        <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=clearshow></span>
         <div style="padding-left:33%">
             <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" align="center" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
-            <uib-progressbar class="progress-striped active" animate='false' value="clearPer" type="success" style="width:30%" ng-show=clearshow>{{clearPer}}%</uib-progressbar>
+            <!--  <uib-progressbar class="progress-striped active" animate='false' value="clearPer" type="success" style="width:30%" ng-show=clearshow>{{clearPer}}%</uib-progressbar> -->
+        </div>
+        <div style="font-size:120%">
+            <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=checkshow>
+                
+            </span>
+            <span ng-show=checkshow> 正在检测中......</span>
         </div>
     </div>
-    <!--</div>-->
 </div>

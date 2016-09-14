@@ -452,3 +452,12 @@ th {
 .popover {
     max-width: 100%;
 }
+
+@keyframes refreshing {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
