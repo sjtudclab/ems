@@ -13,6 +13,7 @@ import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -278,7 +279,10 @@ public class AdminController {
 			return map;
 		}
 		
-		Thread thread = new examImportThread(fileName);
+		//每一次上传把 excel中的所有的文件名都放入hashset
+		HashSet<String> fileSet	=	new HashSet<>();
+		
+		Thread thread = new examImportThread(fileName, fileSet);
 		thread.start();
 		map.put("info", "上传成功");
 		return map;
@@ -312,7 +316,10 @@ public class AdminController {
 			return map;
 		}
 		
-		Thread thread = new relationImportThread(fileName);
+		//每一次上传把 excel中的所有的文件名都放入hashset
+		HashSet<String> fileSet	=	new HashSet<>();
+		
+		Thread thread = new relationImportThread(fileName, fileSet);
 		thread.start();
 		map.put("info", "上传成功");
 		return map;
@@ -416,16 +423,19 @@ public class AdminController {
 }
  class examImportThread extends Thread{
 	private String fileName;
+	private HashSet<String> fileSet;
 	 
-	public examImportThread(String fileName) {
+	public examImportThread(String fileName, HashSet<String> fileSet) {
 		super();
 		this.fileName = fileName;
+		this.fileSet  =	fileSet;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		ExcelImporter excel = new ExcelImporter(this.fileName);
+		excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
         excel.parseSubjectSheet();
         excel.parseSingleChoice();
         excel.parseMultiChoice();
@@ -434,23 +444,28 @@ public class AdminController {
         excel.parseShortAnswer();
         excel.parseFillBlank();
         excel.parseMachineTest();
+        excel.close();		//关闭文件
 	}	
 }
  
  class relationImportThread extends Thread{
-	 private String fileName;
+	private String fileName;
+	private HashSet<String> fileSet; 
 
-	public relationImportThread(String fileName) {
+	public relationImportThread(String fileName, HashSet<String> fileSet) {
 		super();
 		this.fileName = fileName;
+		this.fileSet  = fileSet;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
         ExcelImporter	excel	=	new ExcelImporter(this.fileName);
+        excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
         excel.parseCandidatePaper();
         excel.parseCanidateRoom();
+        excel.close();//关闭文件
 	}
 	 
 	

@@ -16,6 +16,7 @@ import org.dclab.model.SubjectRow;
 import org.dclab.model.TopicRow;
 import org.dclab.service.ImportService;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +38,7 @@ public class ExcelImporter {
     private Sheet sheet;								
     private Map<String, Integer>	paperIdMap;			//get paper id by paper number, used in topic parsing
     													//get paper id by subject info, used in room parsing
+    private HashSet<String> fileSet;
     private static Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
     
     //subject sheet column index
@@ -67,6 +71,9 @@ public class ExcelImporter {
     private static final int M_VIDEO	=	9;
     private static final int M_CHOICE_N	=	10;
     private static final int M_CHOICE_1	=	11;
+    
+    //matching sheet, unique, denote the start of items to be matched
+    private static int M_START	=	15;
     
     //short answer sheet unique pdf cell
     private static final int S_PDF		=	9;
@@ -137,8 +144,16 @@ public class ExcelImporter {
         } else
             throw new RuntimeException("文档格式不正确!");
     }
+    
+    public HashSet<String> getFileSet() {
+		return fileSet;
+	}
 
-    /**
+	public void setFileSet(HashSet<String> fileSet) {
+		this.fileSet = fileSet;
+	}
+
+	/**
      * read 1 line in Subject Sheet to construct a subject row for paperID producing
      * @param startRow
      * @return
@@ -253,13 +268,31 @@ public class ExcelImporter {
     	singleChoiceRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	singleChoiceRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		singleChoiceRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		singleChoiceRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	singleChoiceRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		singleChoiceRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		singleChoiceRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	singleChoiceRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		singleChoiceRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		singleChoiceRow.setVideo(file);
+    	}
     	
     	cell		=	row.getCell(T_CHOICE_N);
     	int	choiceN	=	(cell == null) ? DEFAUTL_CHOICE_N : (int)cell.getNumericCellValue();
@@ -284,7 +317,7 @@ public class ExcelImporter {
     	
     	ImportService service = new ImportService();
     	
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	//System.out.println("Row num : "+rowNum);
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
@@ -342,13 +375,34 @@ public class ExcelImporter {
     	topicRow.setHalfMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(M_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setImg(null);
+			
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setImg(file);
+			
+		}
+    	
     	
     	cell		=	row.getCell(M_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setAudio(null);
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setAudio(file);
+		}
     	
     	cell		=	row.getCell(M_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setVideo(null);
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setVideo(file);
+		}
     	
     	cell		=	row.getCell(M_CHOICE_N);
     	int	choiceN	=	(cell == null) ? DEFAUTL_CHOICE_N : (int)cell.getNumericCellValue();
@@ -376,7 +430,7 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	//System.out.println("Multi-Row num : "+rowNum);
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
@@ -424,16 +478,33 @@ public class ExcelImporter {
     	if (cell == null) {
     		throw new RuntimeException("分值不能为空！");
 		}
-    	topicRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setVideo(file);
+    	}
     	
     	return topicRow;
     }
@@ -445,7 +516,7 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		JudgementRow row = readJudgementLine(i);
@@ -490,13 +561,31 @@ public class ExcelImporter {
     	topicRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setVideo(file);
+    	}
     	
     	//matching items parsing
     	cell		=	row.getCell(T_CHOICE_N);
@@ -513,20 +602,19 @@ public class ExcelImporter {
     	topicRow.setItemList(itemList);
     	
     	//matching choices parsing
-    	int	choicePos	=	T_CHOICE_N	+	choiceN + 1;
-    	cell	=	row.getCell(choicePos);
+    	//int	choicePos	=	T_CHOICE_N	+	choiceN + 1;
+    	cell	=	row.getCell(M_START);
     	choiceN	=	(cell == null) ? DEFAUTL_CHOICE_N : (int)cell.getNumericCellValue();
     	
     	List<String> choiceList	=	new ArrayList<String>();
-    	for (int i = choicePos + 1; i <= choicePos + choiceN; i++) {
+    	for (int i = M_START + 1; i <= M_START + choiceN; i++) {
 			cell	=	row.getCell(i);
 			if (cell == null) {
-				throw new RuntimeException("待匹配选项"+(i - choicePos  )+"不能为空！");
+				throw new RuntimeException("待匹配选项"+(i - M_START  )+"不能为空！");
 			}
 			choiceList.add(cell.getStringCellValue());
 		}
     	topicRow.setChoiceList(choiceList);
-    	
     	return topicRow;
     }
     
@@ -536,12 +624,22 @@ public class ExcelImporter {
 			return;
 		}
     	
+    	//read title row to locate the column number
+    	Row titleRow = sheet.getRow(0);
+    	Iterator<Cell> iterator = titleRow.cellIterator();
+    	int pos = 0;
+    	while(iterator.hasNext()){
+    		if("待匹配项个数".equals(iterator.next().getStringCellValue())){
+    			M_START	=	pos;
+    			break;
+    		}
+    		pos++;
+    	}
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		MatchingRow row = readMatchingRow(i);
-    		topicList.add(row);
     		
     		if(row != null)
     			topicList.add(row);
@@ -584,16 +682,41 @@ public class ExcelImporter {
     	topicRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setVideo(file);
+    	}
     	
     	cell		=	row.getCell(S_PDF);
-    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setPdf(null);
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setPdf(file);
+			
+		}
     	
     	return topicRow;
     }
@@ -605,7 +728,7 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		ShortAnswerRow row = readShortAnswerRow(i);
@@ -651,16 +774,41 @@ public class ExcelImporter {
     	topicRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setVideo(file);
+    	}
 
     	cell		=	row.getCell(O_PDF);
-    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setPdf(null);
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setPdf(file);
+			
+		}
     	return topicRow;
     }
     
@@ -671,7 +819,7 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		MachineTestRow row = readMachineTestRow(i);
@@ -716,13 +864,31 @@ public class ExcelImporter {
     	topicRow.setFullMark((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(T_IMG);
-    	topicRow.setImg(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setImg(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setImg(file);
+    	}
     	
     	cell		=	row.getCell(T_AUDIO);
-    	topicRow.setAudio(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setAudio(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setAudio(file);
+    	}
     	
     	cell		=	row.getCell(T_VIDEO);
-    	topicRow.setVideo(cell == null ? null : cell.getStringCellValue().trim());
+    	if(cell == null)
+    		topicRow.setVideo(null);
+    	else{
+    		String file	=	cell.getStringCellValue().trim();
+    		fileSet.add(file);
+    		topicRow.setVideo(file);
+    	}
     	
     	cell		=	row.getCell(T_CHOICE_N);
     	if(cell == null)
@@ -730,7 +896,14 @@ public class ExcelImporter {
     	topicRow.setBlankNum((int)cell.getNumericCellValue());
     	
     	cell		=	row.getCell(B_PDF);
-    	topicRow.setPdf(cell == null ? null : cell.getStringCellValue().trim());
+    	if (cell == null) {
+			topicRow.setPdf(null);
+		}else{
+			String file = cell.getStringCellValue().trim();
+			fileSet.add(file);
+			topicRow.setPdf(file);
+			
+		}
     	
     	return topicRow;
     }
@@ -742,7 +915,7 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		FillBlankRow row = readFillBlankRow(i);
@@ -757,6 +930,9 @@ public class ExcelImporter {
     
     public CandidatePaperRelationRow readCandiateRow(int lineNo){
     	Row	row	=	this.sheet.getRow(lineNo);
+    	if (row == null) {
+			return null;
+		}
     	CandidatePaperRelationRow candidateRow	=	new CandidatePaperRelationRow();    	
     	Cell	cell	=	null;
     	
@@ -777,7 +953,14 @@ public class ExcelImporter {
     	candidateRow.setCid(null == cell ? null : cell.getStringCellValue());
     	
     	cell	=	row.getCell(C_PHOTO);
-    	candidateRow.setPhoto(null == cell ? null : cell.getStringCellValue());
+    	if (cell == null) {
+    		candidateRow.setPhoto(null);
+		}else{
+			String file = cell.getStringCellValue();
+			candidateRow.setPhoto(file);
+			fileSet.add(file);
+		}
+    	
     	
     	//in order to get paper id in DB, assemble subject row, retrieve id in subjectPaperMap
     	SubjectRow	subjectRow	=	new	SubjectRow();
@@ -795,7 +978,7 @@ public class ExcelImporter {
 			throw new RuntimeException("数据库中没有这套试卷！");
 		}
     	candidateRow.setPaperId(paperId);
-    	
+    	System.out.println(candidateRow);
     	return candidateRow;
     }
     
@@ -807,7 +990,8 @@ public class ExcelImporter {
     	if (this.sheet == null) {
 			throw new RuntimeException("没有任何考生信息！");
 		}
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	System.out.println("Row num: "+rowNum);
     	List<CandidatePaperRelationRow> candiateList	=	new ArrayList<>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		CandidatePaperRelationRow row = readCandiateRow(i);
@@ -817,7 +1001,7 @@ public class ExcelImporter {
     			break;
     	}
 
-    	System.out.println(candiateList);
+    	//System.out.println(candiateList);
     	ImportService service = new ImportService();
     	//import candiate service
     	service.importCandidatePaper(candiateList);
@@ -825,6 +1009,9 @@ public class ExcelImporter {
     
     public CandidateRoomRelationRow readCandidateRoomRow(int lineNO){
     	Row row	=	this.sheet.getRow(lineNO);
+    	if (row == null) {
+			return null;
+		}
     	CandidateRoomRelationRow roomRow	=	new CandidateRoomRelationRow();
     	Cell cell	=	null;
     	
@@ -845,8 +1032,14 @@ public class ExcelImporter {
     	if (null == cell) {
     		throw new RuntimeException("座位号不能为空！");
 		}
-    	roomRow.setSeatNum((int)cell.getNumericCellValue());
     	
+    	try{
+    		roomRow.setSeatNum((int)cell.getNumericCellValue());
+    	
+    	}catch(IllegalStateException exception){
+    		String seat	=	cell.getStringCellValue().trim();
+    		roomRow.setSeatNum(Integer.parseInt(seat));
+    	}
     	cell	=	row.getCell(R_IP);
     	roomRow.setIp(null == cell ? null : cell.getStringCellValue());
     	
@@ -855,7 +1048,7 @@ public class ExcelImporter {
     		throw new RuntimeException("准考证号不能为空！");
 		}
     	roomRow.setUid(cell.getStringCellValue());
-    	
+    	System.out.println(roomRow);
     	return roomRow;
     }
     
@@ -865,7 +1058,7 @@ public class ExcelImporter {
 			throw new RuntimeException("没有任何考场信息！");
 		}
     	
-    	int	rowNum	=	this.sheet.getLastRowNum();
+    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
     	List<CandidateRoomRelationRow> roomList	=	new ArrayList<>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		CandidateRoomRelationRow row = readCandidateRoomRow(i);
@@ -893,9 +1086,11 @@ public class ExcelImporter {
     }
     
     public static void main(String[] ags) {
+    	HashSet<String> set = new HashSet<String>();
         String fileName = "E:\\综合测试.xls";//试卷模板.xlsx
         ExcelImporter excel = new ExcelImporter(fileName);
-        //System.out.println(excel.readLine(0));
+        
+        excel.setFileSet(set);
         excel.parseSubjectSheet();
         excel.parseSingleChoice();
         excel.parseMultiChoice();
@@ -904,12 +1099,16 @@ public class ExcelImporter {
         excel.parseShortAnswer();
         excel.parseFillBlank();
         excel.parseMachineTest();
+        System.out.println(set);
         excel.close();
-        /*String fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
-        ExcelImporter excel = new ExcelImporter(fileName);
-        excel		=	new ExcelImporter(fileName);
-        excel.parseCandidatePaper();
-        excel.parseCanidateRoom();*/
         
+        String fileName2	=	"E:\\考生试卷及考场安排_综测.xls";
+        ExcelImporter excel2 = new ExcelImporter(fileName2);
+        set = new HashSet<String>();
+        excel2.setFileSet(set);
+        excel2.parseCandidatePaper();
+        excel2.parseCanidateRoom();
+        excel2.close();
+        System.out.println(set);
     }
 }

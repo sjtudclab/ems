@@ -42,7 +42,6 @@ public class ImportService {
 	//返回paperId
 	public int importSubject(SubjectRow subjectRow){
 		
-		
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.paperMapper.add";
 		subjectRow.setDuration(subjectRow.getDuration()*60);
@@ -60,7 +59,7 @@ public class ImportService {
 	}
 	
 	public boolean importTopic(List<TopicRow> topicList){
-		System.out.println(topicList);
+		System.out.println("size: "+topicList.size()+"  "+topicList);
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.addTopic";
 		String statement1 = "org.dclab.mapping.choiceMapper.add";
@@ -278,7 +277,7 @@ public class ImportService {
 	
 	
 	public boolean importCandidatePaper(List<CandidatePaperRelationRow> list){
-		
+		System.out.println("size: "+list.size()+"  "+list);
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		for(CandidatePaperRelationRow row : list)
@@ -296,7 +295,7 @@ public class ImportService {
 	}
 	
 	public boolean importCandidateRoom(List<CandidateRoomRelationRow> list){
-		
+		System.out.println("size: "+list.size()+"  "+list);
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.sessionMapper.add";
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
