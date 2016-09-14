@@ -16,6 +16,7 @@ import org.dclab.model.SubjectRow;
 import org.dclab.model.TopicRow;
 import org.dclab.service.ImportService;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 import java.io.File;
@@ -148,7 +149,11 @@ public class ExcelImporter {
 		Cell cell 	= 	null;
 		
 		cell 		=	row.getCell(PRO_NAME);
-		subjectRow.setProName(cell == null ? null : cell.getStringCellValue().trim());
+		String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
+		}
+		subjectRow.setProName(pNum);
 		
 		cell		=	row.getCell(PRO_ID);
 		if(cell == null)
@@ -197,8 +202,10 @@ public class ExcelImporter {
     	ImportService service = new ImportService();
     	
     	//from the 1st data line to the end of data line, including the last row (0-based)
-    	for (int i = SUBJECT_1_ROW; i <= this.sheet.getLastRowNum(); i++) {
+    	for (int i = SUBJECT_1_ROW; i < this.sheet.getLastRowNum(); i++) {
     		SubjectRow row =	readSubject(i);
+    		if (row == null) 
+				break;
 			int paperId	=	service.importSubject(row);
 			if (!subjectPaperMap.containsKey(row)) {
 				row.setPaperId(paperId);
@@ -219,11 +226,13 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
+    		//throw new RuntimeException("试卷编号不能为空！");
 		}
     	
-    	SingleChoiceRow	singleChoiceRow	=	new SingleChoiceRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	SingleChoiceRow	singleChoiceRow	=	new SingleChoiceRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	singleChoiceRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -264,7 +273,7 @@ public class ExcelImporter {
 			choiceList.add(cell.getStringCellValue());
 		}
     	singleChoiceRow.setChoiceList(choiceList);
-    	
+    	//System.out.println(singleChoiceRow);
     	return singleChoiceRow;
     }
     
@@ -275,10 +284,15 @@ public class ExcelImporter {
     	
     	ImportService service = new ImportService();
     	
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
+    	//System.out.println("Row num : "+rowNum);
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readSingleChoiceRow(i));
+    		SingleChoiceRow row = readSingleChoiceRow(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -295,11 +309,13 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
+    		//throw new RuntimeException("试卷编号不能为空！");
 		}
     	
-    	MultiChoicesRow	topicRow	=	new MultiChoicesRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	MultiChoicesRow	topicRow	=	new MultiChoicesRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -346,7 +362,7 @@ public class ExcelImporter {
 			choiceList.add(cell.getStringCellValue());
 		}
     	topicRow.setChoiceList(choiceList);
-    	
+    	//System.out.println(topicRow);
     	return topicRow;
 	}
     
@@ -360,10 +376,15 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
+    	//System.out.println("Multi-Row num : "+rowNum);
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readMultiChoiceRow(i));
+    		MultiChoicesRow row = readMultiChoiceRow(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -380,11 +401,12 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
 		}
     	
-    	JudgementRow	topicRow	=	new JudgementRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	JudgementRow	topicRow	=	new JudgementRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -423,10 +445,14 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readJudgementLine(i));
+    		JudgementRow row = readJudgementLine(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -438,11 +464,12 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
 		}
     	
-    	MatchingRow	topicRow	=	new MatchingRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	MatchingRow	topicRow	=	new MatchingRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -510,10 +537,16 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readMatchingRow(i));
+    		MatchingRow row = readMatchingRow(i);
+    		topicList.add(row);
+    		
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -525,11 +558,12 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
 		}
     	
-    	ShortAnswerRow	topicRow	=	new ShortAnswerRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	ShortAnswerRow	topicRow	=	new ShortAnswerRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -538,10 +572,10 @@ public class ExcelImporter {
     	topicRow.setContent(cell == null ? null : cell.getStringCellValue());
     	
     	cell		=	row.getCell(T_CORRECT_A);
-    	if (cell == null) {
+    	/*if (cell == null) {
     		throw new RuntimeException("正确答案不能为空！");
-		}
-    	topicRow.setCorrectAnswer(cell.getStringCellValue());	//reference answer: some words
+		}*/
+    	topicRow.setCorrectAnswer(cell == null ? null : cell.getStringCellValue());	//reference answer: some words
     	
     	cell		=	row.getCell(T_FULL_MARK);
     	if (cell == null) {
@@ -571,10 +605,15 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readShortAnswerRow(i));
+    		ShortAnswerRow row = readShortAnswerRow(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
+    		
     	}
     	
     	service.importTopic(topicList);
@@ -586,11 +625,12 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
 		}
     	
-    	MachineTestRow	topicRow	=	new MachineTestRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	MachineTestRow	topicRow	=	new MachineTestRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -599,10 +639,10 @@ public class ExcelImporter {
     	topicRow.setContent(cell == null ? null : cell.getStringCellValue());
     	
     	cell		=	row.getCell(T_CORRECT_A);
-    	if (cell == null) {
+    	/*if (cell == null) {
     		throw new RuntimeException("正确答案不能为空！");
-		}
-    	topicRow.setCorrectAnswerFile(cell.getStringCellValue());	//reference answer: some words
+		}*/
+    	topicRow.setCorrectAnswerFile(cell == null ? null : cell.getStringCellValue());	//reference answer: some words
     	
     	cell		=	row.getCell(T_FULL_MARK);
     	if (cell == null) {
@@ -631,10 +671,14 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readMachineTestRow(i));
+    		MachineTestRow row = readMachineTestRow(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -646,11 +690,12 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell		=	row.getCell(T_PAPER_NO);
-    	if (cell == null) {
-    		throw new RuntimeException("试卷编号不能为空！");
+    	String pNum;
+    	if (cell == null || (pNum = cell.getStringCellValue().trim()).length() == 0) {
+    		return null;
 		}
     	
-    	FillBlankRow	topicRow	=	new FillBlankRow(paperIdMap.get(cell.getStringCellValue().trim()));
+    	FillBlankRow	topicRow	=	new FillBlankRow(paperIdMap.get(pNum));
     	
     	cell		=	row.getCell(T_NUMBER);
     	topicRow.setNumber(cell == null ? 0 : (int)cell.getNumericCellValue());
@@ -697,10 +742,14 @@ public class ExcelImporter {
 		}
     	
     	ImportService service = new ImportService();
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		topicList.add(readFillBlankRow(i));
+    		FillBlankRow row = readFillBlankRow(i);
+    		if(row != null)
+    			topicList.add(row);
+    		else
+    			break;
     	}
     	
     	service.importTopic(topicList);
@@ -712,8 +761,9 @@ public class ExcelImporter {
     	Cell	cell	=	null;
     	
     	cell	=	row.getCell(C_UID);
-    	if (null == cell) {
-    		throw new RuntimeException("准考证号不能为空！");
+    	if (null == cell || cell.getStringCellValue().trim().length() == 0) {
+    		return null;
+//    		throw new RuntimeException("准考证号不能为空！");
 		}
     	candidateRow.setUid(cell.getStringCellValue());
     	
@@ -757,10 +807,14 @@ public class ExcelImporter {
     	if (this.sheet == null) {
 			throw new RuntimeException("没有任何考生信息！");
 		}
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<CandidatePaperRelationRow> candiateList	=	new ArrayList<>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		candiateList.add(readCandiateRow(i));
+    		CandidatePaperRelationRow row = readCandiateRow(i);
+    		if(row != null)
+    			candiateList.add(row);
+    		else
+    			break;
     	}
 
     	System.out.println(candiateList);
@@ -775,8 +829,9 @@ public class ExcelImporter {
     	Cell cell	=	null;
     	
     	cell	=	row.getCell(R_NAME);
-    	if (null == cell) {
-    		throw new RuntimeException("考场不能为空！");
+    	if (null == cell || cell.getStringCellValue().trim().length() == 0) {
+    		return null;
+//    		throw new RuntimeException("考场不能为空！");
 		}
     	roomRow.setRoomName(cell.getStringCellValue());
     	
@@ -810,10 +865,14 @@ public class ExcelImporter {
 			throw new RuntimeException("没有任何考场信息！");
 		}
     	
-    	int	rowNum	=	this.sheet.getLastRowNum() + 1;
+    	int	rowNum	=	this.sheet.getLastRowNum();
     	List<CandidateRoomRelationRow> roomList	=	new ArrayList<>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
-    		roomList.add(readCandidateRoomRow(i));
+    		CandidateRoomRelationRow row = readCandidateRoomRow(i);
+    		if(row != null)
+    			roomList.add(row);
+    		else
+    			break;
     	}
 
     	System.out.println(roomList);
@@ -822,8 +881,19 @@ public class ExcelImporter {
     	service.importCandidateRoom(roomList);
     }
     
+    public void close(){
+    	if(workbook != null){
+    		try {
+				workbook.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    }
+    
     public static void main(String[] ags) {
-       /* String fileName = "E:\\dclab\\考试管理云平台需求材料\\试卷模板_final.xls";//试卷模板.xlsx
+        String fileName = "E:\\综合测试.xls";//试卷模板.xlsx
         ExcelImporter excel = new ExcelImporter(fileName);
         //System.out.println(excel.readLine(0));
         excel.parseSubjectSheet();
@@ -833,13 +903,13 @@ public class ExcelImporter {
         excel.parseMatching();
         excel.parseShortAnswer();
         excel.parseFillBlank();
-        excel.parseMachineTest();*/
-        
-        String fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
+        excel.parseMachineTest();
+        excel.close();
+        /*String fileName	=	"E:\\dclab\\考试管理云平台需求材料\\考生试卷及考场安排模板_0815_赵.xls";
         ExcelImporter excel = new ExcelImporter(fileName);
         excel		=	new ExcelImporter(fileName);
         excel.parseCandidatePaper();
-        excel.parseCanidateRoom();
+        excel.parseCanidateRoom();*/
         
     }
 }

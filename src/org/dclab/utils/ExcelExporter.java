@@ -224,6 +224,16 @@ public class ExcelExporter {
         System.out.println("成功导出："+fileName);
     }
     
+    public void close(){
+    	if(workbook != null)
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    }
+    
     public static void main(String args[]){
         //String[] headers = {"专业名", "科目名",  "准考证号", "考生姓名", "成绩","日期"};
         ExcelExporter excel =   new ExcelExporter("D:\\test.xls");
