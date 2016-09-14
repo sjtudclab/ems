@@ -351,6 +351,7 @@ angular.module('manager').controller('ImportFile', function($rootScope, $scope, 
                                 url: '/EMS/admin/uploadCheck'
                             }).then(function successCallback(response) {
                                 $scope.checkshow = false;
+                                
                                 var modalParam = {
                                     backdrop: 'static',
                                     size: 'sm'
@@ -362,7 +363,7 @@ angular.module('manager').controller('ImportFile', function($rootScope, $scope, 
                                 modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.info + '</p></div>' + footer;
                                 $uibModal.open(modalParam).result.then(function() {
                                     if ($scope.confirm) {
-
+                                        $scope.checkshow = false;
                                     }
                                 });
 

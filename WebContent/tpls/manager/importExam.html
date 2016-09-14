@@ -16,7 +16,10 @@
             <!--  <uib-progressbar class="progress-striped active" animate='false' value="clearPer" type="success" style="width:30%" ng-show=clearshow>{{clearPer}}%</uib-progressbar> -->
         </div>
         <div style="font-size:120%">
-            <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=clearshow></span>正在检测中......
+            <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=checkshow>
+                
+            </span>
+            <span ng-show=checkshow> 正在检测中......</span>
         </div>
     </div>
 </div>
