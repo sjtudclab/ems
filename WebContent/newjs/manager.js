@@ -451,6 +451,9 @@ angular.module('manager').controller('ImportFile', function($rootScope, $scope, 
 
 });
 angular.module('manager').controller('ImportStuFile', function($rootScope, $scope, $http, $window, $state, $interval, $uibModal) {
+    //正在检测不显示
+    $scope.checkshow = false;
+
 
     $scope.progressPer = 0;
     $scope.ngshow = false;
@@ -501,7 +504,37 @@ angular.module('manager').controller('ImportStuFile', function($rootScope, $scop
                 modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.info + '</p></div>' + footer;
                 $uibModal.open(modalParam).result.then(function() {
                     if ($scope.confirm) {
+                        if (response.data.info == "上传成功") {
+                            $scope.checkshow = true;
+                            // $scope.selectedFile.name=null;
+                            $http({
+                                method: 'GET',
+                                url: '/EMS/admin/uploadCheck'
+                            }).then(function successCallback(response) {
+                                $scope.checkshow = false;
+                                
+                                var modalParam = {
+                                    backdrop: 'static',
+                                    size: 'sm'
+                                };
+                                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+                                var headerBottom = '</h3></div>';
+                                var footer =
+                                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+                                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.info + '</p></div>' + footer;
+                                $uibModal.open(modalParam).result.then(function() {
+                                    if ($scope.confirm) {
+                                        $scope.checkshow = false;
+                                    }
+                                });
 
+
+                            }, function errorCallback(response) {
+                                // called asynchronously if an error occurs
+                                // or server returns response with an error status.
+                            });
+
+                        }
                     }
                 });
             }, function error(response) {
@@ -528,6 +561,7 @@ angular.module('manager').controller('ImportStuFile', function($rootScope, $scop
     $scope.clear = function() {
         $scope.clearPer = 0;
         $scope.clearshow = true;
+
         $http.get('/EMS/admin/stuClear', {
             params: {
                 token: $window.sessionStorage.stoken
