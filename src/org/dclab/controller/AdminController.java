@@ -73,7 +73,7 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Import;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-	
+	public static byte[] lock = new byte[1];
 	@Autowired
 	private AdminService adminService;
 	public void setAdminService(AdminService adminService) {
@@ -129,10 +129,12 @@ public class AdminController {
 		
 		Map<String, String> map= new HashMap<>();
 		if(AdminBean.adminTokenMap.containsValue(token)){
-			userMapperI.deleteAll();
-			sessionMapperI.deleteAll();
-			sessionCanMapperI.deleteAll();
-			map.put("info", "清空成功");
+			synchronized (lock) {
+				userMapperI.deleteAll();
+				sessionMapperI.deleteAll();
+				sessionCanMapperI.deleteAll();
+				map.put("info", "清空成功");
+			}
 		}
 		else
 			map.put("info", "无此权限");
@@ -193,8 +195,11 @@ public class AdminController {
 	
 	@RequestMapping("/Refresh")
 	public List<RoomInfoBean> getRoomInfo(@RequestParam UUID token){
-		if(AdminBean.adminTokenMap.containsValue(token))
-			return adminService.getRoomInfo();
+		if(AdminBean.adminTokenMap.containsValue(token)){
+			synchronized(lock){
+				return adminService.getRoomInfo();
+			}
+		}
 		else
 			return null;
 	}
