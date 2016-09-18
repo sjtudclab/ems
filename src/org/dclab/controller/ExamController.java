@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.dclab.common.Constants;
 import org.dclab.model.CheckBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
@@ -157,8 +158,10 @@ public class ExamController {
 			break;
 		}
 		
-		String path = System.getProperty("project.root")+"EMSdata\\pdf\\";
-		String myfileName = typeId+"-"+id+".pdf";
+		String path = System.getProperty("project.root")+Constants.multiMediaDir;
+		
+		System.out.println("pad的path地址是："+path);
+/*		String myfileName = typeId+"-"+id+".pdf";*/
 /*		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); */
 		response.setHeader("Content-type", "application/pdf");
         

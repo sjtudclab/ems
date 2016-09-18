@@ -2,6 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.dclab.mapping.sessionMapper">
 <insert id="add" parameterType="org.dclab.model.SessionBean" useGeneratedKeys="true" keyProperty="id">
-  insert into session(startTime,roomName) values(#{startTime}, #{roomName})
+  insert into session(startTime,roomName,Uid) values(#{startTime}, #{roomName},#{Uid})
 </insert>
  </mapper>

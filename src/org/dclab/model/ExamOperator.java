@@ -90,11 +90,11 @@ public class ExamOperator {
 					bean.setChoiceList(choiceMapperI.getChoice(topicId));
 					bean.setSingleNum(sList.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 				}
 				
 				List<MultiChoicesBean> mList = topicMapperI.getMultiByPaperId(paperId);
@@ -106,11 +106,11 @@ public class ExamOperator {
 					bean.setChoiceIdList(new ArrayList<Integer>());//初始化一下考生的答案，奇怪的要求
 					
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 				}
 
 				List<JudgementBean> jList = topicMapperI.getJudgeByPaperId(paperId);
@@ -122,11 +122,11 @@ public class ExamOperator {
 					bean.setChoiceList(choiceMapperI.getJudgeChoice(right,error));
 					bean.setJudgeNum(jList.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 				}
 				
 				List<MatchingBean> mlist1 = topicMapperI.getMatchByPaperId(paperId);
@@ -139,24 +139,26 @@ public class ExamOperator {
 					bean.setChoiceIdMap(new HashMap<>());//初始化一下考生的答案，奇怪的要求
 					
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 				}
 				
 				List<ShortAnswerBean> saList = topicMapperI.getShortByPaperId(paperId);
 				for(ShortAnswerBean bean : saList){
 					bean.setShortNum(saList.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    			bean.setShowPdf(true);
+		    			{
+		    				bean.setShowPdf(true);
+		    			}
 				}
 				
 				List<FillBlankBean> fList = topicMapperI.getFillBlankByPaperId(paperId);
@@ -165,26 +167,30 @@ public class ExamOperator {
 					bean.setGapNum(fList.size());
 					bean.setAnswerList(new ArrayList<>());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    			bean.setShowPdf(true);
+		    			{
+		    				bean.setShowPdf(true);
+		    			}
 				}
 				
 				List<MachineTestBean> mList2 = topicMapperI.getMachineByPaperId(paperId);
 				for(MachineTestBean bean : mList2){
 					bean.setMachineNum(mList2.size());
 					if(bean.getImg()!=null&&bean.getImg().length()!=0)
-		    			bean.setImg(imgPath+bean.getImg());
+		    			bean.setImg(Constants.multiMediaDir+bean.getImg());
 		    		if(bean.getAudio()!=null&&bean.getAudio().length()!=0)
-		    			bean.setAudio(audioPath+bean.getAudio());
+		    			bean.setAudio(Constants.multiMediaDir+bean.getAudio());
 		    		if(bean.getVideo()!=null&&bean.getVideo().length()!=0)
-		    			bean.setVideo(vedioPath+bean.getVideo());
+		    			bean.setVideo(Constants.multiMediaDir+bean.getVideo());
 		    		if(bean.getPdf()!=null&&bean.getPdf().length()!=0)
-		    			bean.setShowPdf(true);
+		    			{
+		    				bean.setShowPdf(true);
+		    			}
 		    		
 				}
 				

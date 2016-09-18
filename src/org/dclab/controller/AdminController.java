@@ -12,6 +12,8 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,8 +21,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.MidiDevice.Info;
 
 import org.apache.ibatis.session.SqlSession;
+import org.dclab.common.Constants;
 import org.dclab.mapping.CanAnswerMapperI;
 import org.dclab.mapping.ChoiceMapperI;
 import org.dclab.mapping.MatchItemMapperI;
@@ -49,6 +53,7 @@ import org.dclab.utils.ExcelExporter;
 import org.dclab.utils.ExcelImporter;
 import org.dclab.utils.MyBatisUtil;
 import org.dclab.utils.PDFWriter;
+import org.dclab.utils.ZipTool;
 import org.junit.runners.Parameterized.Parameters;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +62,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -84,6 +90,11 @@ public class AdminController {
 	public void setExportService(ExportService exportService) {
 		this.exportService = exportService;
 	}
+	
+	public static String info = new String();
+	public static volatile boolean flag= false;
+	public static String info1= new String();//这两个是考生考场关系导入时用到的
+	public static volatile boolean flag1 = false;
 	
 	@RequestMapping("/examClear")
 	public Map<String, String> clearExam(@RequestParam UUID token){
@@ -325,6 +336,24 @@ public class AdminController {
 		return map;
 	}
 	
+	@RequestMapping("uploadCheck")
+	public Map<String, String> uploadCheckInfoReturn(){
+		System.out.println("进入info返回函数");
+		while(AdminController.flag==false){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		Map<String, String> map = new HashMap<>();
+		map.put("info", AdminController.info);
+		AdminController.flag=false;
+		AdminController.info = new String();
+		return map;
+	}
+	
 	@RequestMapping("/sumDownload")
 	public void getFile(@RequestParam String token, @RequestParam int id ,HttpServletResponse response) {
 		System.out.println(token);
@@ -434,18 +463,69 @@ public class AdminController {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		ExcelImporter excel = new ExcelImporter(this.fileName);
-		excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
-        excel.parseSubjectSheet();
-        excel.parseSingleChoice();
-        excel.parseMultiChoice();
-        excel.parseJudgement();
-        excel.parseMatching();
-        excel.parseShortAnswer();
-        excel.parseFillBlank();
-        excel.parseMachineTest();
-        excel.close();		//关闭文件
-	}	
+		
+		File file = new File(fileName);
+		String unZipDir = System.getProperty("project.root")+"files\\import\\"+file.getName().replaceAll("[.][^.]+$", "");
+		ZipTool.unzip(fileName,unZipDir);
+		
+		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
+		String[] names = files.list();//获取解压文件后文件夹中的文件名
+		System.out.println("解压目录下的所有文件："+names.toString());
+		String excelName = new String();
+		//找到需要导入数据库的excel文件
+		for(String str : names ){
+			System.out.println("解压目录下的文件名："+str);
+			if(str.endsWith("xls")/*&&(new File(files.getAbsolutePath()+str).isFile())*/)
+			{
+				System.out.println("加了抽象路径的文件名："+files.getAbsolutePath()+str);
+				excelName = str;
+				break;
+			}
+		}
+		//获取多媒体文件在服务器的相对路径
+		int i = unZipDir.indexOf("files");
+		Constants.multiMediaDir = unZipDir.substring(i)+"\\";
+		System.out.println("多媒体文件位置的前缀"+Constants.multiMediaDir);
+		
+		if(excelName.length()==0)
+		{	
+			AdminController.info="压缩文件中无可用excel文件";
+		}
+		else
+		{
+			String AbsolutExcelName = unZipDir+"\\"+excelName;
+		
+			ExcelImporter excel = new ExcelImporter(AbsolutExcelName);
+			excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
+			excel.parseSubjectSheet();
+			excel.parseSingleChoice();
+			excel.parseMultiChoice();
+			excel.parseJudgement();
+			excel.parseMatching();
+			excel.parseShortAnswer();
+			excel.parseFillBlank();
+			excel.parseMachineTest();
+        
+			boolean allExit = true;
+			
+			List<String> list = Arrays.asList(names);
+			//检测题目附带的多媒体文件是否都存在
+			for(String str : excel.getFileSet())
+			{
+				if(!list.contains(str))
+				{
+					AdminController.info="多媒体文件"+str+"不存在";
+					allExit=false;
+					break;
+				}
+			}
+			if(allExit==true)
+				AdminController.info="excel文件:"+excelName+"导入数据库成功";
+			excel.close();		//关闭文件
+		}
+		AdminController.flag=true;
+	}
+	
 }
  
  class relationImportThread extends Thread{
@@ -461,12 +541,77 @@ public class AdminController {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-        ExcelImporter	excel	=	new ExcelImporter(this.fileName);
-        excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
-        excel.parseCandidatePaper();
-        excel.parseCanidateRoom();
-        excel.close();//关闭文件
+		
+		File file = new File(fileName);
+		String unZipDir = System.getProperty("project.root")+"files\\import\\"+file.getName().replaceAll("[.][^.]+$", "");
+		ZipTool.unzip(fileName,unZipDir);
+		
+		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
+		String[] names = files.list();//获取解压文件后文件夹中的文件名
+		System.out.println("解压目录下的所有文件："+names.toString());
+		String excelName = new String();
+		//找到需要导入数据库的excel文件
+		for(String str : names ){
+			System.out.println("解压目录下的文件名："+str);
+			if(str.endsWith("xls")/*&&(new File(files.getAbsolutePath()+str).isFile())*/)
+			{
+				System.out.println("加了抽象路径的文件名："+files.getAbsolutePath()+str);
+				excelName = str;
+				break;
+			}
+		}
+		Constants.photoDir = unZipDir;
+		if(excelName.length()==0)
+		{	
+			AdminController.info="压缩文件中无可用excel文件";
+		}
+		else
+		{
+			String AbsolutExcelName = unZipDir+"\\"+excelName;
+		
+	        ExcelImporter	excel	=	new ExcelImporter(AbsolutExcelName);
+	        excel.setFileSet(this.fileSet);	//每一次上传都使用新的 HashSet装载
+	        excel.parseCandidatePaper();
+	        excel.parseCanidateRoom();
+	        excel.close();//关闭文件
+        
+			boolean allExit = true;
+			
+			List<String> list = Arrays.asList(names);
+			//检测题目附带的多媒体文件是否都存在
+			for(String str : excel.getFileSet())
+			{
+				if(!list.contains(str))
+				{
+					AdminController.info="文件"+str+"不存在";
+					allExit=false;
+					break;
+				}
+			}
+			if(allExit==true)
+				AdminController.info="excel文件:"+excelName+"导入数据库成功";
+			excel.close();		//关闭文件
+		}
+		AdminController.flag=true;
+		
+
+	}
+ }
+/* class infoReturnThread extends Thread{
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(AdminController.flag==false)
+		{
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	 
-	
- }
+ }*/

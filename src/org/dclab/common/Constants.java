@@ -10,4 +10,6 @@ public class Constants {
 	public static final byte MACHINE_TEST	=	6;
 	public static int JUDGEMENT_TRUE  =   61;
 	public static int JUDGEMENT_FALSE =   62;
+	public static String photoDir = new String();
+	public static String multiMediaDir = new String();
 }

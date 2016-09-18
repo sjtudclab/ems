@@ -299,8 +299,11 @@ public class ImportService {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.sessionMapper.add";
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		
 		Map<String  , Integer> unique = new HashMap<>();
+		
+		List<String> superUserList = userMapperI.getUidByRid();
 		
 		for(CandidateRoomRelationRow row : list){
 			int sid;
@@ -309,7 +312,7 @@ public class ImportService {
 				sid=unique.get(str);
 			else
 			{
-				SessionBean sessionBean = new SessionBean(row.getRoomName(), row.getStartTime());
+				SessionBean sessionBean = new SessionBean(row.getRoomName(), row.getStartTime(),superUserList.remove(0));
 				if(sqlSession.insert(statement, sessionBean)!=1){
 					System.err.println("插入session表失败");
 					sqlSession.close();

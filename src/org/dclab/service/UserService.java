@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.Session;
 import org.dclab.User;
+import org.dclab.common.Constants;
 import org.dclab.mapping.AuthorityMapperI;
 import org.dclab.mapping.CanSubMapperI;
 import org.dclab.mapping.SessionCanMapperI;
@@ -82,7 +83,7 @@ public class UserService {
 					map.put("gender", user.getGender());
 					map.put("token", token);
 				
-					String dir=System.getProperty("project.root")+imgPath+user.getPhoto();
+					String dir=Constants.photoDir+"\\"+user.getPhoto();
 					InputStream in=null;
 					byte[] data=null;
 					try{

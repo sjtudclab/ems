@@ -25,7 +25,7 @@ public interface SessionMapperI {
 	@Select("select startTime from session where id=#{id}")
 	public Timestamp getStartTimeById(int id);
 	
-	@Select("select startTime from session")
+	@Select("SELECT DISTINCT startTime FROM `session`")
 	public List<Timestamp> getStartTime();
 	
 	//由场次id获得科目id

@@ -1091,6 +1091,7 @@ public class ExcelImporter {
         ExcelImporter excel = new ExcelImporter(fileName);
         
         excel.setFileSet(set);
+        System.out.println("在试卷导入前的set："+set);
         excel.parseSubjectSheet();
         excel.parseSingleChoice();
         excel.parseMultiChoice();

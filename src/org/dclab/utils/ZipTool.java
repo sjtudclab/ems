@@ -10,7 +10,7 @@ import java.util.zip.*;
  */
 public class ZipTool {
     static final int BUFFER = 8192;
-
+    
     /**
      * Compress the src folder to dst ZIP file
      * @param src
@@ -142,7 +142,7 @@ public class ZipTool {
     }
 
     public static void main(String args[]){
-        ZipTool.compress("D:\\测试", "D:\\测试压缩.zip");
+    /*    ZipTool.compress("D:\\测试", "D:\\测试压缩.zip");*/
         ZipTool.unzip("D:\\测试压缩.zip","D:\\test");
     }
 }  
