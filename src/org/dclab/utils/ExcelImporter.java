@@ -39,7 +39,7 @@ public class ExcelImporter {
     private Map<String, Integer>	paperIdMap;			//get paper id by paper number, used in topic parsing
     													//get paper id by subject info, used in room parsing
     private HashSet<String> fileSet;
-    private Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
+    private static Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
     
     //subject sheet column index
     private static final int PRO_NAME	=	0;
@@ -222,11 +222,11 @@ public class ExcelImporter {
     		if (row == null) 
 				break;
 			int paperId	=	service.importSubject(row);
-			if (!subjectPaperMap.containsKey(row)) {
+			//if (!subjectPaperMap.containsKey(row)) {
 				row.setPaperId(paperId);
 				subjectPaperMap.put(row, paperId);
 				paperIdMap.put(row.getPaperNum(), paperId);
-			}
+			//}
 		}
     }
     
