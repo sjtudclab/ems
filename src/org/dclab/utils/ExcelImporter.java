@@ -39,7 +39,7 @@ public class ExcelImporter {
     private Map<String, Integer>	paperIdMap;			//get paper id by paper number, used in topic parsing
     													//get paper id by subject info, used in room parsing
     private HashSet<String> fileSet;
-    private static Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
+    private Map<SubjectRow, Integer> subjectPaperMap	=	new HashMap<SubjectRow, Integer>();;	
     
     //subject sheet column index
     private static final int PRO_NAME	=	0;
@@ -246,6 +246,7 @@ public class ExcelImporter {
     		return null;
     		//throw new RuntimeException("试卷编号不能为空！");
 		}
+    	System.out.println("paper id map : "+paperIdMap);
     	
     	SingleChoiceRow	singleChoiceRow	=	new SingleChoiceRow(paperIdMap.get(pNum));
     	
@@ -322,6 +323,7 @@ public class ExcelImporter {
     	List<TopicRow> topicList	=	new ArrayList<TopicRow>(rowNum);
     	for (int i = TOPIC_1_ROW; i < rowNum; i++) {
     		SingleChoiceRow row = readSingleChoiceRow(i);
+    		System.out.println(row);
     		if(row != null)
     			topicList.add(row);
     		else
