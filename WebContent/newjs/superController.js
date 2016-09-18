@@ -13,12 +13,11 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 	$scope.roomId = infoStatus.roomId;
 	// 登陆用户id
 	$scope.Rid = infoStatus.Rid;
-    if(infoStatus.Rid==1)
-	{
+    if (infoStatus.Rid == 1) {
 		$rootScope.role = "监考员";
 	}
-	else{
-      $rootScope.role = "管理员";
+	else {
+		$rootScope.role = "管理员";
 	}
 	// 控制标签显示
 	$scope.active = [];
@@ -30,18 +29,18 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 	}
 	// 初始化显示标签0
 	$scope.index = 0;
-	 
-    //数字格式化
-	$rootScope.pad= function(num, n) {  
-    var len = num.toString().length;  
-    while(len < n) {  
-        num = "0" + num;  
-        len++;  
-    }  
-    return num;   
-   }  
 
-	 
+    //数字格式化
+	$rootScope.pad = function (num, n) {
+		var len = num.toString().length;
+		while (len < n) {
+			num = "0" + num;
+			len++;
+		}
+		return num;
+	}
+
+
 
 	$http({
 		method: 'GET',
@@ -54,7 +53,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 		function success(response) {
 			// 考生信息
 			$scope.examineesInfo = response.data;
-			
+
 			$scope.examineeMetaInfo = {
 				'seatNum': '座位号',
 				'uname': '姓名',
@@ -126,7 +125,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 					}
 				}).then(function successCallback(response) {
 					$scope.lists = response.data;
-					
+
 					$scope.selectionStatus = {};
 					$scope.ifcheck = true;
 					/*
@@ -165,7 +164,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 				$scope.selectionStatus = {};
 				break;
 			case "roomChange": // 更换场次
-			    $http.get('/EMS/supervise/roomChange', {
+				$http.get('/EMS/supervise/roomChange', {
 					params: {
 						token: $window.sessionStorage.token
 					}
@@ -185,221 +184,357 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 
 	$scope.confirm = function (url) {
 		var uidList = [];
-		for (x in $scope.selectionStatus) {
+		if ($scope.selectionStatus=={}) {
+            for (x in $scope.selectionStatus) {
 
-			if ($scope.selectionStatus[x]) {
-				uidList.push(x);
+				if ($scope.selectionStatus[x]) {
+					uidList.push(x);
+				}
 			}
-		}
-		var showurl;
-		switch (url) {
-			case "forceStop": // 强制终止
-				showurl = "强制终止";
-				break;
-			case "allowStart": // 允许开始
-			    showurl = "允许开始";
-				break;
-			case "allowStop": // 允许终止
-				showurl = "允许终止";
-				break;
-			case "delay": // 延时操作
-				showurl = "延时操作";
-				break;
-			case "deleteExam": // 撤销登录
-				showurl = "撤销登录";
-				break;
-			case "manualAssign": // 强行交卷
-				showurl = "强行交卷";
-				break;
-			case "restart":
-			    showurl = "撤销交卷";
-				break;
-			case "roomChange": // 更换场次
-				showurl = "更换场次";
-				break;
-			case "seatChange": // 更换座位
-				showurl = "更换座位";
-				break;
-		}
-		var modalParam = {
-			backdrop: 'static',
-			size: 'sm'
-		};
-		var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
-        var headerBottom = '</h3></div>';
-		var footer =
-			'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.okay=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.okay=false;$close()">取消</button></div>';
-		modalParam.template = headerTop + '1' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'？</p></div>' + footer;
-		$uibModal.open(modalParam).result.then(function () {
-			if ($scope.okay) {
-				modalParam.template = headerTop + '2' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'？</p></div>' + footer;
-				$uibModal.open(modalParam).result.then(function () {
-					if ($scope.okay) {
-						modalParam.template = headerTop + '3' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认'+showurl+'？</p></div>' + footer;
-						$uibModal.open(modalParam).result.then(function () {
-							if ($scope.okay) {
+			var showurl;
+			switch (url) {
+				case "forceStop": // 强制终止
+					showurl = "强制终止";
+					break;
+				case "allowStart": // 允许开始
+					showurl = "允许开始";
+					break;
+				case "allowStop": // 允许终止
+					showurl = "允许终止";
+					break;
+				case "delay": // 延时操作
+					showurl = "延时操作";
+					break;
+				case "deleteExam": // 撤销登录
+					showurl = "撤销登录";
+					break;
+				case "manualAssign": // 强行交卷
+					showurl = "强行交卷";
+					break;
+				case "restart":
+					showurl = "撤销交卷";
+					break;
+				case "roomChange": // 更换场次
+					showurl = "更换场次";
+					break;
+				case "seatChange": // 更换座位
+					showurl = "更换座位";
+					break;
+			}
+			var modalParam = {
+				backdrop: 'static',
+				size: 'sm'
+			};
+			var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+			var headerBottom = '</h3></div>';
+			var footer =
+				'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.okay=true;$close()">确认</button><button class="btn btn-warning" type="button" ng-click="$parent.okay=false;$close()">取消</button></div>';
+			modalParam.template = headerTop + '1' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认' + showurl + '？</p></div>' + footer;
+			$uibModal.open(modalParam).result.then(function () {
+				if ($scope.okay) {
+					modalParam.template = headerTop + '2' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认' + showurl + '？</p></div>' + footer;
+					$uibModal.open(modalParam).result.then(function () {
+						if ($scope.okay) {
+							modalParam.template = headerTop + '3' + headerBottom + '<div class="modal-body"><p style="font-size:150%">确认' + showurl + '？</p></div>' + footer;
+							$uibModal.open(modalParam).result.then(function () {
+								if ($scope.okay) {
 
-								switch (url) {
-									case "forceStop": // 强制终止
+									switch (url) {
+										case "forceStop": // 强制终止
 
-										$http.get('/EMS/supervise/forceStop', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
+											$http.get('/EMS/supervise/forceStop', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
 
-										break;
-									case "allowStart": // 允许开始
+														}
+													});
+													// alert(response.data.detail);
+												}
+											}, function errorCallback(response) {
+											});
 
-										$http.get('/EMS/supervise/allowStart', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "allowStop": // 允许终止
+											break;
+										case "allowStart": // 允许开始
 
-										$http.get('/EMS/supervise/allowStop', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "delay": // 延时操作
+											$http.get('/EMS/supervise/allowStart', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
 
-										$http.get('/EMS/supervise/delay', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList,
-												delayTime: $scope.delayTime
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "deleteExam": // 撤销登录
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "allowStop": // 允许终止
 
-										$http.get('/EMS/supervise/deleteExam', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "manualAssign": // 强行交卷
+											$http.get('/EMS/supervise/allowStop', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
 
-										$http.get('/EMS/supervise/manualAssign', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "restart": // 撤销交卷
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "delay": // 延时操作
 
-										$http.get('/EMS/supervise/restart', {
-											params: {
-												token: $window.sessionStorage.token,
-												uidList: uidList
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "roomChange": // 更换场次
+											$http.get('/EMS/supervise/delay', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList,
+													delayTime: $scope.delayTime
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
 
-										$http.put('/EMS/supervise/roomChange', {
-											params: {
-												token: $window.sessionStorage.token,
-												uid: $scope.room,
-												roomNum: $scope.roomNum
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail);
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									case "seatChange": // 更换座位
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "deleteExam": // 撤销登录
 
-										$http.post('/EMS/supervise/seatChange', {
-											params: {
-												token: $window.sessionStorage.token,
-												uid: $scope.seat,
-												seatNum: $scope.seatNum
-											}
-										}).then(function successCallback(response) {
-											if (response.data.flag) {
-												refresh();
-											} else {
-												alert(response.data.detail)
-											}
-										}, function errorCallback(response) {
-										});
-										break;
-									default:
-										alert('考生状态错误！');
+											$http.get('/EMS/supervise/deleteExam', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
+
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "manualAssign": // 强行交卷
+
+											$http.get('/EMS/supervise/manualAssign', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
+
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "restart": // 撤销交卷
+
+											$http.get('/EMS/supervise/restart', {
+												params: {
+													token: $window.sessionStorage.token,
+													uidList: uidList
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
+
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "roomChange": // 更换场次
+
+											$http.put('/EMS/supervise/roomChange', {
+												params: {
+													token: $window.sessionStorage.token,
+													uid: $scope.room,
+													roomNum: $scope.roomNum
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
+
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										case "seatChange": // 更换座位
+
+											$http.post('/EMS/supervise/seatChange', {
+												params: {
+													token: $window.sessionStorage.token,
+													uid: $scope.seat,
+													seatNum: $scope.seatNum
+												}
+											}).then(function successCallback(response) {
+												if (response.data.flag) {
+													refresh();
+												} else {
+													var modalParam = {
+														backdrop: 'static',
+														size: 'sm'
+													};
+													var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+													var headerBottom = '</h3></div>';
+													var footer =
+														'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+													modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+													$uibModal.open(modalParam).result.then(function () {
+														if ($scope.confirm) {
+
+														}
+													});
+												}
+											}, function errorCallback(response) {
+											});
+											break;
+										default:
+											alert('考生状态错误！');
+									}
+
+									// $state.go("finish");
+									/* alert('您已提交');*/
 								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			var modalParam = {
+                backdrop: 'static',
+                size: 'sm'
+            };
+            var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+            var headerBottom = '</h3></div>';
+            var footer =
+                '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+            modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">请至少选择一名考生！</p></div>' + footer;
+            $uibModal.open(modalParam).result.then(function () {
+                if ($scope.confirm) {
 
-								// $state.go("finish");
-								/* alert('您已提交');*/
-							}
-						});
-					}
-				});
-			}
-		});
+                }
+            });
+		}
+
 
 
 	}
