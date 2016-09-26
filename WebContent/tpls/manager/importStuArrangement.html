@@ -1,20 +1,44 @@
-<!--导入考生安排-->
-<div class="panel-body" ng-controller="ImportStuFile">
-    <input type="file" id="StuFile" style="display:none" custom-on-change="selectFile">
-    <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
-    <label for="StuFile" class="btn btn-primary">选择文件</label>
-    <button type="button" ng-click="upload()" class="btn btn-info">导入文件</button>
-    <button type="button" ng-click="clear()" class="btn btn-info">清空考生信息</button>
-    <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=clearshow></span>
-    <div style="padding-left:33%">
-        <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
+<div ng-controller="ImportStuFile" style="height:100%">
+    <!--导入考生安排-->
+    <div style="margin-bottom:3%;height:12%">
+         <br>
+        <input type="file" id="StuFile" style="display:none" custom-on-change="selectFile">
+        <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
+        <label for="StuFile" class="btn btn-primary">选择文件</label>
+        <button type="button" ng-click="upload()" class="btn btn-info">导入文件</button>
+        <button type="button" ng-click="clear()" class="btn btn-info">清空考生信息</button>
+        <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=clearshow></span>
+        <div style="padding-left:33%">
+            <uib-progressbar class="progress-striped active" animate='false' value="progressPer" type="success" style="width:30%" ng-show=ngshow>{{progressPer}}%</uib-progressbar>
 
-        <!--{{progressInfo}}-->
-    </div>
-    <div style="font-size:120%">
+            <!--{{progressInfo}}-->
+        </div>
+        <div style="font-size:120%">
             <span class="glyphicon glyphicon-refresh" style="animation: refreshing infinite linear 1s;" ng-show=checkshow>
                 
             </span>
             <span ng-show=checkshow> 正在检测中......</span>
+        </div>
+
+
+
+    </div>
+    <div class="selectArea">
+     
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th ng-repeat="(key,value) in stuMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
+                    </th>
+                </tr>
+                <tr class="{{roomsStatus[room]}}" ng-repeat="room in Examinfo | orderBy:orderCondition:isReverse">
+                    <td ng-bind="room.id"></td>
+                    <td ng-bind="room.roomName"></td>
+                    <td ng-bind="room.startTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
+                    <!--<td ng-bind="room.detail"></td>-->
+                    <!--<td><input type="checkbox" ng-model="selectionStatus[room.id]" ng-click="checkSel(selectionStatus[room.id],room.id)"></td>-->
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

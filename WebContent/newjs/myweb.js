@@ -6,7 +6,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 		url : '/index',
 		views : {
 			'' : {
-				templateUrl : 'tpls/welcome.html'
+				templateUrl : 'tpls/login.html'
 			},
 			'navbar@index' : {
 				templateUrl : 'tpls/navbar.html'
@@ -16,7 +16,7 @@ routingDemoApp.config(function($stateProvider, $urlRouterProvider) {
 		url : '/already',
 		views : {
 			'' : {
-				templateUrl : 'tpls/login.html'
+				templateUrl : 'tpls/welcome.html'
 			},
 			'navbar@already' : {
 				templateUrl : 'tpls/navbar.html'

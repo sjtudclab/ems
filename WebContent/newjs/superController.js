@@ -2,7 +2,7 @@
 
 
 angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, $scope, $http, $window, $uibModal, $interval) {
-
+  
 	var infoStatus = JSON
 		.parse($window.sessionStorage.infoStatus);
 
@@ -13,11 +13,19 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 	$scope.roomId = infoStatus.roomId;
 	// 登陆用户id
 	$scope.Rid = infoStatus.Rid;
+	
     if (infoStatus.Rid == 1) {
 		$rootScope.role = "监考员";
+		$rootScope.logout=function(){
+          $state.go("index"); 
+        }
+		
 	}
 	else {
 		$rootScope.role = "管理员";
+		$rootScope.logout=function(){
+           window.close();
+         }
 	}
 	// 控制标签显示
 	$scope.active = [];
@@ -60,6 +68,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 				'gender': '性别',
 				'cid': '证件号',
 				'uid': '准考证号',
+				'delayTime':"延时",
 				'status': '状态'
 			};
 			// 状态码转化成易读string
@@ -184,13 +193,14 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 
 	$scope.confirm = function (url) {
 		var uidList = [];
-		if ($scope.selectionStatus=={}) {
+		
             for (x in $scope.selectionStatus) {
 
 				if ($scope.selectionStatus[x]) {
 					uidList.push(x);
 				}
 			}
+		if (uidList.length!=0) {
 			var showurl;
 			switch (url) {
 				case "forceStop": // 强制终止

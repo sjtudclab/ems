@@ -1,13 +1,13 @@
 <div ui-view="navbar" style="height: 6%; background-color: #337ab7 /* #2aabd2 */"></div>
-<div ng-controller="managerCtrl" id='main' class="supervi">
-    <ul class="nav nav-pills nav-stacked">
+<div ng-controller="managerCtrl" id='main' class="supervi" style="height: 100%;">
+    <ul class="nav nav-pills nav-stacked" style="height: 100%;">
         <li ng-repeat="x in operationMetaInfo" class="{{active[$index]}}">
             <a ng-click="superRequest(x.url);$parent.index=$index" ng-bind="x.name" class="cursor-pointer"></a>
         </li>
     </ul>
-    <div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}}">
-        <div class='workingSpace'>
-            <div style="margin: 2% auto; width: 98%; text-align: center" ui-view="{{x.url}}">
+    <div class="content" ng-repeat="x in operationMetaInfo" style="display: {{display[$index]}};height:100%">
+        <div class='workingSpace' style="height: 100%;">
+            <div style="margin: 2% auto; width: 98%; text-align: center;height:100%" ui-view="{{x.url}}" >
                 <!--<p ng-bind="x.url"></p>-->
             </div>
 
