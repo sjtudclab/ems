@@ -12,4 +12,5 @@ public class Constants {
 	public static int JUDGEMENT_FALSE =   62;
 	public static String photoDir = new String();
 	public static String multiMediaDir = new String();
+	public static volatile boolean CanGetRoomInfo = false;
 }
