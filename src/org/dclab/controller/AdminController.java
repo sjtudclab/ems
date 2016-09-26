@@ -195,11 +195,15 @@ public class AdminController {
 	
 	@RequestMapping("/Refresh")
 	public List<RoomInfoBean> getRoomInfo(@RequestParam UUID token){
-		if(AdminBean.adminTokenMap.containsValue(token)){
-			synchronized(lock){
-				return adminService.getRoomInfo();
+		if(Constants.CanGetRoomInfo == true){
+			if(AdminBean.adminTokenMap.containsValue(token)){
+				synchronized(lock){
+					return adminService.getRoomInfo();
+				}
 			}
-		}
+			else
+				return null;
+			}
 		else
 			return null;
 	}

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
+import org.dclab.common.Constants;
 import org.dclab.mapping.AuthorityMapperI;
 import org.dclab.mapping.RoomCanMapperI;
 import org.dclab.mapping.RoomMapperI;
@@ -59,6 +60,8 @@ public class SupervisorOperator {
 		}
 		
 		sqlsession.close();
+		
+		Constants.CanGetRoomInfo=true;
 	}
 }
 
