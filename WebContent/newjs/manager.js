@@ -353,7 +353,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     };
     //每间隔5s自动刷新
     var timingPromise = undefined;
-    timingPromise = $interval(function () { refresh() }, 5000);
+    // timingPromise = $interval(function () { refresh() }, 5000);
 
     function refresh() {
         $http.get('/EMS/admin/roomLists', {
@@ -577,7 +577,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     };
     //每间隔5s自动刷新
     var timingPromise = undefined;
-    timingPromise = $interval(function () { refresh() }, 5000);
+    // timingPromise = $interval(function () { refresh() }, 5000);
 
     function refresh() {
         $http.get('/EMS/admin/roomLists', {
@@ -797,52 +797,53 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     $scope.sum = {};
     $scope.sumE = function () {
         // 友好提示信息，url未定
+    // alert("");
+        if ($scope.sum.type == "sumExport") {
+            // $http.get('/EMS/admin/load', {
+            //     params: {
+            //         token: $window.sessionStorage.stoken
+            //     }
+            // }).then(function successCallback(response) {
+            //     var modalParam = {
+            //         backdrop: 'static',
+            //         size: 'sm'
+            //     };
+            //     var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+            //     var headerBottom = '</h3></div>';
+            //     var footer =
+            //         '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+            //     modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">'+response.info+'</p></div>' + footer;
+            //     $uibModal.open(modalParam).result.then(function () {
+            //         if ($scope.confirm) {
 
-        if ($scope.sum.type = "sumExport") {
-            $http.get('/EMS/admin/load', {
-                params: {
-                    token: $window.sessionStorage.stoken
-                }
-            }).then(function successCallback(response) {
-                var modalParam = {
-                    backdrop: 'static',
-                    size: 'sm'
-                };
-                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
-                var headerBottom = '</h3></div>';
-                var footer =
-                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
-                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">'+response.info+'</p></div>' + footer;
-                $uibModal.open(modalParam).result.then(function () {
-                    if ($scope.confirm) {
-
-                    }
-                });
-            });
+            //         }
+            //     });
+            // });
 
             $scope.sumExport();
         } else {
-            $http.get('/EMS/admin/load', {
-                params: {
-                    token: $window.sessionStorage.stoken
-                }
-            }).then(function successCallback(response) {
-               
-                var modalParam = {
-                    backdrop: 'static',
-                    size: 'sm'
-                };
-                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
-                var headerBottom = '</h3></div>';
-                var footer =
-                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
-                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">'+response.info+'</p></div>' + footer;
-                $uibModal.open(modalParam).result.then(function () {
-                    if ($scope.confirm) {
 
-                    }
-                });
-            });
+            // $http.get('/EMS/admin/load', {
+            //     params: {
+            //         token: $window.sessionStorage.stoken
+            //     }
+            // }).then(function successCallback(response) {
+               
+            //     var modalParam = {
+            //         backdrop: 'static',
+            //         size: 'sm'
+            //     };
+            //     var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+            //     var headerBottom = '</h3></div>';
+            //     var footer =
+            //         '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+            //     modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">'+response.info+'</p></div>' + footer;
+            //     $uibModal.open(modalParam).result.then(function () {
+            //         if ($scope.confirm) {
+
+            //         }
+            //     });
+            // });
             $scope.stuExport();
         }
     }
