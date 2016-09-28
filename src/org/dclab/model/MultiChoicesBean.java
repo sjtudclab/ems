@@ -21,6 +21,7 @@ public class MultiChoicesBean implements Serializable, Cloneable {
 	private static final long serialVersionUID = 6078271522167915749L;
 	public int multiNum;//存储多选题数目
 	private int id;//题目id
+	private int number;//题目序号
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private List<Integer> choiceIdList;//考生答案id的list
@@ -31,8 +32,9 @@ public class MultiChoicesBean implements Serializable, Cloneable {
 	
 	public MultiChoicesBean(){}
 
-	public MultiChoicesBean(int id, int multiNum, String content, List<ChoicesBean> choices, String img, String audio, String video){
+	public MultiChoicesBean(int id, int number,int multiNum, String content, List<ChoicesBean> choices, String img, String audio, String video){
 		this.id		=	id;
+		this.number = number;
 		this.img	=	img;
 		this.audio	=	audio;
 		this.video	=	video;
@@ -44,9 +46,17 @@ public class MultiChoicesBean implements Serializable, Cloneable {
 	
 	@Override
 	public Object clone(){
-		return new MultiChoicesBean(this.id,this.multiNum, this.content, this.choiceList, this.img, this.audio, this.video);
+		return new MultiChoicesBean(this.id,this.number,this.multiNum, this.content, this.choiceList, this.img, this.audio, this.video);
 	}
 	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public String getVideo() {
 		return video;
 	}

@@ -20,6 +20,7 @@ public class SingleChoiceBean implements Serializable,Cloneable{
 	private static final long serialVersionUID = 7633906860972374279L;
 	private int singleNum;//存储单选题数目; 
 	private int id;//题目id
+	private int number;//题目序号
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
@@ -32,8 +33,9 @@ public class SingleChoiceBean implements Serializable,Cloneable{
 		
 	}
 	
-	public SingleChoiceBean(int id,int singleNum, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
+	public SingleChoiceBean(int id,int singleNum,Integer number, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
 		this.id = id;
+		this.number = number;
 		this.content = content;
 		this.choiceList = choiceList;
 		this.img = img;
@@ -49,11 +51,19 @@ public class SingleChoiceBean implements Serializable,Cloneable{
 	 */
 	@Override
 	public Object clone()  {
-		return new SingleChoiceBean(this.id,this.singleNum, this.content, this.choiceList, this.img, this.audio, this.video);
+		return new SingleChoiceBean(this.id,this.singleNum,this.number, this.content, this.choiceList, this.img, this.audio, this.video);
 	}
 	
 	
 	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public String getVideo() {
 		return video;
 	}

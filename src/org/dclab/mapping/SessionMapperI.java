@@ -46,9 +46,12 @@ public interface SessionMapperI {
 	@Select("SELECT * FROM `session` WHERE Uid IS NOT NULL")
 	public List<RoomInfoBean> getRoomInfo();
 	
-	@Select("SELECT id,startTime FROM `session`")
+	@Select("SELECT id,startTime,roomName FROM `session`")
 	public List<SessionBean> getSessionList();
 	
 	@Select("TRUNCATE TABLE session")
 	public void deleteAll();
+	
+	@Select("SELECT roomName FROM `session` where id = #{id}")
+	public String getRoomNameById(int id);
 }

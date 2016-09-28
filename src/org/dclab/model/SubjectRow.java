@@ -1,5 +1,8 @@
 package org.dclab.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubjectRow {
 	private int paperId;
 	public String proName;
@@ -34,6 +37,19 @@ public class SubjectRow {
 		return false;
 	}
 	
+	public List<Object> toList(){
+		List<Object> list = new ArrayList<Object>();
+		list.add(this.proName);
+		list.add(this.proId);
+		list.add(this.subName);
+		list.add(this.subId);
+		list.add(this.paperNum);
+		list.add(this.duration);
+		list.add(this.earliestSubmit);
+		list.add(this.latestLogin);
+		list.add(this.showMark);
+		return list;
+	}
 	
 
 	@Override

@@ -9,6 +9,7 @@ public class MachineTestBean implements Serializable {
 	 */
 	private static final long serialVersionUID = -3749552251308834763L;
 	private int id;
+	private int number;
 	private String content;
 	private String fileName;//考生上传的文件名
 	private boolean ifCheck;
@@ -24,9 +25,10 @@ public class MachineTestBean implements Serializable {
 	public MachineTestBean() {
 		super();
 	}
-	public MachineTestBean(int id, String content, int machineNum, String img, String audio, String video,boolean showPdf,String pdf) {
+	public MachineTestBean(int id,int number, String content, int machineNum, String img, String audio, String video,boolean showPdf,String pdf) {
 		super();
 		this.id = id;
+		this.number	=	number;
 		this.content = content;
 		this.machineNum = machineNum;
 		this.img = img;
@@ -38,10 +40,16 @@ public class MachineTestBean implements Serializable {
 	@Override
 	protected Object clone() {
 		// TODO Auto-generated method stub
-		return new MachineTestBean(this.id, this.content, this.machineNum, this.img, this.audio, this.video, this.showPdf,this.pdf);
+		return new MachineTestBean(this.id,this.number, this.content, this.machineNum, this.img, this.audio, this.video, this.showPdf,this.pdf);
 	}
 	
 	
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
+	}
 	public boolean isShowPdf() {
 		return showPdf;
 	}

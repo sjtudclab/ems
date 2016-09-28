@@ -6,9 +6,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.WriteAbortedException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
@@ -20,10 +25,22 @@ import org.dclab.mapping.SubTypeMapperI;
 import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.model.ChoicesBean;
+import org.dclab.model.ContentBean;
+import org.dclab.model.ExamBean;
+import org.dclab.model.ExamOperator;
+import org.dclab.model.FillBlankBean;
+import org.dclab.model.JudgementBean;
+import org.dclab.model.MachineTestBean;
+import org.dclab.model.MatchingBean;
+import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.RoomInfoBean;
+import org.dclab.model.ShortAnswerBean;
+import org.dclab.model.SingleChoiceBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.model.TopicBean;
+import org.dclab.model.TopicBeanExport;
+import org.dclab.utils.ExcelExporter;
 import org.dclab.utils.MyBatisUtil;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Service;
@@ -138,7 +155,211 @@ public class AdminService {
 		return list;
 	}
 	
+	public void exportPaper(String excelPath,String str,Map<Integer, TopicBeanExport> topicMap,Map<Integer, List<Object>> subjectMap){
+		ExcelExporter excel =   new ExcelExporter(excelPath);
+		Map<String, List<List<? extends Object>>> map = new HashMap<>();
+		
+		ExamBean examBean = ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(str));
+		int paperId = examBean.getPaperId();
+		
+        List<List<? extends Object>> subject  = new ArrayList<>();//考生答卷list中的科目sheet
+        subject.add(subjectMap.get(paperId));
+        
+        String examNum = (String) subjectMap.get(paperId).get(4);//试卷号
+        
+        List<List<? extends Object>> singleList  = new ArrayList<>();
+        for(SingleChoiceBean singleChoiceBean : examBean.getSingleChoiceList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(singleChoiceBean.getNumber());
+        	list.add(singleChoiceBean.getId());
+        	list.add(singleChoiceBean.getContent());
+        	list.add((topicMap.get(singleChoiceBean.getId())).getCorrectAnswer());
+        	//可能会慢，一种解决方案是给考生装载exambean时，将正确答案填入。
+        	list.add(singleChoiceBean.getChoiceId());
+        	list.add(topicMap.get(singleChoiceBean.getId()).getPoints());//和上面一样的问题
+        	list.add(singleChoiceBean.getImg());
+        	list.add(singleChoiceBean.getAudio());
+        	list.add(singleChoiceBean.getVideo());
+        	list.add(singleChoiceBean.getChoiceList().size());
+        	for(ChoicesBean choicesBean : singleChoiceBean.getChoiceList()){
+        		list.add(choicesBean.getContent());
+        	}
+        	singleList.add(list);
+        }
+        List<List<? extends Object>> multiList  = new ArrayList<>();
+        for(MultiChoicesBean multiChoicesBean :examBean.getMultiChoicesList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(multiChoicesBean.getNumber());
+        	list.add(multiChoicesBean.getId());
+        	list.add(multiChoicesBean.getContent());
+        	list.add(topicMap.get(multiChoicesBean.getId()).getCorrectAnswer());
+        	list.add(listToString(multiChoicesBean.getChoiceIdList()));
+        	String point = topicMap.get(multiChoicesBean.getId()).getPoints();
+        	int index = point.indexOf(",");
+        	list.add(point.substring(0, index));
+        	list.add(point.substring(index+1, point.length()));
+        	list.add(multiChoicesBean.getImg());
+        	list.add(multiChoicesBean.getAudio());
+        	list.add(multiChoicesBean.getVideo());
+        	list.add(multiChoicesBean.getChoiceList().size());
+        	for(ChoicesBean choicesBean : multiChoicesBean.getChoiceList()){
+        		list.add(choicesBean.getContent());
+        	}
+        	multiList.add(list);
+        }
+        	
+        List<List<? extends Object>> judgeList  = new ArrayList<>();
+        for(JudgementBean judgementBean : examBean.getJudgementList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);//试卷号
+        	list.add(judgementBean.getNumber());
+        	list.add(judgementBean.getId());
+        	list.add(judgementBean.getContent());
+        	list.add(topicMap.get(judgementBean.getId()).getCorrectAnswer());
+        	list.add(judgementBean.getChoiceId());
+        	list.add(topicMap.get(judgementBean.getId()).getPoints());//此处可修改，因为每种题型的points一般来说是一样的
+        	list.add(judgementBean.getImg());
+        	list.add(judgementBean.getAudio());
+        	list.add(judgementBean.getVideo());
+        	
+        	judgeList.add(list);
+        }
+        
+        List<List<? extends Object>> matchList = new ArrayList<>();
+        for(MatchingBean matchingBean : examBean.getMatchingList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(matchingBean.getNumber());
+        	list.add(matchingBean.getId());
+        	list.add(matchingBean.getContent());
+        	list.add(topicMap.get(matchingBean.getId()).getCorrectAnswer());
+        	list.add(matchingBean.getChoiceIdMap().toString());
+        	list.add(topicMap.get(matchingBean.getId()).getPoints());
+        	list.add(matchingBean.getImg());
+        	list.add(matchingBean.getAudio());
+        	list.add(matchingBean.getVideo());
+        	list.add(matchingBean.getContentList().size());
+        	for(ContentBean contentBean : matchingBean.getContentList()){
+        		list.add(contentBean.getContent());
+        	}
+        	for(ChoicesBean choicesBean : matchingBean.getChoiceList()){
+        		list.add(choicesBean.getContent());
+        	}
+        	
+        	matchList.add(list);
+        }
+        
+        List<List<? extends Object>> shortList = new ArrayList<>();
+        for(ShortAnswerBean shortAnswerBean : examBean.getShortAnswerList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(shortAnswerBean.getNumber());
+        	list.add(shortAnswerBean.getId());
+        	list.add(shortAnswerBean.getContent());
+        	list.add(topicMap.get(shortAnswerBean.getId()).getCorrectAnswer());
+        	list.add(shortAnswerBean.getAnswer());
+        	list.add(topicMap.get(shortAnswerBean.getId()).getPoints());
+        	list.add(shortAnswerBean.getImg());
+        	list.add(shortAnswerBean.getAudio());
+        	list.add(shortAnswerBean.getVideo());
+        	list.add(shortAnswerBean.getPdf());
+        	
+        	shortList.add(list);
+        }
+        
+        List<List<? extends Object>> fillList = new ArrayList<>();
+        for(FillBlankBean fillBlankBean : examBean.getFillBlankList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(fillBlankBean.getNumber());
+        	list.add(fillBlankBean.getId());
+        	list.add(fillBlankBean.getContent());
+        	list.add(topicMap.get(fillBlankBean.getId()).getCorrectAnswer());
+        	list.add(strListToString(fillBlankBean.getAnswerList()));
+        	list.add(topicMap.get(fillBlankBean.getId()).getPoints());
+        	list.add(fillBlankBean.getImg());
+        	list.add(fillBlankBean.getAudio());
+        	list.add(fillBlankBean.getVideo());
+        	list.add(fillBlankBean.getFillNum());
+        	list.add(fillBlankBean.getPdf());
+        	
+        	fillList.add(list);
+        }
+        
+        List<List<? extends Object>> machineList = new ArrayList<>();
+        for(MachineTestBean machineTestBean : examBean.getMachineList()){
+        	List<Object> list = new ArrayList<>();
+        	list.add(examNum);
+        	list.add(machineTestBean.getNumber());
+        	list.add(machineTestBean.getId());
+        	list.add(machineTestBean.getContent());
+        	list.add(topicMap.get(machineTestBean.getId()).getCorrectAnswer());
+        	list.add(machineTestBean.getFileName());
+        	list.add(topicMap.get(machineTestBean.getId()).getPoints());
+        	list.add(machineTestBean.getImg());
+        	list.add(machineTestBean.getAudio());
+        	list.add(machineTestBean.getVideo());
+        	list.add(machineTestBean.getPdf());
+        	
+        	machineList.add(list);
+        }
+        Map<String, List<List<? extends Object>>> map1 = new HashMap<>();
+        map1.put("科目", subject);
+        map1.put("单选题", singleList);
+        map1.put("多选题", multiList);
+        map1.put("判断题", judgeList);
+        map1.put("匹配题", matchList);
+        map1.put("简答题", shortList);
+        map1.put("填空题", fillList);
+        map1.put("上机题", machineList);
+        excel.exportStudentPaper(map1);
+        
+	}
 	
+	public String listToString(List<Integer> list){
+		String string = new String();
+		if(list.size()>0)
+		{
+			for(int i=0;i<list.size()-1;i++)
+				string=string+list.get(i)+",";
+			string = string +list.get(list.size()-1);
+		}
+		return string;
+	}
+	
+	public String strListToString(List<String> list){
+		String string = new String();
+		if(list!=null&&list.size()>0)
+		{
+			for(int i=0;i<list.size()-1;i++)
+				string=string+list.get(i)+",";
+			string = string +list.get(list.size()-1);
+		}
+		return string;
+	}
+	
+	/*public String choiceMapToString(Map<Integer, Integer> map){
+		String string = new String();
+		if(map!=null){
+			Set<Integer> keyList =  map.keySet();
+			Collections.sort(keyList, new Comparator<Integer>() {
+
+				@Override
+				public int compare(Integer arg0, Integer arg1) {
+					// TODO Auto-generated method stub
+					return arg0.compareTo(arg1);
+				}
+				
+			});
+			
+			for(int i : keyList){
+				string = string + map.get(i)+",";
+			}
+		}
+		return string;
+	}*/
 	
 
 	

@@ -31,9 +31,11 @@ import org.dclab.mapping.MatchItemMapperI;
 import org.dclab.mapping.PaperMapperI;
 import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.SessionMapperI;
+import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
+import org.dclab.model.ChoicesBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.Paper4PDF;
@@ -46,6 +48,7 @@ import org.dclab.model.SuperBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.model.Topic4PDF;
+import org.dclab.model.TopicBeanExport;
 import org.dclab.service.AdminService;
 import org.dclab.service.ExportService;
 import org.dclab.service.ImportService;
@@ -120,6 +123,8 @@ public class AdminController {
 		return map;
 	}
 	
+
+	
 	@RequestMapping("/stuClear")
 	public Map<String, String> clearStu(@RequestParam UUID token){
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
@@ -187,6 +192,19 @@ public class AdminController {
 			ExamOperator.newLoad(list);
 			SupervisorOperator.load();
 			sqlSession.close();
+			return new SuperRespond(true);
+		}
+		else
+			return new SuperRespond(false, "无此权限");
+	}
+	
+	@RequestMapping("/start")
+	public SuperRespond allowStart(@RequestParam UUID token){//管理员点击开考
+		if(Constants.CanGetRoomInfo==false){
+			return new SuperRespond(false, "请先装填试卷");
+		}
+		else if(AdminBean.adminTokenMap.containsValue(token)){
+			Constants.superLoginFlag = true;
 			return new SuperRespond(true);
 		}
 		else
@@ -364,14 +382,28 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/sumDownload")
-	public void getFile(@RequestParam String token, @RequestParam int id ,HttpServletResponse response) {
-		System.out.println(token);
-		
+	public void getFile(@RequestParam String token,HttpServletResponse response,@RequestParam int...id ) throws IOException {
+		System.out.println("进入SUm函数");
+		if(ExamOperator.tokenExamMap.isEmpty())
+		{
+			 response.setHeader("Content-type","text/html;charset=UTF-8");
+			 String data = "试卷尚未装载，不能导出";
+			 OutputStream stream = response.getOutputStream();
+			 stream.write(data.getBytes("UTF-8"));
+		}
+		else if(id.length==0)
+		{
+			response.setHeader("Content-type","text/html;charset=UTF-8");
+			 String data = "请先选择考场再导出";
+			 OutputStream stream = response.getOutputStream();
+			 stream.write(data.getBytes("UTF-8"));
+		}
+		else{
 		String path = System.getProperty("project.root")+"files\\export\\test.xls";
 		
 		ExcelExporter excel = new ExcelExporter(path);
 		
-		excel.exportMarks(exportService.getScoreCollect(id), "成绩汇总");
+		excel.exportMarks(exportService.getScoreCollect(id[0]), "成绩汇总");
 		String myfileName = path.substring(path.lastIndexOf('\\')+1);
 		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
 		try {
@@ -383,80 +415,77 @@ public class AdminController {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+		}
 	}
 	
 	@RequestMapping("/stuDownload")
-	public void getStuFile(@RequestParam UUID token , HttpServletResponse response) throws IOException{
-
+	public void getStuFile(@RequestParam UUID token , HttpServletResponse response, @RequestParam int...id ) throws IOException{
+		System.out.println("进入stu函数");
 		if(ExamOperator.tokenExamMap.isEmpty())
 		{
-			response.setHeader("Content-type","text/html;charset=UTF-8");
+			 response.setHeader("Content-type","text/html;charset=UTF-8");
 			 String data = "试卷尚未装载，不能导出";
 			 OutputStream stream = response.getOutputStream();
 			 stream.write(data.getBytes("UTF-8"));
 		}
+		else if(id.length==0)
+		{
+			response.setHeader("Content-type","text/html;charset=UTF-8");
+			 String data = "请先选择考场再导出";
+			 OutputStream stream = response.getOutputStream();
+			 stream.write(data.getBytes("UTF-8"));
+		}
 		else{
-		String path = System.getProperty("project.root")+"files\\export\\";
-		
-		String uid= "a70012";
+			
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
+		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		PaperMapperI paperMapperI = sqlSession.getMapper(PaperMapperI.class);
+		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
 		String statement = "org.dclab.mapping.paperMapper.getSubName";
 		
-		int paperId= userMapperI.getPaperIdByUid(uid);
+		String roomName = sessionMapperI.getRoomNameById(id[0]);
+		long  startTime =sessionMapperI.getStartTimeById(id[0]).getTime();
+		String path = System.getProperty("project.root")+"files\\export\\"+roomName+"-"+startTime;//放置该考场考生考卷的文件夹。
+		System.out.println("放置考生考卷的文件夹:"+path);
+		File dir = new File(path);
+		dir.mkdir();
 		
-		String title = "科目："+sqlSession.selectOne(statement, paperId)+" 姓名："+userMapperI.getNmaeByUid(uid)+" 准考证号："+uid;
-		List<List<Topic4PDF>> topicList	=	new ArrayList<>();
-		List<String> topicNameList	=	new ArrayList<String>();
-		topicNameList.add("选择题");
-		topicNameList.add("简答题");
+		Map<Integer, List<Object>> subjectMap = new HashMap<>();//存储科目信息的map
+		Map<Integer, TopicBeanExport> topicMap = new HashMap<>();//存储topicId和points，correctanswer的map
 		
-		UUID token1 = ExamOperator.idTokenMap.get(uid);
-		ExamBean examBean = ExamOperator.tokenExamMap.get(token1);
-		List<Topic4PDF>	singleChoiceList	=	new ArrayList<>();
-		for(SingleChoiceBean bean : examBean.getSingleChoiceList()){
-			List<String> item = new ArrayList<>();
-			String answer = "";
-			for(int i=0 ;i<bean.getChoiceList().size();i++)
-			{
-				item.add(bean.getChoiceList().get(i).getContent());
-				if(bean.getChoiceList().get(i).getChoiceId()==bean.getChoiceId())
-					answer=String.valueOf(i+1);
-			}
-			Topic4PDF topic4pdf = new Topic4PDF(bean.getContent(), answer, item);
-			singleChoiceList.add(topic4pdf);
+		List<SubjectRow> subjectRows = paperMapperI.getSubjectrowById();
+		for(SubjectRow subjectRow : subjectRows){
+			subjectMap.put(subjectRow.getPaperId(), subjectRow.toList());//这样subjectmap中保存paperid和导出科目sheet需要的数据的映射
 		}
-		topicList.add(singleChoiceList);
 		
-		List<Topic4PDF> shortAnswerList		=	new ArrayList<>();
-		for(ShortAnswerBean bean : examBean.getShortAnswerList()){
-			List<String> item = new ArrayList<>();
-			item.add(bean.getAnswer());
-			
-			Topic4PDF topic4pdf = new Topic4PDF(bean.getContent(), "", item);
-			shortAnswerList.add(topic4pdf);
+		List<TopicBeanExport> topicList = topicMapperI.getPointsAndCorrect();
+		for(TopicBeanExport topicBeanExport : topicList){
+			topicMap.put(topicBeanExport.getId(), topicBeanExport);
 		}
-		topicList.add(shortAnswerList);
 		
-		Paper4PDF	paper	=	new Paper4PDF(uid, title, topicList, topicNameList);
-        PDFWriter.writePaper(paper, path);
-        System.out.println(path+uid);
+		List<String> uidList = sessionCanMapperI.getUidListBySid(id[0]);
+		for(String str : uidList){
+			String excelPath = path+"\\"+str+".xls";
+			adminService.exportPaper(excelPath, str, topicMap, subjectMap);
+		}
+		String zipName = path+".zip";
+		ZipTool.compress(path, zipName);
+		
         
-        String myfileName = uid+".pdf";
-		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
-        
+        response.addHeader("Content-Disposition", "attachment;filename=" + "123.zip" );  
         try {
 			// get your file as InputStream
 			InputStream is = new FileInputStream(new File(
-					path+uid+".pdf"));
+					zipName));
 			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 			response.flushBuffer();
-		} catch (IOException ex) {
+		} catch (IOException ex) 
+        {
 			ex.printStackTrace();
-		}
+        }
 		
-		sqlSession.close();
-	}
 	}
 }
  class examImportThread extends Thread{
@@ -605,7 +634,7 @@ public class AdminController {
 		
 
 	}
- }
+ }}
 /* class infoReturnThread extends Thread{
 
 	@Override

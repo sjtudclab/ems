@@ -13,8 +13,15 @@ public class CandidateBean {
 	private String Uid;//准考证号
 	private String Cid;//身份证号
 	private int status;//考生状态
+	private long finishTime;//考试结束时间
 	
 		
+	public long getFinishTime() {
+		return finishTime;
+	}
+	public void setFinishTime(long finishTime) {
+		this.finishTime = finishTime;
+	}
 	public String getRoomName() {
 		return roomName;
 	}

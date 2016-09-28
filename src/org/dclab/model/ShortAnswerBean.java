@@ -13,6 +13,7 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	 */
 	private static final long serialVersionUID = -5347641227372398886L;
 	private int id;//题目id
+	private int number;
 	private String content;//题干
 	private boolean ifCheck;//检查标记
 	private String answer;//考生答案
@@ -25,8 +26,9 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	
 	public ShortAnswerBean(){}
 	
-	public ShortAnswerBean(int id,int shortNum,String content){
+	public ShortAnswerBean(int id,int number,int shortNum,String content){
 		this.id		=	id;
+		this.number	=	number;
 		this.content=	content;
 		this.shortNum=	shortNum;
 	}
@@ -34,10 +36,18 @@ public class ShortAnswerBean implements Serializable, Cloneable{
 	@Override
 	public Object clone(){
 		
-		return new ShortAnswerBean(this.id,this.shortNum, this.content);
+		return new ShortAnswerBean(this.id,this.number,this.shortNum, this.content);
 	}
 	
 	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public boolean isShowPdf() {
 		return showPdf;
 	}
