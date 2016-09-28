@@ -1,5 +1,6 @@
 package org.dclab.utils;
 
+import org.apache.ibatis.jdbc.Null;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -206,8 +207,13 @@ public class ExcelExporter {
                     } else if (o instanceof Long) {
                         cell.setCellValue((Long)o);
                     }
-                    else
-                        cell.setCellValue(o.toString());
+                    else{
+                    	if(o == null) 
+                    		cell.setCellValue("");
+                    	else
+                    		cell.setCellValue(o.toString());
+                        
+                    }
                 }
             }
 

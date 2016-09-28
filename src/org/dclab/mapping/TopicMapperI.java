@@ -16,6 +16,7 @@ import org.dclab.model.MachineTestBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
 import org.dclab.model.SingleChoiceBean;
+import org.dclab.model.TopicBeanExport;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.dclab.model.ShortAnswerBean;
 import org.dclab.model.ShortAnswerRow;
@@ -64,22 +65,22 @@ public interface TopicMapperI {
 	
 	//数据库修改之后的操作语句
 	
-	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=0 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video FROM `topic` WHERE typeId=0 AND paperId=#{paperId}")
 	public List<SingleChoiceBean> getSingleByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=1 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video FROM `topic` WHERE typeId=1 AND paperId=#{paperId}")
 	public List<MultiChoicesBean> getMultiByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM `topic` WHERE typeId=2 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video FROM `topic` WHERE typeId=2 AND paperId=#{paperId}")
 	public List<JudgementBean> getJudgeByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video FROM topic WHERE typeId=3 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video FROM topic WHERE typeId=3 AND paperId=#{paperId}")
 	public List<MatchingBean> getMatchByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=4 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video,pdf FROM topic WHERE typeId=4 AND paperId=#{paperId}")
 	public List<ShortAnswerBean> getShortByPaperId(int paperId);
 	
-	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=5 AND paperId=#{paperId}")
+	@Select("SELECT id,number,content,img,audio,video,pdf FROM topic WHERE typeId=5 AND paperId=#{paperId}")
 	public List<FillBlankBean> getFillBlankByPaperId(int paperId);
 	
 	@Select("SELECT id,content,img,audio,video,pdf FROM topic WHERE typeId=6 AND paperId=#{paperId}")
@@ -88,6 +89,15 @@ public interface TopicMapperI {
 	@Select("SELECT id AS topicId,correctAnswer AS choiceId,points FROM `topic` WHERE paperId=#{paperId}")
 	public List<CorrectAnswerBean> getCorrectAnswerByPaperId(int paperId);
 	
+	@Select("SELECT correctAnswer FROM `topic` WHERE  id=#{id}")
+	public String getCorrectAnswerById(int id);
+	
+	@Select("SELECT points FROM `topic` WHERE  id=#{id}")
+	public String getPointsById(int id);
+	
 	@Select("TRUNCATE TABLE topic")
 	public void delteAll();
+	
+	@Select("SELECT id,points,correctAnswer FROM topic")
+	public List<TopicBeanExport> getPointsAndCorrect();
 }

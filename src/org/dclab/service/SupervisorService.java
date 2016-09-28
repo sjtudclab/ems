@@ -28,8 +28,12 @@ public class SupervisorService {
 	//获得对应考场的考生信息list
 	public Collection<CandidateBean> getInfo(SuperBean superBean){
 		for(CandidateBean cbean : superBean.getCanMap().values()){
+			
+			
 			UUID token = ExamOperator.idTokenMap.get(cbean.getUid());
 			ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+			
+			cbean.setFinishTime(cbean.getFinishTime()+examBean.getExtraTime()*1000);
 			
 			if(examBean==null || examBean.isIfLogin() == false)
 				cbean.setStatus(0);
@@ -50,6 +54,17 @@ public class SupervisorService {
 		else
 			return new SuperRespond(false, "目标座位已有人");
 	}
+	
+	
+	public SuperRespond releaseSeat(SuperBean superBean,List<String> uidList){
+		for(String string : uidList){
+			superBean.getFreeSeatList().add(superBean.getCanMap().get(string).getSeatNum());
+			superBean.getCanMap().remove(string);
+			
+		}
+		return new SuperRespond(true);
+	}
+	
 	//监考操作之延时操作
 	public SuperRespond delay(List<String> uidList,int delayTime){//delayTime是延迟的分钟
 		for(String i : uidList)

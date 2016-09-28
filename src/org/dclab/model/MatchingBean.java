@@ -22,6 +22,7 @@ public class MatchingBean implements Serializable, Cloneable {
 	private static final long serialVersionUID = -1445501220162322852L;
 	private int matchNum;//匹配题数目
 	private int id;//整个题目的id
+	private int number;
 	private String content;//题目的主题干
 	private List<ContentBean> contentList;//题目的内容和id
 	private boolean ifCheck;//是否需要检查
@@ -33,8 +34,9 @@ public class MatchingBean implements Serializable, Cloneable {
 	
 	public MatchingBean(){}
 	
-	public MatchingBean(int id,int matchNum, List<ContentBean> contents, List<ChoicesBean> choices, String img, String audio, String video){
+	public MatchingBean(int id,int number,int matchNum, List<ContentBean> contents, List<ChoicesBean> choices, String img, String audio, String video){
 		this.id				=	id;
+		this.number 		= 	number;
 		this.contentList	=	contents;
 		this.choiceList		=	choices;
 		this.img			=	img;
@@ -47,7 +49,15 @@ public class MatchingBean implements Serializable, Cloneable {
 	
 	@Override
 	public Object clone() {
-		return new MatchingBean(this.id,this.matchNum, this.contentList, this.choiceList, this.img, this.audio, this.video);
+		return new MatchingBean(this.id,this.number,this.matchNum, this.contentList, this.choiceList, this.img, this.audio, this.video);
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
 	}
 
 	public String getContent() {

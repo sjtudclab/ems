@@ -20,6 +20,7 @@ public class SuperBean implements Serializable{
 	private static final long serialVersionUID = -8957618769067770034L;
 	private String roomName;//考场号
 	private String name;
+	private long startTime;
 	private Map<String, CandidateBean> canMap;//该考场的考生信息list
 	private List<AuthorityBean> authorityList;//权限列表
 	private List<Integer> freeSeatList;//考场空闲座位list
@@ -30,6 +31,12 @@ public class SuperBean implements Serializable{
 	
 	
 	
+	public long getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
 	public int getSign() {
 		return sign;
 	}

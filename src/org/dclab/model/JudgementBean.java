@@ -19,6 +19,7 @@ public class JudgementBean implements Serializable, Cloneable{
 	private static final long serialVersionUID = 1233847995962873452L;
 	private int judgeNum;//存储判断题数目
 	private int id;//题目id(数据库中id)
+	private int number;
 	private String content;//题目内容
 	private boolean ifCheck;//是否需要检查
 	private int choiceId;//考生答案id
@@ -30,8 +31,9 @@ public class JudgementBean implements Serializable, Cloneable{
 	
 	public JudgementBean(){}
 	
-	public JudgementBean(int id,int judgeNum, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
+	public JudgementBean(int id,int number,int judgeNum, String content, List<ChoicesBean> choiceList, String img, String audio, String video){
 		this.id			=	id;
+		this.number     = 	number;
 		this.choiceList	=	choiceList;
 		this.content	=	content;
 		this.img		=	img;
@@ -43,7 +45,15 @@ public class JudgementBean implements Serializable, Cloneable{
 	
 	@Override
 	public Object clone() {
-		return new JudgementBean(this.id,this.judgeNum, this.content, this.choiceList, this.img, this.audio, this.video);
+		return new JudgementBean(this.id,this.number,this.judgeNum, this.content, this.choiceList, this.img, this.audio, this.video);
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
 	}
 
 	public String getVideo() {

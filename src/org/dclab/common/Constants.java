@@ -13,4 +13,5 @@ public class Constants {
 	public static String photoDir = new String();
 	public static String multiMediaDir = new String();
 	public static volatile boolean CanGetRoomInfo = false;
+	public static volatile boolean superLoginFlag = false;
 }

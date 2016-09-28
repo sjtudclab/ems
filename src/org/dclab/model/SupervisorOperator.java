@@ -1,5 +1,6 @@
 package org.dclab.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,11 +45,18 @@ public class SupervisorOperator {
 			superBean.setRoomName(sessionMapperI.getRoomNameByUid(i));
 			int sid= sessionMapperI.getIdByUid(i);//获得场次id
 			
+			Timestamp startTime = sessionMapperI.getStartTimeById(sid);
+			superBean.setStartTime(startTime.getTime());
+			
 			List<String> uList=sessionCanMapperI.getUidListBySid(sid);//获取该考场的考生准考证号list
 			Map<String, CandidateBean> map=new HashMap<>();
 			for(String uid :uList){
-				map.put(uid, sessionCanMapperI.getCandidateBeanByUid(uid));
+				CandidateBean candidateBean = sessionCanMapperI.getCandidateBeanByUid(uid);
+				ExamBean examBean = ExamOperator.tokenExamMap.get(ExamOperator.idTokenMap.get(uid));
+				candidateBean.setFinishTime(superBean.getStartTime()+examBean.getEXAM_TIME()*1000);
+				map.put(uid, candidateBean);
 			}
+			
 			superBean.setName(mapper.getNmaeByUid(i));
 			superBean.setCanMap(map);
 			superBean.setToken(idTokenMap.get(i));

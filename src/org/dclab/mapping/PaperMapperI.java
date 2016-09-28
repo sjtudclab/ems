@@ -1,9 +1,15 @@
 package org.dclab.mapping;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.dclab.model.SubjectRow;
 
 public interface PaperMapperI {
 	@Update("TRUNCATE TABLE paper")
 	public void deleteAll(); 
+	
+	@Select("SELECT * FROM `paper`")
+	public List<SubjectRow> getSubjectrowById();
 }

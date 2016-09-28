@@ -10,6 +10,7 @@ public class FillBlankBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -4829732312526075401L;
 	private int id;//题目id
+	private int number;
 	private String content;//题干
 	private boolean ifCheck;//检查标记
 	private int fillNum;//需要填的空的个数
@@ -26,9 +27,10 @@ public class FillBlankBean implements Serializable{
 	public FillBlankBean() {
 		super();
 	}
-	public FillBlankBean(int id, String content, int fillNum, int gapNum, String img, String audio, String video, boolean showPdf,String pdf) {
+	public FillBlankBean(int id,int number, String content, int fillNum, int gapNum, String img, String audio, String video, boolean showPdf,String pdf) {
 		super();
 		this.id = id;
+		this.number = number;
 		this.content = content;
 		this.fillNum = fillNum;
 		GapNum = gapNum;
@@ -41,10 +43,16 @@ public class FillBlankBean implements Serializable{
 	@Override
 	protected Object clone(){
 		// TODO Auto-generated method stub
-		return new FillBlankBean(this.id, this.content, this.fillNum, this.GapNum, this.img, this.audio, this.video,this.showPdf,this.pdf);
+		return new FillBlankBean(this.id, this.number,this.content, this.fillNum, this.GapNum, this.img, this.audio, this.video,this.showPdf,this.pdf);
 	}
 	
 	
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
+	}
 	public boolean isShowPdf() {
 		return showPdf;
 	}

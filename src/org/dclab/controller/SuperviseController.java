@@ -82,6 +82,19 @@ public class SuperviseController {
 		}
 	}
 	
+	@RequestMapping("/release")//释放座位
+	public SuperRespond seatRelease(SuperRequest superRequest){
+		if(SupervisorOperator.tokenSuperMap.get(superRequest.getToken())!=null){
+			if(superRequest.getUidList()==null)
+				return new SuperRespond(false, "请选择至少一名考生");
+			SuperBean superBean = SupervisorOperator.tokenSuperMap.get(superRequest.getToken());
+			return supervisorService.releaseSeat(superBean, superRequest.getUidList());
+		}
+		else {
+			return new SuperRespond(false, "错误的监考token");
+		}
+	}
+	
 	@RequestMapping("/manualAssign")
 	public SuperRespond manualAssign(SuperRequest superRequest){
 		if(SupervisorOperator.tokenSuperMap.get(superRequest.getToken())!=null)

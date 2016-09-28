@@ -147,17 +147,22 @@ public class UserService {
 			else
 				return new SuperRespond(false, "已经交卷");
 		case 1:
-			UUID token1=SupervisorOperator.idTokenMap.get(user.getUid());
-			SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token1);
-			if(superBean==null)
-				return new SuperRespond(false, "管理员尚未装载，稍等");
-			superBean.setSign(1);
-			map.put("token", token1);
-			map.put("authorityList", SupervisorOperator.tokenSuperMap.get(token1).getAuthorityList());
-			map.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomName());
-			map.put("Rid", SupervisorOperator.tokenSuperMap.get(token1).getRid());
-			sqlSession.close();
-			return map;
+			if(Constants.superLoginFlag==false){
+				return new SuperRespond(false, "尚未开考");
+			}
+			else{
+				UUID token1=SupervisorOperator.idTokenMap.get(user.getUid());
+				SuperBean superBean=SupervisorOperator.tokenSuperMap.get(token1);
+				if(superBean==null)
+					return new SuperRespond(false, "管理员尚未装载，稍等");
+				superBean.setSign(1);
+				map.put("token", token1);
+				map.put("authorityList", SupervisorOperator.tokenSuperMap.get(token1).getAuthorityList());
+				map.put("roomId", SupervisorOperator.tokenSuperMap.get(token1).getRoomName());
+				map.put("Rid", SupervisorOperator.tokenSuperMap.get(token1).getRid());
+				sqlSession.close();
+				return map;
+			}
 		case 2:
 			UUID token2;
 			if(AdminBean.adminTokenMap.containsKey(Uid))
