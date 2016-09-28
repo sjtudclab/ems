@@ -108,14 +108,14 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
 
     //初始化表格
     $scope.roomMetaInfo = {
-        'id': '场次',
+        // 'id': '场次',
         'roomName': '考场名',
         'startTime': '开考时间',
         'size': '考场人数',
         'status': '状态'
     };
     // 状态码转化成易读string
-    // $scope.statusDisplay = ['未登录', '已登录'];
+    $scope.statusDisplay = ['未登录', '已登录'];
     $scope.roomsStatus = {};
     $scope.selectionStatus = {};
 
@@ -810,7 +810,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
 angular.module('manager').controller('exportFile', function ($rootScope, $scope, $http, $window, $state, $interval) {
     //初始化表格
     $scope.roomMetaInfo = {
-        'id': '场次',
+        // 'id': '场次',
         'roomName': '考场名',
         'time': '开始时间'
     };
