@@ -68,7 +68,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 				'gender': '性别',
 				'cid': '证件号',
 				'uid': '准考证号',
-				'delayTime': "延时",
+				'delayTime': "结束时间",
 				'status': '状态'
 			};
 			// 状态码转化成易读string
@@ -127,73 +127,73 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 		$scope.display[$scope.index] = "block";
 	});
 	// 更換座位請求
-	// $scope.superRequest = function (url) {
-	// 	/* console.log($scope); */
-	// 	/* $parent.index=$index; */
-	// 	switch (url) {
-	// 		case "seatChange": // 更换座位
-	// 			$http.get('/EMS/supervise/seatChange', {
-	// 				params: {
-	// 					token: $window.sessionStorage.token
-	// 				}
-	// 			}).then(function successCallback(response) {
-	// 				$scope.lists = response.data;
+	$scope.superRequest = function (url) {
+		/* console.log($scope); */
+		/* $parent.index=$index; */
+		switch (url) {
+			case "seatChange": // 更换座位
+				$http.get('/EMS/supervise/seatChange', {
+					params: {
+						token: $window.sessionStorage.token
+					}
+				}).then(function successCallback(response) {
+					$scope.lists = response.data;
 
-	// 				$scope.selectionStatus = {};
-	// 				$scope.ifcheck = true;
-	// 				/*
-	// 				 * var lists=[]; for(var i=0;i<100;i++){
-	// 				 * lists[i]=i+1; } $scope.lists=lists;
-	// 				 */
-	// 			}, function errorCallback(response) {
-	// 			});
-	// 			break;
-	// 		case "forceStop": // 强制终止
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "allowStart": // 允许开始
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "allowStop": // 允许终止
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "delay": // 延时操作
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "deleteExam": // 撤销登录
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "manualAssign": // 强行交卷
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "restart": // 撤销交卷
-	// 			$scope.ifcheck = false;
-	// 			$scope.selectionStatus = {};
-	// 			break;
-	// 		case "roomChange": // 更换场次
-	// 			$http.get('/EMS/supervise/roomChange', {
-	// 				params: {
-	// 					token: $window.sessionStorage.token
-	// 				}
-	// 			}).then(function successCallback(response) {
-	// 				$scope.roomlists = response.data;
-	// 				$scope.selectionStatus = {};
-	// 				$scope.ifcheck = true;
-	// 			}, function errorCallback(response) {
-	// 			});
-	// 			break;
-	// 		/*
-	// 		 * default: alert('更换座位信息错误！');
-	// 		 */
-	// 	}
+					$scope.selectionStatus = {};
+					$scope.ifcheck = true;
+					/*
+					 * var lists=[]; for(var i=0;i<100;i++){
+					 * lists[i]=i+1; } $scope.lists=lists;
+					 */
+				}, function errorCallback(response) {
+				});
+				break;
+			case "forceStop": // 强制终止
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "allowStart": // 允许开始
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "allowStop": // 允许终止
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "delay": // 延时操作
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "deleteExam": // 撤销登录
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "manualAssign": // 强行交卷
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "restart": // 撤销交卷
+				$scope.ifcheck = false;
+				$scope.selectionStatus = {};
+				break;
+			case "roomChange": // 更换场次
+				$http.get('/EMS/supervise/roomChange', {
+					params: {
+						token: $window.sessionStorage.token
+					}
+				}).then(function successCallback(response) {
+					$scope.roomlists = response.data;
+					$scope.selectionStatus = {};
+					$scope.ifcheck = true;
+				}, function errorCallback(response) {
+				});
+				break;
+			/*
+			 * default: alert('更换座位信息错误！');
+			 */
+		}
 
-	// };
+	};
     $scope.release = function () {
 		var uidList = [];
 
@@ -212,6 +212,21 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 
 			$scope.selectionStatus = {};
             if (response.data.flag) {
+				$http.get('/EMS/supervise/seatChange', {
+					params: {
+						token: $window.sessionStorage.token
+					}
+				}).then(function successCallback(response) {
+					$scope.lists = response.data;
+
+					$scope.selectionStatus = {};
+					$scope.ifcheck = true;
+					/*
+					 * var lists=[]; for(var i=0;i<100;i++){
+					 * lists[i]=i+1; } $scope.lists=lists;
+					 */
+				}, function errorCallback(response) {
+				});
 				refresh();
 				var modalParam = {
 					backdrop: 'static',
