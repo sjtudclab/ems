@@ -115,7 +115,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
         'status': '状态'
     };
     // 状态码转化成易读string
-    $scope.statusDisplay = ['未登录', '已登录'];
+    // $scope.statusDisplay = ['未登录', '已登录'];
     $scope.roomsStatus = {};
     $scope.selectionStatus = {};
 
@@ -159,7 +159,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.roomsInfo) {
-            $scope.selectionStatus[$scope.roomsInfo[x].roomId] = true;
+            $scope.selectionStatus[$scope.roomsInfo[x].id] = true;
         }
         $scope.selectedNum = $scope.roomsInfo.length;
     }
@@ -167,7 +167,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     // 取消选择
     $scope.cancelAll = function () {
         for (x in $scope.roomsInfo) {
-            $scope.selectionStatus[$scope.roomsInfo[x].roomId] = false;
+            $scope.selectionStatus[$scope.roomsInfo[x].id] = false;
         }
         $scope.selectedNum = 0;
     }
@@ -175,13 +175,13 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     // 单独选择
     $scope.checkSel = function (status, roomId) {
         $scope.cancelAll();
-        $scope.selectionStatus[roomId] = true;
-        if (status == true) {
-            $scope.selectedNum += 1;
-        }
-        if (status == false) {
-            $scope.selectedNum -= 1;
-        }
+        // alert(status)
+        // $scope.selectionStatus[roomId] = true;
+        if(status==true){
+           $scope.selectionStatus[roomId] = true;
+       }else{
+           $scope.selectionStatus[roomId] = false;
+       }
     }
 
     // 排序变量
@@ -196,7 +196,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     };
     //每间隔10s自动刷新
     var timingPromise = undefined;
-    timingPromise = $interval(function () { refresh() }, 10000);
+    timingPromise = $interval(function () { refresh() }, 30000);
 
     function refresh() {
 
@@ -833,8 +833,14 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
 
     // 单独选择
     $scope.checkSel = function (status, roomId) {
-        $scope.cancelAll();
-        $scope.selectionStatus[roomId] = true;
+       
+       alert(status);
+       if(status==true){
+           $scope.selectionStatus[roomId] = true;
+       }else{
+           $scope.selectionStatus[roomId] = false;
+       }
+        
 
     }
 
