@@ -28,8 +28,8 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
     $scope.index = 0;
 
     $rootScope.role = "管理员";
-    $rootScope.logout=function(){
-      $state.go("index"); 
+    $rootScope.logout = function () {
+        $state.go("index");
     }
 
     // 监控index变量控制标签及标签页
@@ -249,77 +249,148 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
         }).then(function successCallback(response) {
             // console.log('success');
             // alert("试题装载成功");
-            var modalParam = {
-                backdrop: 'static',
-                size: 'sm'
-            };
-            var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
-            var headerBottom = '</h3></div>';
-            var footer =
-                '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
-            modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">试题装载成功！</p></div>' + footer;
-            $uibModal.open(modalParam).result.then(function () {
-                if ($scope.confirm) {
+            if (response.data.flag) {
+                var modalParam = {
+                    backdrop: 'static',
+                    size: 'sm'
+                };
+                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+                var headerBottom = '</h3></div>';
+                var footer =
+                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">试题装载成功！</p></div>' + footer;
+                $uibModal.open(modalParam).result.then(function () {
+                    if ($scope.confirm) {
 
-                }
-            });
-            $scope.loadStyle = 'cursor:default';
-            $scope.loadButtonDisabled = false;
-            $http({
-                method: 'GET',
-                url: '/EMS/admin/Refresh',
-                params: {
-                    token: $window.sessionStorage.stoken
-                }
-            })
-                .then(
-                function success(response) {
-                    // 考场信息
-                    $scope.roomsInfo = response.data;
-                    // 已选人数
-                    $scope.selectedNum = 0;
-                    // 未登录人数
-                    $scope.absentNum = 0;
-                    // 已登录人数
-                    $scope.examingNum = 0;
-                    for (x in $scope.roomsInfo) {
-                        switch ($scope.roomsInfo[x].status) {
-                            case 0:
-                                $scope.absentNum += 1;
-                                $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
-                                break;
-                            case 1:
-                                $scope.examingNum += 1;
-                                $scope.roomsStatus[$scope.roomsInfo[x].roomId] = 'info';
-                                break;
-                            default:
-                                alert('考生状态错误！');
-                        }
                     }
-                    $scope.orderCondition = 'id';
-                    $scope.isReverse = false;
-                },
-                function error(response) {
-                    alert('出现错误\n' + response.status + ' ' + response.statusText);
                 });
+                $scope.loadStyle = 'cursor:default';
+                $scope.loadButtonDisabled = false;
+                $http({
+                    method: 'GET',
+                    url: '/EMS/admin/Refresh',
+                    params: {
+                        token: $window.sessionStorage.stoken
+                    }
+                })
+                    .then(
+                    function success(response) {
+                        // 考场信息
+                        $scope.roomsInfo = response.data;
+                        // 已选人数
+                        $scope.selectedNum = 0;
+                        // 未登录人数
+                        $scope.absentNum = 0;
+                        // 已登录人数
+                        $scope.examingNum = 0;
+                        for (x in $scope.roomsInfo) {
+                            switch ($scope.roomsInfo[x].status) {
+                                case 0:
+                                    $scope.absentNum += 1;
+                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
+                                    break;
+                                case 1:
+                                    $scope.examingNum += 1;
+                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = 'info';
+                                    break;
+                                default:
+                                    alert('考生状态错误！');
+                            }
+                        }
+                        $scope.orderCondition = 'id';
+                        $scope.isReverse = false;
+                    },
+                    function error(response) {
+                        alert('出现错误\n' + response.status + ' ' + response.statusText);
+                    });
+
+            } else {
+                $scope.loadStyle = 'cursor:default';
+                $scope.loadButtonDisabled = false;
+                var modalParam = {
+                    backdrop: 'static',
+                    size: 'sm'
+                };
+                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+                var headerBottom = '</h3></div>';
+                var footer =
+                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+                $uibModal.open(modalParam).result.then(function () {
+                    if ($scope.confirm) {
+
+                    }
+                });
+            }
 
         })
     }
+    //开考
+    $scope.loadStart = function () {
+
+        $scope.loadStyles = 'cursor:wait';
+        $scope.loadButtonDisableds = true;
+        $http.get('/EMS/admin/start', {
+            params: {
+                token: $window.sessionStorage.stoken
+            }
+        }).then(function successCallback(response) {
+            if (response.data.flag) {
+                var modalParam = {
+                    backdrop: 'static',
+                    size: 'sm'
+                };
+                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+                var headerBottom = '</h3></div>';
+                var footer =
+                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">开考成功！</p></div>' + footer;
+                $uibModal.open(modalParam).result.then(function () {
+                    if ($scope.confirm) {
+
+                    }
+                });
+                $scope.loadStyles = 'cursor:default';
+                $scope.loadButtonDisableds = false;
+            } else {
+                var modalParam = {
+                    backdrop: 'static',
+                    size: 'sm'
+                };
+                var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+                var headerBottom = '</h3></div>';
+                var footer =
+                    '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">'+response.data.detail+'</p></div>' + footer;
+                $uibModal.open(modalParam).result.then(function () {
+                    if ($scope.confirm) {
+
+                    }
+                });
+                $scope.loadStyles = 'cursor:default';
+                $scope.loadButtonDisableds = false;
+            }
+
+
+
+        })
+    }
+
 
 });
 angular.module('manager').controller('ImportFile', function ($rootScope, $scope, $http, $window, $timeout, $state, $interval, $uibModal) {
     //初始化表格
     $scope.roomMetaInfo = {
         'Mid': '专业名称',
-        'Mnum':'专业编号',
+        'Mnum': '专业编号',
         'Sid': '科目名称',
-        'Snum':'科目编号',
+        'Snum': '科目编号',
         'Jid': '试卷号',
         'dura': '考试时长',
     };
-    
+
     $scope.selectionStatus = {};
- 
+
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.Examinfo) {
@@ -368,7 +439,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
         }, function errorCallback(response) { })
 
     }
-    
+
 
 
     //正在检测不显示
@@ -404,7 +475,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
                 },
                 uploadEventHandlers: {
                     progress: function (e) {
-                        $scope.progressPer =Math.round((e.loaded / e.total * 100)*100)/100;
+                        $scope.progressPer = Math.round((e.loaded / e.total * 100) * 100) / 100;
                         // $scope.progressInfo = '上传中';
                     }
                 }
@@ -533,17 +604,17 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     //初始化表格
     $scope.stuMetaInfo = {
         'stuN': '姓名',
-        'stuS':'性别',
+        'stuS': '性别',
         'stuid': '证件号',
-        'Mid':'专业编号',
+        'Mid': '专业编号',
         'Mnum': '专业名称',
         'Sid': '科目名称',
         'Snum': '科目编号',
         'num': '试卷号',
     };
-    
+
     $scope.selectionStatus = {};
- 
+
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.Examinfo) {
@@ -629,7 +700,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
                 },
                 uploadEventHandlers: {
                     progress: function (e) {
-                        $scope.progressPer = Math.round((e.loaded / e.total * 100)*100)/100;
+                        $scope.progressPer = Math.round((e.loaded / e.total * 100) * 100) / 100;
                         // $scope.progressInfo = '上传中';
                     }
                 }
@@ -740,12 +811,12 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     //初始化表格
     $scope.roomMetaInfo = {
         'id': '场次',
-        'roomName':'考场名',
+        'roomName': '考场名',
         'time': '开始时间'
     };
-    
+
     $scope.selectionStatus = {};
- 
+
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.exportByRoom) {
@@ -797,7 +868,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
     $scope.sum = {};
     $scope.sumE = function () {
         // 友好提示信息，url未定
-    // alert("");
+        // alert("");
         if ($scope.sum.type == "sumExport") {
             // $http.get('/EMS/admin/load', {
             //     params: {
@@ -828,7 +899,7 @@ angular.module('manager').controller('exportFile', function ($rootScope, $scope,
             //         token: $window.sessionStorage.stoken
             //     }
             // }).then(function successCallback(response) {
-               
+
             //     var modalParam = {
             //         backdrop: 'static',
             //         size: 'sm'

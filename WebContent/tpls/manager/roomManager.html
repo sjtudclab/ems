@@ -12,6 +12,7 @@
             <!--<span>总人数：{{roomsInfo.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
             <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right"> 
                 <button class="btn btn-primary" style="{{loadStyle}}" ng-disabled="loadButtonDisabled" ng-click="loadExam()">分发试卷</button>
+                <button class="btn btn-primary" style="{{loadStyles}}" ng-disabled="loadButtonDisableds" ng-click="loadStart()">开考</button>
                     <!--<label ng-bind="'已选择:'+selectedNum+'/'+roomsInfo.length"></label>-->
 					<!--<button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
 					<button type="button" class="btn btn-info" ng-click="cancelAll()">取消选择</button>-->
