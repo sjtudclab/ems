@@ -42,7 +42,8 @@
 						<td ng-bind="examinee.uid"></td>
 						<td ng-bind="examinee.finishTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
 						<td ng-bind="statusDisplay[examinee.status]"></td>
-						<td><input type="checkbox" ng-disabled="ifcheck" ng-model="selectionStatus[examinee.uid]" ng-click="checkSel(selectionStatus[examinee.uid])"></td>
+						<td><input type="checkbox"  ng-model="selectionStatus[examinee.uid]" ng-click="checkSel(selectionStatus[examinee.uid])"></td>
+						<!--ng-disabled="ifcheck"-->
 					</tr>
 				</table>
 			</div>
