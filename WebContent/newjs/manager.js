@@ -513,6 +513,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
                         $scope.checkshow = false;
+                        refresh();
                     }
                 });
             }, function error(response) {
@@ -790,6 +791,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
                         $scope.checkshow = false;
+                        refresh();
                     }
                 });
             }, function error(response) {
