@@ -13,7 +13,7 @@
 
     <div class="selectArea">
         <div style="height: 5%;padding-bottom:3%">
-            <!--<span>总人数：{{exportByRoom.length}}&nbsp&nbsp&nbsp&nbsp</span> <span><span>未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>-->
+            <span style="float: left">应考人数：{{exportByRoom.length}}&nbsp&nbsp&nbsp&nbsp</span> <span style="float: left">未登录：{{absentNum}}&nbsp&nbsp&nbsp&nbsp</span>
             <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> <span style="float: right">
                     <!--<label ng-bind="'已选择:'+selectedNum+'/'+roomsInfo.length"></label>-->
 					<button type="button" class="btn btn-info" ng-click="selectAll()">全部选择</button>
@@ -31,6 +31,7 @@
                     <!--<td ng-bind="room.id"></td>-->
                     <td ng-bind="room.roomName"></td>
                     <td ng-bind="room.startTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
+                    <td ng-bind="roomStatus[room.status]"></td>
                     <!--<td ng-bind="room.detail"></td>-->
                     <td><input type="checkbox" ng-model="selectionStatus[room.id]" ng-click="checkSel(selectionStatus[room.id],room.id)"></td>
                 </tr>
