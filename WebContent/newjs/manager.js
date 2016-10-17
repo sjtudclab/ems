@@ -57,9 +57,11 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
 
             case "importExam": // 导入试卷
                 // $scope.showRoom = "none";
+                 $rootScope.refresh0();     
                 break;
             case "importStuArrangement": // 导入考生安排
                 // $scope.showRoom = "none";
+                $rootScope.refresh1();                             
                 break;
             case "roomArrangement": // 考场管理
                 // $scope.showRoom = "block";
@@ -433,7 +435,9 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     $scope.refresh = function () {
         refresh();
     };
-
+    $rootScope.refresh0 = function () {
+        refresh();
+    };
 
     function refresh() {
         $http.get('/EMS/admin/examLists', {
@@ -680,38 +684,20 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
 angular.module('manager').controller('ImportStuFile', function ($rootScope, $scope, $http, $window, $state, $interval, $uibModal) {
     //初始化表格
     $scope.stuMetaInfo = {
+        'stuR': '考场名',
+        'stuT': '开考时间',
+        'stuZ': '准考证号',
+        'stuS': '座位号',
         'stuN': '姓名',
-        'stuS': '性别',
+        'stuL': '登录状态',
+        'stuI': 'IP地址',
+        'stuG': '性别',
         'stuid': '证件号',
-        'Mid': '专业编号',
+        'stuP': '照片',
         'Mnum': '专业名称',
         'Sid': '科目名称',
-        'Snum': '科目编号',
         'num': '试卷号',
     };
-
-    $scope.selectionStatus = {};
-
-    // 全选
-    $scope.selectAll = function () {
-        for (x in $scope.Examinfo) {
-            $scope.selectionStatus[$scope.Examinfo[x].id] = true;
-        }
-    }
-
-    // 取消选择
-    $scope.cancelAll = function () {
-        for (x in $scope.Examinfo) {
-            $scope.selectionStatus[$scope.Examinfo[x].id] = false;
-        }
-    }
-
-    // 单独选择
-    $scope.checkSel = function (status, roomId) {
-        $scope.cancelAll();
-        $scope.selectionStatus[roomId] = true;
-
-    }
 
     // 排序变量
     $scope.thClick = function (value) {
@@ -723,8 +709,11 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     $scope.refresh = function () {
         refresh();
     };
+    $rootScope.refresh1 = function () {
+        refresh();
+    };
     //每间隔5s自动刷新
-    var timingPromise = undefined;
+    //var timingPromise = undefined;
     // timingPromise = $interval(function () { refresh() }, 5000);
 
     function refresh() {
@@ -734,7 +723,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
                 token: $window.sessionStorage.stoken
             }
         }).then(function successCallback(response) {
-            $scope.Examinfo = response.data;
+            $scope.stuinfo = response.data;
             $scope.orderCondition = 'id';
             $scope.isReverse = false;
         }, function errorCallback(response) { })
