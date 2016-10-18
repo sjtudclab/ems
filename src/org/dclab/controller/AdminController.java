@@ -214,14 +214,14 @@ public class AdminController {
 		if(AdminBean.adminTokenMap.containsValue(token))
 		{
 			//**************************
-			SqlSession sqlSession = MyBatisUtil.getSqlSession();
-			SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+			//SqlSession sqlSession = MyBatisUtil.getSqlSession();
+			//SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		/*	Timestamp timestamp = sessionMapperI.getStartTimeById(6);*/
 			//*********************************
 			List<Timestamp> list = sessionMapperI.getStartTime();
 			ExamOperator.newLoad(list);
 			SupervisorOperator.load();
-			sqlSession.close();
+			//sqlSession.close();
 			return new SuperRespond(true);
 		}
 		else
