@@ -21,11 +21,11 @@
 
         <!--</div>-->
     </div>
-    <div class="selectArea">
+    <div class="selectArea" style="height: 88%">
         <div style="height: 5%">
             <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="height: 95%">
             <table class="table table-hover table-bordered">
                 <tr>
                     <th ng-repeat="(key,value) in examMetaInfo" ng-click="thClick(key)" class='cursor-pointer'>{{value}}
@@ -39,7 +39,7 @@
                     <td ng-bind="x.subId"></td>
                     <td ng-bind="x.paperNum"></td>
                     <td ng-bind="x.totalScore"></td>
-                    <td ng-bind="x.typeNumScore"></td>
+                    <td style="width:40%;text-align:left;overflow-x:scroll" ng-bind="x.typeNumScore"></td>
                 </tr>
             </table>
         </div>
