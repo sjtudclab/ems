@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.CorrectAnswerMapperI;
+import org.dclab.mapping.PaperMapperI;
 import org.dclab.mapping.RoomMapperI;
 import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.SessionMapperI;
@@ -33,6 +34,7 @@ import org.dclab.model.JudgementBean;
 import org.dclab.model.MachineTestBean;
 import org.dclab.model.MatchingBean;
 import org.dclab.model.MultiChoicesBean;
+import org.dclab.model.PaperInfoBean;
 import org.dclab.model.RoomInfoBean;
 import org.dclab.model.ShortAnswerBean;
 import org.dclab.model.SingleChoiceBean;
@@ -338,6 +340,41 @@ public class AdminService {
 			string = string +list.get(list.size()-1);
 		}
 		return string;
+	}
+	
+	public List<PaperInfoBean> returnPaperInfo(){
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		PaperMapperI pMapperI = sqlSession.getMapper(PaperMapperI.class);
+		TopicMapperI tMapperI = sqlSession.getMapper(TopicMapperI.class);
+		
+		List<PaperInfoBean> list = pMapperI.getPaperInfo();
+		
+		int num,mark,totalScore=0;
+		int typeId,paperId;
+		String string = new String();
+		String[] typeName = {"单选题","多选题","判断题","匹配题","简答题","填空题","上机题"};
+		
+		for(PaperInfoBean paperInfoBean : list){
+			paperId = paperInfoBean.getPaperId();
+			List<Integer> list2 = tMapperI.getTypeList(paperId);
+			int index=0;
+			for(int i=0;i<7;i++){
+				if(i==list2.get(index)){
+					typeId = i;
+					mark = tMapperI.getSumOfType(typeId, paperId);
+					num = tMapperI.getNumOfType(typeId, paperId);
+					string = string+typeName[i]+num+"题共"+mark+"分，";
+					totalScore = totalScore+mark;
+					index++;
+				}
+			}
+			paperInfoBean.setTotalScore(totalScore);
+			paperInfoBean.setTypeNumScore(string);
+			totalScore = 0;
+			string = new String();
+		}
+		
+		return list;
 	}
 	
 	/*public String choiceMapToString(Map<Integer, Integer> map){

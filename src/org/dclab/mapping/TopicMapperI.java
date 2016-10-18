@@ -100,4 +100,13 @@ public interface TopicMapperI {
 	
 	@Select("SELECT id,points,correctAnswer FROM topic")
 	public List<TopicBeanExport> getPointsAndCorrect();
+	
+	@Select("SELECT DISTINCT typeId FROM `topic` WHERE paperId=#{id}")
+	public List<Integer> getTypeList(int id);
+	
+	@Select("SELECT SUM(topic.points) FROM topic WHERE typeId=#{typeId} AND paperId=#{paperId}")
+	public int getSumOfType(@Param(value = "typeId")int typeId,@Param(value = "paperId")int paperId);
+	
+	@Select("SELECT COUNT(*)  FROM topic WHERE typeId=#{typeId} AND paperId=#{paperId}")
+	public int getNumOfType(@Param(value = "typeId")int typeId,@Param(value = "paperId")int paperId);
 }
