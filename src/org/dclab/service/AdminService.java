@@ -38,6 +38,7 @@ import org.dclab.model.PaperInfoBean;
 import org.dclab.model.RoomInfoBean;
 import org.dclab.model.ShortAnswerBean;
 import org.dclab.model.SingleChoiceBean;
+import org.dclab.model.StudentInfoBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
 import org.dclab.model.TopicBean;
@@ -372,6 +373,27 @@ public class AdminService {
 			paperInfoBean.setTypeNumScore(string);
 			totalScore = 0;
 			string = new String();
+		}
+		sqlSession.close();
+		return list;
+	}
+	
+	public List<StudentInfoBean> getStuInfo(){
+		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		SessionMapperI sMapperI = sqlSession.getMapper(SessionMapperI.class);
+		
+		List<StudentInfoBean> list = sMapperI.getStuInfoAll();
+		
+		for(StudentInfoBean sInfoBean : list){
+			UUID token = ExamOperator.idTokenMap.get(sInfoBean.getUid());
+			ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+			
+			if(examBean==null || examBean.isIfLogin() == false)
+				sInfoBean.setStatus(0);
+			else if(examBean.isFinished())
+				sInfoBean.setStatus(2);
+			else 
+				sInfoBean.setStatus(1);
 		}
 		
 		return list;
