@@ -961,7 +961,10 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
         // 'id': '场次',
         'roomName': '考场名',
         'time': '开始时间',
-        'status': '考场状态'
+        'status': '考场状态',
+        'sumNum':'应考人数',
+        'log':'已登录人数',
+        'unlog':'未登录人数'
     };
 
     $scope.selectionStatus = {};
