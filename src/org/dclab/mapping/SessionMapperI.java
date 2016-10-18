@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.dclab.Session;
 import org.dclab.model.RoomInfoBean;
 import org.dclab.model.SessionBean;
+import org.dclab.model.StudentInfoBean;
 
 import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
@@ -54,4 +55,7 @@ public interface SessionMapperI {
 	
 	@Select("SELECT roomName FROM `session` where id = #{id}")
 	public String getRoomNameById(int id);
+	
+	@Select("SELECT  roomName,startTime,`user`.Uid,seatNum,Uname,ip,gender,Cid,photo,proName,subName,paperNum FROM `session` JOIN session_candidate JOIN `user` JOIN paper WHERE `user`.Uid = session_candidate.Uid AND `session`.id = session_candidate.sid AND paper.paperId = `user`.paperId")
+	public List<StudentInfoBean> getStuInfoAll();
 }

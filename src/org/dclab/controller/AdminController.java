@@ -44,6 +44,7 @@ import org.dclab.model.RoomInfoBean;
 import org.dclab.model.SessionBean;
 import org.dclab.model.ShortAnswerBean;
 import org.dclab.model.SingleChoiceBean;
+import org.dclab.model.StudentInfoBean;
 import org.dclab.model.SubjectRow;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SuperRespond;
@@ -396,6 +397,11 @@ public class AdminController {
 	@RequestMapping("/paperInfo")
 	public List<PaperInfoBean> getPaperInfo(){
 		return adminService.returnPaperInfo();
+	}
+	
+	@RequestMapping("/stuInfo")
+	public List<StudentInfoBean> getStuInfo(){
+		return adminService.getStuInfo();
 	}
 	
 	@PostMapping("/stuForm")
