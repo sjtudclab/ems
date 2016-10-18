@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.dclab.Session;
 import org.dclab.model.RoomInfoBean;
@@ -50,7 +51,8 @@ public interface SessionMapperI {
 	@Select("SELECT id,startTime,roomName FROM `session`")
 	public List<SessionBean> getSessionList();
 	
-	@Select("TRUNCATE TABLE session")
+	//@Select("TRUNCATE TABLE session")
+	@Delete("delete from `session`")
 	public void deleteAll();
 	
 	@Select("SELECT roomName FROM `session` where id = #{id}")

@@ -2,6 +2,7 @@ package org.dclab.mapping;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -30,7 +31,8 @@ public interface SessionCanMapperI {
 	@Select("SELECT COUNT(*) FROM `session_candidate` WHERE sid=#{sid}")
 	public int getSizeOfSession(int sid);
 	
-	@Select("TRUNCATE TABLE session_candidate")
+	//@Select("TRUNCATE TABLE session_candidate")
+	@Delete("delete from `session_candidate`")
 	public void deleteAll();
 
 

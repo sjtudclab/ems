@@ -1,29 +1,24 @@
 package org.dclab.controller;
 
-import java.awt.print.Paper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.MidiDevice.Info;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.dclab.common.Constants;
 import org.dclab.mapping.CanAnswerMapperI;
 import org.dclab.mapping.ChoiceMapperI;
@@ -31,25 +26,18 @@ import org.dclab.mapping.MatchItemMapperI;
 import org.dclab.mapping.PaperMapperI;
 import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.SessionMapperI;
-import org.dclab.mapping.SubjectMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
-import org.dclab.model.ChoicesBean;
-import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
-import org.dclab.model.Paper4PDF;
 import org.dclab.model.PaperInfoBean;
 import org.dclab.model.RoomInfoBean;
 import org.dclab.model.SessionBean;
-import org.dclab.model.ShortAnswerBean;
-import org.dclab.model.SingleChoiceBean;
 import org.dclab.model.StudentInfoBean;
 import org.dclab.model.SubjectRow;
 import org.dclab.model.SuperBean;
 import org.dclab.model.SuperRespond;
 import org.dclab.model.SupervisorOperator;
-import org.dclab.model.Topic4PDF;
 import org.dclab.model.TopicBeanExport;
 import org.dclab.service.AdminService;
 import org.dclab.service.ExportService;
@@ -57,27 +45,65 @@ import org.dclab.service.ImportService;
 import org.dclab.utils.ExcelExporter;
 import org.dclab.utils.ExcelImporter;
 import org.dclab.utils.MyBatisUtil;
-import org.dclab.utils.PDFWriter;
+//import org.dclab.utils.MyBatisUtil;
 import org.dclab.utils.ZipTool;
-import org.junit.runners.Parameterized.Parameters;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Import;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+
+	@Autowired
+	private PaperMapperI paperMapperI;
+	@Autowired
+	private TopicMapperI topicMapperI;
+	@Autowired
+	private ChoiceMapperI choiceMapperI;
+	@Autowired
+	private MatchItemMapperI matchItemMapperI;
+	@Autowired
+	private UserMapperI userMapperI ;
+	@Autowired
+	private SessionMapperI sessionMapperI;
+	@Autowired
+	private SessionCanMapperI sessionCanMapperI;
+	@Autowired
+	private CanAnswerMapperI canAnswerMapperI;
+	
+	public void setPaperMapperI(PaperMapperI paperMapperI) {
+		this.paperMapperI = paperMapperI;
+	}
+
+	public void setTopicMapperI(TopicMapperI topicMapperI) {
+		this.topicMapperI = topicMapperI;
+	}
+
+	public void setMatchItemMapperI(MatchItemMapperI matchItemMapperI) {
+		this.matchItemMapperI = matchItemMapperI;
+	}
+
+	public void setUserMapperI(UserMapperI userMapperI) {
+		this.userMapperI = userMapperI;
+	}
+
+	public void setSessionMapperI(SessionMapperI sessionMapperI) {
+		this.sessionMapperI = sessionMapperI;
+	}
+
+	public void setSessionCanMapperI(SessionCanMapperI sessionCanMapperI) {
+		this.sessionCanMapperI = sessionCanMapperI;
+	}
+	
 	public static byte[] lock = new byte[1];
 	@Autowired
 	private AdminService adminService;
@@ -104,24 +130,26 @@ public class AdminController {
 	@RequestMapping("/examClear")
 	public Map<String, String> clearExam(@RequestParam UUID token){
 		
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		/*SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		PaperMapperI paperMapperI = sqlSession.getMapper(PaperMapperI.class);
 		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
 		ChoiceMapperI choiceMapperI = sqlSession.getMapper(ChoiceMapperI.class);
-		MatchItemMapperI matchItemMapperI = sqlSession.getMapper(MatchItemMapperI.class);
+		MatchItemMapperI matchItemMapperI = sqlSession.getMapper(MatchItemMapperI.class);*/
 		
 		Map<String, String> map= new HashMap<>();
 		if(AdminBean.adminTokenMap.containsValue(token)){
-			paperMapperI.deleteAll();
-			topicMapperI.delteAll();
-			choiceMapperI.deleteAll();
-			matchItemMapperI.deleteAll();
+			synchronized (lock) {
+				paperMapperI.deleteAll();
+				topicMapperI.delteAll();
+				choiceMapperI.deleteAll();
+				matchItemMapperI.deleteAll();
+			}
 			map.put("info", "清空成功");
 			System.out.println("清空成功");
 		}
 		else
 			map.put("info", "无此权限");
-		sqlSession.close();
+		//sqlSession.close();
 		return map;
 	}
 	
@@ -129,10 +157,10 @@ public class AdminController {
 	
 	@RequestMapping("/stuClear")
 	public Map<String, String> clearStu(@RequestParam UUID token){
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		/*SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		SessionMapperI sessionMapperI =  sqlSession.getMapper(SessionMapperI.class);
-		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
+		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);*/
 		
 		Map<String, String> map= new HashMap<>();
 		if(AdminBean.adminTokenMap.containsValue(token)){
@@ -145,14 +173,14 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
-		sqlSession.close();
+		//sqlSession.close();
 		return map;
 	}
 	
 	@RequestMapping("/sumDownloadClear")//导出考生成绩对应的清空
 	public Map<String, String> clearSumDownload(@RequestParam UUID token){
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
-		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
+		//SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		//UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		
 		Map<String, String> map= new HashMap<>();
 		if(AdminBean.adminTokenMap.containsValue(token)){
@@ -161,14 +189,14 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
-		sqlSession.close();
+		//sqlSession.close();
 		return map;
 	}
 
 	@RequestMapping("/stuDownloadClear")//导出考生试卷对应的清空
 	public Map<String, String> clearStuDownload(@RequestParam UUID token){
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
-		CanAnswerMapperI canAnswerMapperI = sqlSession.getMapper(CanAnswerMapperI.class);
+		//SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		//CanAnswerMapperI canAnswerMapperI = sqlSession.getMapper(CanAnswerMapperI.class);
 		
 		Map<String, String> map= new HashMap<>();
 		if(AdminBean.adminTokenMap.containsValue(token)){
@@ -177,7 +205,7 @@ public class AdminController {
 		}
 		else
 			map.put("info", "无此权限");
-		sqlSession.close();
+		//sqlSession.close();
 		return map;
 	}
 	
@@ -309,6 +337,10 @@ public class AdminController {
 		String fileName = path+file.getOriginalFilename();
 		System.out.println(fileName);
 		try {
+			File dir = new File(path);
+			if(!dir.exists())
+				dir.mkdirs();
+			
 			FileOutputStream fos = new FileOutputStream(fileName);
 			fos.write(file.getBytes());
 			fos.flush();
@@ -387,10 +419,11 @@ public class AdminController {
 	
 	@RequestMapping("/roomLists")
 	public List<SessionBean> getSessionList(@RequestParam UUID token){
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
-		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
+		//SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		//SqlSession sqlSession = sqlSessionFactory.openSession();
+		//SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		List<SessionBean> list = sessionMapperI.getSessionList();
-		sqlSession.close();
+		//sqlSession.close();
 		return list;
 	}
 	
@@ -411,6 +444,9 @@ public class AdminController {
 		String fileName = path +file.getOriginalFilename();
 		
 		try {
+			File dir = new File(path);
+			if(!dir.exists())
+				dir.mkdirs();
 			FileOutputStream fos = new FileOutputStream(fileName);
 			fos.write(file.getBytes());
 			fos.flush();
@@ -517,17 +553,19 @@ public class AdminController {
 			 stream.write(data.getBytes("UTF-8"));
 		}
 		else{
-		String path = System.getProperty("project.root")+"files\\export\\test.xls";
-		
-		ExcelExporter excel = new ExcelExporter(path);
+		String path = System.getProperty("project.root")+"files\\export";
+		File dir = new File(path);
+		if(!dir.exists())
+			dir.mkdirs();
+		String fileName = path + "\\test.xls";
+		ExcelExporter excel = new ExcelExporter(fileName);
 		
 		excel.exportMarks(exportService.getScoreCollect(id[0]), "成绩汇总");
-		String myfileName = path.substring(path.lastIndexOf('\\')+1);
+		String myfileName = fileName.substring(fileName.lastIndexOf('\\')+1);
 		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
 		try {
 			// get your file as InputStream
-			InputStream is = new FileInputStream(new File(
-					path));
+			InputStream is = new FileInputStream(new File(fileName));
 			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 			response.flushBuffer();
 		} catch (IOException ex) {
@@ -555,20 +593,22 @@ public class AdminController {
 		}
 		else{
 			
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		/*SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		UserMapperI userMapperI = sqlSession.getMapper(UserMapperI.class);
 		SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		SessionCanMapperI sessionCanMapperI = sqlSession.getMapper(SessionCanMapperI.class);
 		PaperMapperI paperMapperI = sqlSession.getMapper(PaperMapperI.class);
 		TopicMapperI topicMapperI = sqlSession.getMapper(TopicMapperI.class);
-		String statement = "org.dclab.mapping.paperMapper.getSubName";
+		String statement = "org.dclab.mapping.paperMapper.getSubName";*/
 		
 		String roomName = sessionMapperI.getRoomNameById(id[0]);
 		long  startTime =sessionMapperI.getStartTimeById(id[0]).getTime();
 		String path = System.getProperty("project.root")+"files\\export\\"+roomName+"-"+startTime;//放置该考场考生考卷的文件夹。
 		System.out.println("放置考生考卷的文件夹:"+path);
 		File dir = new File(path);
-		dir.mkdir();
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
 		
 		Map<Integer, List<Object>> subjectMap = new HashMap<>();//存储科目信息的map
 		Map<Integer, TopicBeanExport> topicMap = new HashMap<>();//存储topicId和points，correctanswer的map

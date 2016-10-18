@@ -18,11 +18,59 @@
 
 
 	<context:component-scan base-package="org.dclab" />
-
+ 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+ 	
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="1000000000" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
+	
+	<!-- //////////////// 数据库配置  - 引入数据库连接池，应对高并发访问 //////////////////////////////////-->
+	<!-- 引入配置文件 -->  
+    <bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="location" value="classpath:ems.properties" />  
+    </bean>  
+  
+  	<!-- 连接池配置 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  
+        destroy-method="close">  
+        <property name="driverClassName" value="${driver}" />  
+        <property name="url" value="${url}" />  
+        <property name="username" value="${name}" />
+        <property name="password" value="${password}" />
+        <!-- 初始化连接大小 -->  
+        <property name="initialSize" value="${initialSize}"></property>  
+        <!-- 连接池最大数量 -->  
+        <property name="maxTotal" value="${maxTotal}"></property>
+        <!-- 连接池最大空闲 -->  
+        <property name="maxIdle" value="${maxIdle}"></property>  
+        <!-- 连接池最小空闲 -->  
+        <property name="minIdle" value="${minIdle}"></property>  
+        <!-- 获取连接最大等待时间 ms -->  
+        <property name="maxWaitMillis" value="${maxWaitMillis}"></property>  
+    </bean>  
+  
+    <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="configLocation" value="classpath:conf.xml"></property>
+        <!-- 自动扫描 mapping.xml文件 -->  
+        <!-- <property name="mapperLocations" value="classpath:conf.xml"></property>   -->
+    </bean>  
+  
+    <!-- Mapper 接口所在包名，Spring会自动扫描其下的类，通过sql session 自动装配 mapper -->  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="org.dclab.mapping" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean>  
+  
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
+    <bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+	
 </beans>
 

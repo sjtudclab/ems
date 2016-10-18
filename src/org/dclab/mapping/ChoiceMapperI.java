@@ -2,6 +2,7 @@ package org.dclab.mapping;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,7 +21,8 @@ public interface ChoiceMapperI {
 	@Select("SELECT COUNT(*) FROM `choice` WHERE topicId=#{topicId}")
 	public int getFillNumById(int topicId);
 	
-	@Select("TRUNCATE TABLE choice")
+	//@Select("TRUNCATE TABLE choice")
+	@Delete("delete from choice")
 	public void deleteAll();
 	
 }

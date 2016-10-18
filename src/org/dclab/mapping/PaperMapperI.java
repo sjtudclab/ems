@@ -2,13 +2,15 @@ package org.dclab.mapping;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.dclab.model.PaperInfoBean;
 import org.dclab.model.SubjectRow;
 
 public interface PaperMapperI {
-	@Update("TRUNCATE TABLE paper")
+	//@Update("TRUNCATE TABLE paper")
+	@Delete("delete from paper")
 	public void deleteAll(); 
 	
 	@Select("SELECT * FROM `paper`")

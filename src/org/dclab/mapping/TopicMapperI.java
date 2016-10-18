@@ -3,6 +3,7 @@ package org.dclab.mapping;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -95,7 +96,8 @@ public interface TopicMapperI {
 	@Select("SELECT points FROM `topic` WHERE  id=#{id}")
 	public String getPointsById(int id);
 	
-	@Select("TRUNCATE TABLE topic")
+	//@Select("TRUNCATE TABLE topic")
+	@Delete("delete from topic")
 	public void delteAll();
 	
 	@Select("SELECT id,points,correctAnswer FROM topic")
