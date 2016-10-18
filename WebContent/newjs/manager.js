@@ -123,8 +123,8 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     };
     // 状态码转化成易读string
     $scope.statusDisplay = ['未登录', '已登录'];
-    $scope.statusDisplay = ['未分发', '已分发'];
-    $scope.statusDisplay = ['未开考', '已开考'];
+    $scope.statusDisplay1 = ['未分发', '已分发'];
+    $scope.statusDisplay2 = ['未开考', '已开考'];
     $scope.roomsStatus = {};
     $scope.selectionStatus = {};
 
@@ -667,6 +667,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
             }
 
         }).then(function successCallback(response) {
+            refresh();
             $scope.clearshow = false;
             var modalParam = {
                 backdrop: 'static',
@@ -679,7 +680,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
             modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.info + '</p></div>' + footer;
             $uibModal.open(modalParam).result.then(function () {
                 if ($scope.confirm) {
-
+                 
                 }
             });
             // alert(response.data.info);
@@ -933,6 +934,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
                 }
             }
         }).then(function successCallback(response) {
+            refresh();
             $scope.clearshow = false;
             var modalParam = {
                 backdrop: 'static',
@@ -959,7 +961,10 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
         // 'id': '场次',
         'roomName': '考场名',
         'time': '开始时间',
-        'status': '考场状态'
+        'status': '考场状态',
+        'sumNum':'应考人数',
+        'log':'已登录人数',
+        'unlog':'未登录人数'
     };
 
     $scope.selectionStatus = {};

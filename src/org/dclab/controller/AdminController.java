@@ -123,7 +123,7 @@ public class AdminController {
 	}
 	
 	public static String info = new String();
-/*	public static volatile boolean flag= false;*/
+	public static boolean loadFlag = false;
 	public static String info1= new String();//这两个是考生考场关系导入时用到的
 	public static volatile boolean flag1 = false;
 	
@@ -221,7 +221,9 @@ public class AdminController {
 			List<Timestamp> list = sessionMapperI.getStartTime();
 			ExamOperator.newLoad(list);
 			SupervisorOperator.load();
-			//sqlSession.close();
+
+			loadFlag = true ;
+			
 			return new SuperRespond(true);
 		}
 		else
