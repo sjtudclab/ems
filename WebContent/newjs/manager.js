@@ -702,7 +702,8 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
         'Sid': '科目名称',
         'num': '试卷号',
     };
-
+   
+    $scope.stuStatus=["未登录","正在考试","已交卷"];
     // 排序变量
     $scope.thClick = function (value) {
         $scope.orderCondition = value;
@@ -721,7 +722,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     // timingPromise = $interval(function () { refresh() }, 5000);
 
     function refresh() {
-        $http.get('/EMS/admin/roomLists', {
+        $http.get('/EMS/admin/stuInfo', {
             // $http.get('info.json', {
             params: {
                 token: $window.sessionStorage.stoken

@@ -1,7 +1,7 @@
 <div ng-controller="ImportStuFile" style="height:100%">
     <!--导入考生安排-->
     <div style="margin-bottom:3%;height:12%">
-         <br>
+        <br>
         <input type="file" id="StuFile" style="display:none" custom-on-change="selectFile">
         <input ng-model="selectedFile.name" placeholder="选择文件" disabled>
         <label for="StuFile" class="btn btn-primary">选择文件</label>
@@ -24,9 +24,9 @@
 
     </div>
     <div class="selectArea">
-          <div style="height: 5%">
-            <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span> 
-          </div>
+        <div style="height: 5%">
+            <span style="float: left" class="glyphicon glyphicon-refresh cursor-pointer" ng-click="refresh()">刷新</span>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover table-bordered">
                 <tr>
@@ -34,13 +34,21 @@
                     </th>
                 </tr>
                 <tr ng-repeat="x in stuinfo | orderBy:orderCondition:isReverse">
-                    <td ng-bind="x.id"></td>
                     <td ng-bind="x.roomName"></td>
                     <td ng-bind="x.startTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
-                    <td ng-bind="x.roomName"></td>
-                    <td ng-bind="x.roomName"></td>
-                    <td ng-bind="x.roomName"></td>
-                    <td ng-bind="x.roomName"></td>
+                    <td ng-bind="x.uid"></td>
+                    <td ng-bind="x.seatNum"></td>
+                    <td ng-bind="x.uname"></td>
+                    <td ng-bind="stuStatus[x.status]"></td>
+                    <td ng-bind="x.ip"></td>
+                    <td ng-bind="x.gender"></td>
+                    <td ng-bind="x.cid"></td>
+                    <td ng-bind="x.photo"></td>
+                    <td ng-bind="x.proName"></td>
+                    <td ng-bind="x.subName"></td>
+                    <td ng-bind="x.paperNum"></td>
+
+
                 </tr>
             </table>
         </div>
