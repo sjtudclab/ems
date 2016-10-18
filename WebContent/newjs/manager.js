@@ -200,6 +200,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     }
 
     // 刷新
+    refresh();
     $scope.refresh = function () {
         refresh();
     };
@@ -434,6 +435,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     }
 
     // 表格刷新
+    refresh();
     $scope.refresh = function () {
         refresh();
     };
@@ -711,6 +713,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
     }
 
     // 刷新
+    refresh();
     $scope.refresh = function () {
         refresh();
     };
@@ -995,6 +998,7 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
     }
 
     // 刷新
+    refresh();
     $scope.refresh = function () {
         refresh();
     };
