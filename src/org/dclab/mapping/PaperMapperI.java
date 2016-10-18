@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.dclab.model.PaperInfoBean;
 import org.dclab.model.SubjectRow;
 
 public interface PaperMapperI {
@@ -12,4 +13,7 @@ public interface PaperMapperI {
 	
 	@Select("SELECT * FROM `paper`")
 	public List<SubjectRow> getSubjectrowById();
+	
+	@Select("SELECT paperId,proName,proId,subName,subId,paperNum FROM `paper`")
+	public List<PaperInfoBean> getPaperInfo();
 }
