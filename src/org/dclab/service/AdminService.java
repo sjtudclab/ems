@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
+import org.dclab.common.Constants;
+import org.dclab.controller.AdminController;
 import org.dclab.mapping.CorrectAnswerMapperI;
 import org.dclab.mapping.PaperMapperI;
 import org.dclab.mapping.RoomMapperI;
@@ -152,6 +154,14 @@ public class AdminService {
 				bean.setStatus(1);
 			else
 				bean.setStatus(0);
+			if(AdminController.loadFlag==true)
+				bean.setLoadStatus(1);
+			else
+				bean.setLoadStatus(0);
+			if(Constants.superLoginFlag==true)
+				bean.setExamStatus(1);
+			else
+				bean.setExamStatus(0);
 			
 		}
 		sqlSession.close();

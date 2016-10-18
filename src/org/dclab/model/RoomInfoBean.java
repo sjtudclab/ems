@@ -9,9 +9,23 @@ public class RoomInfoBean {
 	private int size;
 	private String Uid;
 	private int status;
+	private int loadStatus;
+	private int examStatus;
 	
 	
 
+	public int getLoadStatus() {
+		return loadStatus;
+	}
+	public void setLoadStatus(int loadStatus) {
+		this.loadStatus = loadStatus;
+	}
+	public int getExamStatus() {
+		return examStatus;
+	}
+	public void setExamStatus(int examStatus) {
+		this.examStatus = examStatus;
+	}
 	public int getId() {
 		return id;
 	}
