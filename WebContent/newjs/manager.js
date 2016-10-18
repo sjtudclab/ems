@@ -57,7 +57,9 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
 
             case "importExam": // 导入试卷
                 // $scope.showRoom = "none";
-                 $rootScope.refresh0();     
+                 $rootScope.refresh0();  
+                
+                // $rootScope.selectedFile =undefined;   
                 break;
             case "importStuArrangement": // 导入考生安排
                 // $scope.showRoom = "none";
@@ -440,7 +442,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
     };
 
     function refresh() {
-        $http.get('/EMS/admin/examLists', {
+        $http.get('/EMS/admin/paperInfo', {
             // $http.get('info.json', {
             params: {
                 token: $window.sessionStorage.stoken
@@ -514,6 +516,7 @@ angular.module('manager').controller('ImportFile', function ($rootScope, $scope,
                     if ($scope.confirm) {
                         $scope.checkshow = false;
                         refresh();
+                        // $scope.fileName=undefined;                        
                     }
                 });
             }, function error(response) {
