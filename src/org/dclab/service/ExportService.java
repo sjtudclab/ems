@@ -47,7 +47,8 @@ public class ExportService {
 			String Uname;
 			
 			try {
-				mark = userMapperI.getMarkByUid(str);//可能会影响性能，因为数据库查了两次
+				if(userMapperI.getMarkByUid(str)!=null)
+					mark = userMapperI.getMarkByUid(str);//可能会影响性能，因为数据库查了两次
 				paperId = userMapperI.getPaperIdByUid(str);
 				Uname = userMapperI.getNmaeByUid(str);
 			} catch (Exception e) {

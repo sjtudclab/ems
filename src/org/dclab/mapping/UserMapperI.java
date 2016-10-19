@@ -39,7 +39,7 @@ public interface UserMapperI {
 	
 	
 	@Select("SELECT mark FROM `user` WHERE Uid=#{uid}")
-	public int getMarkByUid(String uid);
+	public Integer getMarkByUid(String uid);
 	
 	
 	@Select("SELECT paperId FROM `user` WHERE Uid=#{uid}")
