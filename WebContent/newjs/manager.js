@@ -77,17 +77,18 @@ angular.module('manager').controller('managerCtrl', function ($rootScope, $scope
                 }, { id: 31 }, { id: 11 }, { id: 14 }]
                 $scope.orderCondition = 'id';
                 $scope.isReverse = false;
+                $rootScope.refresh3();
                 //请求场次列表/sumList在父域中赋值
-                $http.get('/EMS/admin/roomLists', {
-                    // $http.get('info.json', {
-                    params: {
-                        token: $window.sessionStorage.stoken
-                    }
-                }).then(function successCallback(response) {
-                    $scope.exportByRoom = response.data;
-                    $scope.orderCondition = 'id';
-                    $scope.isReverse = false;
-                }, function errorCallback(response) { });
+                // $http.get('/EMS/admin/roomLists', {
+                //     // $http.get('info.json', {
+                //     params: {
+                //         token: $window.sessionStorage.stoken
+                //     }
+                // }).then(function successCallback(response) {
+                //     $scope.exportByRoom = response.data;
+                //     $scope.orderCondition = 'id';
+                //     $scope.isReverse = false;
+                // }, function errorCallback(response) { });
                 break;
             case "systemManagement": // 系统管理
                 $scope.showRoom = "none";
