@@ -117,6 +117,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
         // 'id': '场次',
         'roomName': '考场名',
         'startTime': '开考时间',
+        'supervisorId':'监考员账号',
         'size': '考场人数',
         'status': '登录状态',
         'status1': '试卷发放状态',
@@ -125,7 +126,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
     // 状态码转化成易读string
     $scope.statusDisplay = ['未登录', '已登录'];
     $scope.statusDisplay1 = ['未分发', '已分发'];
-    $scope.statusDisplay2 = ['未开考', '已开考'];
+    $scope.statusDisplay2 = ['未开考', '已开考','已结束'];
     $scope.roomsStatus = {};
     $scope.selectionStatus = {};
 

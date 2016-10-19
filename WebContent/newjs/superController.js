@@ -120,7 +120,7 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 		}
 		if ($scope.index == 3) {
 			$scope.seatRel = true;
-		}else{
+		} else {
 			$scope.seatRel = false;
 		}
 		$scope.active[$scope.index] = "active";
@@ -619,6 +619,50 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 
 
 
+	}
+
+    $scope.cancelExam = function () {
+		$http.get('/EMS/supervise/release', {
+			params: {
+				token: $window.sessionStorage.token
+			}
+		}).then(function successCallback(response) {
+
+            if (response.data.flag) {
+				refresh();
+				var modalParam = {
+					backdrop: 'static',
+					size: 'sm'
+				};
+				var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+				var headerBottom = '</h3></div>';
+				var footer =
+					'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+				modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">结束考试成功！</p></div>' + footer;
+				$uibModal.open(modalParam).result.then(function () {
+					if ($scope.confirm) {
+
+					}
+				});
+			} else {
+				var modalParam = {
+					backdrop: 'static',
+					size: 'sm'
+				};
+				var headerTop = '<div class="modal-header"><h3 class="modal-title">提醒'
+				var headerBottom = '</h3></div>';
+				var footer =
+					'<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
+				modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">' + response.data.detail + '</p></div>' + footer;
+				$uibModal.open(modalParam).result.then(function () {
+					if ($scope.confirm) {
+
+					}
+				});
+			}
+
+		}, function errorCallback(response) {
+		});
 	}
 
 	// 全选
