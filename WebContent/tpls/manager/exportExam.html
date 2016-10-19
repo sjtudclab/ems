@@ -31,7 +31,9 @@
                     <td ng-bind="room.roomName"></td>
                     <td ng-bind="room.startTime| date:'yyyy-MM-dd HH:mm:ss'"></td>
                     <td ng-bind="roomStatus[room.status]"></td>
-                    <td ng-bind="room."></td>
+                    <td ng-bind="room.testNum"></td>
+                    <td ng-bind="room.registeredNum"></td>
+                    <td ng-bind="room.unRegisteredNum"></td>
                     <!--<td ng-bind="room.detail"></td>-->
                     <td><input type="checkbox" ng-model="selectionStatus[room.id]" ng-click="checkSel(selectionStatus[room.id],room.id)"></td>
                 </tr>

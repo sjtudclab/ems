@@ -968,7 +968,7 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
     };
 
     $scope.selectionStatus = {};
-    $scope.roomStatus = ['未开考', '已开考', '已结束'];
+    $scope.roomStatus = ['未分发','已分发','未开考', '已开考'];
     // 全选
     $scope.selectAll = function () {
         for (x in $scope.exportByRoom) {
@@ -1055,6 +1055,7 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
                 // });
 
                 $scope.sumExport();
+                refresh(); 
             } else {
 
                 // $http.get('/EMS/admin/load', {
@@ -1079,6 +1080,7 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
                 //     });
                 // });
                 $scope.stuExport();
+                refresh(); 
             }
         } else {
             var modalParam = {
