@@ -3,10 +3,13 @@ package org.dclab.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
 import org.dclab.mapping.SessionCanMapperI;
 import org.dclab.mapping.UserMapperI;
+import org.dclab.model.ExamBean;
+import org.dclab.model.ExamOperator;
 import org.dclab.model.ScoreCollectBean;
 import org.dclab.utils.MyBatisUtil;
 import org.springframework.stereotype.Service;
@@ -53,8 +56,16 @@ public class ExportService {
 				continue;
 			}
 			
+			String stringMark = String.valueOf(mark);
+			
+			UUID token = ExamOperator.idTokenMap.get(str);
+			ExamBean examBean = ExamOperator.tokenExamMap.get(token);
+			
+			if(examBean==null||examBean.isIfLogin()==false)
+				stringMark = "缺考";
+			
 			ScoreCollectBean scoreCollectBean = sqlSession.selectOne(statement, paperId);
-			scoreCollectBean.setMark(mark);
+			scoreCollectBean.setMark(stringMark);
 			scoreCollectBean.setUname(Uname);
 			scoreCollectBean.setUid(str);
 			list.add(scoreCollectBean);

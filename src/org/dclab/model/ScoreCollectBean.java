@@ -12,7 +12,7 @@ public class ScoreCollectBean {
 	public String paperNum;
 	public String Uid;
 	public String Uname;	
-	public int mark;
+	public String mark;
 	
 	public String getProName() {
 		return proName;
@@ -44,10 +44,10 @@ public class ScoreCollectBean {
 	public void setSubName(String subName) {
 		this.subName = subName;
 	}
-	public int getMark() {
+	public String getMark() {
 		return mark;
 	}
-	public void setMark(int mark) {
+	public void setMark(String mark) {
 		this.mark = mark;
 	}
 	@Override
