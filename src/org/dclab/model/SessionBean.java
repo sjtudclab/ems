@@ -8,6 +8,11 @@ public class SessionBean {
 	private Timestamp startTime;
 	private String Uid;
 	
+	private int status;//考场状态
+	private int testNum;//应考人数
+	private int registeredNum;//已登录人数
+	private int unRegisteredNum;//未登录人数
+	
 	public SessionBean() {
 		super();
 	}
@@ -16,6 +21,33 @@ public class SessionBean {
 		this.roomName = roomName;
 		this.startTime = startTime;
 		this.Uid = Uid;
+	}
+	
+	
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public int getTestNum() {
+		return testNum;
+	}
+	public void setTestNum(int testNum) {
+		this.testNum = testNum;
+	}
+	public int getRegisteredNum() {
+		return registeredNum;
+	}
+	public void setRegisteredNum(int registeredNum) {
+		this.registeredNum = registeredNum;
+	}
+	public int getUnRegisteredNum() {
+		return unRegisteredNum;
+	}
+	public void setUnRegisteredNum(int unRegisteredNum) {
+		this.unRegisteredNum = unRegisteredNum;
 	}
 	public int getId() {
 		return id;
