@@ -281,7 +281,7 @@ public class AdminController {
 			return new SuperRespond(false, "无此权限");
 	}
 	
-	@RequestMapping("/addSubject")
+	/*@RequestMapping("/addSubject")
 	public SuperRespond addSubject(@RequestParam UUID token, @RequestParam String name,@RequestParam int duration,
 			@RequestParam int earliestSubmit,@RequestParam int latestLogin,@RequestParam String map)
 	{
@@ -306,9 +306,9 @@ public class AdminController {
 		}
 		else
 			return new SuperRespond(false, "无此权限");
-	}
+	}*/
 	
-	@RequestMapping("/addTopic")
+	/*@RequestMapping("/addTopic")
 	public SuperRespond addTopic(@RequestParam UUID token, @RequestParam String content,@RequestParam String choice,
 			@RequestParam List<Integer> List,@RequestParam int typeId)
 	{
@@ -333,7 +333,7 @@ public class AdminController {
 		}
 		else
 			return new SuperRespond(false, "无此权限");
-	}
+	}*/
 	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
 

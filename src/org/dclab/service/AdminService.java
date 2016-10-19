@@ -61,7 +61,7 @@ import com.sun.corba.se.spi.ior.Writeable;
 public class AdminService {
 	public static int currentSubjectId=0;
 	
-	public SuperRespond subjectAdd(String name,int duration,int earliestSubmit,int latestLogin,Map<Integer, String> map){
+	/*public SuperRespond subjectAdd(String name,int duration,int earliestSubmit,int latestLogin,Map<Integer, String> map){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		SubjectMapperI smapper=sqlSession.getMapper(SubjectMapperI.class);
 		//把分钟转化为妙
@@ -97,9 +97,9 @@ public class AdminService {
 
 		sqlSession.close();
 		return new SuperRespond(true);
-	}
+	}*/
 	
-	public SuperRespond TopicAdd(String content,Map<Integer, String> choice,List<Integer> answer,int typeId){
+/*	public SuperRespond TopicAdd(String content,Map<Integer, String> choice,List<Integer> answer,int typeId){
 		SqlSession sqlSession=MyBatisUtil.getSqlSession();
 		String statement = "org.dclab.mapping.topicMapper.add";
 		TopicBean topicBean=new TopicBean(content, typeId, currentSubjectId);
@@ -136,7 +136,7 @@ public class AdminService {
 		
 		sqlSession.close();
 		return new SuperRespond(true);
-	}
+	}*/
 	
 	public List<RoomInfoBean> getRoomInfo()
 	{
