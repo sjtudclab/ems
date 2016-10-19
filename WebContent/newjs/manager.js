@@ -242,7 +242,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                     }
                 }
                 $scope.cancelAll();
-                $scope.orderCondition = 'id';
+                $scope.orderCondition = 'roomName';
                 $scope.isReverse = false;
             },
             function error() { });
@@ -281,43 +281,8 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                 });
                 $scope.loadStyle = 'cursor:default';
                 $scope.loadButtonDisabled = false;
-                $http({
-                    method: 'GET',
-                    url: '/EMS/admin/Refresh',
-                    params: {
-                        token: $window.sessionStorage.stoken
-                    }
-                })
-                    .then(
-                    function success(response) {
-                        // 考场信息
-                        $scope.roomsInfo = response.data;
-                        // 已选人数
-                        $scope.selectedNum = 0;
-                        // 未登录人数
-                        $scope.absentNum = 0;
-                        // 已登录人数
-                        $scope.examingNum = 0;
-                        for (x in $scope.roomsInfo) {
-                            switch ($scope.roomsInfo[x].status) {
-                                case 0:
-                                    $scope.absentNum += 1;
-                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = '';
-                                    break;
-                                case 1:
-                                    $scope.examingNum += 1;
-                                    $scope.roomsStatus[$scope.roomsInfo[x].roomId] = 'info';
-                                    break;
-                                default:
-                                    alert('考生状态错误！');
-                            }
-                        }
-                        $scope.orderCondition = 'id';
-                        $scope.isReverse = false;
-                    },
-                    function error(response) {
-                        alert('出现错误\n' + response.status + ' ' + response.statusText);
-                    });
+               
+                refresh();
 
             } else {
                 $scope.loadStyle = 'cursor:default';
@@ -362,7 +327,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                 modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">开考成功！</p></div>' + footer;
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
-
+                         refresh();
                     }
                 });
                 $scope.loadStyles = 'cursor:default';
@@ -734,7 +699,7 @@ angular.module('manager').controller('ImportStuFile', function ($rootScope, $sco
             }
         }).then(function successCallback(response) {
             $scope.stuinfo = response.data;
-            $scope.orderCondition = 'id';
+            $scope.orderCondition = 'stuR';
             $scope.isReverse = false;
         }, function errorCallback(response) { })
 
@@ -1023,7 +988,7 @@ angular.module('manager').controller('exportFile', function ($uibModal, $rootSco
             }
         }).then(function successCallback(response) {
             $scope.exportByRoom = response.data;
-            $scope.orderCondition = 'id';
+            $scope.orderCondition = 'roomName';
             $scope.isReverse = false;
         }, function errorCallback(response) { })
 
