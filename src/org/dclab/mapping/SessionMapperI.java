@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.dclab.Session;
 import org.dclab.model.RoomInfoBean;
 import org.dclab.model.SessionBean;
@@ -63,4 +64,16 @@ public interface SessionMapperI {
 	
 	@Select("SELECT Uid FROM `session` WHERE id = #{id}")
 	public List<String> getUidById(int id);
+	
+	@Update("UPDATE `session` SET startFlag=1 WHERE id = #{id}")
+	public int updateStartFlag(int id);
+	
+	@Update("UPDATE `session` SET startFlag=2 WHERE id = #{id}")
+	public int cancelStartFlag(int id);
+	
+	@Select("SELECT startFlag from `session` WHERE id =#{id}")
+	public int getStartFlag(int id);
+	
+	@Select("SELECT startFlag from `session` WHERE Uid = #{uid}")
+	public int getStartFlagByUid(String uid);
 }
