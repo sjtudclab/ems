@@ -622,9 +622,10 @@ angular.module('supervisor').controller('supervisorCtrl', function ($rootScope, 
 	}
 
     $scope.cancelExam = function () {
-		$http.get('/EMS/supervise/release', {
+		$http.get('/EMS/supervise/endExam', {
 			params: {
-				token: $window.sessionStorage.token
+				token: $window.sessionStorage.token,
+				id:$scope.roomId
 			}
 		}).then(function successCallback(response) {
 
