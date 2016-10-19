@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.dclab.User;
+import org.dclab.mapping.SessionMapperI;
 import org.dclab.model.CandidateBean;
 import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
@@ -37,6 +38,12 @@ public class SuperviseController {
 	private SupervisorService supervisorService;
 	public void setSupervisorService(SupervisorService service){
 		supervisorService=service;
+	}
+	
+	@Autowired
+	private SessionMapperI sessionMapperI;
+	public void setSessionMapperI(SessionMapperI sessionMapperI) {
+		this.sessionMapperI = sessionMapperI;
 	}
 	
 	@RequestMapping("/Refresh")
@@ -155,6 +162,18 @@ public class SuperviseController {
 				return new SuperRespond(false, "请选择至少一名考生");
 			SuperBean superBean=SupervisorOperator.tokenSuperMap.get(superRequest.getToken());
 			return supervisorService.deleteExamInfo(superBean,superRequest.getUidList());
+		}
+		else
+			return new SuperRespond(false,"错误的监考token");
+	}
+	
+	@RequestMapping("/endExam")
+	public SuperRespond endExam(@RequestParam UUID token, @RequestParam int id ){
+		if(SupervisorOperator.tokenSuperMap.get(token)!=null){
+			if(sessionMapperI.cancelStartFlag(id)==0)
+				return new SuperRespond(false, "错误的考场id");
+			else
+				return new SuperRespond(true);
 		}
 		else
 			return new SuperRespond(false,"错误的监考token");

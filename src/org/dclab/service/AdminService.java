@@ -158,8 +158,10 @@ public class AdminService {
 				bean.setLoadStatus(1);
 			else
 				bean.setLoadStatus(0);
-			if(Constants.superLoginFlag==true)
+			if(sessionMapperI.getStartFlag(bean.getId())==1)
 				bean.setExamStatus(1);
+			else if(sessionMapperI.getStartFlag(bean.getId())==2)
+				bean.setExamStatus(2);
 			else
 				bean.setExamStatus(0);
 			
