@@ -29,6 +29,7 @@ import org.dclab.mapping.SessionMapperI;
 import org.dclab.mapping.TopicMapperI;
 import org.dclab.mapping.UserMapperI;
 import org.dclab.model.AdminBean;
+import org.dclab.model.ExamBean;
 import org.dclab.model.ExamOperator;
 import org.dclab.model.PaperInfoBean;
 import org.dclab.model.RoomInfoBean;
@@ -425,6 +426,35 @@ public class AdminController {
 		//SqlSession sqlSession = sqlSessionFactory.openSession();
 		//SessionMapperI sessionMapperI = sqlSession.getMapper(SessionMapperI.class);
 		List<SessionBean> list = sessionMapperI.getSessionList();
+		
+		for(SessionBean sBean : list){
+			if(Constants.superLoginFlag==true)
+				sBean.setStatus(3);
+			else if(loadFlag == true)
+				sBean.setStatus(1);
+			else if (loadFlag == false)
+				sBean.setStatus(0);
+			else 
+				sBean.setStatus(2);
+			int count = 0,sum;
+			
+			List<String> userList = sessionMapperI.getUidById(sBean.getId());
+			
+			sum = userList.size();
+			
+			for(String uid : userList){
+				UUID token1 = ExamOperator.idTokenMap.get(uid);
+				ExamBean examBean = ExamOperator.tokenExamMap.get(token1);
+				
+				if(examBean!=null&&examBean.isIfLogin() == true){
+					count++;
+				}
+			}
+			
+			sBean.setTestNum(sum);
+			sBean.setRegisteredNum(count);
+			sBean.setUnRegisteredNum(sum-count);
+		}
 		//sqlSession.close();
 		return list;
 	}

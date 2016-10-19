@@ -60,4 +60,7 @@ public interface SessionMapperI {
 	
 	@Select("SELECT  roomName,startTime,`user`.Uid,seatNum,Uname,ip,gender,Cid,photo,proName,subName,paperNum FROM `session` JOIN session_candidate JOIN `user` JOIN paper WHERE `user`.Uid = session_candidate.Uid AND `session`.id = session_candidate.sid AND paper.paperId = `user`.paperId")
 	public List<StudentInfoBean> getStuInfoAll();
+	
+	@Select("SELECT Uid FROM `session` WHERE id = #{id}")
+	public List<String> getUidById(int id);
 }
