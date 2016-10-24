@@ -261,7 +261,7 @@ public class AdminController {
 			return null;
 	}
 	
-	@RequestMapping("roomConfirm")//现在这个控制器是建立在进入某个考场是新打开网页
+	@RequestMapping("/roomConfirm")//现在这个控制器是建立在进入某个考场是新打开网页
 	public Object enterRoom(@RequestParam UUID token,@RequestParam int roomId)
 	{
 		if(AdminBean.adminTokenMap.containsValue(token))
