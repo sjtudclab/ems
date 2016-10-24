@@ -1,5 +1,6 @@
 package org.dclab.service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,7 +84,7 @@ public class UserService {
 					map.put("gender", user.getGender());
 					map.put("token", token);
 				
-					String dir=Constants.photoDir+"\\"+user.getPhoto();
+					String dir=Constants.photoDir+File.separator+user.getPhoto();
 					InputStream in=null;
 					byte[] data=null;
 					try{
