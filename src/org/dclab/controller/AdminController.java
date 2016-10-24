@@ -232,12 +232,14 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/start")
-	public SuperRespond allowStart(@RequestParam UUID token){//管理员点击开考
+	public SuperRespond allowStart(@RequestParam UUID token,@RequestParam List<Integer> list){//管理员点击开考
 		if(Constants.CanGetRoomInfo==false){
 			return new SuperRespond(false, "请先装填试卷");
 		}
 		else if(AdminBean.adminTokenMap.containsValue(token)){
-			Constants.superLoginFlag = true;
+			for(int i:list){
+				sessionMapperI.updateStartFlag(i);
+			}
 			return new SuperRespond(true);
 		}
 		else
@@ -279,7 +281,7 @@ public class AdminController {
 			return new SuperRespond(false, "无此权限");
 	}
 	
-	@RequestMapping("/addSubject")
+	/*@RequestMapping("/addSubject")
 	public SuperRespond addSubject(@RequestParam UUID token, @RequestParam String name,@RequestParam int duration,
 			@RequestParam int earliestSubmit,@RequestParam int latestLogin,@RequestParam String map)
 	{
@@ -304,9 +306,9 @@ public class AdminController {
 		}
 		else
 			return new SuperRespond(false, "无此权限");
-	}
+	}*/
 	
-	@RequestMapping("/addTopic")
+	/*@RequestMapping("/addTopic")
 	public SuperRespond addTopic(@RequestParam UUID token, @RequestParam String content,@RequestParam String choice,
 			@RequestParam List<Integer> List,@RequestParam int typeId)
 	{
@@ -331,7 +333,7 @@ public class AdminController {
 		}
 		else
 			return new SuperRespond(false, "无此权限");
-	}
+	}*/
 	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
 
@@ -428,8 +430,10 @@ public class AdminController {
 		List<SessionBean> list = sessionMapperI.getSessionList();
 		
 		for(SessionBean sBean : list){
-			if(Constants.superLoginFlag==true)
+			if(sessionMapperI.getStartFlag(sBean.getId())==1)
 				sBean.setStatus(3);
+			else if(sessionMapperI.getStartFlag(sBean.getId())==2)
+				sBean.setStatus(4);
 			else if(loadFlag == true)
 				sBean.setStatus(1);
 			else if (loadFlag == false)

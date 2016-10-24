@@ -147,7 +147,7 @@ public class UserService {
 			else
 				return new SuperRespond(false, "已经交卷");
 		case 1:
-			if(Constants.superLoginFlag==false){
+			if(sessionMapperI.getStartFlagByUid(user.getUid())!=1){
 				return new SuperRespond(false, "尚未开考");
 			}
 			else{

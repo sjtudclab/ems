@@ -293,7 +293,7 @@ angular.module('manager').controller('roomCtrl', function ($rootScope, $scope, $
                 var headerBottom = '</h3></div>';
                 var footer =
                     '<div class="modal-footer"><button class="btn btn-primary" type="button" ng-click="$parent.confirm=true;$close()">确认</button></div>';
-                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">试题装载成功！</p></div>' + footer;
+                modalParam.template = headerTop + headerBottom + '<div class="modal-body"><p style="font-size:150%">分发试卷成功！</p></div>' + footer;
                 $uibModal.open(modalParam).result.then(function () {
                     if ($scope.confirm) {
 
