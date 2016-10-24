@@ -335,7 +335,7 @@ public class AdminController {
 	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
 
-		String path=System.getProperty("project.root")+"files\\import\\";
+		String path=System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator;
 		Map<String, String> map = new HashMap<String, String>();
 		String fileName = path+file.getOriginalFilename();
 		System.out.println(fileName);
@@ -357,7 +357,7 @@ public class AdminController {
 		HashSet<String> fileSet	=	new HashSet<>();
 		
 		File file1 = new File(fileName);
-		String unZipDir = System.getProperty("project.root")+"files\\import\\"+file1.getName().replaceAll("[.][^.]+$", "");
+		String unZipDir = System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
 		ZipTool.unzip(fileName,unZipDir);
 		
 		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
@@ -376,7 +376,7 @@ public class AdminController {
 		}
 		//获取多媒体文件在服务器的相对路径
 		int i = unZipDir.indexOf("files");
-		Constants.multiMediaDir = unZipDir.substring(i)+"\\";
+		Constants.multiMediaDir = unZipDir.substring(i)+File.separator;
 		System.out.println("多媒体文件位置的前缀"+Constants.multiMediaDir);
 		
 		if(excelName.length()==0)
@@ -385,7 +385,7 @@ public class AdminController {
 		}
 		else
 		{
-			String AbsolutExcelName = unZipDir+"\\"+excelName;
+			String AbsolutExcelName = unZipDir+File.separator+excelName;
 		
 			ExcelImporter excel = new ExcelImporter(AbsolutExcelName);
 			excel.setFileSet(fileSet);	//每一次上传都使用新的 HashSet装载
@@ -471,7 +471,7 @@ public class AdminController {
 	
 	@PostMapping("/stuForm")
 	public Map<String, String> relationsUpload(@RequestParam("file") MultipartFile file) {
-		String path= System.getProperty("project.root")+"files\\import\\";
+		String path= System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator;
 		Map<String, String> map = new HashMap<>();
 		String fileName = path +file.getOriginalFilename();
 		
@@ -494,7 +494,7 @@ public class AdminController {
 		HashSet<String> fileSet	=	new HashSet<>();
 		
 		File file1 = new File(fileName);
-		String unZipDir = System.getProperty("project.root")+"files\\import\\"+file1.getName().replaceAll("[.][^.]+$", "");
+		String unZipDir = System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
 		ZipTool.unzip(fileName,unZipDir);
 		
 		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
@@ -518,7 +518,7 @@ public class AdminController {
 		}
 		else
 		{
-			String AbsolutExcelName = unZipDir+"\\"+excelName;
+			String AbsolutExcelName = unZipDir+File.separator+excelName;
 		
 	        ExcelImporter	excel	=	new ExcelImporter(AbsolutExcelName);
 	        excel.setFileSet(fileSet);	//每一次上传都使用新的 HashSet装载
@@ -585,15 +585,15 @@ public class AdminController {
 			 stream.write(data.getBytes("UTF-8"));
 		}
 		else{
-		String path = System.getProperty("project.root")+"files\\export";
+		String path = System.getProperty("project.root")+"files"+File.separator+"export";
 		File dir = new File(path);
 		if(!dir.exists())
 			dir.mkdirs();
-		String fileName = path + "\\test.xls";
+		String fileName = path + File.separator+"test.xls";
 		ExcelExporter excel = new ExcelExporter(fileName);
 		
 		excel.exportMarks(exportService.getScoreCollect(id[0]), "成绩汇总");
-		String myfileName = fileName.substring(fileName.lastIndexOf('\\')+1);
+		String myfileName = fileName.substring(fileName.lastIndexOf(File.separator)+1);
 		response.addHeader("Content-Disposition", "attachment;filename=" + myfileName ); 
 		try {
 			// get your file as InputStream
@@ -635,7 +635,7 @@ public class AdminController {
 		
 		String roomName = sessionMapperI.getRoomNameById(id[0]);
 		long  startTime =sessionMapperI.getStartTimeById(id[0]).getTime();
-		String path = System.getProperty("project.root")+"files\\export\\"+roomName+"-"+startTime;//放置该考场考生考卷的文件夹。
+		String path = System.getProperty("project.root")+"files"+File.separator+"export"+File.separator+roomName+"-"+startTime;//放置该考场考生考卷的文件夹。
 		System.out.println("放置考生考卷的文件夹:"+path);
 		File dir = new File(path);
 		if (!dir.exists()) {
@@ -657,7 +657,7 @@ public class AdminController {
 		
 		List<String> uidList = sessionCanMapperI.getUidListBySid(id[0]);
 		for(String str : uidList){
-			String excelPath = path+"\\"+str+".xls";
+			String excelPath = path+File.separator+str+".xls";
 			adminService.exportPaper(excelPath, str, topicMap, subjectMap);
 		}
 		String zipName = path+".zip";

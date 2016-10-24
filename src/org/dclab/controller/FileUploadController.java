@@ -21,7 +21,7 @@ public class FileUploadController {
 
 	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
-		String path=System.getProperty("project.root")+"/files/import/";
+		String path=System.getProperty("project.root")+File.separator+"files"+File.separator+"import"+File.separator;
 		System.out.println(path);
 		Map<String, String> map = new HashMap<String, String>();
 		try {
