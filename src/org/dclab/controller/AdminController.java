@@ -335,7 +335,7 @@ public class AdminController {
 	@PostMapping("/examForm")
 	public Map<String, String> handleFormUpload(@RequestParam("file") MultipartFile file) {
 
-		String path=System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator;
+		String path=System.getProperty("project.root")+"files"+File.separator+"import"+File.separator;
 		Map<String, String> map = new HashMap<String, String>();
 		String fileName = path+file.getOriginalFilename();
 		System.out.println(fileName);
@@ -357,7 +357,7 @@ public class AdminController {
 		HashSet<String> fileSet	=	new HashSet<>();
 		
 		File file1 = new File(fileName);
-		String unZipDir = System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
+		String unZipDir = System.getProperty("project.root")+"files"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
 		ZipTool.unzip(fileName,unZipDir);
 		
 		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
@@ -471,7 +471,7 @@ public class AdminController {
 	
 	@PostMapping("/stuForm")
 	public Map<String, String> relationsUpload(@RequestParam("file") MultipartFile file) {
-		String path= System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator;
+		String path= System.getProperty("project.root")+"files"+File.separator+"import"+File.separator;
 		Map<String, String> map = new HashMap<>();
 		String fileName = path +file.getOriginalFilename();
 		
@@ -494,7 +494,7 @@ public class AdminController {
 		HashSet<String> fileSet	=	new HashSet<>();
 		
 		File file1 = new File(fileName);
-		String unZipDir = System.getProperty("project.root")+"files+"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
+		String unZipDir = System.getProperty("project.root")+"files"+File.separator+"import"+File.separator+file1.getName().replaceAll("[.][^.]+$", "");
 		ZipTool.unzip(fileName,unZipDir);
 		
 		File files = new File(unZipDir);//创建File对象，指向文件解压后的根目录
